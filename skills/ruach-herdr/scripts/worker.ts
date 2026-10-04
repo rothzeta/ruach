@@ -38,7 +38,7 @@ function options(args:string[]) {
   return {command,values,dry,offline,pass,direct};
 }
 function sha(s:string) {return createHash('sha256').update(s).digest('hex');}
-let state:'not-submitted'|'started'|'unknown'='not-submitted';
+let state:'not-submitted'|'started'|'unknown'|'awaiting-input'='not-submitted';
 let phase='preflight',temp:string|undefined,pane:string|undefined,workspace:string|undefined,selected:Selection|undefined;
 let worktree:Worktree|undefined,worktreeState:'not-created'|'created'|'unknown'='not-created';
 try {
@@ -122,14 +122,29 @@ try {
       workspace=placement==='worktree'?result?.workspace?.workspace_id:undefined;
     }catch{}
     if(typeof pane!=='string'||!pane||placement==='worktree'&&(typeof workspace!=='string'||!workspace))fail(4,code,'Launch space response lacks its IDs; inspect state','herdr');
-    // Exactly one submission. Any start error is uncertain and never retried.
+    // Exactly one submission. Inspect readiness failures without retrying.
     phase='start';
     const start=await run([herdr,'agent','start',v.name,'--kind',selected.kind,'--pane',pane,'--',...argv],selected.cwd,35000);
-    if(start.exit!==0||start.timedOut)fail(4,'start_uncertain','Agent startup failed or timed out; inspect the pane before any new invocation','herdr');
+    const inspection={read:['herdr','agent','read',v.name,'--source','recent-unwrapped'],...(workspace?{focus:['herdr','workspace','focus',workspace]}:{})};
+    const space={pane,workspace:workspace??null,inspection,temporary_directory:temp??null,cleanup:'Release the owned session and private material after reuse ends; remove the worktree only after its work is committed and reachable from a retained branch. Keep the branch.'};
+    if(start.exit!==0||start.timedOut) {
+      // Herdr returns agent_not_ready when a native trust/onboarding dialog is
+      // visible. Verify identity and live state rather than hiding it as failure.
+      const observed=await run([herdr,'agent','get',v.name],selected.cwd);
+      let agent:any;try{agent=JSON.parse(observed.stdout).result?.agent;}catch{}
+      if(observed.exit===0&&!observed.timedOut&&agent?.name===v.name&&agent?.pane_id===pane&&agent?.agent===selected.kind&&agent?.agent_status==='blocked') {
+        state='awaiting-input';
+        const next=workspace?`Open the existing workspace: herdr workspace focus ${workspace}.`:`Inspect the existing pane ${pane}.`;
+        console.error(`${v.name} launched and is waiting for native input. ${next} Read the dialog and approve it yourself or explicitly authorize an assistant to answer it. Do not launch another worker to resolve this prompt.`);
+        console.log(JSON.stringify({...output(),...space,action:'awaiting-input',launchable:false,ready:false,awaiting_user_input:true,submission_state:state,next_step:'Open the existing launch space, inspect the native dialog and answer it with user approval. Once ready, use the existing session for the assignment.'}));
+        process.exit(0);
+      }
+      fail(4,'start_uncertain','Agent startup failed or timed out; inspect the pane before any new invocation','herdr');
+    }
     let started;try{started=JSON.parse(start.stdout);}catch{}
     if(started?.result?.agent?.name!==v.name||started?.result?.agent?.pane_id!==pane||started.error)fail(4,'start_uncertain','Agent startup response does not confirm the expected agent and pane; inspect state','herdr');
     state='started';
-    console.log(JSON.stringify({...output(),action:'started',pane,workspace:workspace??null,inspection:{read:['herdr','agent','read',v.name,'--source','recent-unwrapped'],...(workspace?{focus:['herdr','workspace','focus',workspace]}:{})},submission_state:state,temporary_directory:temp??null,cleanup:'Release the owned session and private material after reuse ends; remove the worktree only after its work is committed and reachable from a retained branch. Keep the branch.'}));
+    console.log(JSON.stringify({...output(),...space,action:'started',ready:true,awaiting_user_input:false,submission_state:state}));
   }
 } catch(e) {
   const mutated=state==='unknown'||worktreeState!=='not-created';

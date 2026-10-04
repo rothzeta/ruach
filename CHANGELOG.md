@@ -2,6 +2,14 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
+## 0.2.1 — 2026-10-04
+
+- Fixed local Claude marketplace registration to pass an absolute checkout path instead of the unsupported bare `.` source.
+- Added `install-plugins` as an alias and an optional plugin-name argument, defaulting to `ruach`.
+- Added tests that execute the actual Just recipes from a foreign cwd, including failure handling and literal argument forwarding.
+- Native folder-trust/onboarding dialogs now report a verified waiting-for-input state and workspace inspection commands instead of a generic uncertain-startup failure. No prompt is answered automatically.
+- Added an operations guide covering installation, consumer launches, native confirmation and recovery.
+
 ## 0.2.0 — 2026-10-04
 
 - Worker launches now create isolated Git worktrees and background Herdr workspaces by default, preserving caller focus and layout.

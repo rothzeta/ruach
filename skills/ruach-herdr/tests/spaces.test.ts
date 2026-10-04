@@ -138,6 +138,19 @@ test('startup success must confirm the selected agent in the returned workspace 
   behavior.startWrongPane=true;const r=await launch();expect(r.exit).toBe(4);expect(r.data.submission_state).toBe('unknown');
   expect((await records('mutations.jsonl')).filter(x=>x.action==='start')).toHaveLength(1);
 });
+test('native startup dialog reports awaiting input in the existing workspace without failure or retry',async()=>{
+  behavior.startBlocked=true;const r=await launch();expect(r.exit,r.stderr).toBe(0);
+  expect(r.data.action).toBe('awaiting-input');expect(r.data.submission_state).toBe('awaiting-input');
+  expect(r.data.ready).toBe(false);expect(r.data.awaiting_user_input).toBe(true);expect(r.data.launchable).toBe(false);
+  expect(r.data.workspace).toBe('w2');expect(r.data.pane).toBe('w2:p1');expect(r.data.temporary_directory).toBeTruthy();
+  expect(r.stderr).toContain('herdr workspace focus w2');
+  expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['workspace','start']);
+  expect((await records('calls.jsonl')).some(x=>x.args.includes('send-keys')||x.args.includes('prompt'))).toBe(false);
+});
+test('blocked state from another pane cannot turn a startup error into successful submission',async()=>{
+  behavior.startBlocked=true;behavior.inspectPane='different-pane';const r=await launch();expect(r.exit).toBe(4);
+  expect(r.data.submission_state).toBe('unknown');expect(r.data.diagnostics[0].code).toBe('start_uncertain');
+});
 test('invalid placement combinations and branch/base options fail without launch mutations',async()=>{
   for(const args of [['--placement','unknown'],['--placement','pane','--worktree',target],['--branch','@{-1}'],['--base','missing-ref']]) {
     expect((await launch(args)).exit).toBe(2);

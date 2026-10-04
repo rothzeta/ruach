@@ -17,9 +17,12 @@ install-global *args:
     @"{{bun}}" x --bun skills@1.7.0 add ./skills --global --agent codex --agent claude-code --skill '*' "$@"
 
 # Register this checkout as a user-level Claude marketplace and install its plugin.
-install-plugin:
-    @claude plugin marketplace add . --scope user
-    @claude plugin install ruach@ruach --scope user
+install-plugin plugin='ruach':
+    @claude plugin marketplace add "$PWD" --scope user
+    @claude plugin install "$1@ruach" --scope user
+
+# Plural spelling accepts the same optional plugin name.
+alias install-plugins := install-plugin
 
 # Check synchronized release metadata and its changelog entry.
 release-check:

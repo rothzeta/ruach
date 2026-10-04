@@ -14,6 +14,7 @@ if(exe==='herdr') {
     if(data.unreachable)process.exit(1);
     out({result:{layout:{panes:[{pane_id:data.pane??'w1:p1',rect:{width:data.width??130}}]}}});
   } else if(args.join(' ')==='agent list')out({result:{agents:data.agents??[]}});
+  else if(args.slice(0,2).join(' ')==='agent get'&&data.startBlocked)out({result:{agent:{name:args[2],pane_id:data.inspectPane??'w2:p1',agent:data.inspectKind??'claude',agent_status:'blocked',launch_pending:true}}});
   else if(args.slice(0,2).join(' ')==='workspace create') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'workspace',args,cwd:process.cwd()})+'\n');
     if(data.workspaceFailure)process.exit(1);
@@ -36,6 +37,7 @@ if(exe==='herdr') {
     // Execute only fake harnesses, which record actual native arguments.
     const proc=Bun.spawnSync([join(root,'bin',args[args.indexOf('--kind')+1]),...native],{cwd:process.cwd(),env:process.env});
     if(proc.exitCode!==0)process.exit(1);
+    if(data.startBlocked){console.error(JSON.stringify({error:{code:'agent_not_ready',message:'Native input required'}}));process.exit(1);}
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
 } else if(args.includes('--help')) {
