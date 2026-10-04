@@ -1,0 +1,9 @@
+CI run 4420
+trigger: push
+revision: ash-r8
+started: 2026-09-22T09:41:57Z
+$ make test-retry
+pytest tests/retry -q
+..................                                                       [100%]
+18 passed in 1.07s
+exit status: 0

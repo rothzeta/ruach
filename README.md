@@ -6,7 +6,8 @@ Portable agent roles and self-contained skills for bounded engineering and knowl
 - `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
 - `docs/adr/`: Ruach source and consumer ownership decisions.
 - `scripts/`: explicit pinned snapshot installation and resource checks.
-- `tests/`: installation contract checks. Skill-specific suites and realistic Librarian fixtures live with their skills.
+- `tests/`: installation contract checks. Skill-specific suites live with their skills.
+- `evals/`: developer behavior-evaluation packets with separate rubrics. They are never installed into consumers.
 
 Only Coordinators load workflow bodies. Workers use a role plus a self-contained assignment with scope, document ownership, acceptance, verification and handoff instructions. See [authoring guidance](CONTRIBUTING.md), [ownership ADR](docs/adr/0001-source-and-consumer-ownership.md), [provenance](PROVENANCE.md) and [MIT license](LICENSE).
 
@@ -34,4 +35,4 @@ bun install --frozen-lockfile
 bun test
 ```
 
-Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex preparation is supported subject to runtime gates; Pi, OpenCode, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [fixtures](skills/ruach-librarian/evals/README.md) are prepared for a separate blind evaluator.
+Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex preparation is supported subject to runtime gates; Pi, OpenCode, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check Ruach resource names and relative Markdown file targets (not behavior)."""
+"""Check Ruach resource names, eval placement and relative Markdown file targets (not behavior)."""
 from pathlib import Path
 import re
 import sys
@@ -18,6 +18,11 @@ for skill in (root / 'skills').iterdir():
     desc = re.search(r'^description: (.+)$', header[1], re.M) if header else None
     if not re.fullmatch(r'ruach-[a-z0-9-]+', skill.name) or not name or name[1] != skill.name or not desc:
         errors.append(f'Invalid skill identity/description: {skill.name}')
+# The installer copies whole skills, so evaluation inputs and rubrics belong in top-level evals/.
+for path in (root / 'skills').rglob('*'):
+    relative = path.relative_to(root)
+    if 'node_modules' not in relative.parts and (path.name == 'evals' or 'rubric' in path.name.lower()):
+        errors.append(f'Evaluation material inside installed skills: {relative}')
 for path in root.rglob('*'):
     if any(part in ('node_modules', '.git', '__pycache__') for part in path.relative_to(root).parts):
         continue
@@ -36,4 +41,4 @@ for path in root.rglob('*'):
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)
-print('Resource identities and relative Markdown file targets passed; behavioral quality untested')
+print('Resource identities, eval placement and relative Markdown file targets passed; behavioral quality untested')

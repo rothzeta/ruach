@@ -24,6 +24,8 @@ class SnapshotContracts(unittest.TestCase):
         (self.source / 'skills/ruach-example/SKILL.md').write_text('Shared skill\n')
         (self.source / 'skills/ruach-example/tool.py').write_text('print("shared")\n')
         (self.source / 'skills/ruach-example/tool.py').chmod(0o755)
+        (self.source / 'evals/ruach-example/expected').mkdir(parents=True)
+        (self.source / 'evals/ruach-example/expected/rubric.md').write_text('Evaluator-only rubric\n')
         for name in ('LICENSE', 'PROVENANCE.md'):
             (self.source / name).write_text(name + '\n')
         shutil.copyfile(SCRIPT, self.source / 'scripts/install.py')
@@ -63,6 +65,15 @@ class SnapshotContracts(unittest.TestCase):
         self.assertTrue((self.target / 'skills/ruach-example/tool.py').stat().st_mode & 0o111)
         shutil.rmtree(self.source)
         self.run_cli('check', script=self.target / 'ruach-install.py')
+
+    def test_development_evals_are_not_installed(self):
+        self.install()
+        installed = [p.relative_to(self.target) for p in self.target.rglob('*')]
+        self.assertTrue(installed)
+        self.assertFalse([p for p in installed if 'evals' in p.parts or 'rubric' in p.name])
+        recorded = json.loads((self.target / 'ruach.json').read_text())['files']
+        self.assertFalse([name for name in recorded if 'evals' in name or 'rubric' in name])
+        self.run_cli('check', '--source', str(self.source))
 
     def test_drift_requires_explicit_replace_before_update(self):
         self.install()

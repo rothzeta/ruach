@@ -18,6 +18,6 @@ Extracted from [rothzeta/tehom-brainlab](https://github.com/rothzeta/tehom-brain
 | `skills/ruach-testing/` | `.agents/skills/ruach-testing/` | committed source |
 | `skills/ruach-workflow-feature/` | `.agents/skills/ruach-workflow-feature/` | committed source |
 
-Librarian source drafts were provided alongside that baseline; they were not committed at the baseline. The source `.agents/README.md` "Librarian draft" paragraph established their intended documentation-maintenance scope. Knowledge workflow, install/check tooling, authoring guidance, ADR and behavioral fixtures are newly authored here.
+Librarian source drafts were provided alongside that baseline; they were not committed at the baseline. The source `.agents/README.md` "Librarian draft" paragraph established their intended documentation-maintenance scope. Knowledge workflow, install/check tooling, authoring guidance, ADR and behavioral evaluation fixtures (`evals/`) are newly authored here.
 
 Authored material is licensed under MIT. No third-party source code was copied into this repository. Dependencies remain external with their own licenses: ajv (MIT), yaml (ISC), ws (MIT), pinned by the relevant skill manifests/lockfiles. Upstream harness documentation is linked in the adapter references, not bundled. The Librarian technique is inspired by [Andrej Karpathy's LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f); no gist prose is reproduced. Its source → synthesis → navigation and ingest/query/lint ideas are applied within consumer authority.
