@@ -1,0 +1,14 @@
+{
+  "name": "ruach",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": "https://github.com/rothzeta/ruach",
+  "scripts": {
+    "release-check": "bun scripts/release-check.ts",
+    "agent-routing": "bun scripts/agent-routing.ts",
+    "check": "bun scripts/check.ts",
+    "test": "bun test ./tests"
+  }
+}

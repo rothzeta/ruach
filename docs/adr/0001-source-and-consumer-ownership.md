@@ -8,7 +8,7 @@ Ruach owns reusable role contracts, skills, Coordinator workflows, shared handof
 
 Roles and workflows read consumer guidance and self-contained assignments. They keep role separation, bounded authority, verification, independent review, evidence preservation and cleanup obligations; they do not prescribe a consumer's mailbox paths, protected records or model restrictions.
 
-Source ownership and installation scope are separate. Ruach Git commits are canonical shared source. A committed consumer snapshot is a generated, pinned installation. Global skill discovery (including symlinks) is deployment, not source ownership; it must not become a second editable source tree. Consumers explicitly sync to a commit and record origin, revision and file hashes. A fresh consumer clone runs its installed resources without a sibling checkout; refreshing or comparing against upstream takes an explicit source checkout.
+Source ownership and installation scope are separate. Ruach Git commits are canonical shared source, distributed as semantic releases through immutable annotated tags. A committed consumer snapshot is a generated, pinned installation. Global skill discovery through the standard Skills CLI or a native plugin is deployment, not source ownership; it must not become a second editable source tree. Consumers explicitly select a release version; the snapshot manifest records version, origin, resolved commit and file hashes for integrity. A fresh consumer clone runs its installed resources without a sibling checkout; refreshing or comparing against upstream takes an explicit source checkout. Legacy callers may still select a commit directly.
 
 ## Consequences
 

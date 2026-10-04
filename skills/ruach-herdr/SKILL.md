@@ -29,6 +29,8 @@ bun scripts/worker.ts resolve --offline --name task-worker --role implementer --
 
 For direct selection, supply `--kind KIND --model NATIVE_MODEL [--effort LEVEL]` instead of a route. Otherwise the role's preferred route comes from `.agents/models.yaml`, `.agents/routing.yaml`, and `.agents/roles.yaml`; `--route ID` selects a declared alternative. There are no model defaults or harness fallbacks. Supply `--repo DIR` if Git cannot infer the intended canonical repository from cwd. Relative launcher paths resolve from invocation cwd. See [routing schema and root delegation](references/routing.md).
 
+`--resources DIR` selects the canonical resource root containing `agents/` and `skills/`; `--catalogs DIR` selects the directory containing `models.yaml`, `routing.yaml` and `roles.yaml`. Both default to `<repo>/.agents`. A source-development wrapper can point resources at its checkout and catalogs at its own development configuration, without installing a duplicate snapshot. Relative values resolve from invocation cwd. Explicit source resources remain available to native preparation; Coordinator workflow visibility and worker suppression use that selected skill root.
+
 Start only after authorization to create the named worker:
 
 ```sh

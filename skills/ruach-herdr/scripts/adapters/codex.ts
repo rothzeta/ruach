@@ -26,7 +26,7 @@ export async function prepare(s:Selection,pass:string[]):Promise<Plan> {
   if(!Array.isArray(entries) || entries.some((e:any)=>!e || typeof e.path!=='string' || typeof e.enabled!=='boolean'))fail(3,'codex_config_unavailable','Invalid effective skill overrides','skills.config');
   if(!Array.isArray(native.skills) || native.skills.length!==1 || native.skills[0].cwd!==s.cwd || native.skills[0].errors?.length || !Array.isArray(native.skills[0].skills))fail(3,'codex_catalog_unavailable','Cannot establish the effective skill catalog','skills/list');
   const catalog=native.skills[0].skills;
-  const canonical=await scan(join(s.repo,'.agents','skills'));
+  const canonical=await scan(join(s.resources??join(s.repo,'.agents'),'skills'));
   const workflows=catalog.filter((x:any)=>typeof x.name==='string'&&x.name.startsWith('ruach-workflow-'));
   if(workflows.some((x:any)=>typeof x.path!=='string')) fail(3,'codex_catalog_unavailable','Workflow catalog lacks native paths','skills/list');
   for(const entry of entries) {
@@ -49,7 +49,8 @@ export async function prepare(s:Selection,pass:string[]):Promise<Plan> {
       if(existing)existing.enabled=false;else merged.push({path,enabled:false});
     }
   }
-  const combined=[developer,await contents(s.roleFile)].filter(x=>x!==null&&x!==undefined&&x!=='').join('\n\n');
+  const sourceContext=s.resources ? `Canonical role source: ${JSON.stringify(s.roleFile)}. Canonical skills directory: ${JSON.stringify(join(s.resources,'skills'))}. Resolve role-relative skill references from the role source directory. Only the Coordinator loads workflow bodies; workers follow their role and assignment.` : undefined;
+  const combined=[developer,await contents(s.roleFile),sourceContext].filter(x=>x!==null&&x!==undefined&&x!=='').join('\n\n');
   const argv=['--model',s.model,'--cd',s.cwd,'-c',`developer_instructions=${toml(combined)}`];
   const redactedArgv=['--model',s.model,'--cd',s.cwd,'-c','developer_instructions=<redacted>'];
   if(s.permissions==='auto-review'){argv.push(...autoReview);redactedArgv.push(...autoReview);}

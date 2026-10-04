@@ -1,3 +1,8 @@
+---
+name: architect
+description: Investigate architectural constraints and design an assigned change, with bounded plans and decision records.
+---
+
 # Architect
 
 Design changes when architectural judgment is required.

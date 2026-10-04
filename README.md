@@ -1,38 +1,94 @@
 # Ruach
 
+Current release: **0.1.0**. See the [changelog](CHANGELOG.md).
+
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
 - `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer and Librarian contracts.
 - `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
 - `docs/adr/`: Ruach source and consumer ownership decisions.
 - `scripts/`: explicit pinned snapshot installation and resource checks.
+- `config/agent-routing/`: routing policy for developing Ruach itself.
 - `tests/`: installation contract checks. Skill-specific suites live with their skills.
-- `evals/`: developer behavior-evaluation packets with separate rubrics. They are never installed into consumers.
+- `evals/`: developer behavior-evaluation packets with separate rubrics. Snapshot and skill installations exclude them; they are not native plugin components.
 
 Only Coordinators load workflow bodies. Workers use a role plus a self-contained assignment with scope, document ownership, acceptance, verification and handoff instructions. See [authoring guidance](CONTRIBUTING.md), [ownership ADR](docs/adr/0001-source-and-consumer-ownership.md), [provenance](PROVENANCE.md) and [MIT license](LICENSE).
 
-## Install a pinned project snapshot
+## Standard installation
 
-Requires Python 3 and Git. From a local Ruach checkout, use an existing commit:
+Ruach follows the [Agent Skills specification](https://agentskills.io/specification). Like [Vercel's agent-skills](https://github.com/vercel-labs/agent-skills), it can be installed through the [Skills CLI](https://github.com/vercel-labs/skills). Like [Anthropic's skills](https://github.com/anthropics/skills) and [Superpowers](https://github.com/obra/superpowers), it also ships native Claude plugin metadata. The shared specification covers skills; native agent definitions and plugin packaging depend on the harness.
+
+Install the released skills globally for Codex and Claude Code:
 
 ```sh
-python3 scripts/install.py install --source . --revision COMMIT_SHA --target /path/to/project/.agents
-python3 /path/to/project/.agents/ruach-install.py check --target /path/to/project/.agents
-python3 /path/to/project/.agents/ruach-install.py check --target /path/to/project/.agents --source /path/to/ruach
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.1.0 --global --agent codex --agent claude-code --skill '*'
 ```
 
-Installation reads committed objects, never uncommitted source files; records upstream origin, full SHA and hashes in `ruach.json`; and includes the installer, provenance and license. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree. An install/update uses an explicit source/revision; no fetch, push, global links or persistent harness settings are changed.
+Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
+
+For Claude Code, install the native plugin to expose all eight skills and six named agents together:
+
+```sh
+claude plugin marketplace add rothzeta/ruach#v0.1.0 --scope user
+claude plugin install ruach@ruach --scope user
+claude --agent ruach:coordinator
+```
+
+The marketplace tag fixes the release, and `.claude-plugin/plugin.json` supplies its semantic version. For development from this checkout, `just install-plugin` registers the local marketplace, or `claude --plugin-dir . --agent ruach:coordinator` loads it for one session. Use the plugin installation for Claude when you want native agents; the Skills CLI is sufficient for skill discovery in other harnesses. Avoid installing the same skills twice into Claude.
+
+Executable skills require Bun and their own frozen dependency install. A copied or cached skill keeps its local `package.json` and `bun.lock`: run `bun install --frozen-lockfile` inside `ruach-handoff`, `ruach-herdr` and `ruach-harness-eval` before running their scripts. `just install` prepares those dependencies in this source checkout. Native plugin installation does not automatically install these nested skill packages.
+
+## Develop Ruach with a Coordinator
+
+The development launcher uses `agents/` and `skills/` directly from this checkout. It does not install Ruach into itself. Requires Just, Bun and Git; live startup additionally requires Herdr and the selected native harness.
+
+```sh
+just install
+just agent-routing resolve coordinator
+# Run from an existing Herdr pane:
+just coordinator
+just coordinator ruach-lead --dry-run
+just agent-routing start implementer ruach-builder
+just agent-routing start architect ruach-designer --route gpt-6.1-sol-high
+```
+
+The Coordinator prefers Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The launcher defaults to automatic approval review; `--permissions inherit` preserves native permission settings. `resolve` selects offline without native config reads or panes. `start --dry-run` checks live prerequisites without launching; `start` creates one sibling pane without focus and starts once. Send the task separately after startup. Inspect uncertain startup state before trying again. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
+
+Use `BUN_BIN` to override Bun, otherwise Just uses `~/.bun/bin/bun` when present, then `bun` on PATH. `bun run agent-routing -- resolve coordinator` is also available. `--root DIR` selects another Ruach worktree's routing catalogs and working directory while retaining the launcher and canonical resources from this checkout.
+
+Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude and supplies their source location to Codex. Launch commands do not perform a global installation.
+
+## Install a pinned project snapshot
+
+For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
+
+```sh
+bun scripts/install.ts install --source . --version 0.1.0 --target /path/to/project/.agents
+bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
+bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
+```
+
+`--version 0.1.0` selects exactly the `v0.1.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
+
+To update a snapshot installed with the previous Python installer, run the TypeScript installer from a new checkout with the desired commit. It reads the existing manifest and removes the previous managed installer during the update; consumer policy and drift checks are preserved.
 
 ## Verify
 
 ```sh
-python3 scripts/check.py
-python3 -m unittest discover -s tests -v
+bun run check
+bun run release-check
+bun run test
 # In each of skills/ruach-handoff, skills/ruach-herdr, skills/ruach-harness-eval:
 bun install --frozen-lockfile
 bun test
 ```
 
 Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex preparation is supported subject to runtime gates; Pi, OpenCode, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.
+
+## Releases
+
+Use Semantic Versioning for the repository bundle. Update the root `package.json` version, `.claude-plugin/plugin.json` version, marketplace metadata version, the current release and installation examples in this README, and `CHANGELOG.md` together. Skill-local private package versions remain independent implementation-package metadata.
+
+Run `just release-check`, `just check`, the root tests and affected skill suites before committing. Create an annotated `vMAJOR.MINOR.PATCH` tag on the release commit. `claude plugin tag .` creates the additional native `ruach--vMAJOR.MINOR.PATCH` tag used for Claude plugin dependency-version resolution; both tags name the same commit. Never move or overwrite a released tag. Remote publication is a separate explicit step.

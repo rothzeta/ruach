@@ -1,0 +1,10 @@
+{
+  "name": "ruach",
+  "version": "0.1.0",
+  "description": "Portable engineering and knowledge-maintenance roles, skills, and Coordinator workflows.",
+  "author": { "name": "rothzeta" },
+  "homepage": "https://github.com/rothzeta/ruach",
+  "repository": "https://github.com/rothzeta/ruach",
+  "license": "MIT",
+  "keywords": ["skills", "agents", "engineering", "knowledge", "coordination"]
+}

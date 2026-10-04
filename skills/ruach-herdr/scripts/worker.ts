@@ -6,13 +6,13 @@ import { contents, directory, fail, Failure, identifier, kinds, efforts, string,
 import { executable, json, run } from './process';
 import { routed } from './routing';
 import { prepare } from './adapters';
-const usage='bun scripts/worker.ts resolve|start --name NAME --role ROLE --cwd DIR [--repo DIR] [--route ID | --kind KIND --model MODEL [--effort LEVEL]] [--dry-run | --offline] [--temp-dir DIR] [--permissions inherit|auto-review] [-- NATIVE_FLAGS]';
+const usage='bun scripts/worker.ts resolve|start --name NAME --role ROLE --cwd DIR [--repo DIR] [--resources DIR] [--catalogs DIR] [--route ID | --kind KIND --model MODEL [--effort LEVEL]] [--dry-run | --offline] [--temp-dir DIR] [--permissions inherit|auto-review] [-- NATIVE_FLAGS]';
 function options(args:string[]) {
   if(args.includes('--help')||args.includes('-h')) {console.log(JSON.stringify({schema_version:1,ok:true,usage}));process.exit(0);}
   const command=args.shift();
   if(!['resolve','start'].includes(command??''))fail(2,'usage','Expected resolve or start','command');
   const values:Record<string,string>={};let dry=false,offline=false,pass:string[]=[];
-  const keys=['name','role','cwd','repo','route','kind','model','effort','temp-dir','permissions'];
+  const keys=['name','role','cwd','repo','resources','catalogs','route','kind','model','effort','temp-dir','permissions'];
   for(let i=0;i<args.length;i++) {
     const token=args[i];
     if(token==='--'){pass=args.slice(i+1);break;}
@@ -47,11 +47,14 @@ try {
   const repo=v.repo ? resolve(v.repo) : gitRoot;
   if(!repo)fail(2,'repository_required','Cannot infer repository; supply --repo','repo');
   await directory(repo,'repo');
-  const roleFile=join(repo,'.agents','agents',`${v.role}.md`);
+  const resources=resolve(v.resources??join(repo,'.agents'));
+  const catalogs=resolve(v.catalogs??join(repo,'.agents'));
+  await directory(resources,'resources');
+  const roleFile=join(resources,'agents',`${v.role}.md`);
   const roleBody=await contents(roleFile);
   if(!roleBody.trim())fail(2,'invalid_role','Canonical role file is empty','role');
-  const selection=o.direct ? {kind:v.kind as Selection['kind'],model:v.model,effort:v.effort,provenance:'explicit CLI'} : await routed(repo,v.role,v.route);
-  selected={name:v.name,role:v.role,roleFile,roleHash:sha(roleBody),repo,cwd,...selection,permissions:(v.permissions??'inherit') as Permissions};
+  const selection=o.direct ? {kind:v.kind as Selection['kind'],model:v.model,effort:v.effort,provenance:'explicit CLI'} : await routed(repo,v.role,v.route,catalogs,resources);
+  selected={name:v.name,role:v.role,roleFile,roleHash:sha(roleBody),repo,cwd,...(v.resources?{resources}:{}),...selection,permissions:(v.permissions??'inherit') as Permissions};
   const tempRoot=resolve(v['temp-dir']??tmpdir());await directory(tempRoot,'temp-dir');
   if(o.offline) {
     const {validatePass}=await import('./adapters');validatePass(selected,o.pass);

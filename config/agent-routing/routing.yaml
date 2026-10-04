@@ -1,0 +1,7 @@
+routes:
+  gpt-6.1-sol-high:
+    model: gpt-6.1-sol
+    effort: high
+  claude-opus-5.5-high:
+    model: claude-opus-5.5
+    effort: high

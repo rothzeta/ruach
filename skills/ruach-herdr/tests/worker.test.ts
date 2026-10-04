@@ -77,6 +77,32 @@ test('explicit resolve and dry-run preserve config, hide all discovered workflow
   expect(rpcCalls.filter(x=>x.method==='config/read').every(x=>x.params.cwd===repo)).toBe(true);
   expect(await readFile(join(home,'.codex-sentinel'),'utf8')).toBe('unchanged configuration');
 });
+for(const kind of ['claude','codex'])for(const role of ['coordinator','implementer'])test(`${kind} ${role} uses explicit source roles, skills and catalogs`,async()=>{
+  const sourceResources=join(root,'source resources'),catalogs=join(root,'source catalogs');
+  await mkdir(join(sourceResources,'agents'),{recursive:true});
+  await writeFile(join(sourceResources,'agents',`${role}.md`),'Source-only '+role+' instructions.');
+  await skill(join(sourceResources,'skills','technical'),'ruach-source-technical');
+  await skill(join(sourceResources,'skills','workflow'),'ruach-workflow-source');
+  await cp(join(fixture,'routing'),catalogs,{recursive:true});
+  const resourceArgs=['--resources',sourceResources,'--catalogs',catalogs];
+  const offline=await asRole(role,'resolve',[...resourceArgs,'--offline']);
+  expect(offline.exit).toBe(0);expect(offline.result.selection.roleFile).toBe(join(sourceResources,'agents',`${role}.md`));
+  expect(offline.result.selection.resources).toBe(sourceResources);expect(offline.result.launchable).toBe(false);
+  const r=await asRole(role,'start',[...resourceArgs,'--kind',kind,'--model','test-model','--effort','high']);
+  expect(r.exit).toBe(0);expect(r.result.hidden_workflows.includes('ruach-workflow-source')).toBe(role!=='coordinator');
+  const native=(await lines('native-launches.jsonl'))[0];
+  if(kind==='claude') {
+    expect(native.args).toContain(join(sourceResources,'agents',`${role}.md`));
+    const generated=r.result.temporary_directory;
+    expect(await stat(join(generated,'.claude/skills/ruach-source-technical'))).toBeDefined();
+    expect(await stat(join(generated,'.claude/skills/ruach-workflow-source')).then(()=>true,()=>false)).toBe(role==='coordinator');
+  } else {
+    const developer=Bun.TOML.parse(native.args.find((arg:string)=>arg.startsWith('developer_instructions='))).developer_instructions;
+    expect(developer).toContain('Source-only '+role+' instructions.');expect(developer).toContain(JSON.stringify(join(sourceResources,'skills')));
+    const entries=Bun.TOML.parse(native.args.find((arg:string)=>arg.startsWith('skills.config='))).skills.config;
+    if(role!=='coordinator')expect(entries.find((entry:any)=>entry.path===join(sourceResources,'skills','workflow','SKILL.md')).enabled).toBe(false);
+  }
+});
 test('explicit Codex start composes developer text and existing skills, passes exact native args and starts once without focus',async()=>{
   const pass=['--add-dir',join(root,'directory with spaces $() `text`'),'--no-alt-screen'];
   const r=await launch('start',[...explicit,'--temp-dir',temporary,'--',...pass]);

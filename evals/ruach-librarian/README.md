@@ -1,6 +1,6 @@
 # Librarian behavioral evaluation packet
 
-Developer evaluation material for [ruach-librarian](../../skills/ruach-librarian/SKILL.md). It lives outside `skills/`, so installation never copies these cases or rubrics into a consumer. The corpora are synthetic. Prepare a fresh isolated copy of a case's corpus for each subject, and never run upkeep on a real consumer mailbox. The Implementer prepares fixtures but does not run or grade the subject.
+Developer evaluation material for [ruach-librarian](../../skills/ruach-librarian/SKILL.md). It lives outside `skills/`, so snapshot and skill installations exclude these cases and rubrics. A native plugin fetched as a complete Git repository can retain developer files on disk; these packets are not registered plugin components or subject inputs. The corpora are synthetic. Prepare a fresh isolated copy of a case's corpus for each subject, and never run upkeep on a real consumer mailbox. The Implementer prepares fixtures but does not run or grade the subject.
 
 ## Subject boundary
 

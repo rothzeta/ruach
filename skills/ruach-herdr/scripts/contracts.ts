@@ -31,6 +31,7 @@ export async function contents(path: string): Promise<string> {
 export type Permissions = 'inherit' | 'auto-review';
 export interface Selection {
   name: string; role: string; roleFile: string; roleHash: string; repo: string; cwd: string;
+  resources?: string;
   kind: Kind; model: string; permissions: Permissions; effort?: string; route?: string; provenance: string;
 }
 export interface Plan {

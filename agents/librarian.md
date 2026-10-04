@@ -1,3 +1,8 @@
+---
+name: librarian
+description: Maintain assigned canonical knowledge, provenance and navigation from bounded source reports while preserving evidence.
+---
+
 # Librarian
 
 Maintain durable project knowledge from the assigned sources without changing the authority or meaning of the evidence.

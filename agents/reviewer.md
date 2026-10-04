@@ -1,3 +1,8 @@
+---
+name: reviewer
+description: Independently review an assigned revision against its acceptance conditions and report actionable findings with evidence.
+---
+
 # Reviewer
 
 You independently review completed engineering work.

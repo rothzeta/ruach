@@ -17,10 +17,10 @@ async function yaml(path: string, root: string) {
   for(const key of Object.keys(mapping)) string(key,`${path}:${root}`);
   return mapping;
 }
-export async function routed(repo: string, role: string, requested?: string) {
-  const models=await yaml(join(repo,'.agents','models.yaml'),'models');
-  const routes=await yaml(join(repo,'.agents','routing.yaml'),'routes');
-  const roles=await yaml(join(repo,'.agents','roles.yaml'),'roles');
+export async function routed(repo: string, role: string, requested?: string, catalogs = join(repo, '.agents'), resources = join(repo, '.agents')) {
+  const models=await yaml(join(catalogs,'models.yaml'),'models');
+  const routes=await yaml(join(catalogs,'routing.yaml'),'routes');
+  const roles=await yaml(join(catalogs,'roles.yaml'),'roles');
   for(const [id,v] of Object.entries(models)) {
     const f=`models.yaml:models.${id}`, m=object(v,f);
     exactKeys(m,['harness','native_model'],f);
@@ -47,7 +47,7 @@ export async function routed(repo: string, role: string, requested?: string) {
   const route=requested ?? roles[role].preferred;
   if(![roles[role].preferred,...(roles[role].alternatives ?? [])].includes(route)) fail(2,'disallowed_route','Requested route is outside role preferences and alternatives','route');
   const r=routes[route],m=models[r.model];
-  await contents(join(repo,'.agents','agents',`${role}.md`));
+  await contents(join(resources,'agents',`${role}.md`));
   validateEffort(m.harness as Kind,r.effort);
-  return {route,kind:m.harness as Kind,model:m.native_model as string,effort:r.effort as string,provenance:'repository .agents YAML'};
+  return {route,kind:m.harness as Kind,model:m.native_model as string,effort:r.effort as string,provenance:catalogs===join(repo,'.agents')?'repository .agents YAML':'repository YAML catalogs'};
 }

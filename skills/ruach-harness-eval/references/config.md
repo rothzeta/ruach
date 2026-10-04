@@ -33,7 +33,7 @@ Required root fields: `schema_version`, nonempty `task`, assignment file path, `
 
 `cwd` must be exactly `{repo}`, `{foreign_cwd}`, or `{fixture:ID}`. These tokens also expand inside individual argv, env, and expected-output strings without word splitting. `{foreign_cwd}` is a fresh, empty directory outside the candidate. Token-shaped `{unknown}` strings are rejected; other literal braces are allowed. No shell, arbitrary evaluator expressions, or command interpolation is supported. Empty argv elements are permitted after the executable.
 
-`expect` requires exactly one of `exit` (integer 0..255) or `exit_nonzero: true`. Optional `stdout`/`stderr` demand exact strings; `stdout_contains`, `stderr_contains`, `stdout_not_contains`, `stderr_not_contains` test literal substrings, case sensitive. For example, a Python test-suite check can require `stderr_not_contains: "Ran 0 tests"`. A signal, timeout, or output-limit termination always fails, even with a nonzero-exit expectation.
+`expect` requires exactly one of `exit` (integer 0..255) or `exit_nonzero: true`. Optional `stdout`/`stderr` demand exact strings; `stdout_contains`, `stderr_contains`, `stdout_not_contains`, `stderr_not_contains` test literal substrings, case sensitive. For example, a Bun test-suite check can require `stderr_not_contains: "\n 0 pass\n"` to reject the zero-pass summary. A signal, timeout, or output-limit termination always fails, even with a nonzero-exit expectation.
 
 Optional `expect.files` is an array of `{path, content?, sha256?}` relative to the check cwd. At least one expected value is required; both are enforced when present. Content supports root tokens; sha256 is lowercase hex. Missing/unreadable files and symlinks fail the check.
 

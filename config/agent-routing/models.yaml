@@ -1,0 +1,8 @@
+# Ruach development routes; consumers keep their own model policy.
+models:
+  gpt-6.1-sol:
+    harness: codex
+    native_model: gpt-6.1-sol
+  claude-opus-5.5:
+    harness: claude
+    native_model: claude-opus-5-5

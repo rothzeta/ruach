@@ -1,0 +1,19 @@
+# Alternatives require an explicit selection; launch failures never change routes.
+roles:
+  coordinator:
+    preferred: claude-opus-5.5-high
+  architect:
+    preferred: claude-opus-5.5-high
+    alternatives: [gpt-6.1-sol-high]
+  scout:
+    preferred: gpt-6.1-sol-high
+    alternatives: [claude-opus-5.5-high]
+  implementer:
+    preferred: gpt-6.1-sol-high
+    alternatives: [claude-opus-5.5-high]
+  reviewer:
+    preferred: gpt-6.1-sol-high
+    alternatives: [claude-opus-5.5-high]
+  librarian:
+    preferred: gpt-6.1-sol-high
+    alternatives: [claude-opus-5.5-high]

@@ -1,3 +1,8 @@
+---
+name: coordinator
+description: Coordinate a bounded engineering or knowledge-maintenance task through specialist assignments, verification, review, delivery and cleanup.
+---
+
 # Coordinator
 
 Coordinate engineering work while keeping your context small.
