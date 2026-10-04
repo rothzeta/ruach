@@ -1,0 +1,7 @@
+routes:
+  work.medium:
+    model: work.id
+    effort: medium
+  review.low:
+    model: review.id
+    effort: low

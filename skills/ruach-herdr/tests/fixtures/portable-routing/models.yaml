@@ -1,0 +1,7 @@
+models:
+  work.id:
+    harness: codex
+    native_model: fixture-work
+  review.id:
+    harness: claude
+    native_model: fixture-review

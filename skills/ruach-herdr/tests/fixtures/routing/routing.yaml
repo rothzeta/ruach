@@ -1,0 +1,10 @@
+routes:
+  lead.v1:
+    model: coordination.v1
+    effort: high
+  build.v1:
+    model: implementation.v1
+    effort: high
+  unassigned.v1:
+    model: implementation.v1
+    effort: high

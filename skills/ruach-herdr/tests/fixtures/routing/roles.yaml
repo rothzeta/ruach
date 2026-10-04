@@ -1,0 +1,15 @@
+roles:
+  coordinator:
+    preferred: lead.v1
+  architect:
+    preferred: lead.v1
+    alternatives: [build.v1]
+  scout:
+    preferred: build.v1
+    alternatives: [lead.v1]
+  implementer:
+    preferred: build.v1
+    alternatives: [lead.v1]
+  reviewer:
+    preferred: build.v1
+    alternatives: [lead.v1]

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ruach handoff leading block (v1)",
+  "type": "object",
+  "required": ["task", "status", "outcome", "artifacts", "verification", "discoveries", "blockers"],
+  "properties": {
+    "task": { "$ref": "#/definitions/text" },
+    "status": { "enum": ["complete", "blocked", "needs-decision", "failed"] },
+    "outcome": { "$ref": "#/definitions/text" },
+    "artifacts": { "type": "array", "items": { "$ref": "#/definitions/text" } },
+    "verification": { "$ref": "#/definitions/checks" },
+    "review": { "$ref": "#/definitions/checks" },
+    "discoveries": { "$ref": "#/definitions/notes" },
+    "blockers": { "$ref": "#/definitions/notes" }
+  },
+  "patternProperties": {
+    "(^|_)(revision|baseline)$|^destination_before$": { "$ref": "#/definitions/text" }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "text": { "type": "string", "pattern": "\\S" },
+    "note": {
+      "anyOf": [
+        { "$ref": "#/definitions/text" },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 1,
+          "propertyNames": { "$ref": "#/definitions/text" },
+          "additionalProperties": { "$ref": "#/definitions/text" }
+        }
+      ]
+    },
+    "notes": { "type": "array", "items": { "$ref": "#/definitions/note" } },
+    "checks": {
+      "anyOf": [
+        { "const": "not-run" },
+        { "$ref": "#/definitions/notes" }
+      ]
+    }
+  }
+}

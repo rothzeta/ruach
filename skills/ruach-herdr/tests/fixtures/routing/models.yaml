@@ -1,0 +1,7 @@
+models:
+  coordination.v1:
+    harness: claude
+    native_model: fixture-claude
+  implementation.v1:
+    harness: codex
+    native_model: fixture-codex

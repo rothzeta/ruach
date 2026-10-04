@@ -1,0 +1,13 @@
+{
+  "name": "ruach-herdr",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "yaml": "2.8.1",
+    "ws": "8.18.3"
+  }
+}

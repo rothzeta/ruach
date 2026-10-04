@@ -1,0 +1,8 @@
+roles:
+  builder:
+    preferred: work.medium
+    alternatives: [review.low]
+  designer:
+    preferred: review.low
+  auditor:
+    preferred: work.medium
