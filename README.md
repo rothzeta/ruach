@@ -7,6 +7,7 @@ Portable agent roles and self-contained skills for bounded engineering and knowl
 - `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer and Librarian contracts.
 - `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
 - `docs/adr/`: Ruach source and consumer ownership decisions.
+- `docs/roadmap.md`: proposed post-stabilisation direction and open decisions.
 - `scripts/`: explicit pinned snapshot installation and resource checks.
 - `config/agent-routing/`: routing policy for developing Ruach itself.
 - `tests/`: installation contract checks. Skill-specific suites live with their skills.
