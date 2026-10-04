@@ -27,7 +27,8 @@ async function lines(file:string){const body=await readFile(join(root,file),'utf
 async function skill(dir:string,name:string){await mkdir(dir,{recursive:true});await writeFile(join(dir,'SKILL.md'),`---\nname: ${name}\ndescription: Test skill.\n---\nTest body\n`);}
 async function launch(command='start',extra:string[]=[],env:Record<string,string>={}) {
   await save();
-  const proc=Bun.spawn([process.execPath,worker,command,'--name','example-worker','--role','implementer','--cwd',repo,'--repo',repo,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
+  const placement=extra.includes('--placement')?[]:['--placement','pane'];
+  const proc=Bun.spawn([process.execPath,worker,command,'--name','example-worker','--role','implementer','--cwd',repo,'--repo',repo,...placement,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
   const [stdout,stderr,exit]=await Promise.all([new Response(proc.stdout).text(),new Response(proc.stderr).text(),proc.exited]);
   return {exit,stdout,stderr,result:JSON.parse(stdout)};
 }
@@ -123,7 +124,7 @@ test('duplicate launcher options are rejected before any mutation',async()=>{
 });
 async function asRole(role:string,command='start',extra:string[]=[]) {
   await save();
-  const p=Bun.spawn([process.execPath,worker,command,'--name','routed-worker','--role',role,'--cwd',repo,'--repo',repo,'--temp-dir',temporary,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,FIXTURE_ROOT:root,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1'},stdout:'pipe',stderr:'pipe'});
+  const p=Bun.spawn([process.execPath,worker,command,'--name','routed-worker','--role',role,'--cwd',repo,'--repo',repo,'--placement','pane','--temp-dir',temporary,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,FIXTURE_ROOT:root,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1'},stdout:'pipe',stderr:'pipe'});
   const [stdout,stderr,exit]=await Promise.all([new Response(p.stdout).text(),new Response(p.stderr).text(),p.exited]);return {exit,stdout,stderr,result:JSON.parse(stdout)};
 }
 test('routed start and route override launch the data-selected native profile',async()=>{

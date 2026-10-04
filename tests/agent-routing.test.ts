@@ -52,6 +52,12 @@ test('external worktree selects policy and cwd while source code and resources r
     argv: ['start', '--role', 'architect', '--name', 'designer', '--repo', worktree, '--cwd', worktree,
       '--resources', fixture, '--catalogs', join(worktree, 'config/agent-routing'), '--permissions', 'inherit', '--dry-run', '--route', 'chosen'] }]);
 });
+test('Architect wrapper forwards exact background worktree options once', () => {
+  const path=join(fixture,'design space $() `literal`');
+  const result=run(['start','architect','design-a','--placement','worktree','--worktree',path,'--branch','design/a','--base','v0.1.0']);
+  expect(result.status).toBe(0);expect(calls()).toHaveLength(1);
+  expect(calls()[0].argv.slice(-8)).toEqual(['--placement','worktree','--worktree',path,'--branch','design/a','--base','v0.1.0']);
+});
 for (const code of [2, 3, 4]) test(`worker exit ${code} is preserved without retry`, () => {
   expect(run(['start', 'reviewer', 'reviewer-a'], wrapper, { WORKER_EXIT: String(code) }).status).toBe(code);
   expect(calls()).toHaveLength(1);

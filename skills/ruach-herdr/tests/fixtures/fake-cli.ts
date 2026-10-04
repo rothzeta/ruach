@@ -9,10 +9,16 @@ function out(v:any){console.log(JSON.stringify(v));}
 if(exe==='herdr') {
   if(args.join(' ')==='agent start --help')console.log(`--kind --pane [possible values: ${data.kinds??'claude, codex, pi, opencode, omp, agy'}]`);
   else if(args.join(' ')==='pane split --help')console.log('--current --direction --cwd --no-focus --env');
+  else if(args.join(' ')==='workspace create --help')console.log('--cwd --label --no-focus --env');
   else if(args.join(' ')==='pane layout --current') {
     if(data.unreachable)process.exit(1);
     out({result:{layout:{panes:[{pane_id:data.pane??'w1:p1',rect:{width:data.width??130}}]}}});
   } else if(args.join(' ')==='agent list')out({result:{agents:data.agents??[]}});
+  else if(args.slice(0,2).join(' ')==='workspace create') {
+    appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'workspace',args,cwd:process.cwd()})+'\n');
+    if(data.workspaceFailure)process.exit(1);
+    out({result:{workspace:{workspace_id:'w2'},...(data.workspaceMalformed?{}:{root_pane:{pane_id:'w2:p1'}})}});
+  }
   else if(args.slice(0,2).join(' ')==='pane split') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'split',args,cwd:process.cwd()})+'\n');
     if(data.splitFailure)process.exit(1);
@@ -30,7 +36,7 @@ if(exe==='herdr') {
     // Execute only fake harnesses, which record actual native arguments.
     const proc=Bun.spawnSync([join(root,'bin',args[args.indexOf('--kind')+1]),...native],{cwd:process.cwd(),env:process.env});
     if(proc.exitCode!==0)process.exit(1);
-    out({result:{agent:{name:args[2],pane_id:'w1:p2'}}});
+    out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
 } else if(args.includes('--help')) {
   console.log('--model --config --cd --effort --settings --add-dir --no-alt-screen --sandbox --ask-for-approval --verbose'+(data.noAutoReview?'':' --permission-mode --approve-for-me'));

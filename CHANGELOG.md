@@ -2,6 +2,13 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
+## 0.2.0 — 2026-10-04
+
+- Worker launches now create isolated Git worktrees and background Herdr workspaces by default, preserving caller focus and layout.
+- Added `just architect`, custom worktree path/branch/base options and explicit `--placement pane` compatibility.
+- Native configuration is read in the worker checkout before startup; results include checkout, branch, workspace and inspection details.
+- Post-mutation failures preserve resources and report recovery state without automatic retry or cleanup.
+
 ## 0.1.0 — 2026-10-04
 
 - Initial versioned distribution of six reusable roles and eight Agent Skills.

@@ -1,5 +1,6 @@
 import { fail, Failure } from './contracts';
 import { json, run } from './process';
+import manifest from '../package.json';
 // Prefer the existing matching daemon; never start or replace a persistent daemon.
 async function daemonRead(exe: string, cwd: string) {
   const version=await run([exe,'app-server','daemon','version'],cwd);
@@ -28,7 +29,7 @@ async function daemonRead(exe: string, cwd: string) {
   const timer=setTimeout(()=>{rejectAll();ws.terminate();},10000);
   try {
     await new Promise<void>((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject);ws.once('close',()=>reject(unavailable()));});
-    await rpc('initialize',{clientInfo:{name:'ruach-herdr',version:'0.1.0'},capabilities:{experimentalApi:true}});
+    await rpc('initialize',{clientInfo:{name:'ruach-herdr',version:manifest.version},capabilities:{experimentalApi:true}});
     ws.send(JSON.stringify({method:'initialized'}));
     const config=await rpc('config/read',{cwd,includeLayers:false});
     const skills=await rpc('skills/list',{cwds:[cwd],forceReload:false});
@@ -59,7 +60,7 @@ async function stdioRead(exe:string,cwd:string) {
     while(true){const response=await message();if(response.id!==n)continue;if(response.error)throw Error('native read failed');return response.result;}
   }
   try {
-    await rpc('initialize',{clientInfo:{name:'ruach-herdr',version:'0.1.0'},capabilities:{experimentalApi:true}});
+    await rpc('initialize',{clientInfo:{name:'ruach-herdr',version:manifest.version},capabilities:{experimentalApi:true}});
     await send({method:'initialized'});
     const config=await rpc('config/read',{cwd,includeLayers:false});
     const skills=await rpc('skills/list',{cwds:[cwd],forceReload:false});

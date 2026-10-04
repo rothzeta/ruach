@@ -1,6 +1,6 @@
 # Ruach
 
-Current release: **0.1.0**. See the [changelog](CHANGELOG.md).
+Current release: **0.2.0**. See the [changelog](CHANGELOG.md).
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -21,7 +21,7 @@ Ruach follows the [Agent Skills specification](https://agentskills.io/specificat
 Install the released skills globally for Codex and Claude Code:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.1.0 --global --agent codex --agent claude-code --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.2.0 --global --agent codex --agent claude-code --skill '*'
 ```
 
 Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
@@ -29,7 +29,7 @@ Omit `--global` for a project installation. From a checkout of the desired relea
 For Claude Code, install the native plugin to expose all eight skills and six named agents together:
 
 ```sh
-claude plugin marketplace add rothzeta/ruach#v0.1.0 --scope user
+claude plugin marketplace add rothzeta/ruach#v0.2.0 --scope user
 claude plugin install ruach@ruach --scope user
 claude --agent ruach:coordinator
 ```
@@ -38,21 +38,35 @@ The marketplace tag fixes the release, and `.claude-plugin/plugin.json` supplies
 
 Executable skills require Bun and their own frozen dependency install. A copied or cached skill keeps its local `package.json` and `bun.lock`: run `bun install --frozen-lockfile` inside `ruach-handoff`, `ruach-herdr` and `ruach-harness-eval` before running their scripts. `just install` prepares those dependencies in this source checkout. Native plugin installation does not automatically install these nested skill packages.
 
-## Develop Ruach with a Coordinator
+## Develop Ruach with named roles
 
 The development launcher uses `agents/` and `skills/` directly from this checkout. It does not install Ruach into itself. Requires Just, Bun and Git; live startup additionally requires Herdr and the selected native harness.
 
 ```sh
 just install
 just agent-routing resolve coordinator
-# Run from an existing Herdr pane:
+# Run in an authorized Herdr session:
 just coordinator
+just architect ruach-designer
 just coordinator ruach-lead --dry-run
 just agent-routing start implementer ruach-builder
 just agent-routing start architect ruach-designer --route gpt-6.1-sol-high
+# Explicitly use a sibling pane instead of a new worktree workspace:
+just architect ruach-designer --placement pane
 ```
 
-The Coordinator prefers Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The launcher defaults to automatic approval review; `--permissions inherit` preserves native permission settings. `resolve` selects offline without native config reads or panes. `start --dry-run` checks live prerequisites without launching; `start` creates one sibling pane without focus and starts once. Send the task separately after startup. Inspect uncertain startup state before trying again. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
+The Coordinator and Architect prefer Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The launcher defaults to automatic approval review; `--permissions inherit` preserves native permission settings. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
+
+For `just architect`, the default worker name is `ruach-architect`, checkout `/path/to/ruach-worktrees/ruach-architect` next to this repo, branch `ruach/ruach-architect`, and base committed HEAD. Choose a fresh worker name for each launch; existing branches and paths are rejected. Uncommitted source edits are not copied. Use `--worktree DIR`, `--branch NAME` and `--base REF` to customize the checkout. Native settings are read again from the actual worker checkout before startup. `--placement pane` explicitly uses the supplied source cwd and requires a caller pane ID.
+
+With access to the same Herdr session, inspect a background worker or bring its workspace into view using the returned workspace ID:
+
+```sh
+herdr agent read ruach-designer --source recent-unwrapped
+herdr workspace focus <returned-workspace-id>
+```
+
+Results include workspace/pane IDs, worktree path/branch/base and inspection commands. If creation or startup fails after mutation, inspect those resources and the reported state before retrying. The launcher retains them for recovery. After reuse ends, close the owned session/workspace and remove its worktree only after committing useful work to a retained branch; keep the branch.
 
 Use `BUN_BIN` to override Bun, otherwise Just uses `~/.bun/bin/bun` when present, then `bun` on PATH. `bun run agent-routing -- resolve coordinator` is also available. `--root DIR` selects another Ruach worktree's routing catalogs and working directory while retaining the launcher and canonical resources from this checkout.
 
@@ -63,12 +77,12 @@ Global discovery uses the standard installation commands above. The source launc
 For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
 
 ```sh
-bun scripts/install.ts install --source . --version 0.1.0 --target /path/to/project/.agents
+bun scripts/install.ts install --source . --version 0.2.0 --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
 ```
 
-`--version 0.1.0` selects exactly the `v0.1.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+`--version 0.2.0` selects exactly the `v0.2.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
 

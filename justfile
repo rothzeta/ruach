@@ -40,6 +40,10 @@ test:
 agent-routing *args:
     @"{{bun}}" scripts/agent-routing.ts "$@"
 
-# Launch the Coordinator in one sibling Herdr pane.
+# Launch the Coordinator in a background worktree workspace.
 coordinator *args:
     @"{{bun}}" scripts/agent-routing.ts start coordinator "$@"
+
+# Launch the Architect in a background worktree workspace.
+architect *args:
+    @"{{bun}}" scripts/agent-routing.ts start architect "$@"

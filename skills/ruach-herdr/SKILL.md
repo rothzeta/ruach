@@ -1,6 +1,6 @@
 ---
 name: ruach-herdr
-description: Resolve a repository role and model route, prepare native harness instructions, and start one named worker in a sibling Herdr pane. Use for an authorized worker launch; excludes assignments, monitoring, prompts, evaluation, and benchmarks.
+description: Resolve a repository role and model route, prepare native harness instructions, and start one named worker in a background Git worktree workspace. Supports an explicitly requested sibling pane. Use for an authorized worker launch; excludes assignments, monitoring, prompts, evaluation, and benchmarks.
 ---
 
 # Ruach Herdr
@@ -14,7 +14,7 @@ bun test
 
 The test suite binds local Unix-domain sockets to simulate native config reads. Its sandbox must permit socket binding; a prerequisite probe fails immediately with an explanation when binding is denied. Tests use temporary HOME/config directories and fake CLIs; they do not silently skip unsupported environments.
 
-`resolve` without `--offline`, `start --dry-run`, and `start` all require live Herdr context (`HERDR_ENV=1`, the caller's `HERDR_PANE_ID`, and readable caller layout/live names), plus the selected native prerequisites. Resolve effective selection or prepare a launch without creating launch material or panes:
+`resolve` without `--offline`, `start --dry-run`, and `start` require an authorized live Herdr session (`HERDR_ENV=1` and readable live names), plus the selected native prerequisites. Default worktree placement does not require a caller pane ID or layout. Resolve effective selection or prepare a launch without creating worktrees, launch material or workspaces:
 
 ```sh
 bun scripts/worker.ts resolve --name task-worker --role implementer --cwd /path/to/worktree
@@ -37,7 +37,20 @@ Start only after authorization to create the named worker:
 bun scripts/worker.ts start --name task-worker --role implementer --cwd /path/to/worktree
 ```
 
-`start` uses the same live context as resolve/dry-run: `HERDR_ENV=1` and the caller's `HERDR_PANE_ID`; preflight reads that pane and live names. It splits that pane once with `--no-focus`, preserves the requested cwd and executable PATH, and submits one `herdr agent start`. It never sends a task prompt or retries. Coordinator workflow skills remain visible according to existing native settings; workers receive the canonical role and known local `ruach-workflow-*` names are disabled where the native mechanism supports it. The launcher never supplies workflow bodies as worker instructions. Only the Coordinator loads and executes workflow bodies; workers follow their canonical role and the Coordinator’s self-contained assignment. Existing developer and technical skill configuration is preserved.
+`start` defaults to `--placement worktree`: create a new Git branch and worktree, then a Herdr workspace with `--no-focus`, and submit one `herdr agent start` in its initial terminal. The caller's layout and focus stay intact. The default destination is `<checkout-parent>/<checkout-name>-worktrees/<worker-name>`, branch `ruach/<worker-name>`, and base the source checkout's committed HEAD. `--worktree DIR`, `--branch NAME` and `--base REF` customize these values. Existing paths and branches are rejected; the launcher never overwrites or reuses them. Uncommitted source changes are not copied. Canonical resources and routing remain in their selected source locations.
+
+Preflight checks the native route, destination, branch and resolved base before creating anything. Native configuration is read again in the actual worktree before startup, so project settings and relative native arguments use the worker's checkout. Dry-run reports the planned destination and pinned commit, but inspects native configuration in the source cwd because the destination does not yet exist. A failure after worktree creation returns exit 4 with recovery information and preserves the checkout and branch.
+
+`--placement pane` explicitly requests a sibling pane in the supplied cwd. Only this mode requires `HERDR_PANE_ID` and readable caller layout. It splits once with `--no-focus`; worktree-specific options are invalid in this mode. Both modes preserve executable PATH and harness configuration roots in the new terminal. Neither sends a task prompt or retries.
+
+Successful results report `workspace`, `pane`, `worktree` (path, cwd, branch and resolved base), `worktree_state` and inspection argv. An authorized caller with access to the same Herdr session can read or focus the background worker when needed:
+
+```sh
+herdr agent read task-worker --source recent-unwrapped
+herdr workspace focus <returned-workspace-id>
+```
+
+Coordinator workflow skills remain visible according to existing native settings; workers receive the canonical role and known local `ruach-workflow-*` names are disabled where the native mechanism supports it. The launcher never supplies workflow bodies as worker instructions. Only the Coordinator loads and executes workflow bodies; workers follow their canonical role and the Coordinator’s self-contained assignment. Existing developer and technical skill configuration is preserved.
 
 Claude and Codex have launch preparation enabled. Codex prefers an already-running matching-version local daemon for native effective config discovery; otherwise it uses a short-lived stdio app-server and terminates it after config/catalog reads. It never starts or replaces a persistent daemon. Pi, OpenCode, DSH, OMP, and Agy currently fail before mutation for missing or unverified capabilities. Read [adapter evidence and limits](references/adapters.md) before selecting a harness. A prepared argv does not establish account access, model availability, native acceptance, or a successful paid session.
 
@@ -45,11 +58,11 @@ Claude keeps native account-synced, plugin, managed and legacy customizations. T
 
 `resolve --offline` is fully write-free and reads selection and canonical role only; it returns `launchable: false` and no native argv. It cannot authorize a start.
 
-One versioned JSON result goes to stdout; concise diagnostics go to stderr. Exit codes: `0` resolved/prepared/started; `2` usage or invalid data/config; `3` unavailable executable, Herdr context/kind, or native capability; `4` preparation failure or uncertain post-mutation state. Developer text and native pass-through values are redacted in results. Never treat a failed startup as proof that submission did not occur: inspect the reported pane before launching again.
+One versioned JSON result goes to stdout; concise diagnostics go to stderr. Exit codes: `0` resolved/prepared/started; `2` usage or invalid data/config; `3` unavailable executable, Herdr context/kind, or native capability; `4` preparation failure or post-mutation state requiring inspection. Developer text and native pass-through values are redacted in results. Never treat a failed startup as proof that submission did not occur: inspect the reported launch space before launching again.
 
-For launch recovery, exit `2` requires fixing the usage or config error. For exit `3`, read the diagnostic: a missing executable, Herdr context/kind, or native capability can be fixed, after which the same route can be relaunched. Exit `3` does not prove the model or account is unavailable. For exit `4`, inspect the reported pane and its `submission_state` before any relaunch. Never send a new assignment into a session that is still working or waiting for input. Route changes follow the caller's route policy; the launcher itself never falls back.
+For launch recovery, exit `2` requires fixing the usage or config error. For exit `3`, read the diagnostic: a missing executable, Herdr context/kind, or native capability can be fixed, after which the same route can be relaunched. Exit `3` does not prove the model or account is unavailable. For exit `4`, inspect the reported worktree/branch, workspace, pane, `worktree_state` and `submission_state` before any relaunch. Never send a new assignment into a session that is still working or waiting for input. Route changes follow the caller's route policy; the launcher itself never falls back.
 
-Private generated material uses the OS temporary root, or existing `--temp-dir DIR`, with restricted permissions. Successful or uncertain launches retain it; the caller removes it after the session ends and state is known. Resolve/dry-run create no launch material or panes, but the no-daemon Codex reader may initialize native runtime state. Do not change persistent user harness settings or install global symlinks.
+Private generated material uses the OS temporary root, or existing `--temp-dir DIR`, with restricted permissions. Successful or uncertain launches retain it; the caller removes it after the session ends and state is known. Release an owned workspace once no pending assignment needs it. Remove an owned worktree only when its work is committed and reachable from a retained branch, running `git worktree remove` from a retained checkout; keep the branch. Preserve unrelated resources and uncommitted evidence. Resolve/dry-run create no worktrees, launch material or workspaces, but the no-daemon Codex reader may initialize native runtime state. Do not change persistent user harness settings or install global symlinks.
 
 Pass native arguments after `--`. The bounded supported flags are Codex `--no-alt-screen`, `--sandbox`/`-s`, `--ask-for-approval`/`-a`, `--add-dir`; Claude `--verbose`, `--permission-mode`, `--add-dir`. Value flags accept one value each (repeat `--add-dir` for multiple directories) or `--flag=value`. Accepted argv elements retain their bytes and ordering. Model, effort, role/config, resume, prompt, print, credential, and unknown flags are rejected before mutation. Under the default inherit policy, existing supported native permission flags remain available.
 
