@@ -335,3 +335,18 @@ test('Codex no-daemon coordinator retains enabled workflows and unrelated skill 
 test('Codex unresponsive stdio reader hits its deadline and leaves no child or launch mutation',async()=>{
   behavior.daemonMissing=true;behavior.stdioNoReply=true;const r=await launch('resolve',explicit);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('codex_config_unavailable');await readersStopped();await noMutation();
 },20000);
+for(const style of ['no-frontmatter','no-name','nested-unrelated'])test(`valid unrelated Claude skill (${style}) does not block launch preparation`,async()=>{
+  const dir=join(repo,'.claude','skills','third-party');await mkdir(dir,{recursive:true});
+  if(style==='no-frontmatter')await writeFile(join(dir,'SKILL.md'),'# Third party\nPlain instructions without frontmatter.\n');
+  else await writeFile(join(dir,'SKILL.md'),'---\ndescription: Name comes from the directory.\n---\nBody\n');
+  if(style==='nested-unrelated'){await mkdir(join(repo,'pkg','.claude','skills','local'),{recursive:true});await writeFile(join(repo,'pkg','.claude','skills','local','SKILL.md'),'No frontmatter either.\n');}
+  for(const [command,extra] of [['resolve',[]],['start',['--dry-run']]] as const){
+    const r=await asRole('architect',command,extra);expect(r.exit,r.stderr).toBe(0);expect(r.result.launchable).toBe(true);
+  }
+  await noMutation();
+});
+for(const defect of ['no-frontmatter','no-name','bad-name'])test(`Ruach-owned skill with ${defect} stays strictly validated`,async()=>{
+  const dir=join(repo,'.agents','skills','owned');await mkdir(dir,{recursive:true});
+  await writeFile(join(dir,'SKILL.md'),defect==='no-frontmatter'?'# Owned\n':defect==='no-name'?'---\ndescription: x\n---\nBody\n':'---\nname: Not Valid\n---\nBody\n');
+  const r=await asRole('architect','start',['--dry-run']);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('invalid_skill');await noMutation();
+});

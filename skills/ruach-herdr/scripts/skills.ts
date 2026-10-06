@@ -1,9 +1,12 @@
 import { readdir, realpath, readFile, stat } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { homedir } from 'node:os';
 import { fail } from './contracts';
 export interface Skill {name:string; path:string; source:string; workflow:boolean}
-export async function scan(root:string,excludedPath?:string):Promise<Skill[]> {
+// Ruach-owned roots are validated strictly. Other roots hold unrelated native skills that
+// Claude itself accepts without frontmatter or a name (the directory name is used), so only
+// genuinely unparsable frontmatter or a non-string name is an error there.
+export async function scan(root:string,excludedPath?:string,strict=false):Promise<Skill[]> {
   const found:Skill[]=[];const seen=new Set<string>();
   async function visit(path:string,depth:number) {
     if(path===excludedPath)return;
@@ -15,11 +18,15 @@ export async function scan(root:string,excludedPath?:string):Promise<Skill[]> {
     if((await stat(file).catch(()=>null))?.isFile()) {
       const body=await readFile(file,'utf8');
       const header=body.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
-      if(!header) fail(2,'invalid_skill','Skill lacks YAML frontmatter',file);
-      let name;
-      try { const {parseDocument}=await import('yaml');const doc=parseDocument(header[1],{uniqueKeys:true});if(doc.errors.length)throw Error();name=doc.toJS({maxAliasCount:0}).name; }
-      catch { return fail(2,'invalid_skill','Cannot parse skill frontmatter',file); }
-      if(typeof name!=='string' || !/^[a-z0-9][a-z0-9-]*$/.test(name)) fail(2,'invalid_skill','Invalid skill name',file);
+      if(!header && strict) fail(2,'invalid_skill','Skill lacks YAML frontmatter',file);
+      let name:any=basename(path);
+      if(header) {
+        let declared;
+        try { const {parseDocument}=await import('yaml');const doc=parseDocument(header[1],{uniqueKeys:true});if(doc.errors.length)throw Error();declared=doc.toJS({maxAliasCount:0})?.name; }
+        catch { return fail(2,'invalid_skill','Cannot parse skill frontmatter',file); }
+        if(declared!==undefined||strict)name=declared;
+      }
+      if(typeof name!=='string' || !(strict?/^[a-z0-9][a-z0-9-]*$/.test(name):name.trim())) fail(2,'invalid_skill','Invalid skill name',file);
       found.push({name,path:canonical,source:path,workflow:name.startsWith('ruach-workflow-')});
       return;
     }
