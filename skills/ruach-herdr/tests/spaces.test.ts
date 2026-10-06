@@ -186,6 +186,16 @@ test('inherited Git environment cannot move the worktree into another repository
   expect(command(['worktree','list','--porcelain'])).toContain(target);
   expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
 });
+test('a replacement ref cannot change the tree checked out for the reported base',async()=>{
+  const base=command(['rev-parse','HEAD']);
+  await writeFile(join(repo,'tracked.txt'),'Forged by replacement\n');
+  command(['add','tracked.txt']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Forged']);
+  const forged=command(['rev-parse','HEAD']);command(['reset','--quiet','--hard',base]);
+  command(['replace',base,forged]);
+  const r=await launch(['--dry-run']);expect(r.exit,r.stderr).toBe(0);
+  const live=await launch();expect(live.exit,live.stderr).toBe(0);
+  expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
+});
 test('a helper descendant holding probe pipes cannot stall launch and is reaped from the helper group',async()=>{
   behavior.descendant=true;const started=Date.now();
   const r=await launch(['--dry-run']);
