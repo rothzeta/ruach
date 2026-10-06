@@ -410,3 +410,37 @@ for (const flag of ['--assume-unchanged', '--skip-worktree']) test(`index flag $
   const accepted = accept(f); expect(accepted.exit).not.toBe(0); expect(accepted.value.ok).toBe(false);
   expect(accepted.value.checks.every((c: any) => c.status !== 'passed')).toBe(true);
 });
+
+// A descendant in its own session keeps inherited output pipes open without being in the check's process group.
+const holder = (seconds: number) => `require("child_process").spawn(process.execPath,["-e","setTimeout(()=>{},${seconds * 1000})"],{detached:true,stdio:["ignore","inherit","inherit"]}).unref()`;
+test('a descendant holding output pipes cannot stall a completed check past its bound', () => {
+  const f = fixture(); const started = Date.now();
+  const observed = accept(f, acceptance(f, [check([bun, '-e', holder(15)], { exit: 0 }, { timeout_ms: 5000 })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.exit).toBe(1); expect(observed.value.checks[0].status).toBe('failed');
+  expect(observed.value.checks[0].diagnostics.map((d: any) => d.code)).toContain('orphaned_output');
+});
+test('timeout settles once within a bound even when a descendant keeps the pipes open', () => {
+  const f = fixture(); const started = Date.now();
+  const observed = accept(f, acceptance(f, [check([bun, '-e', `${holder(15)}; setInterval(()=>{},1000)`], { exit: 0 }, { timeout_ms: 500 })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.value.checks[0].timed_out).toBe(true); expect(observed.value.checks[0].status).toBe('failed');
+});
+test('FIFO and oversized expected files yield structured failed checks within a bound', () => {
+  const f = fixture(); const started = Date.now();
+  const script = 'const fs=require("fs");require("child_process").execFileSync("mkfifo",["pipe"]);fs.closeSync(fs.openSync("big","w"));fs.truncateSync("big",20*1024*1024)';
+  const observed = accept(f, acceptance(f, [check([bun, '-e', script], { exit: 0, files: [{ path: 'pipe', content: 'x' }, { path: 'big', sha256: '0'.repeat(64) }] }, { cwd: '{foreign_cwd}' })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.exit).toBe(1); const diagnostics = observed.value.checks[0].diagnostics;
+  expect(diagnostics.filter((d: any) => d.code === 'file_unreadable').map((d: any) => d.field)).toEqual(['expect.files.pipe', 'expect.files.big']);
+});
+test('special files as configuration inputs are structured setup errors, not hangs', () => {
+  const f = fixture(); const fifo = join(f.base, 'assignment.fifo');
+  expect(spawnSync('mkfifo', [fifo]).status).toBe(0);
+  const config = acceptance(f); config.assignment = fifo;
+  const observed = accept(f, config);
+  expect(observed.exit).toBe(2); expect(observed.value.diagnostics.map((d: any) => d.code)).toContain('unreadable_artifact');
+  const evidence = join(f.base, 'evidence.fifo'); expect(spawnSync('mkfifo', [evidence]).status).toBe(0);
+  const checked = scope(f, { evidence: { acceptance: 'evidence.fifo' }, task: 't', run: 'r' });
+  expect(checked.exit).toBe(2); expect(checked.value.diagnostics.map((d: any) => d.code)).toContain('unreadable_artifact');
+});

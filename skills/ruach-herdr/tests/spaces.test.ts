@@ -46,7 +46,13 @@ const args=process.argv.slice(2),root=process.env.FIXTURE_ROOT;
 appendFileSync(root+'/git-calls.jsonl',JSON.stringify(args)+'\\n');
 const behavior=JSON.parse(readFileSync(root+'/behavior.json','utf8'));
 if(behavior.worktreeFailure&&args.includes('add')&&args.includes('worktree'))process.exit(1);
-const result=spawnSync(${JSON.stringify(git)},args,{stdio:'inherit'});process.exit(result.status??1);
+const result=spawnSync(${JSON.stringify(git)},args,{stdio:'inherit'});
+if(behavior.descendant&&args.includes('--show-toplevel')&&!args.includes('--quiet')){
+  // A helper descendant keeps inherited output pipes open after the probe finishes.
+  const child=Bun.spawn([process.execPath,'-e','setTimeout(()=>{},20000)'],{stdio:['ignore','inherit','inherit']});
+  appendFileSync(root+'/descendants.pid',child.pid+'\\n');child.unref();
+}
+process.exit(result.status??1);
 `);
   await chmod(join(bin,'git'),0o700);
   behavior={daemonMissing:true};cwdOverride=undefined;
@@ -180,3 +186,17 @@ test('inherited Git environment cannot move the worktree into another repository
   expect(command(['worktree','list','--porcelain'])).toContain(target);
   expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
 });
+test('a helper descendant holding probe pipes cannot stall launch and is reaped from the helper group',async()=>{
+  behavior.descendant=true;const started=Date.now();
+  const r=await launch(['--dry-run']);
+  expect(Date.now()-started).toBeLessThan(12000);expect(r.exit,r.stderr).toBe(0);
+  const pids=(await readFile(join(root,'descendants.pid'),'utf8')).trim().split('\n').map(Number);
+  await Bun.sleep(300);
+  for(const pid of pids)expect(()=>process.kill(pid,0)).toThrow();
+},20000);
+test('a FIFO in place of a canonical role file fails promptly as unreadable',async()=>{
+  const role=join(repo,'.agents/agents/architect.md');await rm(role);
+  expect(Bun.spawnSync(['mkfifo',role]).exitCode).toBe(0);
+  const started=Date.now();const r=await launch(['--dry-run']);
+  expect(Date.now()-started).toBeLessThan(8000);expect(r.exit).toBe(2);expect(r.data.diagnostics[0].code).toBe('unreadable_file');
+},20000);

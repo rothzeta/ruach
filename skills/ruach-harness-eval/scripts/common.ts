@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { accessSync, constants, lstatSync, readFileSync, statSync, realpathSync, writeFileSync } from 'node:fs';
+import { accessSync, closeSync, constants, fstatSync, lstatSync, openSync, readFileSync, statSync, realpathSync, writeFileSync } from 'node:fs';
 import { delimiter, dirname, isAbsolute, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -29,8 +29,25 @@ export function repoPath(value: any, field: string, prefix = false): string {
   if (isAbsolute(path) || path.includes('\\') || parts.some(p => !p || p === '.' || p === '..' || p.toLowerCase() === '.git') || (prefix && !path.endsWith('/'))) fail(field, 'Expected a repository-relative path (directory prefixes end in /)');
   return path;
 }
+// Largest input or expected-file artifact read into memory.
+export const ARTIFACT_LIMIT = 16 * 1024 * 1024;
+// Read only a bounded regular file. O_NONBLOCK keeps a FIFO from stalling the open and
+// the descriptor check keeps devices, directories and growing files from being read.
+export function readArtifact(path: string, field = 'artifact', limit = ARTIFACT_LIMIT): Buffer {
+  let fd: number | undefined;
+  try {
+    fd = openSync(path, constants.O_RDONLY | constants.O_NONBLOCK);
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.size > limit) throw new Error('unsuitable');
+    const body = readFileSync(fd);
+    if (body.length > limit) throw new Error('unsuitable');
+    return body;
+  } catch { throw new SetupError('unreadable_artifact', field, 'Input must be a readable regular file within the size budget'); }
+  finally { if (fd !== undefined) try { closeSync(fd); } catch {} }
+}
 export function loadJson(path: string): any {
-  try { return JSON.parse(readFileSync(path, 'utf8')); }
+  const body = readArtifact(path, 'config').toString('utf8');
+  try { return JSON.parse(body); }
   catch { throw new SetupError('unreadable_config', 'config', 'Cannot read JSON input'); }
 }
 export function hash(value: string | Buffer) { return createHash('sha256').update(value).digest('hex'); }

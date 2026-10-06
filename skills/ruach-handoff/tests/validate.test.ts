@@ -119,6 +119,19 @@ describe("leading block and schema through the CLI", () => {
     expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["FIELD_INVALID"]);
     expect(result.json.diagnostics[0].path).toBe("/tested_revision");
   });
+  test("a FIFO or oversized report is an unreadable input, never a hang or unbounded read", () => {
+    const folder = dir(), fifo = join(folder, "report.md");
+    expect(Bun.spawnSync(["mkfifo", fifo]).exitCode).toBe(0);
+    const started = Date.now();
+    let result = run([fifo]);
+    expect(result.exit).toBe(2);
+    expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["INPUT_UNREADABLE"]);
+    const big = file(minimal + "\n\n" + "x".repeat(20 * 1024 * 1024));
+    result = run([big]);
+    expect(result.exit).toBe(2);
+    expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["INPUT_UNREADABLE"]);
+    expect(Date.now() - started).toBeLessThan(8000);
+  }, 10_000);
   test("the shipped schema is the structural oracle, including role metadata", () => {
     const schema = JSON.parse(readFileSync(join(skill, "handoff.schema.json"), "utf8"));
     const validate = new Ajv({ strict: true }).compile(schema);

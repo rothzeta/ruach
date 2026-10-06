@@ -1,3 +1,4 @@
+import { closeSync, constants, fstatSync, openSync, readFileSync } from "node:fs";
 import { readFile, realpath } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
@@ -56,7 +57,13 @@ try {
 let source: string;
 try {
   report = await realpath(report);
-  source = (await readFile(report, "utf8")).replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+  // Bounded regular file only: O_NONBLOCK keeps a FIFO from blocking the open.
+  const fd = openSync(report, constants.O_RDONLY | constants.O_NONBLOCK);
+  try {
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.size > 16 * 1024 * 1024) throw new Error("unsuitable");
+    source = readFileSync(fd, "utf8").replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+  } finally { closeSync(fd); }
 } catch {
   fail(2, "INPUT_UNREADABLE", "/report", "Cannot read the report file.");
 }
