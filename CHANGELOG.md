@@ -8,7 +8,7 @@ Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`
 
 Track A, integrity and security:
 
-- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`) rejected by acceptance checks, and verified worker checkouts that ignore inherited `GIT_*` variables.
+- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`), `core.fsmonitor` and tracked files with a Git filter attribute rejected or neutralized by acceptance checks, and verified worker checkouts that ignore inherited `GIT_*` variables.
 - A2: patched `ws` and `yaml` dependencies in Herdr.
 - A3: strict handoff keys, escaped diagnostics and revision checks; native skill discovery tolerates unrelated skills.
 - A4: bounded processes and artifact reads (descendant pipes, FIFOs, oversized files).

@@ -46,7 +46,7 @@ Snapshot route, run offline into a temporary directory:
 - `ready --route native` before dependencies exited 1 with the exact `bun install --frozen-lockfile` remediation for `ruach-handoff` and `ruach-herdr`; after running those two commands, `ready --route herdr` exited 0.
 - Codex `skills/list` for the project listed the 8 Ruach skills with scope `repo`.
 
-One caution: a plain `claude` run elsewhere refreshed `~/.claude/plugins/known_marketplaces.json` (the `claude-plugins-official` timestamp) during the experiment window, presumably this session's own background refresh. The experiments' own marketplace and plugin entries are only in the temporary config directory; the pre-existing `ruach` entry in the real file is unchanged.
+One caution: a plain `claude` run elsewhere refreshed `~/.claude/plugins/known_marketplaces.json` (the `claude-plugins-official` timestamp) during the experiment window. The cause is unattributed: it could be a background refresh by a running Claude session or one of the experiment commands, and no evidence here separates them. The experiments' own marketplace and plugin entries are only in the temporary config directory; the pre-existing `ruach` entry in the real file is unchanged.
 
 ## Claude `--agent` versus the Herdr adapter
 

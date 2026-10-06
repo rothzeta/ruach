@@ -426,6 +426,26 @@ test('core.fsmonitor cannot hide changes from clean checks', () => {
   expect(observed.value.diagnostics.length).toBeGreaterThan(0);
 });
 
+// A clean filter selected through untracked repository config can rewrite a tampered file to its committed content
+// while status hashes it, so filtered tracked files must fail closed rather than read as clean.
+for (const source of ['info-attributes', 'tracked-gitattributes']) test(`a clean filter from ${source} cannot forge a clean checkout`, () => {
+  const f = fixture();
+  git(f.repo, 'config', 'filter.forge.clean', "printf 'stable\\n'");
+  if (source === 'info-attributes') write(join(f.repo, '.git', 'info', 'attributes'), 'protected filter=forge\n');
+  else { write(join(f.repo, '.gitattributes'), 'protected filter=forge\n'); git(f.repo, 'add', '.gitattributes'); git(f.repo, 'commit', '-q', '-m', 'attributes'); }
+  Bun.sleepSync(1100); // let the tampered file's stat data differ from the index entry
+  write(join(f.repo, 'protected'), 'TAMPER\n');
+  const observed = scope(f, {}, 'HEAD', [], git(f.repo, 'rev-parse', 'HEAD'));
+  expect(observed.exit).not.toBe(0); expect(observed.value.ok).toBe(false);
+  expect(observed.value.diagnostics.length).toBeGreaterThan(0);
+  const accepted = accept(f); expect(accepted.exit).not.toBe(0); expect(accepted.value.ok).toBe(false);
+});
+test('repositories without filter attributes are unaffected', () => {
+  const f = fixture();
+  write(join(f.repo, '.gitattributes'), '*.txt text eol=lf\n'); git(f.repo, 'add', '.gitattributes'); git(f.repo, 'commit', '-q', '-m', 'eol');
+  expect(scope(f, { paths: ['.gitattributes'] }).exit).toBe(0);
+});
+
 // A descendant in its own session keeps inherited output pipes open without being in the check's process group.
 const holder = (seconds: number) => `require("child_process").spawn(process.execPath,["-e","setTimeout(()=>{},${seconds * 1000})"],{detached:true,stdio:["ignore","inherit","inherit"]}).unref()`;
 test('a descendant holding output pipes cannot stall a completed check past its bound', () => {

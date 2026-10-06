@@ -78,3 +78,7 @@ test('the Herdr suite runs with a raised per-test timeout in just test and is do
   expect(read('justfile')).toMatch(/skills\/ruach-herdr && "\{\{bun\}\}" test --timeout 30000/);
   expect(read('docs/operations.md')).toContain('--timeout 30000');
 });
+
+test('known limitations document the filter fail-closed behavior', () => {
+  expect(read('docs/operations.md')).toContain('content_filter_state');
+});
