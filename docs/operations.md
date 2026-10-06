@@ -160,7 +160,7 @@ Worktrees, branches and reports created by past tasks belong to the task records
 
 ## Release verification and toolchain versions
 
-CI (`.github/workflows/ci.yml`) is the reference gate: frozen installs (`just install`), `just check` (resource checks and typecheck), `just release-check`, `bun audit` for the root and each locked skill, and `just test` (root tools plus the handoff, Herdr and harness-eval suites). The runner must permit local sockets because Herdr tests open them. Locally run the same recipes.
+CI (`.github/workflows/ci.yml`) is the reference gate: frozen installs (`just install`), `just check` (resource checks and typecheck), `just release-check`, `bun audit` for the root and each locked skill, and `just test` (root tools plus the handoff, Herdr and harness-eval suites). The runner must permit local sockets because Herdr tests open them. Locally run the same recipes, one at a time: the Herdr suite takes a few minutes. Its tests start real processes and sockets, so `skills/ruach-herdr/bunfig.toml` preloads `tests/setup.ts`, which raises Bun's 5 s per-test default to 30 s so loaded hosts do not fail spuriously.
 
 Recorded toolchain for the 0.3 line (update with each release that changes it; the CI `BUN_VERSION`/`JUST_VERSION` must match):
 
@@ -179,3 +179,9 @@ CI action references use version tags, not commit SHAs.
 
 - **Snapshot integrity** covers the files copied into a consumer: resource identities, links, release metadata, and that skill `bun.lock` files exist and are frozen. `just check` and `just release-check` verify it. It says nothing about the machine that runs the snapshot.
 - **Runtime/bootstrap integrity** covers what a run depends on that the snapshot does not contain: the Bun, Git, Herdr and native harness versions, `bun install --frozen-lockfile` having been run inside each executable skill, and resolved executables on `PATH`. Verify it per machine (readiness checks, `bun audit`, the suites); a passing snapshot check does not establish it, and a passing local run does not establish snapshot integrity.
+
+## Known limitations in 0.3
+
+- **Concurrent installs.** `install` plans (drift, leftovers, conflicts) before it takes the `.ruach-staging` lock. Two installers racing on one target can plan against state that changes before the lock; do not run two installs into the same target at once. Every state reached in stress runs passed `check`, but the window is not closed.
+- **Linked launches.** If identity verification fails after `herdr worktree create` succeeded, the failure result does not yet report the workspace Herdr opened (`workspace: null`); find it with `herdr worktree list`. A launch from a `--cwd` subdirectory that is absent from the base commit is detected only after the checkout is created (exit 4, path and branch retained). In linked mode Herdr itself runs `git worktree add`, so the launcher cannot disable replacement refs there; the standalone path does.
+- **Codex instructions in argv.** See the Codex adapter reference: role instructions are visible in local process listings.
