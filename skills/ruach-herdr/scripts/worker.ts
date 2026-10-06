@@ -6,7 +6,7 @@ import { contents, directory, fail, Failure, identifier, kinds, efforts, string,
 import { environment, executable, json, run } from './process';
 import { routed } from './routing';
 import { prepare } from './adapters';
-import { worktreePlan, createWorktree, type Worktree } from './spaces';
+import { worktreePlan, createWorktree, createLinkedWorktree, linkedParent, type Worktree } from './spaces';
 const usage='bun scripts/worker.ts resolve|start --name NAME --role ROLE --cwd DIR [--repo DIR] [--resources DIR] [--catalogs DIR] [--route ID | --kind KIND --model MODEL [--effort LEVEL]] [--placement worktree|pane] [--worktree DIR] [--branch NAME] [--base REF] [--dry-run | --offline] [--temp-dir DIR] [--permissions inherit|auto-review] [-- NATIVE_FLAGS]';
 function options(args:string[]) {
   if(args.includes('--help')||args.includes('-h')) {console.log(JSON.stringify({schema_version:1,ok:true,usage}));process.exit(0);}
@@ -72,8 +72,11 @@ try {
   const h=await run([herdr,'agent','start','--help'],cwd);
   const available=h.stdout.match(/\[possible values:([^\]]+)\]/)?.[1].split(',').map(x=>x.trim());
   if(h.exit!==0||h.timedOut||!available?.includes(selected.kind))fail(3,'unsupported_herdr_kind','Installed Herdr does not support the selected kind','kind');
-  const topologyHelp=await run([herdr,placement==='pane'?'pane':'workspace',placement==='pane'?'split':'create','--help'],cwd);
-  const required=placement==='pane'?['--current','--direction','--cwd','--no-focus','--env']:['--cwd','--label','--no-focus','--env'];
+  // Linked mode needs a launching workspace of this repository; otherwise keep a standalone workspace.
+  const link=placement==='worktree'&&process.env.HERDR_ENV==='1'?await linkedParent(herdr,cwd,process.env.HERDR_WORKSPACE_ID||undefined):{parent:null,reason:null};
+  const linkedMode=link.parent!==null;
+  const topologyHelp=await run([herdr,placement==='pane'||linkedMode?'pane':'workspace',placement==='pane'||linkedMode?'split':'create','--help'],cwd);
+  const required=placement==='pane'?['--current','--direction','--cwd','--no-focus','--env']:linkedMode?['--direction','--cwd','--no-focus','--env']:['--cwd','--label','--no-focus','--env'];
   if(topologyHelp.exit!==0||topologyHelp.timedOut||required.some(f=>!topologyHelp.stdout.includes(f)))fail(3,'unsupported_herdr','Required Herdr placement capabilities are unavailable','herdr');
   if(process.env.HERDR_ENV!=='1')fail(3,'missing_herdr_context','An authorized Herdr session with HERDR_ENV=1 is required','HERDR_ENV');
   let direction:string|undefined;
@@ -93,12 +96,14 @@ try {
   if(agents.some((a:any)=>a.name===v.name))fail(2,'duplicate_name','Agent name is already in use','name');
   let plan=await prepare(selected,o.pass);
   if(placement==='worktree')worktree=await worktreePlan(cwd,v.name,v);
-  const output=()=>({schema_version:1,ok:true,selection:selected!,permissions:selected!.permissions,placement,worktree:worktree??null,worktree_state:worktreeState,git_root:gitRoot??null,launchable:true,coverage:plan.coverage,cli_version:plan.version,config_reader:plan.configReader??null,argv:plan.redactedArgv,hidden_workflows:plan.hiddenWorkflows,temporary_operations:plan.operations,direction:direction??null,diagnostics:[],limits:['No paid session, native prompt/skill acceptance, account entitlement or model availability is established by preflight.',...(worktree?['A new worktree starts from the resolved commit; uncommitted source changes are not copied. Dry-run inspects native settings in the source cwd; start reads them again in the new worktree.']:[])]});
+  const output=()=>({schema_version:1,ok:true,selection:selected!,permissions:selected!.permissions,placement,worktree:worktree??null,worktree_state:worktreeState,worktree_mode:placement==='worktree'?(linkedMode?'linked':'standalone'):null,linked_parent:link.parent,...(placement==='worktree'&&!linkedMode?{linked_unavailable:link.reason}:{}),git_root:gitRoot??null,launchable:true,coverage:plan.coverage,cli_version:plan.version,config_reader:plan.configReader??null,argv:plan.redactedArgv,hidden_workflows:plan.hiddenWorkflows,temporary_operations:plan.operations,direction:direction??null,diagnostics:[],limits:['No paid session, native prompt/skill acceptance, account entitlement or model availability is established by preflight.',...(worktree?['A new worktree starts from the resolved commit; uncommitted source changes are not copied. Dry-run inspects native settings in the source cwd; start reads them again in the new worktree.']:[])]});
   if(o.command==='resolve'||o.dry){console.log(JSON.stringify({...output(),action:o.command==='resolve'?'resolved':'dry-run',submission_state:state}));}
   else {
     if(worktree) {
       phase='worktree';worktreeState='unknown';
-      await createWorktree(cwd,worktree);worktreeState='created';
+      if(linkedMode){const made=await createLinkedWorktree(herdr,cwd,link.parent!,v.name,worktree);workspace=made.workspace;pane=made.pane;}
+      else await createWorktree(cwd,worktree);
+      worktreeState='created';
       selected={...selected,cwd:worktree.cwd,resources};
       // Re-read native configuration from the actual worker checkout, rather than
       // importing the caller checkout's project settings or relative paths.
@@ -110,23 +115,26 @@ try {
       argv=await plan.materialize(temp);
     }
     if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
-    phase=placement==='pane'?'split':'workspace';state='unknown';
+    phase=placement==='pane'||linkedMode?'split':'workspace';state='unknown';
+    const rootPane=linkedMode?pane:undefined;if(linkedMode)pane=undefined;
     const paneEnvironment=['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).flatMap(key=>['--env',`${key}=${environment()[key]}`]);
-    const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:[herdr,'workspace','create','--label',v.name];
+    // Herdr's worktree create takes no environment, so the worker pane is split from the linked
+    // workspace's root pane to carry the caller's PATH and configuration homes.
+    const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:linkedMode?[herdr,'pane','split',rootPane!,'--direction','right']:[herdr,'workspace','create','--label',v.name];
     const created=await run([...topology,'--cwd',selected.cwd,'--no-focus',...paneEnvironment],selected.cwd);
-    const code=placement==='pane'?'split_uncertain':'workspace_uncertain';
+    const code=placement==='pane'||linkedMode?'split_uncertain':'workspace_uncertain';
     if(created.exit!==0||created.timedOut)fail(4,code,'Launch space creation failed or timed out; inspect state before any new invocation','herdr');
     try {
       const result=JSON.parse(created.stdout).result;
-      pane=placement==='pane'?result?.pane?.pane_id:result?.root_pane?.pane_id;
-      workspace=placement==='worktree'?result?.workspace?.workspace_id:undefined;
+      pane=placement==='pane'||linkedMode?result?.pane?.pane_id:result?.root_pane?.pane_id;
+      if(!linkedMode)workspace=placement==='worktree'?result?.workspace?.workspace_id:undefined;
     }catch{}
     if(typeof pane!=='string'||!pane||placement==='worktree'&&(typeof workspace!=='string'||!workspace))fail(4,code,'Launch space response lacks its IDs; inspect state','herdr');
     // Exactly one submission. Inspect readiness failures without retrying.
     phase='start';
     const start=await run([herdr,'agent','start',v.name,'--kind',selected.kind,'--pane',pane,'--',...argv],selected.cwd,35000);
     const inspection={read:['herdr','agent','read',v.name,'--source','recent-unwrapped'],...(workspace?{focus:['herdr','workspace','focus',workspace]}:{})};
-    const space={pane,workspace:workspace??null,inspection,temporary_directory:temp??null,cleanup:'Release the owned session and private material after reuse ends; remove the worktree only after its work is committed and reachable from a retained branch. Keep the branch.'};
+    const space={pane,workspace:workspace??null,inspection,temporary_directory:temp??null,cleanup:(linkedMode?`Release the owned session and private material after reuse ends; remove the registered worktree with herdr worktree remove --workspace ${workspace} only after its work is committed and reachable from a retained branch. Keep the branch.`:'Release the owned session and private material after reuse ends; remove the worktree only after its work is committed and reachable from a retained branch. Keep the branch.')};
     if(start.exit!==0||start.timedOut) {
       // Herdr returns agent_not_ready when a native trust/onboarding dialog is
       // visible. Verify identity and live state rather than hiding it as failure.

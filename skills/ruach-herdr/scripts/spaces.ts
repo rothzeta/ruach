@@ -1,7 +1,7 @@
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { lstat, realpath } from 'node:fs/promises';
 import { fail } from './contracts';
-import { executable, run } from './process';
+import { executable, json, run } from './process';
 
 export interface Worktree {
   path: string;
@@ -34,9 +34,48 @@ export async function worktreePlan(cwd: string, name: string, values: Record<str
   return { path, cwd: join(path, inside), branch, base: base.stdout.trim() };
 }
 
+// A parent is usable only when Herdr resolves it to a workspace of this same repository.
+// Anything else (absent, unreachable, other repository, missing flags) keeps a standalone workspace.
+export async function linkedParent(herdr: string, cwd: string, parent: string | undefined): Promise<{ parent: string | null; reason: string | null }> {
+  if (!parent) return { parent: null, reason: 'no launching workspace in the Herdr context' };
+  const help = await run([herdr, 'worktree', 'create', '--help'], cwd);
+  if (help.exit !== 0 || help.timedOut || !['--workspace', '--branch', '--base', '--path', '--label', '--no-focus'].every(flag => help.stdout.includes(flag)))
+    return { parent: null, reason: 'installed Herdr lacks linked worktree creation' };
+  const listed = await run([herdr, 'worktree', 'list', '--workspace', parent], cwd);
+  let key: unknown;
+  try { key = json(listed.stdout, 'worktree list').result?.source?.repo_key; } catch {}
+  const common = await run([executable('git'), '-C', cwd, 'rev-parse', '--path-format=absolute', '--git-common-dir'], cwd);
+  if (listed.exit !== 0 || listed.timedOut || typeof key !== 'string' || common.exit !== 0 || common.timedOut)
+    return { parent: null, reason: 'launching workspace is not a Git worktree workspace' };
+  const [a, b] = await Promise.all([realpath(key).catch(() => null), realpath(common.stdout.trim()).catch(() => null)]);
+  if (!a || a !== b) return { parent: null, reason: 'launching workspace belongs to a different repository' };
+  return { parent, reason: null };
+}
+
 export async function createWorktree(cwd: string, worktree: Worktree) {
   const result = await run([executable('git'), '-C', cwd, 'worktree', 'add', '-b', worktree.branch, '--', worktree.path, worktree.base], cwd, 30000);
   if (result.exit !== 0 || result.timedOut) fail(4, 'worktree_uncertain', 'Worktree creation failed or timed out; inspect the reported path and branch before retrying', 'worktree');
+  await verifyWorktree(worktree);
+}
+
+// Registers the checkout with Herdr as a linked worktree of the parent workspace.
+export async function createLinkedWorktree(herdr: string, cwd: string, parent: string, label: string, worktree: Worktree): Promise<{ workspace: string; pane: string }> {
+  const created = await run([herdr, 'worktree', 'create', '--workspace', parent, '--branch', worktree.branch, '--base', worktree.base, '--path', worktree.path, '--label', label, '--no-focus'], cwd, 30000);
+  if (created.exit !== 0 || created.timedOut) fail(4, 'worktree_uncertain', 'Worktree creation failed or timed out; inspect the reported path and branch before retrying', 'worktree');
+  await verifyWorktree(worktree);
+  let workspace: unknown, pane: unknown, linked: unknown, path: unknown;
+  try {
+    const result = JSON.parse(created.stdout).result;
+    workspace = result?.workspace?.workspace_id; pane = result?.root_pane?.pane_id;
+    linked = result?.worktree?.is_linked_worktree; path = result?.worktree?.path;
+  } catch {}
+  const canonical = async (value: string) => realpath(value).catch(() => null);
+  if (typeof workspace !== 'string' || !workspace || typeof pane !== 'string' || !pane || linked !== true || typeof path !== 'string' || await canonical(path) !== await canonical(worktree.path))
+    fail(4, 'worktree_uncertain', 'Linked worktree response does not confirm its workspace and checkout; inspect the reported path and branch before retrying', 'worktree');
+  return { workspace: workspace as string, pane: pane as string };
+}
+
+async function verifyWorktree(worktree: Worktree) {
   // The worker must run inside the checkout just created, not any other repository.
   const git = executable('git');
   const [top, head, cwdTop] = await Promise.all([

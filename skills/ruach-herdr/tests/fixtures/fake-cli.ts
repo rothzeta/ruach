@@ -9,6 +9,19 @@ function out(v:any){console.log(JSON.stringify(v));}
 if(exe==='herdr') {
   if(args.join(' ')==='agent start --help')console.log(`--kind --pane [possible values: ${data.kinds??'claude, codex, pi, opencode, omp, agy'}]`);
   else if(args.join(' ')==='pane split --help')console.log('--current --direction --cwd --no-focus --env');
+  else if(args.join(' ')==='worktree create --help')console.log(data.noLinked?'--cwd':'--workspace --cwd --branch --base --path --label --focus --no-focus');
+  else if(args.slice(0,2).join(' ')==='worktree list') {
+    if(data.parentUnknown)process.exit(1);
+    out({result:{source:{repo_key:data.parentRepoKey??join(data.repo,'.git'),source_workspace_id:args[3]},worktrees:[]}});
+  } else if(args.slice(0,2).join(' ')==='worktree create') {
+    const at=(flag:string)=>args[args.indexOf(flag)+1];
+    appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'worktree',args,cwd:process.cwd()})+'\n');
+    if(data.linkedFailure)process.exit(1);
+    if(data.linkedPartial)Bun.spawnSync([data.git,'-C',data.repo,'branch',at('--branch'),at('--base')]);
+    else if(Bun.spawnSync([data.git,'-C',data.repo,'worktree','add','-b',at('--branch'),'--',at('--path'),at('--base')]).exitCode!==0)process.exit(1);
+    if(data.linkedPartial)process.exit(1);
+    out({result:{workspace:{workspace_id:'w9'},...(data.linkedMalformed?{}:{root_pane:{pane_id:'w9:p1'}}),worktree:{branch:at('--branch'),path:at('--path'),is_linked_worktree:data.linkedUnlinked?false:true}}});
+  }
   else if(args.join(' ')==='workspace create --help')console.log('--cwd --label --no-focus --env');
   else if(args.join(' ')==='pane layout --current') {
     if(data.unreachable)process.exit(1);
@@ -23,7 +36,7 @@ if(exe==='herdr') {
   else if(args.slice(0,2).join(' ')==='pane split') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'split',args,cwd:process.cwd()})+'\n');
     if(data.splitFailure)process.exit(1);
-    out({result:{pane:{pane_id:'w1:p2'}}});
+    out({result:{pane:{pane_id:args[2]&&!args[2].startsWith('--')?args[2].split(':')[0]+':p2':'w1:p2'}}});
   } else if(args.slice(0,2).join(' ')==='agent start') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'start',args,cwd:process.cwd()})+'\n');
     if(data.startTimeout)await new Promise(r=>setTimeout(r,40000));
