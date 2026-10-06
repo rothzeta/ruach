@@ -2,6 +2,36 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
+## 0.3.0 — Unreleased
+
+Planned scope, per the [roadmap](docs/roadmap.md). Items marked "delivered by another worker" are not part of this documentation change and are listed only as plan.
+
+Track A, integrity and security (delivered by other workers):
+
+- Identity guarantees for pinned reads, index flags and worker checkouts; patched `ws` and `yaml` dependencies.
+- Stricter handoff and native-discovery parsing; bounded processes and artifact reads; pinned launch executable identity.
+- Recoverable snapshot installation with staged writes, rollback and an immediate integrity check, as designed in [the 0.3 design](docs/design/0.3-install-and-readiness.md).
+- Hardening and per-skill LICENSE/PROVENANCE notices.
+
+Track B, verification gate (delivered by other workers): typecheck, a CI job over all suites and audits, and added regression cases.
+
+Track C, onboarding and installation:
+
+- Choose-by-job README (standalone skills, direct native role, coordinated Herdr use) with what each route installs and still needs; source-development detail moved after the consumer paths.
+- Lifecycle guide in the operations guide: inspect, upgrade pin to pin, prepare dependencies, resolve duplicates, remove while preserving local resources.
+- Optional `compatibility` metadata on executable skills so Bun, Git and Herdr prerequisites show early; `just check` now validates it and requires Bun to be declared by executable skills.
+- A readiness command (`just ready`) is planned in parallel work; this entry does not describe its behavior.
+
+Track D, product consolidation:
+
+- Worked consumer example, assignment specimen, direct/compact/full use guide with a proportionate-overhead rule, task record example for resuming a Coordinator, and a one-coordination-owner-per-task note.
+- Wording: uncommitted diffs and retained checkouts are normal delivery outcomes; Implementers justify scope changes and the Coordinator approves; Reviewer covers assigned artifacts and the responsible worker. No role authority changed.
+- Discovery metadata: the feature workflow is described as Coordinator-only, the Librarian covers queries, and `ruach-harness-eval` is described as a checker, not a benchmark runner (`model_use_verified` stays false).
+- Shorter common paths: handoff validator output details moved to a reference; cleanup rules stated once in the Coordinator role.
+- Before/after examples in `ruach-testing`, including replacing a fixed-seed snapshot with property assertions.
+
+Track E, native packaging and parity checks (delivered by other workers or follow-up): clean-install smoke tests per route, Codex role discovery, Claude/Herdr composition notes and source-mode skill exposure checks.
+
 ## 0.2.1 — 2026-10-04
 
 - Fixed local Claude marketplace registration to pass an absolute checkout path instead of the unsupported bare `.` source.
