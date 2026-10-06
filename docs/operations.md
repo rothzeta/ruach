@@ -25,6 +25,17 @@ An install killed mid-commit also leaves `.ruach-staging`. `install` refuses and
 
 For hosts that receive only skill folders through the Skills CLI, there is no installer script; run `ready` and installation commands from a Ruach checkout or plugin copy.
 
+## Check readiness
+
+`ready` reports, read-only, whether this Ruach copy can serve a route. It reads files and runs only `--version` probes; it never installs, writes settings or changes discovery links, and prints remediation commands instead of running them.
+
+```sh
+just ready --route skill|native|herdr [--json]      # source checkout
+bun .agents/ruach-install.ts ready --route native   # installed snapshot
+```
+
+It scans the active copy plus project (`.agents/skills`, `.agents/agents`, `.claude/skills`; `--project DIR` changes the project root), user (`~/.claude/skills`, `~/.agents/skills`, `$CODEX_HOME/skills`) and any `--skills DIR` locations, then checks each executable skill's nested packages against its `bun.lock` (`ready`, `missing`, `mismatched` or `no-dependencies`) and the Bun, Git and Herdr prerequisites. Duplicate Ruach skill or role names are warnings. Exit codes: 0 ready, or no route requested; 1 the requested route is not ready; 2 usage error; 3 inspection failed. For the standalone Skills CLI route no script is installed, so run it from a checkout or plugin copy with `--skills DIR`.
+
 ## Launch while developing Ruach
 
 Run these in an authorized Herdr session with `HERDR_ENV=1`, Bun, Git and the selected native harness available:

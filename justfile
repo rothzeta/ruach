@@ -32,6 +32,10 @@ release-check:
 check:
     @"{{bun}}" run check
 
+# Report read-only readiness of this checkout (pass --route skill|native|herdr, --json).
+ready *args:
+    @"{{bun}}" scripts/install.ts ready "$@"
+
 # Test root tools and each executable skill.
 test:
     @"{{bun}}" run test

@@ -2,8 +2,9 @@
 // Install/check a committed Ruach snapshot without touching consumer policy.
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { accessSync, chmodSync, constants, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, rmdirSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
+import { homedir } from 'node:os';
 import { parseArgs } from 'node:util';
 
 const ORIGIN = 'https://github.com/rothzeta/ruach.git', METADATA = 'ruach.json', STAGING = '.ruach-staging';
@@ -215,6 +216,158 @@ function install(options: Options) {
   try { rmSync(staging, { recursive: true }); }
   catch { console.error(`Warning: the install is verified, but ${staging} could not be removed; delete it before the next install.`); }
 }
+// ---- ready: read-only readiness report. It only reads files and runs `--version` probes. ----
+type Check = { ready: boolean; missing: string[]; warnings: string[] };
+type Item = { name: string; path: string; version?: string };
+type Location = { scope: string; kind: 'skills' | 'agents'; path: string; items: Item[] };
+type PackageReport = { skill: string; path: string; state: 'ready' | 'missing' | 'mismatched' | 'no-dependencies'; remediation?: string };
+const ROLES = ['architect', 'coordinator', 'implementer', 'librarian', 'reviewer', 'scout'];
+const ROUTES = ['skill', 'native', 'herdr'] as const;
+class UsageError extends Error {}
+const home = () => process.env.HOME || homedir();
+function tilde(path: string): string { const h = home(); return h && h !== '/' && (path === h || path.startsWith(h + '/')) ? '~' + path.slice(h.length) : path; }
+function shellWord(path: string): string { return /^[\w@%+=:,./-]+$/.test(path) ? path : `'${path.replaceAll("'", "'\\''")}'`; }
+function which(name: string): string | undefined {
+  for (const directory of (process.env.PATH ?? '').split(':').filter(Boolean)) {
+    const path = join(directory, name);
+    try { if (statSync(path).isFile()) { accessSync(path, constants.X_OK); return path; } } catch {}
+  }
+}
+function probe(name: string, run: boolean) {
+  const path = which(name);
+  if (!path) return { name, found: false };
+  if (!run) return { name, found: true, path: tilde(path) };
+  const result = spawnSync(path, ['--version'], { encoding: 'utf8', timeout: 5000 });
+  const version = (result.stdout ?? '').trim().split('\n')[0] || undefined;
+  return result.status === 0 ? { name, found: true, path: tilde(path), ...(version ? { version } : {}) } : { name, found: false, path: tilde(path) };
+}
+function frontmatterName(file: string): string | undefined {
+  try { return /^name:\s*["']?([^\s"']+)/m.exec(readFileSync(file, 'utf8').split('\n').slice(0, 20).join('\n'))?.[1]; } catch { return undefined; }
+}
+function readJson(path: string): any { try { return JSON.parse(readFileSync(path, 'utf8')); } catch { return undefined; } }
+// Unreadable existing locations are inspection failures (exit 3), absent ones are simply empty.
+function entries(directory: string): string[] {
+  try { return readdirSync(directory).sort(); } catch (error: any) { if (error.code === 'ENOENT' || error.code === 'ENOTDIR') return []; throw error; }
+}
+function scan(scope: string, kind: 'skills' | 'agents', directory: string): Location | undefined {
+  const items: Item[] = [];
+  for (const entry of entries(directory)) {
+    const path = join(directory, entry);
+    if (kind === 'skills') {
+      const skill = join(path, 'SKILL.md');
+      if (!existsSync(skill)) continue;
+      items.push({ name: frontmatterName(skill) ?? entry, path: tilde(path), ...(readJson(join(path, 'package.json'))?.version ? { version: readJson(join(path, 'package.json')).version } : {}) });
+    } else if (entry.endsWith('.md')) items.push({ name: frontmatterName(path) ?? entry.slice(0, -3), path: tilde(path) });
+  }
+  return items.length ? { scope, kind, path: tilde(directory), items } : undefined;
+}
+function packageState(directory: string): PackageReport['state'] {
+  const dependencies = Object.keys(readJson(join(directory, 'package.json'))?.dependencies ?? {});
+  if (!dependencies.length) return 'no-dependencies';
+  const lock = readFileSync(join(directory, 'bun.lock'), 'utf8');
+  let mismatched = false;
+  for (const dependency of dependencies) {
+    const escaped = dependency.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const locked = new RegExp(`^\\s*"${escaped}": \\["${escaped}@([^"]+)"`, 'm').exec(lock)?.[1];
+    const installed = readJson(join(directory, 'node_modules', dependency, 'package.json'))?.version;
+    if (installed === undefined) return 'missing';
+    if (installed !== locked) mismatched = true;
+  }
+  return mismatched ? 'mismatched' : 'ready';
+}
+function gitState(root: string) {
+  const path = which('git');
+  if (!path) return {};
+  const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
+  const run = (args: string[]) => spawnSync(path, ['--no-replace-objects', '--no-optional-locks', '-C', root, ...args], { env, encoding: 'utf8', timeout: 5000 });
+  const head = run(['rev-parse', 'HEAD']), status = run(['status', '--porcelain']);
+  return { ...(head.status === 0 ? { revision: head.stdout.trim() } : {}), ...(status.status === 0 ? { dirty: status.stdout.trim() !== '' } : {}) };
+}
+function ready(argv: string[]): { report: any; code: number } {
+  let values;
+  try { values = parseArgs({ args: argv, strict: true, allowPositionals: false, options: { route: { type: 'string' }, json: { type: 'boolean' }, project: { type: 'string' }, skills: { type: 'string', multiple: true } } }).values; }
+  catch (error) { throw new UsageError(error instanceof Error ? error.message : String(error)); }
+  if (values.route !== undefined && !(ROUTES as readonly string[]).includes(values.route)) throw new UsageError('--route must be skill, native or herdr');
+  const dir = import.meta.dir, root = dirname(dir);
+  let active: any, scope: string, copy: string;
+  if (existsSync(join(dir, METADATA))) {
+    scope = 'snapshot'; copy = dir;
+    const data = load(dir); let integrity: string;
+    try {
+      if (stat(join(dir, STAGING))) throw new Error(`interrupted install: ${STAGING} present`);
+      const problems = drift(dir, data);
+      integrity = problems.length ? 'drift: ' + problems.join(', ') : 'ok';
+    } catch (error) { integrity = 'failed: ' + (error instanceof Error ? error.message : String(error)); }
+    active = { kind: 'snapshot', version: data.version, revision: data.revision, path: tilde(dir), integrity };
+  } else if (existsSync(join(root, '.git'))) {
+    scope = 'source'; copy = root;
+    active = { kind: 'source', version: readJson(join(root, 'package.json'))?.version, path: tilde(root), ...gitState(root) };
+  } else {
+    scope = 'plugin'; copy = root;
+    active = { kind: 'plugin', version: readJson(join(root, '.claude-plugin', 'plugin.json'))?.version, path: tilde(root) };
+  }
+  const locations: Location[] = [], seen = new Set<string>();
+  const add = (where: string, kind: 'skills' | 'agents', directory: string) => {
+    let real: string;
+    try { real = realpathSync(directory); } catch { return; }
+    if (seen.has(kind + real)) return;
+    seen.add(kind + real);
+    const location = scan(where, kind, directory);
+    if (location) locations.push(location);
+  };
+  add(scope, 'skills', join(copy, 'skills')); add(scope, 'agents', join(copy, 'agents'));
+  const project = resolve(values.project ?? process.cwd()), codex = process.env.CODEX_HOME || join(home(), '.codex');
+  for (const [where, kind, directory] of [['project', 'skills', join(project, '.agents/skills')], ['project', 'agents', join(project, '.agents/agents')], ['project', 'skills', join(project, '.claude/skills')],
+    ['user', 'skills', join(home(), '.claude/skills')], ['user', 'skills', join(home(), '.agents/skills')], ['user', 'skills', join(codex, 'skills')]] as const) add(where, kind, directory);
+  for (const directory of values.skills ?? []) add('extra', 'skills', resolve(directory));
+  const roleNames = new Set([...ROLES, ...(locations.find(l => l.scope === scope && l.kind === 'agents')?.items.map(i => i.name) ?? [])]);
+  const ruachSkills = locations.filter(l => l.kind === 'skills').flatMap(l => l.items.filter(i => i.name.startsWith('ruach-')).map(i => ({ ...i, scope: l.scope })));
+  const ruachRoles = locations.filter(l => l.kind === 'agents').flatMap(l => l.items.filter(i => roleNames.has(i.name)).map(i => ({ ...i, scope: l.scope })));
+  const packages: PackageReport[] = [];
+  const absolute = (shown: string) => shown.startsWith('~') ? home() + shown.slice(1) : shown;
+  for (const skill of ruachSkills) {
+    const directory = absolute(skill.path);
+    if (!existsSync(join(directory, 'package.json')) || !existsSync(join(directory, 'bun.lock'))) continue;
+    const state = packageState(directory);
+    packages.push({ skill: skill.name, path: skill.path, state, ...(state === 'missing' || state === 'mismatched' ? { remediation: `(cd ${shellWord(directory)} && bun install --frozen-lockfile)` } : {}) });
+  }
+  const prerequisites = [probe('bun', true), probe('git', true), probe('herdr', true), probe('claude', false), probe('codex', false), ...(scope === 'source' ? [probe('just', false)] : [])]
+    .map(item => ({ ...item, ...(item.name === 'herdr' ? { session: Boolean(process.env.HERDR_ENV) } : {}) }));
+  const found = (name: string) => prerequisites.find(item => item.name === name)?.found;
+  const duplicates = new Map<string, string[]>();
+  for (const item of [...ruachSkills.map(i => ({ ...i, label: 'skill' })), ...ruachRoles.map(i => ({ ...i, label: 'role' }))]) duplicates.set(`${item.label} ${item.name}`, [...duplicates.get(`${item.label} ${item.name}`) ?? [], item.path]);
+  const warnings = [...duplicates].filter(([, paths]) => paths.length > 1).map(([name, paths]) => `duplicate ${name}: ${paths.join(', ')}`);
+  const needsPackages = (name: string, missing: string[]) => {
+    const copies = packages.filter(p => p.skill === name);
+    if (copies.length && !copies.some(p => p.state === 'ready' || p.state === 'no-dependencies')) missing.push(`${name} packages ${copies[0].state}: ${copies[0].remediation}`);
+  };
+  const skill: Check = { ready: false, missing: [], warnings: [...warnings] };
+  if (!found('bun')) skill.missing.push('bun not found or not working');
+  if (!ruachSkills.length) skill.missing.push('no Ruach skills located');
+  for (const name of new Set(ruachSkills.map(i => i.name))) needsPackages(name, skill.missing);
+  const native: Check = { ready: false, missing: [...skill.missing], warnings: [...warnings] };
+  if (!ruachRoles.length) native.missing.push('no Ruach roles located');
+  if (active.integrity && active.integrity !== 'ok') native.missing.push('snapshot integrity ' + active.integrity);
+  if (!prerequisites.find(i => i.name === 'claude')?.found) native.warnings.push('claude not found on PATH');
+  const herdr: Check = { ready: false, missing: [...native.missing], warnings: [...native.warnings] };
+  if (!found('git')) herdr.missing.push('git not found or not working');
+  if (!found('herdr')) herdr.missing.push('herdr not found or not working');
+  if (!ruachSkills.some(i => i.name === 'ruach-herdr')) herdr.missing.push('ruach-herdr not located');
+  if (!process.env.HERDR_ENV) herdr.warnings.push('live launch needs a Herdr session');
+  const routes = { skill, native, herdr };
+  for (const check of Object.values(routes)) check.ready = !check.missing.length;
+  const report = { schema_version: 1, active, locations, packages, prerequisites, routes };
+  const code = values.route && !routes[values.route as keyof typeof routes].ready ? 1 : 0;
+  if (values.json) return { report: JSON.stringify(report, null, 2), code };
+  const lines = [`Active: ${active.kind} ${active.version ? 'v' + active.version : ''} ${active.revision ?? ''} at ${active.path}${active.dirty ? ' (dirty)' : ''}`.replace(/ +/g, ' ')];
+  if (active.integrity) lines.push(`  ${active.integrity === 'ok' ? 'ok' : 'missing'} integrity: ${active.integrity}`);
+  lines.push('Locations:', ...locations.map(l => `  ok ${l.kind} (${l.scope}) ${l.path}: ${l.items.map(i => i.name).join(', ')}`));
+  lines.push('Nested packages:', ...packages.map(p => `  ${p.state === 'ready' || p.state === 'no-dependencies' ? 'ok' : 'missing'} ${p.skill} ${p.path}: ${p.state}${p.remediation ? ' -> ' + p.remediation : ''}`));
+  lines.push('Prerequisites:', ...prerequisites.map(p => `  ${p.found ? 'ok' : ['claude', 'codex', 'just'].includes(p.name) ? 'warn' : 'missing'} ${p.name}${p.version ? ' ' + p.version : ''}${p.path ? ' ' + p.path : ''}`));
+  lines.push('Routes:');
+  for (const [name, check] of Object.entries(routes)) lines.push(`  ${check.ready ? 'ok' : 'missing'} ${name}`, ...check.missing.map(m => `    missing ${m}`), ...check.warnings.map(w => `    warn ${w}`));
+  return { report: lines.join('\n'), code };
+}
 function canonical(value: unknown): string {
   if (object(value)) return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}';
   return JSON.stringify(value);
@@ -231,10 +384,18 @@ function check(options: Options) {
   }
   console.log(`Snapshot verified: ${data.version ? `v${data.version}` : data.revision} (${Object.keys(data.files).length} files)`);
 }
-const usage = 'bun install.ts install --source DIR --version VERSION --target DIR [--replace]\nbun ruach-install.ts check --target DIR [--source DIR]\nAdvanced/legacy installation may use --revision COMMIT instead of --version.';
+const usage = 'bun install.ts install --source DIR --version VERSION --target DIR [--replace]\nbun ruach-install.ts check --target DIR [--source DIR]\nbun ruach-install.ts ready [--route skill|native|herdr] [--json] [--project DIR] [--skills DIR]\nAdvanced/legacy installation may use --revision COMMIT instead of --version.';
 try {
   const [command, ...argv] = process.argv.slice(2);
-  if (command === '--help' || (['install', 'check'].includes(command) && argv.includes('--help'))) { console.log(usage); process.exit(0); }
+  if (command === '--help' || (['install', 'check', 'ready'].includes(command) && argv.includes('--help'))) { console.log(usage); process.exit(0); }
+  if (command === 'ready') {
+    try { const { report, code } = ready(argv); console.log(report); process.exitCode = code; }
+    catch (error) {
+      console.error('Ready failed: ' + (error instanceof Error ? error.message : String(error)));
+      process.exitCode = error instanceof UsageError ? 2 : 3;
+    }
+    process.exit(process.exitCode);
+  }
   if (!['install', 'check'].includes(command)) throw new Error(usage);
   const { values, positionals } = parseArgs({ args: argv, strict: true, allowPositionals: false, options: {
     source: { type: 'string' }, target: { type: 'string' },
