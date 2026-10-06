@@ -279,7 +279,7 @@ function gitState(root: string) {
   const path = which('git');
   if (!path) return {};
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
-  const run = (args: string[]) => spawnSync(path, ['--no-replace-objects', '--no-optional-locks', '-C', root, ...args], { env, encoding: 'utf8', timeout: 5000 });
+  const run = (args: string[]) => spawnSync(path, ['--no-replace-objects', '--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'core.untrackedCache=false', '-C', root, ...args], { env, encoding: 'utf8', timeout: 5000 });
   const head = run(['rev-parse', 'HEAD']), status = run(['status', '--porcelain']);
   return { ...(head.status === 0 ? { revision: head.stdout.trim() } : {}), ...(status.status === 0 ? { dirty: status.stdout.trim() !== '' } : {}) };
 }

@@ -85,7 +85,7 @@ export function git(repo: string, argv: string[], allowFailure = false): { exit:
   // Keep these private probes independent of acceptance checks' intentional env.
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
   env.GIT_OPTIONAL_LOCKS = '0';
-  const child = spawnSync(command, ['--no-replace-objects', '-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
+  const child = spawnSync(command, ['--no-replace-objects', '-c', 'core.fsmonitor=false', '-c', 'core.untrackedCache=false', '-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
   if (child.error || (!allowFailure && child.status !== 0)) throw new SetupError('git_error', 'repo', 'Git probe failed; check repository and Git availability');
   return { exit: child.status ?? 2, stdout: child.stdout ?? Buffer.alloc(0) };
 }

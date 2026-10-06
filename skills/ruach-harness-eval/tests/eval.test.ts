@@ -411,6 +411,21 @@ for (const flag of ['--assume-unchanged', '--skip-worktree']) test(`index flag $
   expect(accepted.value.checks.every((c: any) => c.status !== 'passed')).toBe(true);
 });
 
+// A repository-local fsmonitor hook that reports no changes must not make a tampered tracked file look clean.
+test('core.fsmonitor cannot hide changes from clean checks', () => {
+  const f = fixture();
+  const hook = join(f.base, 'fsmonitor.sh');
+  write(hook, '#!/bin/sh\nprintf "tok\\0"\n'); chmodSync(hook, 0o755);
+  git(f.repo, 'config', 'core.fsmonitor', hook);
+  // Prime the index fsmonitor token; the fixture helper disables optional locks, which would skip the index write.
+  spawnSync('git', ['-C', f.repo, 'status', '--porcelain'], { env: process.env });
+  write(join(f.repo, 'protected'), 'tampered\n');
+  expect(spawnSync('git', ['-C', f.repo, 'status', '--porcelain'], { encoding: 'utf8', env: process.env }).stdout).toBe('');
+  const observed = scope(f, {});
+  expect(observed.exit).not.toBe(0); expect(observed.value.ok).toBe(false);
+  expect(observed.value.diagnostics.length).toBeGreaterThan(0);
+});
+
 // A descendant in its own session keeps inherited output pipes open without being in the check's process group.
 const holder = (seconds: number) => `require("child_process").spawn(process.execPath,["-e","setTimeout(()=>{},${seconds * 1000})"],{detached:true,stdio:["ignore","inherit","inherit"]}).unref()`;
 test('a descendant holding output pipes cannot stall a completed check past its bound', () => {
