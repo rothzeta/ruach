@@ -124,6 +124,12 @@ Both demonstrations complete on the music software and one playable prototype; n
 
 Pause catalog expansion. Run Ruach on real projects, log recurring friction, and prioritize from that. Add only task-driven items:
 
+- **Agent profiles:** run the same workflow with a different set of agents by selecting a named profile, e.g. `--profile cheap`, `--profile deep-review`, `--profile codex-only`. A profile is a consumer-owned overlay on the existing catalogs (a `roles.yaml`, plus extra routes/models if needed) that replaces role-to-route preferences and alternatives for one run. Requirements:
+  - Explicit selection only; the default profile is today's catalogs. No automatic switching, and escalation still uses only the active profile's declared alternatives.
+  - Workflow, role files and assignments are unchanged; only routing differs.
+  - The active profile name is recorded in the task record and handoff, so runs are comparable.
+  - Validated like the base catalogs; works through `just agent-routing` and the Herdr skill, not a new orchestrator.
+  - Enables the same-task A/B comparisons the measurement pilot needs and cheap/strong or Claude-only/Codex-only switching without editing shared files.
 - Additional adapters (Gemini, Pi, OpenCode, etc.) only against a concrete current execution need.
 - Other techniques (framework- or domain-specific) from existing external skills rather than a Ruach specialist catalog.
 - Analyst role if council use shows a gap.
