@@ -65,13 +65,39 @@ Principles carried through every release:
 - Document the Claude `--agent` (system prompt) vs Herdr adapter (appended) composition difference and check it with the same small task.
 - Verify source-mode skill exposure per harness.
 
+### Track F: Session-derived fixes (from 7 days of Claude, Codex and Gemini sessions)
+
+Evidence is approximate (grep-level, mostly ramec/tehom-brainlab/enoch); each item needs a regression or doc check.
+
+1. **Sandbox git writes in worktrees.** Launcher/adapter grants the worktree gitdir as writable; a launch smoke test proves `git add && git commit`; workers request escalation once on an `index.lock` EROFS and never loop. (Codex: 116 sessions; Claude: ~15.)
+2. **Environment vs product failure.** `ruach-testing` and Reviewer classify environment failures (sockets, tmp, disk) as "not verified: environment", never as findings; no verifying command piped into `head`/`tail` without `pipefail`; record exact command and exit code.
+3. **Handoff integrity.** A report never cites its own commit; every SHA verified with `git cat-file -e`; clean worktree required; final message carries status, verification or explicit "not run", SHA and open items; add `needs-decision` status with options; delivery receipt (SHA, tag, remote state, residue).
+4. **Delivery and cleanup checklist.** Delegable merge step with a never-push default and archive, fast-forward, verify, cleanup recipe; mandatory rebase/merge latest base, re-verify and record final SHA; remove worktrees and branches, check `.gitignore`, report clean status.
+5. **Role-first precedence and Coordinator discipline.** Role files state that the assignment names the role and orchestrator sections of AGENTS.md are ignored by workers; Coordinator delegates routine work (merges, test runs, log reading) and never reads source.
+6. **Assignment lint and decision list.** Coordinator checks task text, base SHA freshness, unused branch name and ownership paths; each assignment opens with the user's decisions, which are not reopened; standard assignment template and mailbox path convention in `ruach-handoff`.
+
 ### 0.3 exit criteria
 
 All P1 and P2 findings closed with regressions; CI green on a clean checkout; a newcomer can install and complete a small task by following the README alone; native smoke checks recorded for Claude and Codex.
 
 ---
 
-## 0.3.x — Measurement (runs alongside 0.3 finishing)
+## 0.3.x — Session-derived improvements and measurement
+
+Follow-ups after 0.3 ships, from the same session review:
+
+- **Parallel decomposition:** the Architect emits disjoint work packages with a dependency graph; the Coordinator states why any step is serial. (Highest-signal gap: repeated user complaints.)
+- **Milestone ledger:** Coordinator keeps a ledger updated each step, preserving decision rationale verbatim so compaction can resume from it.
+- **Resource ledger and idempotent launch:** worktree, branch, space, pane and agent tracked and checked each phase end; reuse or clean a stale worktree instead of failing on "destination already exists".
+- **Docs conventions:** durable decision means an ADR plus an AGENTS.md pointer; mailbox items triaged into `docs/` with provenance; docs-convention probe in onboarding.
+- **Monitoring:** prefer event-driven `herdr agent wait` over repeated timers; do not relay every worker approval to the user; report last worker activity at check-ins.
+- **Advisor template:** copyable read-only assignment ("do not edit repository files; write the answer only to X") for Scout/Reviewer.
+- **Codex discovery smoke test** with an isolated home, plus an assignment prefix with explicit skill paths as a fallback; docs note that the `.agents` snapshot is already Gemini-compatible.
+- **`ruach-harness-eval` unassisted-discovery mode:** minimal brief; run marked "assisted" if it hints at routes or skills.
+- **Wording:** tighten `ruach-simplification` and `ruach-testing` on justified splits and public-contract tests.
+- Session-level route overrides recorded in the task record.
+
+### Measurement
 
 Small comparative pilot, not a benchmark service:
 
@@ -96,6 +122,10 @@ Small comparative pilot, not a benchmark service:
 | `Tester` | Role | Owns runtime observations for an assignment |
 
 Names and packaging are proposals. Add an Analyst role only if council assignments reveal a gap Architect cannot fill; domain experts (music, UI/UX) are consumer-declared roles via existing routing.
+
+### Gemini as a worker/advisor agent (not orchestrator)
+
+Antigravity (`agy`) already loads `AGENTS.md`, `GEMINI.md` and `.agents/skills`, so snapshots work unmodified. Add a thin Gemini launch adapter for non-Coordinator roles, chiefly council advisors, reviewers and read-only Scouts (33 of 36 recent Gemini sessions were read-only advisory). The Coordinator stays on a supported orchestrator harness. Adapter needs: start `agy` in a linked worktree workspace; deliver the startup role turn and the assignment separately; pass large prompts by file path (inline hit "argument list too long"); seed the `settings.json` allowlist/`trustedWorkspaces` only as a consumer-owned step, never global settings; a Gemini route in the consumer catalogs. Verify `agy` headless flags and approval behavior before claiming support.
 
 ### Suggested sequence
 
@@ -131,7 +161,7 @@ Pause catalog expansion. Run Ruach on real projects, log recurring friction, and
   - The active profile name is recorded in the task record and handoff, so runs are comparable.
   - Validated like the base catalogs; works through `just agent-routing` and the Herdr skill, not a new orchestrator.
   - Enables the same-task A/B comparisons the measurement pilot needs and cheap/strong or Claude-only/Codex-only switching without editing shared files.
-- Additional adapters (Gemini, Pi, OpenCode, etc.) only against a concrete current execution need.
+- Additional adapters (Pi, OpenCode, etc.; Gemini is already planned in 0.4) only against a concrete current execution need.
 - Other techniques (framework- or domain-specific) from existing external skills rather than a Ruach specialist catalog.
 - Analyst role if council use shows a gap.
 
