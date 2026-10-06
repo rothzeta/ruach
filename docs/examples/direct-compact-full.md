@@ -8,7 +8,7 @@ Coordinator overhead should match the task. Choose the lightest level that still
 | --- | --- | --- |
 | Direct | The change is small, local and low-risk, and you will read the diff yourself | One native role (for example `claude --agent ruach:implementer`) with the skills you want. No Coordinator, no Herdr. |
 | Compact | One bounded change needs independent verification or review but no design phase | A Coordinator, one Implementer and one Reviewer. Skip Scout and Architect. One assignment each; handoffs required. |
-| Full | The work spans components, needs design decisions, or has parallel tasks and an integration step | The whole feature workflow: optional Scout and Architect, several Implementers with file ownership, integration, combined verification, review, merge and cleanup. |
+| Full | The work spans components, needs design decisions, or has parallel tasks and an integration step | The whole feature workflow: optional Scout and Architect, several Implementers with file ownership, integration, combined verification, review, a separate delivery assignment and cleanup. |
 
 Move up a level when a trigger appears: unclear scope, more than one owner of the same files, a design question, or a result you cannot judge alone. Move down when roles would only repeat the same check. Extra workers add launch, reading and cleanup cost; they are not free assurance.
 
@@ -22,4 +22,4 @@ The owner has a colleague's branch and wants an independent opinion. A Coordinat
 
 ## Medium feature (full)
 
-"Add saved filters to the report page" touches the API, the UI and the stored settings. The Coordinator briefly assigns an Architect for a bounded plan, then Implementers with disjoint file ownership (API, UI), an integration Implementer to combine and verify the combined revision, an independent Reviewer on that revision, and a merge. Resources are released after each committed handoff. See the [consumer example](consumer-example.md) for the lifecycle of one task through those steps.
+"Add saved filters to the report page" touches the API, the UI and the stored settings. The Coordinator briefly assigns an Architect for a bounded plan, then Implementers with disjoint file ownership (API, UI), an integration Implementer to combine and verify the combined revision, an independent Reviewer on that revision, and, once review passes and the owner authorizes the target, a separate delivery Implementer. Resources are released after each committed handoff. See the [consumer example](consumer-example.md) for the lifecycle of one task through those steps.

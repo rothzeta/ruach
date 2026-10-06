@@ -45,7 +45,7 @@ Follow the launcher's recovery contract. Before replacing a worker, confirm its 
 
 ## Escalation
 
-A launch failure is reported under the launch recovery contract; routes never change automatically. For work-quality failures (blocked worker, repeated failed verification, a non-converging review fix loop), stop after the declared number of failed cycles (default 2, consumer-overridable), preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
+A launch failure is reported under the launch recovery contract; routes never change automatically. For work-quality failures (blocked worker, repeated failed verification, a non-converging review fix loop), stop after the declared number of failed cycles (default 2; the consumer overrides it in the assignment or consumer guidance), preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
 
 ## Context
 
@@ -74,7 +74,7 @@ Advance only when the selected workflow's required dependencies, checks, reviews
 
 ## Completion
 
-Clean up task resources yourself as soon as their reuse ends, not at the end of the workflow. Keep a worker or worktree only while a concrete pending step, such as a review fix loop, integration, or merge, needs it.
+Clean up task resources yourself as soon as their reuse ends, not at the end of the workflow. Keep a worker or worktree only while a concrete pending step, such as a review fix loop, integration, or delivery, needs it.
 
 - Close a worker's task session once its durable handoff is preserved and you will not assign it further work, and remove that launch's private temporary directory if its result reported a non-null `temporary_directory`. Never close your own session; its launching parent releases a temporary Coordinator.
 - Remove a task-owned temporary worktree, including any temporary Coordinator or delivery checkout, with `herdr worktree remove --workspace <id>` when it is registered with Herdr (a linked launch) or `git worktree remove` otherwise, once its work is committed and reachable from a retained branch and no assignment will use it. Run removal from a retained checkout outside the path and keep the branch.

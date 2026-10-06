@@ -1,13 +1,13 @@
 ---
 name: ruach-workflow-feature
-description: Coordinator-only workflow (workers never load it) to coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, merging, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
+description: Coordinator-only workflow (workers never load it) to coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, delivery, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
 ---
 
 # Feature workflow
 
 This is the generic feature workflow. Use a more specific workflow when one is assigned; keep this procedure sufficient for ordinary feature delivery.
 
-Only the Coordinator loads and executes this workflow. Translate it into self-contained specialist assignments; workers receive their role, context and bounded instructions without workflow bodies. Require [ruach-handoff](../ruach-handoff/SKILL.md) for every worker result, including integration and merging. Specify the consumer's durable assignment/report locations, protected-document owners, commit requirements and evidence-retention rules. Workers keep disposable material outside the repository. Each responsible worker runs the handoff validator before returning; this is separate from technical verification and acceptance. Use the consumer's authorized launch and communication mechanisms; for Herdr see [ruach-herdr](../ruach-herdr/SKILL.md).
+Only the Coordinator loads and executes this workflow. Translate it into self-contained specialist assignments; workers receive their role, context and bounded instructions without workflow bodies. Require [ruach-handoff](../ruach-handoff/SKILL.md) for every worker result, including integration and delivery. Specify the consumer's durable assignment/report locations, protected-document owners, commit requirements and evidence-retention rules. Workers keep disposable material outside the repository. Each responsible worker runs the handoff validator before returning; this is separate from technical verification and acceptance. Use the consumer's authorized launch and communication mechanisms; for Herdr see [ruach-herdr](../ruach-herdr/SKILL.md).
 
 ## 1. Understand
 
@@ -17,7 +17,7 @@ Establish:
 - scope;
 - relevant constraints;
 - acceptance conditions;
-- integration and destination branches or workspaces, delivery expectations, and any restrictions on committing or merging.
+- integration and destination branches or workspaces, delivery expectations, and any restrictions on committing, and the delivery target and its authorization status.
 
 Resolve delivery details from the assignment, established project conventions, and session context. Ask for a missing destination or decision only when it prevents the next action.
 
@@ -29,7 +29,7 @@ Do not repeat existing specification or design work when it is already adequate.
 
 Use existing plans and concise specialist handoffs to identify bounded implementation tasks, dependencies, and ownership. Assign required technical design or plan writing to an Architect.
 
-Choose an Implementer to own integration and merging; the same worker may implement the feature. Specify the changes to combine, destination, and required checks.
+Choose an Implementer to own integration; the same worker may implement the feature. Specify the changes to combine, the integration branch or workspace, and required checks. Integration does not deliver: delivery to the destination is a separate Implementer assignment created under step 8 after review and authorization.
 
 Track task-created sessions and harness workspaces, and task-created or task-assigned temporary worktrees, including any temporary Coordinator or delivery checkout, and identify a retained checkout from which worktree removal can run. Note which pending step, if any, still needs each worker and worktree so they can be released as described in Clean up.
 
@@ -86,7 +86,7 @@ After required checks on the combined revision succeed, assign an independent Re
 
 ## 8. Deliver
 
-When the assignment asks for an uncommitted diff, a retained checkout or a candidate branch instead of a merge, deliver exactly that. It is a normal successful outcome: record where the result is and why it is retained. The rest of this step applies when merging is assigned.
+When the assignment asks for an uncommitted diff, a retained checkout or a candidate branch instead of a merge, deliver exactly that. It is a normal successful outcome: record where the result is and why it is retained. The rest of this step applies when delivery by merge is requested.
 
 Delivery is a separate Implementer assignment; there is no Merger role. Create it only after both hold:
 
@@ -102,7 +102,7 @@ Require a delivery handoff with `delivered_revision`, the reviewed revision, the
 Preserve the delivery summary and required durable reports in commits reachable from retained branches before removing the worktrees that hold them. Record:
 
 - implemented work;
-- integration and merge outcome, destination, and final revision;
+- integration outcome and the delivery outcome with destination and `delivered_revision`;
 - verification actually performed and the tested revision;
 - review findings and disposition;
 - important discoveries or decisions;
@@ -121,7 +121,7 @@ The delivery record lists what the Coordinator closed and removed and any except
 
 Separate two kinds of failure. A **launch failure** follows the launcher's recovery contract: report it and never switch routes automatically. A **work-quality failure** is a worker that is blocked, repeated failed verification, or a review fix loop that is not converging.
 
-After a small declared number of failed fix/review cycles (default 2; the consumer may override), stop looping and escalate:
+After a small declared number of failed fix/review cycles (default 2; the consumer overrides it in the assignment or consumer guidance), stop looping and escalate:
 
 1. Preserve partial work and evidence in durable reports.
 2. A blocker the Implementer cannot resolve goes to the Architect, when the project declares one, before any stronger-model retry.

@@ -33,7 +33,9 @@ A Reviewer, in a separate worker, receives the exact revision, acceptance condit
 
 ## 6. Delivery
 
-The integration Implementer merges the accepted revision into the destination named in the assignment and reports source, destination and final revisions. The Coordinator comments the outcome and report links on `PROJ-142` and updates only the records the consumer assigns to it. Delivery stops at the local merge; push or publication would need its own assignment.
+After the Reviewer reports no blocking findings on the combined revision and the checks pass on it, the Coordinator confirms that the owner authorized delivery to the named target. Here the request itself ("merged to `main` locally") is that authorization; silence would not be.
+
+The Coordinator then assigns a separate delivery Implementer (there is no Merger role). The assignment names the target branch (`main`, local only) and the exact reviewed revision, and says to merge only if the destination has not moved since the candidate was prepared. If `main` moved, or the merge needs any change to the candidate, the worker stops and reports; integration is refreshed and the affected checks and review repeat. The worker returns a handoff with `delivered_revision`, the reviewed revision, the destination and the outcome. The Coordinator does not perform or validate the merge itself, comments the outcome and report links on `PROJ-142`, updates only the records the consumer assigns to it, and then cleans up as in the next section. Delivery stops at the local merge; push or publication would need its own authorization and assignment.
 
 ## 7. Release or retention
 

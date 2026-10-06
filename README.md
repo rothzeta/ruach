@@ -32,7 +32,7 @@ To see how the roles are used on a real task, read the [worked consumer example]
 
 Ruach does not ship model policy. A consumer declares it in three files under `.agents/` of its repository (the default; `--catalogs DIR` selects another directory). The schema and validation rules are in the [routing reference](skills/ruach-herdr/references/routing.md); Ruach's own [development catalogs](config/agent-routing/) are a working example.
 
-- `models.yaml`: each model ID maps to a `harness` (`claude` or `codex`) and a `native_model`.
+- `models.yaml`: each model ID maps to a `harness` (`claude` or `codex`; other harnesses can be declared but are unsupported and fail at preparation) and a `native_model`.
 - `routing.yaml`: each route ID names a model and an `effort`.
 - `roles.yaml`: each role names a `preferred` route and an optional list of `alternatives`.
 
@@ -56,7 +56,7 @@ roles:
 
 Alternatives are explicit-only: the launcher uses the preferred route unless you pass `--route ID` naming the preference or one of that role's alternatives. It rejects other routes, and a launch failure never switches route or model. A selected model still needs native account access. Skip the catalogs entirely with direct selection (`--kind`, `--model`, `--effort`).
 
-**Escalation.** If an Implementer's fix and review cycles keep failing (twice by default; a consumer can change the number), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
+**Escalation.** If an Implementer's fix and review cycles keep failing (twice by default; set a different number in the assignment or consumer guidance), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
 
 ## Standard installation
 

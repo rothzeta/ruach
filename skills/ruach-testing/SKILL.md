@@ -60,7 +60,7 @@ expect(shuffle([1, 2, 3, 4], seed(7))).toEqual([3, 1, 4, 2]);
 // After: asserts the contract
 const input = [1, 2, 3, 4];
 const out = shuffle(input);
-expect([...out].sort()).toEqual([1, 2, 3, 4]); // same members, once each
+expect([...out].sort((a, b) => a - b)).toEqual([1, 2, 3, 4]); // same members, once each
 expect(input).toEqual([1, 2, 3, 4]);           // input not mutated
 ```
 
