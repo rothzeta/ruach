@@ -107,7 +107,7 @@ After reuse ends, close only the owned session/workspace. Commit useful work and
 
 ## Lifecycle: inspect, upgrade and remove
 
-This section covers the installed copy of Ruach for each route. A readiness command (`just ready`) is planned in parallel work for 0.3 and is not documented here; until it is released, use the manual checks below. Install and first-launch steps are above.
+This section covers the installed copy of Ruach for each route. Use [`just ready`](#check-readiness) for a read-only readiness check, and the checks below to inspect versions. Install and first-launch steps are above.
 
 ### Inspect the active version
 

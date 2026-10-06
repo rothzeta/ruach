@@ -4,23 +4,27 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## 0.3.0 — Unreleased
 
-Planned scope, per the [roadmap](docs/roadmap.md). Items marked "delivered by another worker" are not part of this documentation change and are listed only as plan.
+Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`.
 
-Track A, integrity and security (delivered by other workers):
+Track A, integrity and security:
 
-- Identity guarantees for pinned reads, index flags and worker checkouts; patched `ws` and `yaml` dependencies.
-- Stricter handoff and native-discovery parsing; bounded processes and artifact reads; pinned launch executable identity.
-- Recoverable snapshot installation with staged writes, rollback and an immediate integrity check, as designed in [the 0.3 design](docs/design/0.3-install-and-readiness.md).
-- Hardening and per-skill LICENSE/PROVENANCE notices.
+- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`) rejected by acceptance checks, and verified worker checkouts that ignore inherited `GIT_*` variables.
+- A2: patched `ws` and `yaml` dependencies in Herdr.
+- A3: strict handoff keys, escaped diagnostics and revision checks; native skill discovery tolerates unrelated skills.
+- A4: bounded processes and artifact reads (descendant pipes, FIFOs, oversized files).
+- A5: recoverable snapshot installation with staged writes, rename-only commits (outside hardlinks untouched), rollback, leftover checks and an immediate integrity check; interrupted installs fail `check` until recovered manually ([failures and recovery](docs/operations.md#snapshot-installation-failures-and-recovery)).
+- A6: pinned launch executable identity (relative and empty `PATH` entries resolved once).
+- A7: launches from a Herdr workspace of the same repository create linked worktrees; clean them up with `herdr worktree remove --workspace <id>` (otherwise `git worktree remove`). Standalone launches are unchanged.
+- A8: hardening and notices: the evidence output descriptor is held across checks, the Codex instruction transport exposure is documented, and each skill folder ships `LICENSE` and `PROVENANCE.md` verified by `just check`.
 
-Track B, verification gate (delivered by other workers): typecheck, a CI job over all suites and audits, and added regression cases.
+Track B, verification gate: typecheck wired into `just check`, a CI job over all suites and audits, toolchain notes, and a regression-case inventory.
 
 Track C, onboarding and installation:
 
 - Choose-by-job README (standalone skills, direct native role, coordinated Herdr use) with what each route installs and still needs; source-development detail moved after the consumer paths.
 - Lifecycle guide in the operations guide: inspect, upgrade pin to pin, prepare dependencies, resolve duplicates, remove while preserving local resources.
-- Optional `compatibility` metadata on executable skills so Bun, Git and Herdr prerequisites show early; `just check` now validates it and requires Bun to be declared by executable skills.
-- A readiness command (`just ready`) is planned in parallel work; this entry does not describe its behavior.
+- Optional `compatibility` metadata on executable skills so Bun, Git and Herdr prerequisites show early; `just check` validates it and requires Bun to be declared by executable skills.
+- `just ready` (`ready` subcommand of the installer): read-only readiness check per route (`skill`, `native`, `herdr`) that reports dependencies, duplicates and prerequisites, prints remediation instead of running it, and never writes.
 
 Track D, product consolidation:
 
@@ -32,8 +36,6 @@ Track D, product consolidation:
 - "Choose your models" README section for `models.yaml`, `routing.yaml` and `roles.yaml`, with a Claude and Codex example that a test keeps valid.
 - Shorter common paths: handoff validator output details moved to a reference; cleanup rules stated once in the Coordinator role.
 - Before/after examples in `ruach-testing`, including replacing a fixed-seed snapshot with property assertions.
-
-Track E, native packaging and parity checks (delivered by other workers or follow-up): clean-install smoke tests per route, Codex role discovery, Claude/Herdr composition notes and source-mode skill exposure checks.
 
 ## 0.2.1 — 2026-10-04
 

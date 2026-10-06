@@ -201,6 +201,7 @@ function treeHash(root = target): string[] {
 function fileState(path: string) { const info = statSync(path); return { body: readFileSync(path, 'utf8'), mode: info.mode & 0o7777, ino: info.ino }; }
 function updateSource(change: () => void) { change(); return commit(); }
 const asRoot = process.getuid?.() === 0;
+if (asRoot) console.warn("SKIPPED: 3 RU-07 rollback tests need a non-root uid (chmod 0555 does not block root); run them as a non-root user.");
 function readOnly(directory: string, run: () => void) {
   const original = statSync(directory).mode & 0o7777;
   chmodSync(directory, 0o555);
