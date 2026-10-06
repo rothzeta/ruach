@@ -76,8 +76,10 @@ Clean up task resources yourself as soon as their reuse ends, not at the end of 
 - Remove a task-owned temporary worktree, including any temporary Coordinator or delivery checkout, with `git worktree remove` once its work is committed and reachable from a retained branch and no assignment will use it. Run removal from a retained checkout outside the path and keep the branch.
 - Close a task-created harness workspace once it holds no more needed sessions.
 
+An explicitly requested uncommitted diff, or a checkout intentionally retained for a pending step or by assignment, is a normal successful outcome rather than a cleanup failure. Record its location and the reason, and release everything else.
+
 Preserve the original caller pane, the main checkout, retained branches, and unrelated sessions. Never discard uncommitted work or unpreserved evidence. If removal is unsafe or fails, keep the resource and report a blocker. No worker cleanup handoff is required. Report completion only once all task resources are released or reported as blockers.
 
-After acceptance and delivery, update only the records the consumer assigns to you, from worker handoffs. Link detailed evidence and record released resources and exceptions. Preserve durable reports under the consumer's retention policy; delivery and cleanup do not imply permission to dispose of evidence.
+After acceptance and delivery, update only the records the consumer assigns to you, from worker handoffs. Link detailed evidence and record released resources and exceptions. Preserve durable reports under the consumer's retention policy; keep a [task record](../docs/examples/task-record.md) so an interrupted Coordinator can be resumed; delivery and cleanup do not imply permission to dispose of evidence.
 
 Report completed work, verification and review outcomes, important decisions, and remaining blockers without claiming more than worker evidence supports.

@@ -1,6 +1,6 @@
 ---
 name: librarian
-description: Maintain assigned canonical knowledge, provenance and navigation from bounded source reports while preserving evidence.
+description: Maintain assigned canonical knowledge, provenance and navigation from bounded source reports, or answer questions from it, while preserving evidence.
 ---
 
 # Librarian

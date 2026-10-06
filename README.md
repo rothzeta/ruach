@@ -6,7 +6,7 @@ Portable agent roles and self-contained skills for bounded engineering and knowl
 
 - `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer and Librarian contracts.
 - `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
-- `docs/`: [operations guide](docs/operations.md), [roadmap](docs/roadmap.md) and the source/consumer ownership [ADR](docs/adr/0001-source-and-consumer-ownership.md).
+- `docs/`: [operations guide](docs/operations.md), [examples](docs/examples/), [coordination ownership](docs/coordination.md), [roadmap](docs/roadmap.md) and the source/consumer ownership [ADR](docs/adr/0001-source-and-consumer-ownership.md).
 - `scripts/`: explicit pinned snapshot installation and resource checks.
 - `config/agent-routing/`: routing policy for developing Ruach itself.
 - `tests/`: installation contract checks. Skill-specific suites live with their skills.
@@ -25,6 +25,8 @@ Pick the route that matches what you want to do. Each route installs different t
 | Coordinate separate workers in background worktrees | [Coordinated Herdr use](#install-a-pinned-project-snapshot) with a pinned project snapshot | Roles and skills together under `.agents/`, with a manifest for integrity checks | Bun, Git, Herdr, the selected native harness and account, consumer-owned routing or a direct model, and nested skill dependencies. |
 
 The snapshot route is for projects that want an auditable, committed installation. Start with the smallest route that covers the job; you can add another later. Avoid installing the same skills twice into one harness. The [lifecycle guide](docs/operations.md#lifecycle-inspect-upgrade-and-remove) covers inspecting, upgrading and removing an installation. A readiness command (`just ready`) that checks a route end to end is planned for 0.3 and is not described here; see the [design](docs/design/0.3-install-and-readiness.md) and the [changelog](CHANGELOG.md) for its status.
+
+To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
 
 ## Standard installation
 

@@ -1,6 +1,6 @@
 ---
 name: ruach-workflow-feature
-description: Coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, merging, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
+description: Coordinator-only workflow (workers never load it) to coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, merging, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
 ---
 
 # Feature workflow
@@ -85,6 +85,8 @@ After required checks on the combined revision succeed, assign an independent Re
 
 ## 8. Merge
 
+When the assignment asks for an uncommitted diff, a retained checkout or a candidate branch instead of a merge, deliver exactly that. It is a normal successful outcome: record where the result is and why it is retained. The rest of this step applies when a merge is assigned.
+
 Once required verification and review are satisfied, assign the integration Implementer to merge the accepted combined revision into the agreed destination using project conventions and the assignment's permissions.
 
 Have the worker confirm the destination has not advanced since the candidate was prepared. If it has advanced, or merging requires conflict resolution or other changes to the candidate, refresh integration and repeat relevant verification and review before delivery.
@@ -107,12 +109,6 @@ After acceptance and delivery, the Coordinator updates the records assigned by c
 
 ## 10. Clean up
 
-The Coordinator performs cleanup itself, as soon as each resource's reuse ends, rather than deferring it to the end of the workflow. Decide reuse deliberately: keep a worker or worktree only while a concrete pending step, such as a review fix loop, integration, or merge, needs it. The natural release points are after each committed handoff, after review acceptance, and after merge.
+Apply the Coordinator's [completion and cleanup rules](../../agents/coordinator.md#completion) for workers, worktrees, harness workspaces and evidence preservation; they are not repeated here. Decide reuse deliberately. The natural release points are after each committed handoff, after review acceptance, and after merge.
 
-- **Workers.** Once a worker's durable handoff is committed and no further assignment, such as a fix or re-review, will go to it, close its task session and remove the private temporary directory its launch result reported (`temporary_directory`), if non-null. A worker never closes its own session; the launching parent closes a temporary Coordinator's session after its final report.
-- **Worktrees.** Once a task-owned temporary worktree's work is committed and reachable from a retained branch, and no further assignment will use it, close any session still using it and remove it with `git worktree remove`, running from a retained checkout outside the path. Keep the branch.
-- **Harness workspaces.** Close a task-created workspace or tab once it holds no more needed sessions.
-
-Preserve the original caller session, the main checkout, the retained destination checkout, branches containing delivered changes or evidence, unrelated worktrees, and unrelated sessions. Preserve useful working evidence in durable reports first; disposable working files and installed dependencies may then be discarded. Respect consumer retention and disposition permissions; delivery and resource cleanup do not authorize removal of durable evidence. Do not discard uncommitted work or unpreserved evidence to satisfy cleanup. If removal is unsafe or fails, keep the resource and report a cleanup blocker.
-
-No worker cleanup handoff is required. The Coordinator's delivery record lists what it closed and removed and any exceptions; report any resource released after that record is committed, such as the checkout holding it, in the completion response. The workflow completes once all task resources are released or reported as blockers; a successful merge alone does not complete the workflow.
+The delivery record lists what the Coordinator closed and removed and any exceptions; report any resource released after that record is committed, such as the checkout holding it, in the completion response. The workflow completes once all task resources are released or reported as blockers; a successful merge alone does not complete it.
