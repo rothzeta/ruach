@@ -65,6 +65,8 @@ Principles carried through every release:
 - Document the Claude `--agent` (system prompt) vs Herdr adapter (appended) composition difference and check it with the same small task.
 - Verify source-mode skill exposure per harness.
 
+Offline evidence, the Codex export evaluation and the pending smoke checklist are in [native-parity.md](native-parity.md).
+
 ### 0.3 exit criteria
 
 All P1 and P2 findings closed with regressions; CI green on a clean checkout; a newcomer can install and complete a small task by following the README alone; native smoke checks recorded for Claude and Codex.
