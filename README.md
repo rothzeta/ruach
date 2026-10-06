@@ -6,13 +6,57 @@ Portable agent roles and self-contained skills for bounded engineering and knowl
 
 - `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer and Librarian contracts.
 - `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
-- `docs/adr/`: Ruach source and consumer ownership decisions.
+- `docs/`: [operations guide](docs/operations.md), [examples](docs/examples/), [coordination ownership](docs/coordination.md), [roadmap](docs/roadmap.md) and the source/consumer ownership [ADR](docs/adr/0001-source-and-consumer-ownership.md).
 - `scripts/`: explicit pinned snapshot installation and resource checks.
 - `config/agent-routing/`: routing policy for developing Ruach itself.
 - `tests/`: installation contract checks. Skill-specific suites live with their skills.
 - `evals/`: developer behavior-evaluation packets with separate rubrics. Snapshot and skill installations exclude them; they are not native plugin components.
 
 Only Coordinators load workflow bodies. Workers use a role plus a self-contained assignment with scope, document ownership, acceptance, verification and handoff instructions. See [authoring guidance](CONTRIBUTING.md), [ownership ADR](docs/adr/0001-source-and-consumer-ownership.md), [provenance](PROVENANCE.md) and [MIT license](LICENSE).
+
+## Choose by job
+
+Pick the route that matches what you want to do. Each route installs different things and still needs the prerequisites shown.
+
+| Job | Route | Installs | Still needs |
+| --- | --- | --- | --- |
+| Use a technique (testing, simplification, handoff format) in any harness | [Standalone skills](#standard-installation) through the Skills CLI | Skill folders and native discovery links | Bun and a local `bun install --frozen-lockfile` for the executable skills (`ruach-handoff`, `ruach-herdr`, `ruach-harness-eval`). No role files. |
+| Work as a named role in Claude Code in your current terminal | [Direct native role](#standard-installation) through the Claude plugin | All skills and the six named agents (`ruach:coordinator`, `ruach:implementer`, …) | Claude Code. Nested skill dependencies are not installed automatically. No background workers. |
+| Coordinate separate workers in background worktrees | [Coordinated Herdr use](#install-a-pinned-project-snapshot) with a pinned project snapshot | Roles and skills together under `.agents/`, with a manifest for integrity checks | Bun, Git, Herdr, the selected native harness and account, consumer-owned routing or a direct model, and nested skill dependencies. |
+
+The snapshot route is for projects that want an auditable, committed installation. Start with the smallest route that covers the job; you can add another later. Avoid installing the same skills twice into one harness. The [lifecycle guide](docs/operations.md#lifecycle-inspect-upgrade-and-remove) covers inspecting, upgrading and removing an installation. A readiness command (`just ready`) that checks a route end to end is planned for 0.3 and is not described here; see the [design](docs/design/0.3-install-and-readiness.md) and the [changelog](CHANGELOG.md) for its status.
+
+To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
+
+## Choose your models
+
+Ruach does not ship model policy. A consumer declares it in three files under `.agents/` of its repository (the default; `--catalogs DIR` selects another directory). The schema and validation rules are in the [routing reference](skills/ruach-herdr/references/routing.md); Ruach's own [development catalogs](config/agent-routing/) are a working example.
+
+- `models.yaml`: each model ID maps to a `harness` (`claude` or `codex`) and a `native_model`.
+- `routing.yaml`: each route ID names a model and an `effort`.
+- `roles.yaml`: each role names a `preferred` route and an optional list of `alternatives`.
+
+```yaml
+# .agents/models.yaml
+models:
+  claude-sonnet: { harness: claude, native_model: claude-sonnet-5-5 }
+  claude-opus: { harness: claude, native_model: claude-opus-5-5 }
+  codex-main: { harness: codex, native_model: gpt-6.1-sol }
+# .agents/routing.yaml
+routes:
+  sonnet-medium: { model: claude-sonnet, effort: medium }
+  opus-high: { model: claude-opus, effort: high }
+  codex-high: { model: codex-main, effort: high }
+# .agents/roles.yaml
+roles:
+  coordinator: { preferred: opus-high }
+  implementer: { preferred: sonnet-medium, alternatives: [codex-high] }
+  reviewer: { preferred: codex-high, alternatives: [opus-high] }
+```
+
+Alternatives are explicit-only: the launcher uses the preferred route unless you pass `--route ID` naming the preference or one of that role's alternatives. It rejects other routes, and a launch failure never switches route or model. A selected model still needs native account access. Skip the catalogs entirely with direct selection (`--kind`, `--model`, `--effort`).
+
+**Escalation.** If an Implementer's fix and review cycles keep failing (twice by default; a consumer can change the number), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
 
 ## Standard installation
 
@@ -38,7 +82,23 @@ The marketplace tag fixes the release, and `.claude-plugin/plugin.json` supplies
 
 Executable skills require Bun and their own frozen dependency install. A copied or cached skill keeps its local `package.json` and `bun.lock`: run `bun install --frozen-lockfile` inside `ruach-handoff`, `ruach-herdr` and `ruach-harness-eval` before running their scripts. `just install` prepares those dependencies in this source checkout. Native plugin installation does not automatically install these nested skill packages.
 
-## Develop Ruach with named roles
+## Install a pinned project snapshot
+
+For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
+
+```sh
+bun scripts/install.ts install --source . --version 0.2.1 --target /path/to/project/.agents
+bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
+bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
+```
+
+`--version 0.2.1` selects exactly the `v0.2.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+
+Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
+
+To update a snapshot installed with the previous Python installer, run the TypeScript installer from a new checkout with the desired commit. It reads the existing manifest and removes the previous managed installer during the update; consumer policy and drift checks are preserved.
+
+## Develop Ruach itself
 
 The development launcher uses `agents/` and `skills/` directly from this checkout. It does not install Ruach into itself. Requires Just, Bun and Git; live startup additionally requires Herdr and the selected native harness.
 
@@ -73,22 +133,6 @@ A native trust or onboarding dialog returns `action: awaiting-input` with `ready
 Use `BUN_BIN` to override Bun, otherwise Just uses `~/.bun/bin/bun` when present, then `bun` on PATH. `bun run agent-routing -- resolve coordinator` is also available. `--root DIR` selects another Ruach worktree's routing catalogs and working directory while retaining the launcher and canonical resources from this checkout.
 
 Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude and supplies their source location to Codex. Launch commands do not perform a global installation.
-
-## Install a pinned project snapshot
-
-For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
-
-```sh
-bun scripts/install.ts install --source . --version 0.2.1 --target /path/to/project/.agents
-bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
-bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
-```
-
-`--version 0.2.1` selects exactly the `v0.2.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
-
-Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
-
-To update a snapshot installed with the previous Python installer, run the TypeScript installer from a new checkout with the desired commit. It reads the existing manifest and removes the previous managed installer during the update; consumer policy and drift checks are preserved.
 
 ## Verify
 

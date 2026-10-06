@@ -1,6 +1,6 @@
 ---
 name: ruach-librarian
-description: Triage source reports and maintain a project's canonical knowledge, provenance, and navigation. Use for assigned knowledge consolidation or documentation upkeep; a document mentioned as context alone does not request maintenance.
+description: Triage source reports, maintain a project's canonical knowledge, provenance and navigation, or answer questions from it. Use for assigned knowledge consolidation, documentation upkeep or knowledge query; a document mentioned as context alone does not request maintenance.
 ---
 
 # Ruach librarian

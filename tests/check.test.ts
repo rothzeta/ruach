@@ -49,3 +49,15 @@ for (const name of ['LICENSE', 'PROVENANCE.md']) {
     write(join(skill, name), `Root ${name}\n`); expect(check().status).toBe(0);
   });
 }
+test('compatibility metadata must be a single bounded line', () => {
+  write(join(skill, 'SKILL.md'), header.replace('Example skill.\n', 'Example skill.\ncompatibility: Requires Bun and Git on PATH.\n')); expect(check().status).toBe(0);
+  write(join(skill, 'SKILL.md'), header.replace('Example skill.\n', `Example skill.\ncompatibility: ${'x'.repeat(501)}\n`));
+  expect(check().status).toBe(1); expect(check().stderr).toContain('Invalid compatibility');
+  write(join(skill, 'SKILL.md'), header.replace('Example skill.\n', 'Example skill.\ncompatibility:\n'));
+  expect(check().status).toBe(1); expect(check().stderr).toContain('Invalid compatibility');
+});
+test('an executable skill must declare its Bun prerequisite early', () => {
+  write(join(skill, 'package.json'), '{}\n');
+  expect(check().status).toBe(1); expect(check().stderr).toContain('Executable skill must declare Bun compatibility');
+  write(join(skill, 'SKILL.md'), header.replace('Example skill.\n', 'Example skill.\ncompatibility: Requires Bun.\n')); expect(check().status).toBe(0);
+});

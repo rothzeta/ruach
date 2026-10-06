@@ -1,6 +1,7 @@
 ---
 name: ruach-harness-eval
-description: Run repeatable acceptance and scope checks for an explicitly requested harness/model evaluation using supplied candidates and versioned fixtures. Evaluation only; do not load for daily coordination, worker launch, or routine implementation.
+description: Check one supplied harness/model evaluation run with repeatable acceptance and scope checks over supplied candidates and versioned fixtures. A checker, not a benchmark runner, launcher or proof of model use (model_use_verified stays false). Explicit evaluation only; do not load for daily coordination, worker launch, or routine implementation.
+compatibility: Requires Bun and Git on PATH. Run `bun install --frozen-lockfile` in the skill directory first.
 ---
 
 # Harness evaluation

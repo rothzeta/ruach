@@ -48,3 +48,24 @@ Protect required behavior through observable boundaries. Apply this skill within
 - Include relevant evidence and test or artifact references in the required handoff.
 
 Use the project's established test runner and conventions. Add framework-specific guidance only for concrete needs, keeping shared testing principles here.
+
+## Before and after
+
+**Fixed-seed snapshot to property assertions.** A shuffle helper is documented to return every input exactly once in an unspecified order. A test seeds the random generator and compares against a stored list. That freezes one implementation's output; any valid change fails it.
+
+```ts
+// Before: asserts a coincidence of seed and algorithm
+expect(shuffle([1, 2, 3, 4], seed(7))).toEqual([3, 1, 4, 2]);
+
+// After: asserts the contract
+const input = [1, 2, 3, 4];
+const out = shuffle(input);
+expect([...out].sort()).toEqual([1, 2, 3, 4]); // same members, once each
+expect(input).toEqual([1, 2, 3, 4]);           // input not mutated
+```
+
+Keep a fixed-seed exact-output test only if reproducibility from a seed is itself the contract.
+
+**Private call to public outcome.** Before: `expect(cache.evict).toHaveBeenCalledWith('a')` after adding a third item to a two-item cache. After: add three items, then assert that the oldest key is absent and the two newest are present. The first fails on a correct refactor; the second fails only when eviction is wrong.
+
+**Incidental to configured input.** Before: assert the default timeout is `30`. After: supply `timeout: 5` and assert the operation gives up after 5; the default can change.

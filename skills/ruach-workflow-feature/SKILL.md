@@ -1,6 +1,6 @@
 ---
 name: ruach-workflow-feature
-description: Coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, merging, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
+description: Coordinator-only workflow (workers never load it) to coordinate a bounded feature through optional investigation and design, implementation, integration, verification, independent review, merging, and prompt Coordinator cleanup of task resources. Use as the generic feature workflow when no more specific workflow is assigned.
 ---
 
 # Feature workflow
@@ -81,15 +81,21 @@ After required checks on the combined revision succeed, assign an independent Re
 2. Collect the review summary, blocking and optional findings, verification results, and durable report reference. Missing findings do not establish that verification passed.
 3. Return blocking findings to the responsible Implementer as bounded fixes. Require relevant verification results and the updated revision in the handoff. Route fixes through the integration and combined-verification steps before re-review.
 4. Assign re-review of blocking fixes and materially changed behavior, contracts, or tests on the updated revision. Repeat while resolvable blocking findings remain; report a blocker when resolution needs a decision or exceeds the assignment.
-5. Advance only when the Reviewer reports no outstanding blocking findings and the required checks have reported successful results for the reviewed revision. Optional improvements do not block completion unless required by the acceptance conditions. Then release the Reviewer and any worker or worktree that no pending step needs.
+5. Apply [Escalation](#escalation) when fix and review cycles do not converge.
+6. Advance only when the Reviewer reports no outstanding blocking findings and the required checks have reported successful results for the reviewed revision. Optional improvements do not block completion unless required by the acceptance conditions. Then release the Reviewer and any worker or worktree that no pending step needs.
 
-## 8. Merge
+## 8. Deliver
 
-Once required verification and review are satisfied, assign the integration Implementer to merge the accepted combined revision into the agreed destination using project conventions and the assignment's permissions.
+When the assignment asks for an uncommitted diff, a retained checkout or a candidate branch instead of a merge, deliver exactly that. It is a normal successful outcome: record where the result is and why it is retained. The rest of this step applies when merging is assigned.
 
-Have the worker confirm the destination has not advanced since the candidate was prepared. If it has advanced, or merging requires conflict resolution or other changes to the candidate, refresh integration and repeat relevant verification and review before delivery.
+Delivery is a separate Implementer assignment; there is no Merger role. Create it only after both hold:
 
-Require a merge handoff identifying the reviewed candidate, destination branch, final revision, and merge outcome. The worker confirms the delivered result contains the accepted changes and reports its relation to the verified candidate. Reuse verification evidence when the delivered content is unchanged; rerun relevant checks and re-review material changes. Coordinator does not perform the merge or validate its result. Remote push, publication, and deployment require an explicit assignment. After the merge handoff is committed, release the integration Implementer and every worktree that recording delivery does not need.
+- an independent Reviewer reported no outstanding blocking findings on the combined revision, with required checks passing on that revision;
+- you have confirmed that the user authorized delivery to the named target. Silence or earlier approval of other work is not authorization.
+
+The assignment names the target branch and the exact reviewed revision. The worker merges only if the destination has not moved since the candidate was prepared. If it moved, or merging needs conflict resolution or any other change to the candidate, the worker stops and reports; refresh integration and repeat the affected checks and review before delivery. Remote push, publication and deployment need their own explicit authorization.
+
+Require a delivery handoff with `delivered_revision`, the reviewed revision, the destination branch and the outcome, confirming the delivered result contains the accepted changes. Reuse verification evidence when the delivered content is unchanged; rerun relevant checks and re-review material changes. You do not perform the merge or validate its result; cleanup remains yours. After the delivery handoff is committed, release the delivery Implementer and every worktree that recording delivery does not need.
 
 ## 9. Record delivery
 
@@ -107,12 +113,18 @@ After acceptance and delivery, the Coordinator updates the records assigned by c
 
 ## 10. Clean up
 
-The Coordinator performs cleanup itself, as soon as each resource's reuse ends, rather than deferring it to the end of the workflow. Decide reuse deliberately: keep a worker or worktree only while a concrete pending step, such as a review fix loop, integration, or merge, needs it. The natural release points are after each committed handoff, after review acceptance, and after merge.
+Apply the Coordinator's [completion and cleanup rules](../../agents/coordinator.md#completion) for workers, worktrees, harness workspaces and evidence preservation; they are not repeated here. Decide reuse deliberately. The natural release points are after each committed handoff, after review acceptance, and after merge.
 
-- **Workers.** Once a worker's durable handoff is committed and no further assignment, such as a fix or re-review, will go to it, close its task session and remove the private temporary directory its launch result reported (`temporary_directory`), if non-null. A worker never closes its own session; the launching parent closes a temporary Coordinator's session after its final report.
-- **Worktrees.** Once a task-owned temporary worktree's work is committed and reachable from a retained branch, and no further assignment will use it, close any session still using it and remove it with `herdr worktree remove --workspace <id>` when registered with Herdr (a linked launch) or `git worktree remove` otherwise, running from a retained checkout outside the path. Keep the branch.
-- **Harness workspaces.** Close a task-created workspace or tab once it holds no more needed sessions.
+The delivery record lists what the Coordinator closed and removed and any exceptions; report any resource released after that record is committed, such as the checkout holding it, in the completion response. The workflow completes once all task resources are released or reported as blockers; a successful merge alone does not complete it.
 
-Preserve the original caller session, the main checkout, the retained destination checkout, branches containing delivered changes or evidence, unrelated worktrees, and unrelated sessions. Preserve useful working evidence in durable reports first; disposable working files and installed dependencies may then be discarded. Respect consumer retention and disposition permissions; delivery and resource cleanup do not authorize removal of durable evidence. Do not discard uncommitted work or unpreserved evidence to satisfy cleanup. If removal is unsafe or fails, keep the resource and report a cleanup blocker.
+## Escalation
 
-No worker cleanup handoff is required. The Coordinator's delivery record lists what it closed and removed and any exceptions; report any resource released after that record is committed, such as the checkout holding it, in the completion response. The workflow completes once all task resources are released or reported as blockers; a successful merge alone does not complete the workflow.
+Separate two kinds of failure. A **launch failure** follows the launcher's recovery contract: report it and never switch routes automatically. A **work-quality failure** is a worker that is blocked, repeated failed verification, or a review fix loop that is not converging.
+
+After a small declared number of failed fix/review cycles (default 2; the consumer may override), stop looping and escalate:
+
+1. Preserve partial work and evidence in durable reports.
+2. A blocker the Implementer cannot resolve goes to the Architect, when the project declares one, before any stronger-model retry.
+3. Then either (a) launch the role's declared `alternatives` route, only when consumer policy or the user authorizes that escalation, giving the new worker the prior handoff and findings; or (b) report to the user with a recommendation.
+4. Never use a route that is not declared in the consumer's `roles.yaml`, and never switch automatically. Silence is not approval; continue unrelated authorized work meanwhile.
+5. Record each escalation in the task record or handoff: reason, route before and after, and evidence references.

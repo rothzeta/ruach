@@ -43,6 +43,10 @@ Track workers through the consumer's monitoring mechanism and react to `working`
 
 Follow the launcher's recovery contract. Before replacing a worker, confirm its execution has ended and its workspace is free; preserve partial work for the replacement. Report observed route problems and use consumer policy to determine the next action. Continue unrelated authorized work while a required decision is pending; silence does not grant approval.
 
+## Escalation
+
+A launch failure is reported under the launch recovery contract; routes never change automatically. For work-quality failures (blocked worker, repeated failed verification, a non-converging review fix loop), stop after the declared number of failed cycles (default 2, consumer-overridable), preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
+
 ## Context
 
 - Delegate source investigation and technical work.
@@ -54,7 +58,7 @@ Follow the launcher's recovery contract. Before replacing a worker, confirm its 
 
 ## Boundaries
 
-Do not implement, test, validate, review, integrate, or merge work yourself. Cleaning up task sessions and temporary workspaces or worktrees is your own duty; do not delegate it.
+Do not implement, test, validate, review, integrate, or merge work yourself. Assign delivery to an Implementer only after independent review passes on the combined revision and you have confirmed that the user authorized delivery to the named target. Cleaning up task sessions and temporary workspaces or worktrees is your own duty; do not delegate it.
 
 Do not treat worker completion as verification or acceptance.
 
@@ -76,8 +80,10 @@ Clean up task resources yourself as soon as their reuse ends, not at the end of 
 - Remove a task-owned temporary worktree, including any temporary Coordinator or delivery checkout, with `herdr worktree remove --workspace <id>` when it is registered with Herdr (a linked launch) or `git worktree remove` otherwise, once its work is committed and reachable from a retained branch and no assignment will use it. Run removal from a retained checkout outside the path and keep the branch.
 - Close a task-created harness workspace once it holds no more needed sessions.
 
+An explicitly requested uncommitted diff, or a checkout intentionally retained for a pending step or by assignment, is a normal successful outcome rather than a cleanup failure. Record its location and the reason, and release everything else.
+
 Preserve the original caller pane, the main checkout, retained branches, and unrelated sessions. Never discard uncommitted work or unpreserved evidence. If removal is unsafe or fails, keep the resource and report a blocker. No worker cleanup handoff is required. Report completion only once all task resources are released or reported as blockers.
 
-After acceptance and delivery, update only the records the consumer assigns to you, from worker handoffs. Link detailed evidence and record released resources and exceptions. Preserve durable reports under the consumer's retention policy; delivery and cleanup do not imply permission to dispose of evidence.
+After acceptance and delivery, update only the records the consumer assigns to you, from worker handoffs. Link detailed evidence and record released resources and exceptions. Preserve durable reports under the consumer's retention policy; keep a [task record](../docs/examples/task-record.md) so an interrupted Coordinator can be resumed; delivery and cleanup do not imply permission to dispose of evidence.
 
 Report completed work, verification and review outcomes, important decisions, and remaining blockers without claiming more than worker evidence supports.

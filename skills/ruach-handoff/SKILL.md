@@ -1,6 +1,7 @@
 ---
 name: ruach-handoff
 description: Produce or consume the canonical structured handoff between engineering workers and coordinators. Use when returning delegated work or receiving a worker's result.
+compatibility: Requires Bun; Git on PATH for revision checks. Run `bun install --frozen-lockfile` in the skill directory first.
 ---
 
 # Ruach handoff
@@ -26,21 +27,7 @@ existence, certify report truth, or establish review/acceptance. A valid `comple
 report with `verification: not-run` is mechanically valid; the assignment and
 responsible reviewer determine whether its claims and evidence are sufficient.
 
-Output is one JSON object on stdout with `schema_version: 1`, `ok`, `diagnostics`,
-and resolved revision records; concise diagnostics also go to stderr. Each
-diagnostic has a stable `code` and JSON-pointer `path`; YAML errors include line
-and column. Report contents and supplied revision values are not echoed.
-Exit 0 means structural validation and supplied revision resolution succeeded;
-exit 1 means invalid report or missing revision; exit 2 means usage, unreadable
-input, missing dependencies/schema, or unavailable repository/Git. `--help` exits 0;
-unknown or duplicate options fail with `USAGE`. CLI paths are relative to invocation cwd.
-Revision resolution runs only after the entire leading block passes parsing and
-schema validation. Fix structural errors and rerun to reveal any missing revisions.
-
-Stable codes: `HEADER_INVALID`, `YAML_INVALID`, `YAML_DUPLICATE`, `FIELD_REQUIRED`,
-`FIELD_TYPE`, `FIELD_ENUM`, `FIELD_INVALID`, `REVISION_MISSING`, `USAGE`,
-`INPUT_UNREADABLE`, `DEPENDENCY_UNAVAILABLE`, `SCHEMA_UNAVAILABLE`,
-`REPO_UNAVAILABLE`, `GIT_UNAVAILABLE`.
+The validator prints one JSON result and exits 0 when the report and any supplied revisions are valid, 1 for an invalid report or missing revision, and 2 for usage or setup failures. Output schema, exit codes and stable diagnostic codes are in [references/validator.md](references/validator.md).
 
 ## Format and neutral starting point
 
