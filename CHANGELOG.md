@@ -26,6 +26,8 @@ Track C, onboarding and installation:
 - Optional `compatibility` metadata on executable skills so Bun, Git and Herdr prerequisites show early; `just check` validates it and requires Bun to be declared by executable skills.
 - `just ready` (`ready` subcommand of the installer): read-only readiness check per route (`skill`, `native`, `herdr`) that reports dependencies, duplicates and prerequisites, prints remediation instead of running it, and never writes.
 
+Track E, native packaging and parity: [native-parity.md](docs/native-parity.md) records offline-verified Codex role and skill discovery, per-harness skill exposure, plugin-cache and snapshot installation facts, the Claude `--agent` versus Herdr append difference, a Codex agent TOML export evaluation and a clean-install smoke checklist. Paid smoke checks per route are pending user authorization; plugin packaging and Codex export remain needs-decision.
+
 Track D, product consolidation:
 
 - Worked consumer example, assignment specimen, direct/compact/full use guide with a proportionate-overhead rule, task record example for resuming a Coordinator, and a one-coordination-owner-per-task note.

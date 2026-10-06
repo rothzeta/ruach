@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const repo = resolve(import.meta.dir, '..');
@@ -34,4 +34,23 @@ test('roadmap numbers linked worktrees A7 and hardening A8', () => {
   const roadmap = read('docs/roadmap.md');
   expect(roadmap).toMatch(/\| A7 \| Herdr-linked worktrees/);
   expect(roadmap).toMatch(/\| A8 \| Hardening and notices/);
+});
+
+test('native parity guide records evidence, pending smoke checks and undecided items, and its links resolve', () => {
+  const guide = read('docs/native-parity.md');
+  for (const heading of ['Codex role and skill discovery', 'Clean-install plugin cache facts', 'Claude `--agent` versus the Herdr adapter', 'Native Codex agent export evaluation', 'Clean-install smoke checklist'])
+    expect(guide, heading).toContain(`## ${heading}`);
+  for (const route of ['Plugin', 'Snapshot', 'Skills CLI']) expect(guide, route).toContain(`### ${route}`);
+  expect(guide).toContain('PENDING');
+  expect(guide).toContain('needs-decision');
+  for (const [, target] of guide.matchAll(/\]\((?!https?:|#)([^)#]+)(?:#[^)]*)?\)/g))
+    expect(existsSync(join(repo, 'docs', target)), target).toBe(true);
+  expect(read('README.md')).toContain('docs/native-parity.md');
+  expect(read('docs/roadmap.md')).toContain('native-parity.md');
+});
+
+test('the 0.3.0 changelog states Track E honestly: documented, smoke checks pending', () => {
+  const entry = changelog030();
+  expect(entry).toMatch(/Track E[^\n]*native-parity\.md/);
+  expect(entry).toMatch(/Track E[^\n]*pending/i);
 });
