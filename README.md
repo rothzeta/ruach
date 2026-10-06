@@ -28,6 +28,36 @@ The snapshot route is for projects that want an auditable, committed installatio
 
 To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
 
+## Choose your models
+
+Ruach does not ship model policy. A consumer declares it in three files under `.agents/` of its repository (the default; `--catalogs DIR` selects another directory). The schema and validation rules are in the [routing reference](skills/ruach-herdr/references/routing.md); Ruach's own [development catalogs](config/agent-routing/) are a working example.
+
+- `models.yaml`: each model ID maps to a `harness` (`claude` or `codex`) and a `native_model`.
+- `routing.yaml`: each route ID names a model and an `effort`.
+- `roles.yaml`: each role names a `preferred` route and an optional list of `alternatives`.
+
+```yaml
+# .agents/models.yaml
+models:
+  claude-sonnet: { harness: claude, native_model: claude-sonnet-5-5 }
+  claude-opus: { harness: claude, native_model: claude-opus-5-5 }
+  codex-main: { harness: codex, native_model: gpt-6.1-sol }
+# .agents/routing.yaml
+routes:
+  sonnet-medium: { model: claude-sonnet, effort: medium }
+  opus-high: { model: claude-opus, effort: high }
+  codex-high: { model: codex-main, effort: high }
+# .agents/roles.yaml
+roles:
+  coordinator: { preferred: opus-high }
+  implementer: { preferred: sonnet-medium, alternatives: [codex-high] }
+  reviewer: { preferred: codex-high, alternatives: [opus-high] }
+```
+
+Alternatives are explicit-only: the launcher uses the preferred route unless you pass `--route ID` naming the preference or one of that role's alternatives. It rejects other routes, and a launch failure never switches route or model. A selected model still needs native account access. Skip the catalogs entirely with direct selection (`--kind`, `--model`, `--effort`).
+
+**Escalation.** If an Implementer's fix and review cycles keep failing (twice by default; a consumer can change the number), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
+
 ## Standard installation
 
 Ruach follows the [Agent Skills specification](https://agentskills.io/specification). Like [Vercel's agent-skills](https://github.com/vercel-labs/agent-skills), it can be installed through the [Skills CLI](https://github.com/vercel-labs/skills). Like [Anthropic's skills](https://github.com/anthropics/skills) and [Superpowers](https://github.com/obra/superpowers), it also ships native Claude plugin metadata. The shared specification covers skills; native agent definitions and plugin packaging depend on the harness.

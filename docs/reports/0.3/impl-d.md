@@ -18,6 +18,7 @@ verification:
   - "just check: pass"
   - "just release-check: pass (v0.2.1, no version bump)"
   - "just test: pass (root 52, handoff 24, herdr 126, harness-eval 59; 0 fail); herdr tests ran with local sockets"
+  - "Addendum 1: just check and just release-check pass; root bun run test 53 pass 0 fail (new readme-routing test). Skill suites not rerun since no skill code changed after the full pass"
   - "New check tests (compatibility metadata, Bun declaration) failed against the old scripts/check.ts and pass with the change"
 discoveries:
   - "Skills CLI list/remove/update and claude plugin list/update/uninstall exist (verified via --help); the lifecycle doc cites only those"
@@ -28,6 +29,10 @@ blockers: []
 ---
 
 # Report impl-d
+
+## Addendum 1 (delivery ownership, escalation, models docs)
+
+Folded in after the first handoff: feature workflow step 8 is now "Deliver" (separate Implementer assignment gated on review and confirmed user authorization, exact revision, destination-not-moved rule, `delivered_revision`); an Escalation section (default 2 cycles, Architect before stronger model, declared alternatives only with authorization, recorded in the task record); Coordinator and Implementer wording aligned; "Choose your models" README section checked against `skills/ruach-herdr/references/routing.md` and the real `resolve --offline` behavior; new `tests/readme-routing.test.ts` keeps its example valid and alternatives explicit-only. `delivered_revision` already exists in the handoff schema and tests, so no schema or validator change was needed. Final checks for this addendum are in the terminal handoff.
 
 Commits: C4 check and metadata; C1/C3 README and lifecycle; D consolidation; D changelog.
 

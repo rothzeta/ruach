@@ -27,6 +27,9 @@ Track D, product consolidation:
 - Worked consumer example, assignment specimen, direct/compact/full use guide with a proportionate-overhead rule, task record example for resuming a Coordinator, and a one-coordination-owner-per-task note.
 - Wording: uncommitted diffs and retained checkouts are normal delivery outcomes; Implementers justify scope changes and the Coordinator approves; Reviewer covers assigned artifacts and the responsible worker. No role authority changed.
 - Discovery metadata: the feature workflow is described as Coordinator-only, the Librarian covers queries, and `ruach-harness-eval` is described as a checker, not a benchmark runner (`model_use_verified` stays false).
+- Delivery is a separate Implementer assignment (no Merger role), created only after independent review passes on the combined revision and the user's authorization of the named target is confirmed; the worker merges the exact reviewed revision only if the destination has not moved and reports `delivered_revision`.
+- Escalation rule in the feature workflow: after a declared number of failed fix/review cycles (default 2), the Coordinator preserves evidence, routes unresolved blockers to the Architect if declared, then uses a declared `alternatives` route only with authorization or reports to the user. Launch failures still never switch routes.
+- "Choose your models" README section for `models.yaml`, `routing.yaml` and `roles.yaml`, with a Claude and Codex example that a test keeps valid.
 - Shorter common paths: handoff validator output details moved to a reference; cleanup rules stated once in the Coordinator role.
 - Before/after examples in `ruach-testing`, including replacing a fixed-seed snapshot with property assertions.
 

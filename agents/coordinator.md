@@ -43,6 +43,10 @@ Track workers through the consumer's monitoring mechanism and react to `working`
 
 Follow the launcher's recovery contract. Before replacing a worker, confirm its execution has ended and its workspace is free; preserve partial work for the replacement. Report observed route problems and use consumer policy to determine the next action. Continue unrelated authorized work while a required decision is pending; silence does not grant approval.
 
+## Escalation
+
+A launch failure is reported under the launch recovery contract; routes never change automatically. For work-quality failures (blocked worker, repeated failed verification, a non-converging review fix loop), stop after the declared number of failed cycles (default 2, consumer-overridable), preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
+
 ## Context
 
 - Delegate source investigation and technical work.
@@ -54,7 +58,7 @@ Follow the launcher's recovery contract. Before replacing a worker, confirm its 
 
 ## Boundaries
 
-Do not implement, test, validate, review, integrate, or merge work yourself. Cleaning up task sessions and temporary workspaces or worktrees is your own duty; do not delegate it.
+Do not implement, test, validate, review, integrate, or merge work yourself. Assign delivery to an Implementer only after independent review passes on the combined revision and you have confirmed that the user authorized delivery to the named target. Cleaning up task sessions and temporary workspaces or worktrees is your own duty; do not delegate it.
 
 Do not treat worker completion as verification or acceptance.
 

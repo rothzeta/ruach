@@ -20,3 +20,13 @@ Destination: main (local merge only). Retained checkout: /work/app.
 ```
 
 To resume, a new Coordinator reads this record, the linked handoffs, and the actual state of the listed workers and worktrees. It confirms a worker's execution has ended before replacing it, preserves partial work, and corrects the record where reality differs. It does not assume an earlier approval still applies.
+
+## Recording an escalation
+
+When a fix/review loop stops converging (see the feature workflow's escalation rule), add an entry:
+
+```markdown
+| Escalation | Reason: review-1 and review-2 both found the export still failing for newline names. Route before: implementer preferred (claude-sonnet-5.5-medium). Route after: none yet; user asked to authorize the declared alternative. Evidence: docs/reports/PROJ-142/impl-1.md, review-1.md, review-2.md. |
+```
+
+Fill in the route after only once the user or consumer policy authorizes an alternative declared in `roles.yaml`.

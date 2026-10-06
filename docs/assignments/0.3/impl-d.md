@@ -10,3 +10,16 @@ Tests: this is mostly prose, but where a check can enforce a contract (link chec
 Prepare the 0.3.0 CHANGELOG entry at the end (Unreleased/0.3.0 section per the changelog and release-check conventions, summarizing all tracks A-E as planned; mark items other workers deliver with plain wording; do not bump package versions or tag; ensure release-check still passes without a version bump).
 Ownership: README.md, docs/ (except docs/operations.md install/ready sections owned by impl-c: coordinate by keeping lifecycle text in a separate section and expect a trivial merge), agents/*.md wording, skill SKILL.md wording/metadata, CHANGELOG.md.
 Report path: docs/reports/0.3/impl-d.md.
+
+## Addendum 1 (user-approved scope additions to Track D; part of this assignment)
+
+1. Delivery ownership: do NOT add a Merger role. In ruach-workflow-feature, make delivery an explicit separate Implementer assignment, only after (a) independent review passes on the combined revision and (b) the Coordinator confirms the user authorized delivery to the named target. Assignment names target branch and exact reviewed revision, merge only if the destination has not moved; otherwise refresh affected checks/review. Worker reports `delivered_revision`; Coordinator does cleanup. Align Implementer/Coordinator wording.
+2. Escalation (workflow + docs; no new role, no automatic route switching):
+   - Distinguish launch failure (already covered by the launcher recovery contract: report, never auto-switch) from work-quality failure (worker blocked, repeated failed verification, or review fix loop not converging).
+   - Add a bounded rule to the workflow: after a small declared number of failed fix/review cycles (default 2, consumer-overridable), the Coordinator stops looping and escalates: preserve partial work and evidence, then either (a) launch the role's declared `alternatives` route if consumer policy/user authorizes that escalation, with the prior handoff and findings as input, or (b) report to the user with a recommendation. Never invent a route outside roles.yaml; silence is not approval; continue unrelated work meanwhile.
+   - Reviewer-level escalation: a blocker the Implementer cannot resolve goes to Architect (if declared) before a stronger-model retry.
+   - Record each escalation in the task record/handoff (reason, route before/after, evidence refs).
+3. README/docs: add a short "Choose your models" section: how a consumer defines models.yaml / routes in routing.yaml / role preferences and alternatives in roles.yaml, the catalog location (verify against skills/ruach-herdr/references/routing.md and the consumer default path; document what is actually true), that alternatives are explicit-only, and a small example mixing Claude and Codex. Include the escalation rule and how declaring a stronger alternative enables it.
+Add regression/doc checks where the repo's resource checks apply.
+
+Ownership note: workflow edits go in skills/ruach-workflow-feature/SKILL.md and agents/coordinator.md, agents/implementer.md. The handoff schema may need a delivered_revision field: if so, extend skills/ruach-handoff schema/validator with a failing test first (coordinate by keeping that edit small; impl-a edits handoff parsing, expect a trivial merge).
