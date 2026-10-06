@@ -1,7 +1,7 @@
 ---
 task: 0.3-integ-fix3
 status: complete
-outcome: Implemented docs/design/0.3-clean-check.md in harness-eval: cleanliness is now decided from committed objects and raw worktree bytes, closing the whole RU-02 class (stat cache, config, attributes, exclude files, self-ignoring .gitignore, rewritten index). All design probes are public-boundary tests; all checks pass. D1-D4 were Coordinator-made decisions and are pending user ratification.
+outcome: "Implemented docs/design/0.3-clean-check.md in harness-eval: cleanliness is now decided from committed objects and raw worktree bytes, closing the whole RU-02 class (stat cache, config, attributes, exclude files, self-ignoring .gitignore, rewritten index). All design probes are public-boundary tests; all checks pass. D1-D4 were Coordinator-made decisions and are pending user ratification."
 role: implementer
 candidate_revision: 09fe3fca6c8dec2b33eafadd8ad02fb06491ea32
 tested_revision: 09fe3fca6c8dec2b33eafadd8ad02fb06491ea32
