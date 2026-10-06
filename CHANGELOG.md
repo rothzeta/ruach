@@ -8,7 +8,7 @@ Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`
 
 Track A, integrity and security:
 
-- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`), `core.fsmonitor` and tracked files with a Git filter attribute rejected or neutralized by acceptance checks, and verified worker checkouts that ignore inherited `GIT_*` variables.
+- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`), and every other repository-local input to `git status` (stat data, `core.*` comparison settings, attributes and filters, exclude files, self-ignoring `.gitignore`) no longer able to forge a clean checkout: the harness-eval clean check now compares raw worktree bytes with committed objects (contract change below), and verified worker checkouts that ignore inherited `GIT_*` variables.
 - A2: patched `ws` and `yaml` dependencies in Herdr.
 - A3: strict handoff keys, escaped diagnostics and revision checks; native skill discovery tolerates unrelated skills.
 - A4: bounded processes and artifact reads (descendant pipes, FIFOs, oversized files).
@@ -16,6 +16,8 @@ Track A, integrity and security:
 - A6: pinned launch executable identity (relative and empty `PATH` entries resolved once).
 - A7: launches from a Herdr workspace of the same repository create linked worktrees; clean them up with `herdr worktree remove --workspace <id>` (otherwise `git worktree remove`). Standalone launches are unchanged.
 - A8: hardening and notices: the evidence output descriptor is held across checks, the Codex instruction transport exposure is documented, and each skill folder ships `LICENSE` and `PROVENANCE.md` verified by `just check`.
+
+Harness-eval contract change (A1/RU-02): dirty records now contain exactly one path and renames are reported as a deletion plus an addition (both paths remain in `assessed_paths`); the setup errors `hidden_index_state` and `content_filter_state` are retired, so such checkouts are assessed and reported through `dirty_worktree`/`dirty_candidate` (exit 1) instead of exit 2; `clean_check_budget` (exit 2) is new; comparison is byte-exact, so converted working copies (eol, ident, Git LFS and other filters) read as dirty; sparse checkouts are unsupported.
 
 Track B, verification gate: typecheck wired into `just check`, a CI job over all suites and audits, toolchain notes, and a regression-case inventory.
 

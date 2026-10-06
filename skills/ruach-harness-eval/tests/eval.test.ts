@@ -408,7 +408,9 @@ for (const flag of ['--assume-unchanged', '--skip-worktree']) test(`index flag $
   expect(observed.exit).not.toBe(0); expect(observed.value.ok).toBe(false);
   expect(observed.value.diagnostics.length).toBeGreaterThan(0);
   const accepted = accept(f); expect(accepted.exit).not.toBe(0); expect(accepted.value.ok).toBe(false);
-  expect(accepted.value.checks.every((c: any) => c.status !== 'passed')).toBe(true);
+  // The checkout is now assessed by content: the tampered file is reported as dirt and acceptance fails on it.
+  expect(accepted.value.dirty_before.flatMap((d: any) => d.paths)).toContain('protected');
+  expect(accepted.value.diagnostics.map((d: any) => d.code)).toContain('dirty_candidate');
 });
 
 // A repository-local fsmonitor hook that reports no changes must not make a tampered tracked file look clean.
