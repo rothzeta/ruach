@@ -2,11 +2,11 @@
 // Install/check a committed Ruach snapshot without touching consumer policy.
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
-const ORIGIN = 'https://github.com/rothzeta/ruach.git', METADATA = 'ruach.json';
+const ORIGIN = 'https://github.com/rothzeta/ruach.git', METADATA = 'ruach.json', STAGING = '.ruach-staging';
 const EXTRAS: Record<string, string> = { 'scripts/install.ts': 'ruach-install.ts', LICENSE: 'ruach/LICENSE', 'PROVENANCE.md': 'ruach/PROVENANCE.md' };
 const IGNORED = new Set(['node_modules', '__pycache__']);
 type FileRecord = { sha256: string; mode: number };
@@ -99,59 +99,130 @@ function* walk(directory: string, prefix: string): Generator<string> {
     if (info?.isDirectory()) yield* walk(path, relative);
   }
 }
-function drift(target: string, data: Manifest): string[] {
+function drift(target: string, data: Manifest, extraSkills: Iterable<string> = []): string[] {
   const problems = new Set<string>();
   for (const [name, expected] of Object.entries(data.files)) {
     const path = destination(target, name), info = stat(path);
     if (!info?.isFile() || digest(readFileSync(path)) !== expected.sha256 || (info.mode & 0o111 ? 0o755 : 0o644) !== expected.mode) problems.add(name);
   }
   // New files within managed skills are drift; extra consumer skills/roles are allowed.
-  const skills = new Set(Object.keys(data.files).filter(name => name.startsWith('skills/')).map(name => name.split('/')[1]));
+  const skills = new Set([...Object.keys(data.files).filter(name => name.startsWith('skills/')).map(name => name.split('/')[1]), ...extraSkills]);
   for (const skill of skills) for (const name of walk(join(target, 'skills', skill), `skills/${skill}`)) {
     const info = stat(join(target, name));
     if (info?.isSymbolicLink() || info?.isFile() && !Object.hasOwn(data.files, name)) problems.add(name);
   }
   return [...problems].sort();
 }
+const skillRoots = (names: Iterable<string>) => new Set([...names].filter(name => name.startsWith('skills/')).map(name => name.split('/')[1]));
+class RollbackIncomplete extends Error {}
+type Step = { kind: 'mkdir'; path: string } | { kind: 'backup'; path: string; saved: string } | { kind: 'place'; path: string; dev: number; ino: number };
+// Undo this run's steps in reverse, once each; never delete recursively or follow links. Returns paths needing manual recovery.
+function rollback(done: Step[]): string[] {
+  const failed: string[] = [];
+  for (const step of done.reverse()) {
+    try {
+      if (step.kind === 'place') {
+        const info = stat(step.path);
+        if (!info) continue;
+        if (!info.isFile() || info.dev !== step.dev || info.ino !== step.ino) throw new Error('changed');
+        unlinkSync(step.path);
+      } else if (step.kind === 'backup') {
+        if (stat(step.path)) throw new Error('occupied');
+        renameSync(step.saved, step.path);
+      } else rmdirSync(step.path);
+    } catch { failed.push(step.path); }
+  }
+  return failed;
+}
 function install(options: Options) {
   if (options.version !== undefined && !VERSION.test(options.version)) throw new Error('Release version must be MAJOR.MINOR.PATCH');
   const ref = options.version !== undefined ? `refs/tags/v${options.version}` : options.revision!;
-  const target = resolve(options.target), { sha, files, version } = committed(options.source!, ref);
+  const target = resolve(options.target), { sha, files, version } = committed(options.source!, ref), staging = join(target, STAGING);
   if (options.version !== undefined && version !== options.version) throw new Error('Release tag does not match the committed package version');
+  if (stat(staging)) throw new Error(`Interrupted install: ${STAGING} exists in the target; recover or remove it before installing`);
   if (stat(join(target, METADATA))?.isSymbolicLink()) throw new Error('Snapshot metadata must not be a symlink');
   const old = existsSync(join(target, METADATA)) ? load(target) : undefined;
-  const problems = old ? drift(target, old) : [];
-  if (problems.length && !options.replace) throw new Error('Installed snapshot has drift; use --replace to overwrite explicitly');
+  const roots = skillRoots([...Object.keys(old?.files ?? {}), ...files.keys()]);
+  const problems = old ? drift(target, old, roots) : [];
+  const known = new Set([...Object.keys(old?.files ?? {}), ...files.keys()]);
+  const leftovers = new Set<string>();
+  for (const skill of roots) for (const name of walk(join(target, 'skills', skill), `skills/${skill}`)) {
+    const info = stat(join(target, name));
+    if (info?.isSymbolicLink() || info && !info.isFile() && !info.isDirectory()) throw new Error('Skill roots contain a non-regular entry; remove it manually');
+    if (info?.isFile() && !known.has(name)) leftovers.add(name);
+  }
+  if ((problems.length || leftovers.size) && !options.replace) throw new Error('Installed snapshot has drift or unrecorded files; use --replace to overwrite explicitly');
   for (const [name, { body }] of files) {
     const path = destination(target, name), info = stat(path);
     if (info && !info.isFile()) throw new Error('Managed destination is not a regular file');
     if (info && (!old || !Object.hasOwn(old.files, name)) && !readFileSync(path).equals(body) && !options.replace) throw new Error('Conflicting destination; use --replace to adopt explicitly');
+    // A file standing where a parent directory is needed would fail mid-commit.
+    for (let parent = dirname(path); parent !== target && parent.startsWith(target); parent = dirname(parent)) if (stat(parent) && !stat(parent)!.isDirectory()) throw new Error('Managed destination parent is not a directory');
   }
   const removals = new Set<string>();
   if (old) {
     if (options.replace) for (const name of problems) if (!Object.hasOwn(old.files, name) && !files.has(name)) removals.add(name);
     for (const name of Object.keys(old.files)) if (!files.has(name)) removals.add(name);
   }
+  if (options.replace) for (const name of leftovers) removals.add(name);
   // Validate every removal before mutation, including obsolete managed paths.
   const paths = [...removals].map(name => destination(target, name));
   for (const path of paths) if (stat(path) && !stat(path)!.isFile()) throw new Error('Managed destination is not a regular file');
-  for (const path of paths) if (stat(path)) unlinkSync(path);
-  for (const [name, { body, mode }] of files) {
-    const path = destination(target, name);
-    mkdirSync(dirname(path), { recursive: true });
-    writeFileSync(path, body);
-    chmodSync(path, mode);
-  }
+  const next = JSON.stringify(manifest(sha, files, options.version), null, 2) + '\n';
+  type Operation = { index: number; name: string; path: string; kind: 'create' | 'replace' | 'remove'; body?: Buffer; mode?: number };
+  const operations: Operation[] = [...removals].filter(name => stat(destination(target, name))).map(name => ({ name, path: destination(target, name), kind: 'remove' as const }))
+    .concat([...files].map(([name, { body, mode }]) => ({ name, path: destination(target, name), kind: stat(destination(target, name)) ? 'replace' as const : 'create' as const, body, mode })))
+    .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+    .concat([{ name: METADATA, path: join(target, METADATA), kind: stat(join(target, METADATA)) ? 'replace' as const : 'create' as const, body: Buffer.from(next), mode: 0o644 }])
+    .map((operation, index) => ({ ...operation, index }));
+  // The exclusive mkdir is both the concurrency lock and the marker of an interrupted install.
   mkdirSync(target, { recursive: true });
-  writeFileSync(join(target, METADATA), JSON.stringify(manifest(sha, files, options.version), null, 2) + '\n');
+  try { mkdirSync(staging); }
+  catch (error: any) { throw error.code === 'EEXIST' ? new Error(`Interrupted install: ${STAGING} exists in the target`) : error; }
+  const saved = (operation: Operation) => join(staging, 'old', String(operation.index)), fresh = (operation: Operation) => join(staging, 'new', String(operation.index));
+  try {
+    mkdirSync(join(staging, 'new')); mkdirSync(join(staging, 'old'));
+    for (const operation of operations) if (operation.body) {
+      writeFileSync(fresh(operation), operation.body, { flag: 'wx' });
+      chmodSync(fresh(operation), operation.mode!);
+    }
+    writeFileSync(join(staging, 'journal.json'), JSON.stringify({ schema_version: 1, operations: operations.map(({ index, name, kind }) => ({ index, path: name, kind })) }, null, 2) + '\n');
+  } catch (error) { rmSync(staging, { recursive: true, force: true }); throw error; }
+  const done: Step[] = [];
+  try {
+    const made = new Set<string>();
+    for (const operation of operations) if (operation.body) {
+      const missing: string[] = [];
+      for (let parent = dirname(operation.path); parent !== target && !made.has(parent) && !stat(parent); parent = dirname(parent)) missing.unshift(parent);
+      for (const parent of missing) { mkdirSync(parent); made.add(parent); done.push({ kind: 'mkdir', path: parent }); }
+    }
+    for (const operation of operations) if (operation.kind !== 'create') {
+      renameSync(operation.path, saved(operation)); done.push({ kind: 'backup', path: operation.path, saved: saved(operation) });
+    }
+    for (const operation of operations) if (operation.body) {
+      const info = lstatSync(fresh(operation));
+      renameSync(fresh(operation), operation.path); done.push({ kind: 'place', path: operation.path, dev: info.dev, ino: info.ino });
+    }
+    load(target);
+    const remaining = drift(target, manifest(sha, files, options.version), roots);
+    if (remaining.length || readFileSync(join(target, METADATA), 'utf8') !== next) throw new Error('Installed tree does not match the manifest: ' + remaining.join(', '));
+  } catch (error) {
+    const failed = rollback(done);
+    if (!failed.length) { rmSync(staging, { recursive: true, force: true }); throw new Error('Install failed and was rolled back; the target is unchanged: ' + (error instanceof Error ? error.message : String(error))); }
+    throw new RollbackIncomplete(`Install failed and rollback is incomplete; manual recovery needed using ${staging}/journal.json and ${staging}/old. Unrestored: ${failed.join(', ')}`);
+  }
   console.log(`Installed ${files.size} files from ${options.version ? `v${options.version}` : sha}`);
+  try { rmSync(staging, { recursive: true }); }
+  catch { console.error(`Warning: the install is verified, but ${staging} could not be removed; delete it before the next install.`); }
 }
 function canonical(value: unknown): string {
   if (object(value)) return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}';
   return JSON.stringify(value);
 }
 function check(options: Options) {
-  const target = resolve(options.target), data = load(target), problems = drift(target, data);
+  const target = resolve(options.target);
+  if (stat(join(target, STAGING))) throw new Error(`interrupted install: ${STAGING} present`);
+  const data = load(target), problems = drift(target, data);
   if (problems.length) throw new Error('Snapshot drift: ' + problems.join(', '));
   if (options.source) {
     const { sha, files, version } = committed(options.source, data.revision);
@@ -173,5 +244,5 @@ try {
   (command === 'install' ? install : check)(values as Options);
 } catch (error) {
   console.error('Snapshot failed: ' + (error instanceof Error ? error.message : String(error)));
-  process.exitCode = 1;
+  process.exitCode = error instanceof RollbackIncomplete ? 3 : 1;
 }

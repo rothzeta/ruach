@@ -11,6 +11,20 @@ just install-plugins
 
 `just install-global` installs skills through the Skills CLI for Codex and Claude. It does not install role definitions or consumer launch shortcuts. Choose the native plugin for Claude when you want its named agents and skills together. See the [README](../README.md#standard-installation) for versioned remote installation. Remote version tags must be published before those commands can fetch them.
 
+## Snapshot installation failures and recovery
+
+`ruach-install.ts install` stages every file under `.ruach-staging` in the target, then renames it into place and verifies the result. It never writes through an existing path, so hardlinks to managed files outside the snapshot keep their content and mode.
+
+| Exit | Meaning | Next step |
+| --- | --- | --- |
+| 0 | Installed and verified. | None. A warning names `.ruach-staging` if it could not be removed; delete it before the next install. |
+| 1 | Refused or failed with no change: drift, leftovers in a skill root, conflicts, a non-regular entry, or a commit failure that rolled back completely. | Fix the reported cause; `--replace` adopts drift, conflicts and regular-file leftovers, never symlinks, FIFOs or directories. |
+| 3 | Rollback incomplete. `.ruach-staging` is kept with `journal.json` and `old/`. | Manual recovery below. |
+
+An install killed mid-commit also leaves `.ruach-staging`. `install` refuses and `check` fails with `interrupted install` until it is resolved. To recover manually, move each `old/<index>` file named in `journal.json` back to its recorded path, delete files the journal marks `create` that the failed run placed, then remove `.ruach-staging`. Alternatively remove `.ruach-staging` and run `install --replace` to reinstall the snapshot. There is no `install --recover` command.
+
+For hosts that receive only skill folders through the Skills CLI, there is no installer script; run `ready` and installation commands from a Ruach checkout or plugin copy.
+
 ## Launch while developing Ruach
 
 Run these in an authorized Herdr session with `HERDR_ENV=1`, Bun, Git and the selected native harness available:

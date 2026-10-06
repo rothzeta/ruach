@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -20,7 +20,12 @@ function cli(args: string[], success = true, executable = script) {
   expect(result.status, result.stderr).toBe(success ? 0 : 1);
   return result;
 }
-function install(revision = sha, extra: string[] = [], success = true) { return cli(['install', '--source', source, '--revision', revision, ...extra], success); }
+function install(revision = sha, extra: string[] = [], success = true) {
+  const result = cli(['install', '--source', source, '--revision', revision, ...extra], success);
+  // Every successful install leaves no staging area and an immediately verifiable tree.
+  if (success) { expect(existsSync(join(target, '.ruach-staging'))).toBe(false); cli(['check', '--source', source]); }
+  return result;
+}
 function check(success = true, upstream = false) { return cli(['check', ...(upstream ? ['--source', source] : [])], success); }
 function metadata() { return JSON.parse(readFileSync(join(target, 'ruach.json'), 'utf8')); }
 beforeEach(() => {
@@ -170,4 +175,113 @@ test('upstream check detects a locally rewritten release version', () => {
   const data = metadata(); data.version = '0.2.0'; write(join(target, 'ruach.json'), JSON.stringify(data));
   check(); check(false, true);
   data.version = '../outside'; write(join(target, 'ruach.json'), JSON.stringify(data)); check(false);
+});
+
+// Paths, types, contents, modes and inodes of everything under the target, including staging.
+function treeHash(root = target): string[] {
+  const rows: string[] = [];
+  (function visit(directory: string, prefix: string) {
+    for (const name of readdirSync(directory).sort()) {
+      const path = join(directory, name), info = lstatSync(path), relative = `${prefix}${name}`, mode = info.mode & 0o7777;
+      if (info.isDirectory()) { rows.push(`${relative}/ d ${mode} ${info.ino}`); visit(path, relative + '/'); }
+      else if (info.isSymbolicLink()) rows.push(`${relative} l ${readlinkSync(path)}`);
+      else if (info.isFile()) rows.push(`${relative} f ${mode} ${info.ino} ${createHash('sha256').update(readFileSync(path)).digest('hex')}`);
+      else rows.push(`${relative} special ${mode}`);
+    }
+  })(root, '');
+  return rows;
+}
+function fileState(path: string) { const info = statSync(path); return { body: readFileSync(path, 'utf8'), mode: info.mode & 0o7777, ino: info.ino }; }
+function updateSource(change: () => void) { change(); return commit(); }
+const asRoot = process.getuid?.() === 0;
+function readOnly(directory: string, run: () => void) {
+  const original = statSync(directory).mode & 0o7777;
+  chmodSync(directory, 0o555);
+  try { run(); } finally { chmodSync(directory, original); }
+}
+
+test('RU-08: updating a hardlinked managed file leaves the outside link untouched', () => {
+  install(); const managed = join(target, 'skills/ruach-example/SKILL.md'), outside = join(base, 'outside');
+  linkSync(managed, outside); const before = fileState(outside);
+  install(updateSource(() => write(join(source, 'skills/ruach-example/SKILL.md'), 'Updated skill\n')));
+  expect(fileState(outside)).toEqual(before);
+  expect(readFileSync(managed, 'utf8')).toBe('Updated skill\n'); expect(statSync(managed).ino).not.toBe(before.ino);
+});
+test('RU-08: a mode change does not alter the outside hardlink', () => {
+  install(); const managed = join(target, 'skills/ruach-example/tool.ts'), outside = join(base, 'outside');
+  linkSync(managed, outside); const before = fileState(outside);
+  install(updateSource(() => chmodSync(join(source, 'skills/ruach-example/tool.ts'), 0o644)));
+  expect(fileState(outside)).toEqual(before); expect(statSync(managed).mode & 0o111).toBe(0);
+});
+test('RU-08: pruning and --replace adoption leave outside hardlinks untouched', () => {
+  install(); const managed = join(target, 'skills/ruach-example/tool.ts'), outside = join(base, 'outside');
+  linkSync(managed, outside); const before = fileState(outside);
+  install(updateSource(() => unlinkSync(join(source, 'skills/ruach-example/tool.ts'))));
+  expect(existsSync(managed)).toBe(false); expect(fileState(outside)).toEqual(before);
+  rmSync(target, { recursive: true }); write(join(target, 'agents/implementer.md'), 'consumer role\n');
+  const adopted = join(target, 'agents/implementer.md'), other = join(base, 'outside2');
+  linkSync(adopted, other); const previous = fileState(other);
+  install(sha, ['--replace']);
+  expect(fileState(other)).toEqual(previous); expect(readFileSync(adopted, 'utf8')).toBe('Shared role\n');
+});
+test.skipIf(asRoot)('RU-07: a failing commit restores the previous tree', () => {
+  install(); const before = treeHash(), next = updateSource(() => {
+    write(join(source, 'agents/implementer.md'), 'Updated role\n'); write(join(source, 'skills/ruach-example/SKILL.md'), 'Updated skill\n');
+  });
+  readOnly(join(target, 'skills/ruach-example'), () => install(next, [], false));
+  expect(treeHash()).toEqual(before); expect(existsSync(join(target, '.ruach-staging'))).toBe(false);
+  check(true, true);
+});
+test.skipIf(asRoot)('RU-07: removals are restored when the commit fails', () => {
+  install(); const before = treeHash(), next = updateSource(() => {
+    write(join(source, 'agents/implementer.md'), 'Updated role\n'); write(join(source, 'skills/ruach-example/SKILL.md'), 'Updated skill\n');
+    unlinkSync(join(source, 'skills/ruach-example/tool.ts'));
+  });
+  readOnly(join(target, 'skills/ruach-example'), () => install(next, [], false));
+  expect(treeHash()).toEqual(before); expect(existsSync(join(target, 'skills/ruach-example/tool.ts'))).toBe(true);
+  check(true, true);
+});
+test.skipIf(asRoot)('RU-07: directories created by a failed update are removed', () => {
+  install(); const before = treeHash(), next = updateSource(() => {
+    write(join(source, 'skills/ruach-new/SKILL.md'), 'New skill\n'); write(join(source, 'skills/ruach-example/SKILL.md'), 'Updated skill\n');
+  });
+  readOnly(join(target, 'skills/ruach-example'), () => install(next, [], false));
+  expect(existsSync(join(target, 'skills/ruach-new'))).toBe(false); expect(treeHash()).toEqual(before);
+});
+function incomingSkill() { return updateSource(() => write(join(source, 'skills/ruach-new/SKILL.md'), 'New skill\n')); }
+test('RU-09: a leftover in an incoming skill root fails without --replace', () => {
+  install(); const next = incomingSkill(); write(join(target, 'skills/ruach-new/stale.md'), 'stale\n');
+  const before = treeHash(); install(next, [], false);
+  expect(treeHash()).toEqual(before);
+});
+test('RU-09: --replace removes a leftover in an incoming skill root', () => {
+  install(); const next = incomingSkill(); write(join(target, 'skills/ruach-new/stale.md'), 'stale\n');
+  install(next, ['--replace']);
+  expect(existsSync(join(target, 'skills/ruach-new/stale.md'))).toBe(false);
+  expect(existsSync(join(target, 'skills/ruach-new/SKILL.md'))).toBe(true); check(true, true);
+});
+test('RU-09: dependencies in an incoming skill root are not leftovers', () => {
+  install(); const next = incomingSkill(); write(join(target, 'skills/ruach-new/node_modules/x'), 'dependency\n');
+  install(next); expect(readFileSync(join(target, 'skills/ruach-new/node_modules/x'), 'utf8')).toBe('dependency\n');
+});
+test('RU-09: non-regular leftovers fail even with --replace', () => {
+  install(); const next = incomingSkill(); mkdirSync(join(target, 'skills/ruach-new'), { recursive: true });
+  symlinkSync(join(base, 'elsewhere'), join(target, 'skills/ruach-new/link'));
+  let before = treeHash(); install(next, ['--replace'], false); expect(treeHash()).toEqual(before);
+  unlinkSync(join(target, 'skills/ruach-new/link'));
+  if (spawnSync('mkfifo', [join(target, 'skills/ruach-new/pipe')]).status !== 0) return;
+  before = treeHash(); install(next, ['--replace'], false); expect(treeHash()).toEqual(before);
+});
+test('an interrupted install blocks install and check', () => {
+  install(); mkdirSync(join(target, '.ruach-staging')); const before = treeHash();
+  install(updateSource(() => write(join(source, 'agents/implementer.md'), 'Updated role\n')), [], false);
+  expect(treeHash()).toEqual(before);
+  expect(check(false).stderr).toContain('.ruach-staging');
+});
+test('RU-07: structural conflicts are rejected before any mutation, even with --replace', () => {
+  mkdirSync(join(target, 'skills/ruach-example/tool.ts'), { recursive: true });
+  let before = treeHash(); install(sha, ['--replace'], false); expect(treeHash()).toEqual(before);
+  rmSync(join(target, 'skills'), { recursive: true }); writeFileSync(join(target, 'skills'), 'not a directory');
+  before = treeHash(); install(sha, ['--replace'], false); expect(treeHash()).toEqual(before);
+  expect(existsSync(join(target, 'agents'))).toBe(false);
 });
