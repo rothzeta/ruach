@@ -31,12 +31,12 @@ for (const role of ['coordinator', 'architect', 'scout', 'implementer', 'reviewe
   expect(data.selection.roleFile).toBe(join(source, 'agents', `${role}.md`));
   expect(data.selection.resources).toBe(source); expect(data.selection.cwd).toBe(source);
   expect(data.permissions).toBe('auto-review'); expect(data.argv).toEqual([]);
-  expect(data.selection.kind).toBe(['coordinator', 'architect'].includes(role) ? 'claude' : 'codex');
+  expect(data.selection.kind).toBe('claude');
 });
 test('offline resolution honors declared alternatives and rejects other routes', () => {
-  const result = run(['resolve', 'architect', '--route', 'gpt-6.1-sol-high'], script);
-  expect(result.status, result.stderr).toBe(0); expect(JSON.parse(result.stdout).selection.kind).toBe('codex');
-  const invalid = run(['resolve', 'coordinator', '--route', 'gpt-6.1-sol-high'], script);
+  const result = run(['resolve', 'architect', '--route', 'claude-opus-5.5-high'], script);
+  expect(result.status, result.stderr).toBe(0); expect(JSON.parse(result.stdout).selection.effort).toBe('high');
+  const invalid = run(['resolve', 'coordinator', '--route', 'claude-opus-5.5-high'], script);
   expect(invalid.status).toBe(2); expect(JSON.parse(invalid.stdout).diagnostics[0].code).toBe('disallowed_route');
 });
 test('start delegates once with default name, source roots, and exact output forwarding', () => {
