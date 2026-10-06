@@ -490,3 +490,177 @@ test('the evidence output is reserved before checks run and cannot be redirected
   expect(swapped.exit).toBe(2); expect(swapped.value.diagnostics.map((d: any) => d.code)).toContain('output_error');
   expect(readFileSync(victim, 'utf8')).toBe('untouched\n');
 });
+
+// ---- Content-based clean check (RU-02, docs/design/0.3-clean-check.md section 14) ----
+// The numbers in the test names are the design's test numbers. "Forged" states must read as dirty with a
+// record naming the path; controls must stay clean. Each forgery asserts its precondition (plain git status
+// is clean) so a test cannot fail or pass for the wrong reason.
+function plain(repo: string, ...args: string[]) {
+  const result = spawnSync('git', ['-C', repo, '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', ...args], { encoding: 'utf8', env: process.env });
+  return result.stdout;
+}
+function settle(f: ReturnType<typeof fixture>) { Bun.sleepSync(1100); plain(f.repo, 'status', '--porcelain'); } // index entries no longer racy
+function tamperKeepingMtime(f: ReturnType<typeof fixture>, file = 'protected', body = 'TAMPER\n') {
+  const ref = join(f.base, `mtime-ref-${file.replace(/\W/g, '_')}`);
+  spawnSync('touch', ['-r', join(f.repo, file), ref]); write(join(f.repo, file), body); spawnSync('touch', ['-r', ref, join(f.repo, file)]);
+}
+function expectDetected(observed: ReturnType<typeof scope>, path: string, extra = true) {
+  expect(observed.exit).toBe(1); expect(observed.value.ok).toBe(false); expect(observed.value.clean).toBe(false);
+  expect(observed.value.dirty.flatMap((d: any) => d.paths)).toContain(path);
+  return extra;
+}
+function expectClean(observed: ReturnType<typeof scope>) { expect(observed.exit, observed.stdout).toBe(0); expect(observed.value.ok).toBe(true); expect(observed.value.clean).toBe(true); expect(observed.value.dirty).toEqual([]); }
+function viaAcceptance(f: ReturnType<typeof fixture>) {
+  const accepted = accept(f, acceptance(f, [check([bun, '-e', '0'], { exit: 0 })]));
+  return accepted;
+}
+
+for (const [number, setting] of [['1', ['core.trustctime', 'false']], ['2', ['core.checkStat', 'minimal']]] as const) test(`${number}. ${setting[0]}=${setting[1]} cannot hide an equal-size edit with restored mtime`, () => {
+  const f = fixture(); git(f.repo, 'config', setting[0], setting[1]); settle(f);
+  tamperKeepingMtime(f);
+  expect(plain(f.repo, 'status', '--porcelain')).toBe(''); // precondition: the forgery works against plain status
+  expectDetected(scope(f, {}), 'protected');
+  const accepted = viaAcceptance(f); expect(accepted.value.ok).toBe(false); expect(accepted.value.dirty_before.flatMap((d: any) => d.paths)).toContain('protected');
+});
+test('3. an index whose stat and checksum were rewritten to claim the committed blob cannot hide a tampered file', () => {
+  const f = fixture(), blob = git(f.repo, 'rev-parse', 'HEAD:protected');
+  git(f.repo, 'config', 'index.version', '2'); write(join(f.repo, 'protected'), 'TAMPER\n'); Bun.sleepSync(1100); git(f.repo, 'add', 'protected');
+  const path = join(f.repo, '.git', 'index'), index = readFileSync(path);
+  let offset = 12, patched = false;
+  for (let i = 0, count = index.readUInt32BE(8); i < count; i++) {
+    const length = index.readUInt16BE(offset + 60) & 0xfff, name = index.subarray(offset + 62, offset + 62 + length).toString();
+    if (name === 'protected') { Buffer.from(blob, 'hex').copy(index, offset + 40); patched = true; }
+    offset += Math.ceil((62 + length + 1) / 8) * 8;
+  }
+  expect(patched).toBe(true);
+  createHash('sha1').update(index.subarray(0, index.length - 20)).digest().copy(index, index.length - 20); writeFileSync(path, index);
+  expect(plain(f.repo, 'status', '--porcelain')).toBe(''); // precondition
+  expectDetected(scope(f, {}), 'protected');
+});
+test('4. default configuration still detects the same edit (control)', () => {
+  const f = fixture(); settle(f); tamperKeepingMtime(f);
+  expectDetected(scope(f, {}), 'protected');
+});
+test('5. a check that forges equality inside acceptance cannot make dirty_after clean', () => {
+  const f = fixture(); git(f.repo, 'config', 'core.trustctime', 'false'); settle(f);
+  const script = `set -e; touch -r protected ../ref; printf 'TAMPER\\n' > protected; touch -r ../ref protected`;
+  const accepted = accept(f, acceptance(f, [check(['sh', '-c', script], { exit: 0 })]));
+  expect(accepted.value.ok).toBe(false); expect(accepted.value.dirty_after.flatMap((d: any) => d.paths)).toContain('protected');
+  expect(accepted.value.diagnostics.map((d: any) => d.code)).toContain('dirty_candidate');
+});
+test('8. core.filemode=false cannot hide a changed executable bit', () => {
+  const f = fixture(); git(f.repo, 'config', 'core.filemode', 'false'); chmodSync(join(f.repo, 'protected'), 0o755);
+  expect(plain(f.repo, 'status', '--porcelain')).toBe('');
+  expectDetected(scope(f, {}), 'protected');
+});
+test('9. core.symlinks=false cannot hide a symlink replaced by a regular file', () => {
+  const f = fixture(); symlinkSync('protected', join(f.repo, 'link')); const baseline = commit(f.repo);
+  git(f.repo, 'config', 'core.symlinks', 'false'); rmSync(join(f.repo, 'link')); write(join(f.repo, 'link'), 'protected');
+  expect(plain(f.repo, 'status', '--porcelain')).toBe('');
+  expectDetected(scope(f, {}, 'HEAD', [], baseline), 'link');
+});
+test('10. an untouched assume-unchanged or skip-worktree file is clean', () => {
+  for (const flag of ['--assume-unchanged', '--skip-worktree']) {
+    const f = fixture(); git(f.repo, 'update-index', flag, 'protected'); expectClean(scope(f, {}));
+  }
+});
+test('13. a clean filter named by core.attributesFile cannot forge a clean checkout', () => {
+  const f = fixture(), attributes = write(join(f.base, 'attributes'), 'protected filter=forge\n');
+  git(f.repo, 'config', 'filter.forge.clean', "printf 'stable\\n'"); git(f.repo, 'config', 'core.attributesFile', attributes);
+  settle(f); tamperKeepingMtime(f); expect(plain(f.repo, 'status', '--porcelain')).toBe('');
+  expectDetected(scope(f, {}), 'protected');
+});
+test('14. an [attr] macro expanding to a clean filter cannot forge a clean checkout', () => {
+  const f = fixture();
+  write(join(f.repo, '.git', 'info', 'attributes'), '[attr]forged filter=forge\nprotected forged\n');
+  git(f.repo, 'config', 'filter.forge.clean', "printf 'stable\\n'");
+  settle(f); tamperKeepingMtime(f); expect(plain(f.repo, 'status', '--porcelain')).toBe('');
+  expectDetected(scope(f, {}), 'protected');
+});
+test('15. a smudge-only filter on an untouched file is clean', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'protected filter=smudgeonly\n'); git(f.repo, 'config', 'filter.smudgeonly.smudge', 'cat');
+  expectClean(scope(f, {}));
+});
+test('16. a filtered file whose worktree bytes differ from the committed pointer is dirty, not a setup error', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'protected filter=lfs\n');
+  git(f.repo, 'config', 'filter.lfs.clean', "printf 'pointer\\n'"); git(f.repo, 'config', 'filter.lfs.smudge', 'cat');
+  write(join(f.repo, 'protected'), 'stable\n'); git(f.repo, 'add', '-f', 'protected'); git(f.repo, 'commit', '-q', '-m', 'pointer'); const baseline = git(f.repo, 'rev-parse', 'HEAD');
+  const observed = scope(f, {}, 'HEAD', [], baseline); expectDetected(observed, 'protected');
+  expect(observed.value.diagnostics.map((d: any) => d.code)).toContain('dirty_worktree');
+});
+test('17. an unset filter attribute on an untouched file is clean', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'protected -filter\n'); expectClean(scope(f, {}));
+});
+test('18. a textconv driver cannot mask a tampered file', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'protected diff=masked\n'); git(f.repo, 'config', 'diff.masked.textconv', 'echo stable; true');
+  settle(f); tamperKeepingMtime(f); expectDetected(scope(f, {}), 'protected');
+});
+test('19. a working-tree-encoding attribute cannot mask a tampered file', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'protected working-tree-encoding=UTF-16\n');
+  settle(f); tamperKeepingMtime(f); expectDetected(scope(f, {}), 'protected');
+});
+test('20. an ident attribute cannot let a foreign expanded $Id$ read as the committed blob', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), 'identity.txt ident\n');
+  write(join(f.repo, 'identity.txt'), '$Id$\n'); git(f.repo, 'add', 'identity.txt'); git(f.repo, 'commit', '-q', '-m', 'ident'); const baseline = git(f.repo, 'rev-parse', 'HEAD');
+  settle(f); write(join(f.repo, 'identity.txt'), `$Id: ${'f'.repeat(40)} $\n`); // plain status already reports this one; the test pins raw-byte semantics
+  expectDetected(scope(f, {}, 'HEAD', [], baseline), 'identity.txt');
+});
+test('21. eol and autocrlf configuration on an untouched LF checkout is clean', () => {
+  const f = fixture(); write(join(f.repo, '.git', 'info', 'attributes'), '* text\n'); git(f.repo, 'config', 'core.autocrlf', 'true'); expectClean(scope(f, {}));
+});
+test('22. an untracked file listed in .git/info/exclude is detected', () => {
+  const f = fixture(); write(join(f.repo, 'evil.ts'), 'x\n'); write(join(f.repo, '.git', 'info', 'exclude'), 'evil.ts\n');
+  expectDetected(scope(f, {}), 'evil.ts');
+});
+test('23. an untracked file listed in a repository core.excludesFile is detected', () => {
+  const f = fixture(); write(join(f.repo, 'evil.ts'), 'x\n'); git(f.repo, 'config', 'core.excludesFile', write(join(f.base, 'excludes'), 'evil.ts\n'));
+  expectDetected(scope(f, {}), 'evil.ts');
+});
+test('24. an untracked self-ignoring .gitignore and the file it hides are both reported', () => {
+  const f = fixture(); mkdirSync(join(f.repo, 'sub')); write(join(f.repo, 'sub', '.gitignore'), '*\n'); write(join(f.repo, 'sub', 'evil.ts'), 'x\n');
+  const observed = scope(f, {}); expectDetected(observed, 'sub/.gitignore');
+  expect(observed.value.dirty.flatMap((d: any) => d.paths)).toContain('sub/evil.ts');
+});
+test('25. an edited root .gitignore cannot hide untracked files from scope when cleanliness is optional', () => {
+  const f = fixture(); write(join(f.repo, '.gitignore'), '*\n'); write(join(f.repo, 'evil.ts'), 'x\n');
+  const observed = scope(f, { paths: ['.gitignore'], require_clean: false });
+  expect(observed.exit).toBe(1); expect(observed.value.unexpected_paths).toContain('evil.ts');
+});
+test('26. files ignored by committed .gitignore are not dirty', () => {
+  const f = fixture(); mkdirSync(join(f.repo, 'ignored')); write(join(f.repo, 'ignored', 'x'), 'x\n'); expectClean(scope(f, {}));
+});
+test('28. a submodule edit with core.trustctime=false and a restored mtime still marks the parent dirty', () => {
+  const f = fixture(), source = join(f.base, 'module-source'); mkdirSync(source); git(source, 'init', '-q'); write(join(source, 'file'), 'original'); commit(source);
+  git(f.repo, '-c', 'protocol.file.allow=always', 'submodule', 'add', '-q', source, 'module'); const baseline = commit(f.repo);
+  git(join(f.repo, 'module'), 'config', 'core.trustctime', 'false'); Bun.sleepSync(1100); plain(join(f.repo, 'module'), 'status', '--porcelain');
+  tamperKeepingMtime(f, 'module/file', 'DIRTYEDT');
+  expectDetected(scope(f, { paths: ['module'] }, 'HEAD', [], baseline), 'module');
+});
+test('29. a removed submodule directory is dirty and an empty one is clean', () => {
+  const f = fixture(), source = join(f.base, 'module-source'); mkdirSync(source); git(source, 'init', '-q'); write(join(source, 'file'), 'original'); commit(source);
+  git(f.repo, '-c', 'protocol.file.allow=always', 'submodule', 'add', '-q', source, 'module'); const baseline = commit(f.repo);
+  rmSync(join(f.repo, 'module'), { recursive: true, force: true }); expectDetected(scope(f, { paths: ['module'] }, 'HEAD', [], baseline), 'module');
+  mkdirSync(join(f.repo, 'module')); expectClean(scope(f, {}, 'HEAD', [], baseline));
+});
+test('30. a tracked file replaced by a FIFO is dirty and never blocks', () => {
+  const f = fixture(); rmSync(join(f.repo, 'protected')); expect(spawnSync('mkfifo', [join(f.repo, 'protected')]).status).toBe(0);
+  const started = Date.now(); expectDetected(scope(f, {}), 'protected'); expect(Date.now() - started).toBeLessThan(8000);
+});
+test('31. a tracked file replaced by a directory, and a path behind a parent symlink, are dirty', () => {
+  const f = fixture(); rmSync(join(f.repo, 'protected')); mkdirSync(join(f.repo, 'protected')); write(join(f.repo, 'protected', 'inner'), 'x'); expectDetected(scope(f, {}), 'protected');
+  const g = fixture(); mkdirSync(join(g.repo, 'dir')); write(join(g.repo, 'dir', 'file'), 'x\n'); const baseline = commit(g.repo);
+  rmSync(join(g.repo, 'dir'), { recursive: true }); symlinkSync(g.base, join(g.repo, 'dir')); expectDetected(scope(g, {}, 'HEAD', [], baseline), 'dir/file');
+});
+test('33. an untracked listing beyond the entry budget is a setup error, never clean', () => {
+  // The 1 GiB hash budget is not tested at its boundary: that would need a committed file over 1 GiB.
+  const f = fixture(); mkdirSync(join(f.repo, 'bulk'));
+  for (let i = 0; i < 100_001; i++) writeFileSync(join(f.repo, 'bulk', `f${i}`), '');
+  const observed = scope(f, {}); expect(observed.exit).toBe(2); expect(observed.value.ok).toBe(false);
+  expect(observed.value.diagnostics.map((d: any) => d.code)).toContain('clean_check_budget'); expect(observed.value.clean).not.toBe(true);
+}, 120000);
+test('34. a committed file over the artifact limit is hashed by streaming: untouched is clean, an equal-size edit is dirty', () => {
+  const f = fixture(), size = 17 * 1024 * 1024; writeFileSync(join(f.repo, 'big.bin'), Buffer.alloc(size, 97)); const baseline = commit(f.repo);
+  expectClean(scope(f, {}, 'HEAD', [], baseline));
+  const edited = Buffer.alloc(size, 97); edited[size - 1] = 98; writeFileSync(join(f.repo, 'big.bin'), edited);
+  expectDetected(scope(f, {}, 'HEAD', [], baseline), 'big.bin');
+}, 60000);
