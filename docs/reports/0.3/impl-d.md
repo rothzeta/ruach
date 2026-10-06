@@ -2,8 +2,8 @@
 task: 0.3-impl-d
 status: complete
 outcome: Track C1/C3/C4 and all Track D documentation, metadata and wording delivered, with the 0.3.0 changelog entry; no needs-decision items.
-candidate_revision: cff719ae4ed4e48934b30b890663daea8d8705ad
-tested_revision: cff719ae4ed4e48934b30b890663daea8d8705ad
+candidate_revision: 8ddd5c5fc77fea71fd6bb9cfc079ab56cc5216ff
+tested_revision: 8ddd5c5fc77fea71fd6bb9cfc079ab56cc5216ff
 artifacts:
   - docs/reports/0.3/impl-d.md
   - "branch ruach/ruach03-impl-d"
