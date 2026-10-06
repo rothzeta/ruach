@@ -79,3 +79,56 @@ herdr pane read <returned-pane-id> --source recent-unwrapped --lines 120
 Older releases reported a folder-trust dialog as `start_uncertain` with exit 4. If the existing agent is blocked and the pane shows that dialog, complete the confirmation in that workspace; another launch is unnecessary. A timeout does not prove a start command was never delivered. The launcher does not retry or delete uncertain resources.
 
 After reuse ends, close only the owned session/workspace. Commit useful work and preserve it on a retained branch before removing its worktree with `git worktree remove` from another retained checkout. Keep the branch and unrelated resources. Never discard uncommitted evidence to make cleanup succeed.
+
+## Lifecycle: inspect, upgrade and remove
+
+This section covers the installed copy of Ruach for each route. A readiness command (`just ready`) is planned in parallel work for 0.3 and is not documented here; until it is released, use the manual checks below. Install and first-launch steps are above.
+
+### Inspect the active version
+
+| Route | Command | What it shows |
+| --- | --- | --- |
+| Skills CLI | `bunx --bun skills@1.7.0 list [--global]` | Installed skill folders and the agents they are linked to. It does not record a Ruach release; compare against the tag you installed from. |
+| Claude plugin | `claude plugin list` | Installed plugins with their versions. `ruach@ruach` shows the marketplace tag's plugin version. |
+| Project snapshot | `bun .agents/ruach-install.ts check --target .agents` | Verifies hashes and prints `Snapshot verified: v<version>`. `.agents/ruach.json` records the version, upstream origin, resolved commit and file hashes. Add `--source /path/to/ruach` to compare against the upstream tree. |
+
+If two routes provide the same skill names to one harness, discovery can pick either copy. Inspect each route before assuming which version is active.
+
+### Upgrade from one pin to another
+
+Upgrade by choosing a new release, never by following a branch.
+
+- **Skills CLI:** repeat the `add` command with the new tag, for example `.../tree/v<new>`, and the same `--global` and `--agent` options.
+- **Claude plugin:** register the new tag (`claude plugin marketplace add rothzeta/ruach#v<new> --scope user`), then reinstall or update `ruach@ruach` with `claude plugin update`. Start a new Claude session afterward.
+- **Project snapshot:** from a checkout containing the new tag, run `bun scripts/install.ts install --source . --version <new> --target <project>/.agents`. Managed drift or conflicting files stop the update; rerun with `--replace` only after reading what differs. Local resources outside the manifest are not touched. Then run `check` as above.
+
+Review the [changelog](../CHANGELOG.md) between the two versions before upgrading, and commit a project snapshot as one change so it can be reverted as one.
+
+### Prepare dependencies after an update
+
+Updates replace skill files but do not run package installs. After each upgrade, in the executable skills you use:
+
+```sh
+(cd <install-root>/skills/ruach-handoff && bun install --frozen-lockfile)
+(cd <install-root>/skills/ruach-herdr && bun install --frozen-lockfile)
+(cd <install-root>/skills/ruach-harness-eval && bun install --frozen-lockfile)
+```
+
+`<install-root>` is `.agents` for a snapshot, the plugin cache directory for Claude, or the skill directory the Skills CLI reported. In a Ruach source checkout, `just install` does all three. The frozen install fails if a skill's lock file and manifest disagree, which is the intended signal for a damaged copy.
+
+### Resolve duplicate installations
+
+Duplicates appear when the same skills arrive through more than one route, such as the plugin and the Skills CLI, or a snapshot plus a global install. Symptoms are two entries for one skill or unexpected versions.
+
+1. List what each route installed (table above).
+2. Keep the route that matches your job in the [README](../README.md#choose-by-job). Plugin for native Claude roles, snapshot for Herdr coordination, Skills CLI for skills alone.
+3. Remove the other copy with that route's own remove command (below). Do not delete files by hand inside a route's managed directories.
+4. Start a new harness session and confirm each skill appears once.
+
+### Remove while preserving local resources
+
+- **Skills CLI:** `bunx --bun skills@1.7.0 remove <skill>... [--global]` removes only named skills.
+- **Claude plugin:** `claude plugin uninstall ruach@ruach`, and `claude plugin marketplace remove ruach` if the marketplace is no longer wanted.
+- **Project snapshot:** the manifest lists exactly which files Ruach installed. Remove those paths (the installed `ruach-install.ts`, `ruach.json` and the listed `agents/` and `skills/` files) and leave everything else. Your own routing files (`models.yaml`, `routing.yaml`, `roles.yaml`), extra roles and extra skills are consumer-owned and not in the manifest. Check `git status` afterward. There is no uninstall subcommand in 0.2.x.
+
+Worktrees, branches and reports created by past tasks belong to the task records, not to the installation. Removing Ruach does not remove them.
