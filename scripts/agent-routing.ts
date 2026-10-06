@@ -24,15 +24,16 @@ try {
     placement: { type: 'string' }, worktree: { type: 'string' }, branch: { type: 'string' }, base: { type: 'string' },
     ...(command === 'resolve' ? { name: { type: 'string' as const } } : { 'dry-run': { type: 'boolean' as const } }),
   } });
+  const flags = values as { name?: string; 'dry-run'?: boolean };
   const [role, explicitName] = positionals;
   if (!role || !/^[a-z][a-z0-9_-]*$/.test(role) || positionals.length > (command === 'start' ? 2 : 1)) throw new Error(usage);
   if (!['inherit', 'auto-review'].includes(values.permissions!)) throw new Error('Expected --permissions inherit|auto-review');
-  const root = resolve(values.root ?? source), name = explicitName ?? values.name ?? `ruach-${role}`;
+  const root = resolve(values.root ?? source), name = explicitName ?? flags.name ?? `ruach-${role}`;
   const argv = [join(source, 'skills/ruach-herdr/scripts/worker.ts'), command,
     '--role', role, '--name', name, '--repo', root, '--cwd', root,
     '--resources', source, '--catalogs', join(root, 'config/agent-routing'), '--permissions', values.permissions!];
   if (command === 'resolve') argv.push('--offline');
-  if (values['dry-run']) argv.push('--dry-run');
+  if (flags['dry-run']) argv.push('--dry-run');
   if (values.route !== undefined) argv.push('--route', values.route);
   for (const key of ['placement', 'worktree', 'branch', 'base'] as const) if (values[key] !== undefined) argv.push(`--${key}`, values[key]!);
   const result = spawnSync(process.execPath, argv, { cwd: root, stdio: 'inherit' });

@@ -98,9 +98,9 @@ for(const kind of ['claude','codex'])for(const role of ['coordinator','implement
     expect(await stat(join(generated,'.claude/skills/ruach-source-technical'))).toBeDefined();
     expect(await stat(join(generated,'.claude/skills/ruach-workflow-source')).then(()=>true,()=>false)).toBe(role==='coordinator');
   } else {
-    const developer=Bun.TOML.parse(native.args.find((arg:string)=>arg.startsWith('developer_instructions='))).developer_instructions;
+    const developer=(Bun.TOML.parse as (text: string) => any)(native.args.find((arg:string)=>arg.startsWith('developer_instructions='))).developer_instructions;
     expect(developer).toContain('Source-only '+role+' instructions.');expect(developer).toContain(JSON.stringify(join(sourceResources,'skills')));
-    const entries=Bun.TOML.parse(native.args.find((arg:string)=>arg.startsWith('skills.config='))).skills.config;
+    const entries=(Bun.TOML.parse as (text: string) => any)(native.args.find((arg:string)=>arg.startsWith('skills.config='))).skills.config;
     if(role!=='coordinator')expect(entries.find((entry:any)=>entry.path===join(sourceResources,'skills','workflow','SKILL.md')).enabled).toBe(false);
   }
 });
@@ -111,9 +111,9 @@ test('explicit Codex start composes developer text and existing skills, passes e
   const mutations=await lines('mutations.jsonl');expect(mutations.map(x=>x.action)).toEqual(['split','start']);
   expect(mutations[0].args).toContain('--current');expect(mutations[0].args).toContain('--no-focus');expect(mutations[0].args).not.toContain('--focus');expect(mutations[0].args[mutations[0].args.indexOf('--cwd')+1]).toBe(repo);
   const native=(await lines('native-launches.jsonl'))[0];expect(native.cwd).toBe(repo);expect(native.args.slice(-pass.length)).toEqual(pass);
-  const dev=native.args.find((a:string)=>a.startsWith('developer_instructions='));const parsed=Bun.TOML.parse(dev);
+  const dev=native.args.find((a:string)=>a.startsWith('developer_instructions='));const parsed=(Bun.TOML.parse as (text: string) => any)(dev);
   expect(parsed.developer_instructions).toBe(secret+'\n\n'+roleText);
-  const skills=Bun.TOML.parse(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any;
+  const skills=(Bun.TOML.parse as (text: string) => any)(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any;
   expect(skills.config.find((e:any)=>e.path===join(repo,'unrelated')).enabled).toBe(false);
   expect(skills.config.filter((e:any)=>e.path.includes('workflow')).every((e:any)=>!e.enabled)).toBe(true);
   expect(r.stdout+r.stderr).not.toContain(secret);expect(r.stdout).not.toContain(pass[1]);
@@ -150,7 +150,7 @@ for(const [name,file,content] of [
 ] as const) test(`invalid routing ${name} fails before any mutation`,async()=>{await writeFile(join(repo,'.agents',file),content);const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(2);await noMutation();});
 for(const kind of ['pi','opencode','dsh','agy','omp'])test(`${kind} absent or unverified adapter fails accurately without mutation`,async()=>{const r=await launch('start',['--kind',kind,'--model','test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
 test('unsupported Herdr kind fails even when the harness executable exists',async()=>{await cp(join(bin,'codex'),join(bin,'dsh'));const r=await launch('start',['--kind','dsh','--model','test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('unsupported_herdr_kind');await noMutation();});
-for(const env of [{HERDR_ENV:'0'},{HERDR_PANE_ID:''}])test('absent caller context fails without mutation',async()=>{const r=await launch('start',[...explicit,'--temp-dir',temporary],env);expect(r.exit).toBe(3);await noMutation();});
+for(const env of [{HERDR_ENV:'0'},{HERDR_PANE_ID:''}] as Record<string,string>[])test('absent caller context fails without mutation',async()=>{const r=await launch('start',[...explicit,'--temp-dir',temporary],env);expect(r.exit).toBe(3);await noMutation();});
 test('unreachable Herdr and both unavailable Codex readers fail before launch mutation',async()=>{behavior.unreachable=true;let r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();behavior.unreachable=false;behavior.daemonMissing=true;behavior.stdioUnavailable=true;r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
 test('missing Herdr executable fails without mutation',async()=>{await rm(join(bin,'herdr'));let r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
 test('invalid native catalog never replaces user configuration',async()=>{behavior.badCatalog=true;const r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
@@ -159,7 +159,7 @@ test('split failure never submits an agent and retains private config for uncert
 for(const args of [['--model','replacement'],['-c','developer_instructions=secret'],['--resume'],['--api-key','secret'],['initial prompt'],['--print']])test('conflicting native argv cannot bypass role/config/session contracts',async()=>{const r=await launch('start',[...explicit,'--temp-dir',temporary,'--',...args]);expect(r.exit).toBe(2);await noMutation();});
 test('duplicate live names fail without splitting',async()=>{behavior.agents=[{name:'example-worker'}];const r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(2);await noMutation();});
 test('routed implementer uses its assigned Codex route',async()=>{const r=await asRole('implementer','resolve');expect(r.exit).toBe(0);expect(r.result.selection.kind).toBe('codex');expect(r.result.selection.route).toBe('build.v1');await noMutation();});
-test('Codex coordinator preserves existing workflow and unrelated skill entries',async()=>{const r=await asRole('coordinator','start',explicit);expect(r.exit).toBe(0);expect(r.result.hidden_workflows).toEqual([]);const native=(await lines('native-launches.jsonl'))[0];const skills=Bun.TOML.parse(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any;expect(skills.config.find((e:any)=>e.path.endsWith('workflow/SKILL.md')).enabled).toBe(true);expect(skills.config.find((e:any)=>e.path.endsWith('unrelated')).enabled).toBe(false);});
+test('Codex coordinator preserves existing workflow and unrelated skill entries',async()=>{const r=await asRole('coordinator','start',explicit);expect(r.exit).toBe(0);expect(r.result.hidden_workflows).toEqual([]);const native=(await lines('native-launches.jsonl'))[0];const skills=(Bun.TOML.parse as (text: string) => any)(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any;expect(skills.config.find((e:any)=>e.path.endsWith('workflow/SKILL.md')).enabled).toBe(true);expect(skills.config.find((e:any)=>e.path.endsWith('unrelated')).enabled).toBe(false);});
 test('Claude dry-run does not create settings or skill links',async()=>{const r=await launch('start',['--kind','claude','--model','test-model','--temp-dir',temporary,'--dry-run']);expect(r.exit).toBe(0);await noMutation();});
 test('Claude additional directory workflow is hidden and native argv preserves whitespace and Unicode',async()=>{const extra=join(root,'external space ü $()');await skill(join(extra,'.claude','skills','alias'),'ruach-workflow-added');const pass=['--add-dir',extra,'--verbose'];const r=await launch('start',['--kind','claude','--model','test-model','--temp-dir',temporary,'--',...pass]);expect(r.exit).toBe(0);expect(r.result.hidden_workflows).toContain('ruach-workflow-added');expect((await lines('native-launches.jsonl'))[0].args.slice(-pass.length)).toEqual(pass);});
 test('entire routing graph is validated even when selected route is valid',async()=>{const file=join(repo,'.agents','routing.yaml');await writeFile(file,(await readFile(file,'utf8'))+'  broken.v1: {model: missing, effort: high}\n');const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('missing_model');await noMutation();});
@@ -283,8 +283,8 @@ test('no-daemon Codex resolve, dry-run and start preserve layered native config 
     const r=await launch(command,[...explicit,...extra]);expect(r.exit).toBe(0);expect(r.result.config_reader).toBe('stdio');expect(r.result.hidden_workflows).toContain('ruach-workflow-feature');expect(r.stdout+r.stderr).not.toContain(layered);await noMutation();await readersStopped();
   }
   const r=await launch('start',[...explicit,'--permissions','auto-review']);expect(r.exit).toBe(0);expect(r.result.config_reader).toBe('stdio');
-  const native=(await lines('native-launches.jsonl'))[0];expect(Bun.TOML.parse(native.args.find((a:string)=>a.startsWith('developer_instructions='))).developer_instructions).toBe(layered+'\n\n'+roleText);
-  const skills=(Bun.TOML.parse(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any).config;
+  const native=(await lines('native-launches.jsonl'))[0];expect((Bun.TOML.parse as (text: string) => any)(native.args.find((a:string)=>a.startsWith('developer_instructions='))).developer_instructions).toBe(layered+'\n\n'+roleText);
+  const skills=((Bun.TOML.parse as (text: string) => any)(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any).config;
   expect(skills.find((e:any)=>e.path===join(repo,'unrelated')).enabled).toBe(false);expect(skills.filter((e:any)=>e.path.includes('workflow')).every((e:any)=>!e.enabled)).toBe(true);
   expect(native.args).toContain('--approve-for-me');expect(await Promise.all(protectedFiles.map(f=>readFile(f)))).toEqual(before);await readersStopped();
   const requests=await lines('stdio-requests.jsonl');expect(requests.every(r=>['initialize','initialized','config/read','skills/list'].includes(r.method))).toBe(true);
@@ -329,7 +329,7 @@ test('offline auto-review selection is write-free and never starts config inspec
 
 test('Codex no-daemon coordinator retains enabled workflows and unrelated skill configuration',async()=>{
   behavior.daemonMissing=true;const r=await asRole('coordinator','start',[...explicit,'--permissions','auto-review']);expect(r.exit).toBe(0);expect(r.result.hidden_workflows).toEqual([]);expect(r.result.config_reader).toBe('stdio');
-  const native=(await lines('native-launches.jsonl'))[0];const skills=(Bun.TOML.parse(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any).config;
+  const native=(await lines('native-launches.jsonl'))[0];const skills=((Bun.TOML.parse as (text: string) => any)(native.args.find((a:string)=>a.startsWith('skills.config='))).skills as any).config;
   expect(skills.find((e:any)=>e.path.endsWith('workflow/SKILL.md')).enabled).toBe(true);expect(skills.find((e:any)=>e.path.endsWith('unrelated')).enabled).toBe(false);await readersStopped();
 });
 test('Codex unresponsive stdio reader hits its deadline and leaves no child or launch mutation',async()=>{

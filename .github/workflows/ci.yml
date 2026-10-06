@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    # Herdr tests open local Unix/TCP sockets; GitHub-hosted Linux runners permit this.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      BUN_VERSION: "1.4.2"
+      JUST_VERSION: "1.40.0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - uses: extractions/setup-just@v2
+        with:
+          just-version: ${{ env.JUST_VERSION }}
+      - name: Record toolchain
+        run: |
+          bun --version
+          just --version
+          git --version
+      - name: Install (frozen lockfiles)
+        run: just install
+      - name: Resource, link and type checks
+        run: just check
+      - name: Release metadata
+        run: just release-check
+      - name: Dependency audit
+        run: |
+          bun audit
+          for dir in skills/ruach-handoff skills/ruach-herdr; do
+            (cd "$dir" && bun audit)
+          done
+      - name: Test root tools and all executable skills
+        run: just test

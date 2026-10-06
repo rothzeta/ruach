@@ -8,6 +8,7 @@ default:
 
 # Install pinned executable-skill dependencies.
 install:
+    @"{{bun}}" install --frozen-lockfile
     @cd skills/ruach-handoff && "{{bun}}" install --frozen-lockfile
     @cd skills/ruach-herdr && "{{bun}}" install --frozen-lockfile
     @cd skills/ruach-harness-eval && "{{bun}}" install --frozen-lockfile
@@ -31,6 +32,11 @@ release-check:
 # Check resource identities, eval placement and links.
 check:
     @"{{bun}}" run check
+    @"{{bun}}" run typecheck
+
+# Typecheck sources and tests (needs `just install` for skill dependencies).
+typecheck:
+    @"{{bun}}" run typecheck
 
 # Test root tools and each executable skill.
 test:

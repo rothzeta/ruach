@@ -95,7 +95,7 @@ test('Codex reads effective configuration in the actual worktree and uses its cw
   const r=await launch([],{},'codex');expect(r.exit,r.stderr).toBe(0);
   expect(r.data.selection.cwd).toBe(target);
   const native=(await records('native-launches.jsonl'))[0];
-  const developer=Bun.TOML.parse(native.args.find((x:string)=>x.startsWith('developer_instructions='))).developer_instructions;
+  const developer=(Bun.TOML.parse as (text: string) => any)(native.args.find((x:string)=>x.startsWith('developer_instructions='))).developer_instructions;
   expect(developer).toContain('Committed worker settings');expect(developer).not.toContain('Uncommitted caller settings');
   expect(native.args[native.args.indexOf('--cd')+1]).toBe(target);
 });
