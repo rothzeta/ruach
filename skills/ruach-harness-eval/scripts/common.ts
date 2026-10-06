@@ -68,7 +68,7 @@ export function git(repo: string, argv: string[], allowFailure = false): { exit:
   // Keep these private probes independent of acceptance checks' intentional env.
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
   env.GIT_OPTIONAL_LOCKS = '0';
-  const child = spawnSync(command, ['-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
+  const child = spawnSync(command, ['--no-replace-objects', '-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
   if (child.error || (!allowFailure && child.status !== 0)) throw new SetupError('git_error', 'repo', 'Git probe failed; check repository and Git availability');
   return { exit: child.status ?? 2, stdout: child.stdout ?? Buffer.alloc(0) };
 }
@@ -97,6 +97,9 @@ export function changes(repo: string, from: string, to: string) {
   return result;
 }
 export function dirty(repo: string) {
+  // assume-unchanged (lowercase tag) and skip-worktree (S) entries hide edits from status; fail closed.
+  const hidden = git(repo, ['ls-files', '-v', '-z']).stdout.toString().split('\0').filter(entry => /^[a-zS] /.test(entry));
+  if (hidden.length) throw new SetupError('hidden_index_state', 'repo', 'Index assume-unchanged or skip-worktree entries hide changes from clean checks');
   const tokens = git(repo, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--ignore-submodules=none']).stdout.toString().split('\0');
   const result: { status: string; paths: string[]; staged: boolean; unstaged: boolean; untracked: boolean }[] = [];
   for (let i = 0; i < tokens.length - 1;) {

@@ -109,11 +109,11 @@ if (repoArg !== undefined || supplied.length) {
       fail(2, "GIT_UNAVAILABLE", "/repo", "Git must be available on PATH to check repository references.");
     }
   }
-  const root = git(["-C", repoArg === undefined ? dirname(report) : resolve(repoArg), "rev-parse", "--show-toplevel"]);
+  const root = git(["--no-replace-objects", "-C", repoArg === undefined ? dirname(report) : resolve(repoArg), "rev-parse", "--show-toplevel"]);
   if (root.exitCode !== 0) fail(2, "REPO_UNAVAILABLE", "/repo", "Cannot locate a Git worktree from --repo or the report's directory.");
   repo = root.stdout.toString().trim();
   for (const [field, revision] of supplied) {
-    const checked = git(["-C", repo, "rev-parse", "--verify", "--end-of-options", `${revision}^{commit}`]);
+    const checked = git(["--no-replace-objects", "-C", repo, "rev-parse", "--verify", "--end-of-options", `${revision}^{commit}`]);
     if (checked.exitCode !== 0) {
       diagnostics.push({ code: "REVISION_MISSING", path: `/${field}`, message: "Revision does not resolve to an existing commit in the selected repository." });
     } else revisions.push({ path: `/${field}`, resolved: checked.stdout.toString().trim() });

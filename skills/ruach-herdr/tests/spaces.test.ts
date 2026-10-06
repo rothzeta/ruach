@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
-import { chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { symlink, realpath, chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const worker=resolve(import.meta.dir,'../scripts/worker.ts');
 const fake=resolve(import.meta.dir,'fixtures/fake-cli.ts');
 const git=Bun.which('git')!;
-let root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
+let cwdOverride:string|undefined,root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
 function command(args:string[]) {
   const result=Bun.spawnSync([git,'-C',repo,...args],{stdout:'pipe',stderr:'pipe'});
   if(result.exitCode!==0)throw new Error(result.stderr.toString());
@@ -18,7 +18,7 @@ async function records(name:string) {
 }
 async function launch(extra:string[]=[],env:Record<string,string>={},kind='claude') {
   await writeFile(join(root,'behavior.json'),JSON.stringify(behavior));
-  const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',repo,'--repo',repo,
+  const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',cwdOverride??repo,'--repo',repo,
     '--kind',kind,'--model','test-model','--temp-dir',temp,...extra],{
     cwd:root,env:{...process.env,HOME:home,CLAUDE_CONFIG_DIR:join(home,'.claude'),CODEX_HOME:join(home,'.codex'),
       PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
@@ -49,7 +49,7 @@ if(behavior.worktreeFailure&&args.includes('add')&&args.includes('worktree'))pro
 const result=spawnSync(${JSON.stringify(git)},args,{stdio:'inherit'});process.exit(result.status??1);
 `);
   await chmod(join(bin,'git'),0o700);
-  behavior={daemonMissing:true};
+  behavior={daemonMissing:true};cwdOverride=undefined;
 });
 afterEach(async()=>{await rm(root,{recursive:true,force:true});});
 
@@ -156,4 +156,27 @@ test('invalid placement combinations and branch/base options fail without launch
     expect((await launch(args)).exit).toBe(2);
   }
   expect(await records('mutations.jsonl')).toEqual([]);
+});
+test('a symlinked cwd resolves to the matching location inside the created worktree',async()=>{
+  const real=await realpath(root);
+  await mkdir(join(repo,'pkg'));await writeFile(join(repo,'pkg/file.txt'),'package\n');
+  command(['add','.']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Package']);
+  for(const [link,inside] of [['alias-root',''],['alias-pkg','pkg']]) {
+    await symlink(join(repo,inside),join(root,link));cwdOverride=join(root,link);
+    const r=await launch();
+    expect(r.exit,r.stderr).toBe(0);
+    const expected=join(real,'source-worktrees','designer',inside);
+    expect(await realpath(r.data.worktree.cwd)).toBe(expected);expect(await realpath(r.data.selection.cwd)).toBe(expected);
+    expect(await realpath((await records('native-launches.jsonl')).at(-1).cwd)).toBe(expected);
+    await rm(join(real,'source-worktrees'),{recursive:true,force:true});command(['worktree','prune']);command(['branch','-D','ruach/designer']);
+  }
+});
+test('inherited Git environment cannot move the worktree into another repository',async()=>{
+  const other=join(root,'other');await mkdir(other);
+  Bun.spawnSync([git,'-C',other,'init','--quiet']);
+  const r=await launch([],{GIT_DIR:join(other,'.git'),GIT_WORK_TREE:other});
+  expect(r.exit,r.stderr).toBe(0);
+  expect(await realpath(r.data.worktree.cwd)).toBe(await realpath(target));
+  expect(command(['worktree','list','--porcelain'])).toContain(target);
+  expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
 });

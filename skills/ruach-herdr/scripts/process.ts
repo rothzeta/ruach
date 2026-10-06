@@ -1,7 +1,13 @@
+import { basename } from 'node:path';
 import { fail } from './contracts';
+// Git repository selection must come from the explicit -C path, never inherited GIT_* variables.
+function environment(argv: string[]) {
+  if(basename(argv[0])!=='git') return process.env;
+  return Object.fromEntries(Object.entries(process.env).filter(([name])=>!name.toUpperCase().startsWith('GIT_')));
+}
 export async function run(argv: string[], cwd: string, timeout = 10000) {
   let proc;
-  try { proc=Bun.spawn(argv,{cwd,env:process.env,stdin:'ignore',stdout:'pipe',stderr:'pipe'}); }
+  try { proc=Bun.spawn(argv,{cwd,env:environment(argv),stdin:'ignore',stdout:'pipe',stderr:'pipe'}); }
   catch { return fail(3,'executable_unavailable','Could not execute prerequisite',argv[0]); }
   let timedOut=false;
   const timer=setTimeout(()=>{timedOut=true;proc.kill();},timeout);

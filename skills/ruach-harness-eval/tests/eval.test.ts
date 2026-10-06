@@ -389,3 +389,24 @@ test('repository identity permits selected subdirectories and aliases but reject
   const rejectedAcceptance = accept(requested); expect(rejectedAcceptance.exit).toBe(2); expect(rejectedAcceptance.value.diagnostics.some((d: any) => d.code === 'invalid_repository')).toBe(true);
   expect(snapshot(requested.repo)).toEqual(beforeRequested); expect(snapshot(other.repo)).toEqual(beforeOther);
 });
+
+test('replacement refs cannot alter the commits that scope checks read', () => {
+  const f = fixture();
+  write(join(f.repo, 'allowed.txt'), 'real change\n'); const real = commit(f.repo);
+  git(f.repo, 'checkout', '-q', '--detach', f.baseline); write(join(f.repo, 'outside.txt'), 'forged change\n'); const forged = commit(f.repo);
+  git(f.repo, 'checkout', '-q', real);
+  git(f.repo, 'replace', real, forged);
+  const observed = scope(f, { paths: ['allowed.txt'] }, real);
+  expect(observed.value.diagnostics).toEqual([]); expect(observed.exit).toBe(0);
+  expect(observed.value.changed_paths).toEqual(['allowed.txt']);
+});
+
+for (const flag of ['--assume-unchanged', '--skip-worktree']) test(`index flag ${flag} cannot hide a modified tracked file from clean checks`, () => {
+  const f = fixture();
+  write(join(f.repo, 'protected'), 'tampered\n'); git(f.repo, 'update-index', flag, 'protected');
+  const observed = scope(f, {});
+  expect(observed.exit).not.toBe(0); expect(observed.value.ok).toBe(false);
+  expect(observed.value.diagnostics.length).toBeGreaterThan(0);
+  const accepted = accept(f); expect(accepted.exit).not.toBe(0); expect(accepted.value.ok).toBe(false);
+  expect(accepted.value.checks.every((c: any) => c.status !== 'passed')).toBe(true);
+});
