@@ -22,7 +22,7 @@ just architect design-a
 just coordinator lead-a
 ```
 
-Offline `resolve` selects the route without starting anything. Dry-run checks live prerequisites and reports the planned checkout. A live launch creates a fresh Git branch and worktree next to the source checkout and a background Herdr workspace, preserving caller focus and layout. It starts from committed HEAD; uncommitted source changes stay in the source checkout. Named workers must have fresh branch/path destinations.
+Offline `resolve` selects the route without starting anything. Dry-run checks live prerequisites and reports the planned checkout. A live launch creates a fresh Git branch and worktree next to the source checkout and a background Herdr workspace, preserving caller focus and layout. From a Herdr workspace of the same repository the worker is registered as a linked worktree of that workspace; otherwise it gets a standalone workspace. It starts from committed HEAD; uncommitted source changes stay in the source checkout. Named workers must have fresh branch/path destinations.
 
 Architect and Coordinator use the configured preferred routes. Use an explicitly declared alternative with `--route ID`; route failures never switch harnesses or models automatically. `--worktree DIR`, `--branch NAME` and `--base REF` customize the checkout. `--placement pane` explicitly requests a sibling pane in the source cwd.
 
@@ -78,4 +78,4 @@ herdr pane read <returned-pane-id> --source recent-unwrapped --lines 120
 
 Older releases reported a folder-trust dialog as `start_uncertain` with exit 4. If the existing agent is blocked and the pane shows that dialog, complete the confirmation in that workspace; another launch is unnecessary. A timeout does not prove a start command was never delivered. The launcher does not retry or delete uncertain resources.
 
-After reuse ends, close only the owned session/workspace. Commit useful work and preserve it on a retained branch before removing its worktree with `git worktree remove` from another retained checkout. Keep the branch and unrelated resources. Never discard uncommitted evidence to make cleanup succeed.
+After reuse ends, close only the owned session/workspace. Commit useful work and preserve it on a retained branch before removing its worktree: `herdr worktree remove --workspace <id>` for a worktree registered by a linked launch, otherwise `git worktree remove` from another retained checkout. Keep the branch and unrelated resources. Never discard uncommitted evidence to make cleanup succeed.
