@@ -21,6 +21,9 @@ for (const name of readdirSync(join(root, 'skills')).sort()) {
   const identity = header && /^name: (.+)$/m.exec(header)?.[1];
   const description = header && /^description: (.+)$/m.exec(header)?.[1];
   if (!/^ruach-[a-z0-9-]+$/.test(name) || identity !== name || !description) errors.push(`Invalid skill identity/description: ${name}`);
+  const compatibility = header && /^compatibility:(.*)$/m.exec(header)?.[1].trim();
+  if (compatibility !== undefined && compatibility !== false && (!compatibility || compatibility.length > 500)) errors.push(`Invalid compatibility metadata (1-500 characters on one line): ${name}`);
+  if (existsSync(join(skill, 'package.json')) && !/\bBun\b/.test(compatibility || '')) errors.push(`Executable skill must declare Bun compatibility: ${name}`);
 }
 for (const relative of walk(root)) {
   const path = join(root, relative), info = lstatSync(path), name = relative.split('/').at(-1)!;

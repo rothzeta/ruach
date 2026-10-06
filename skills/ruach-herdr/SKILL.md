@@ -1,6 +1,7 @@
 ---
 name: ruach-herdr
 description: Resolve a repository role and model route, prepare native harness instructions, and start one named worker in a background Git worktree workspace. Supports an explicitly requested sibling pane. Use for an authorized worker launch; excludes assignments, monitoring, prompts, evaluation, and benchmarks.
+compatibility: Requires Bun, Git, Herdr and the selected native harness (Claude or Codex). Run `bun install --frozen-lockfile` in the skill directory first.
 ---
 
 # Ruach Herdr

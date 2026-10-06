@@ -1,6 +1,7 @@
 ---
 name: ruach-handoff
 description: Produce or consume the canonical structured handoff between engineering workers and coordinators. Use when returning delegated work or receiving a worker's result.
+compatibility: Requires Bun; Git on PATH for revision checks. Run `bun install --frozen-lockfile` in the skill directory first.
 ---
 
 # Ruach handoff
