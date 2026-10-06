@@ -46,7 +46,7 @@ ready *args:
 test:
     @"{{bun}}" run test
     @cd skills/ruach-handoff && "{{bun}}" test
-    @cd skills/ruach-herdr && "{{bun}}" test
+    @cd skills/ruach-herdr && "{{bun}}" test --timeout 30000
     @cd skills/ruach-harness-eval && "{{bun}}" test
 
 # Resolve or launch a role using Ruach's source resources.

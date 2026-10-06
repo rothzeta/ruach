@@ -160,7 +160,7 @@ Worktrees, branches and reports created by past tasks belong to the task records
 
 ## Release verification and toolchain versions
 
-CI (`.github/workflows/ci.yml`) is the reference gate: frozen installs (`just install`), `just check` (resource checks and typecheck), `just release-check`, `bun audit` for the root and each locked skill, and `just test` (root tools plus the handoff, Herdr and harness-eval suites). The runner must permit local sockets because Herdr tests open them. Locally run the same recipes, one at a time: the Herdr suite takes a few minutes. Its tests start real processes and sockets, so `skills/ruach-herdr/bunfig.toml` preloads `tests/setup.ts`, which raises Bun's 5 s per-test default to 30 s so loaded hosts do not fail spuriously.
+CI (`.github/workflows/ci.yml`) is the reference gate: frozen installs (`just install`), `just check` (resource checks and typecheck), `just release-check`, `bun audit` for the root and each locked skill, and `just test` (root tools plus the handoff, Herdr and harness-eval suites). The runner must permit local sockets because Herdr tests open them. Locally run the same recipes, one at a time: the Herdr suite takes a few minutes. Its tests start real processes and sockets, so `just test` runs it with `bun test --timeout 30000`; Bun's 5 s default (which also bounds per-test setup hooks) fails spuriously on loaded hosts. Use the same flag when running `bun test` in `skills/ruach-herdr` directly.
 
 Recorded toolchain for the 0.3 line (update with each release that changes it; the CI `BUN_VERSION`/`JUST_VERSION` must match):
 

@@ -142,7 +142,7 @@ bun run release-check
 bun run test
 # In each of skills/ruach-handoff, skills/ruach-herdr, skills/ruach-harness-eval:
 bun install --frozen-lockfile
-bun test
+bun test --timeout 30000   # Herdr suite only: real processes need more than the 5 s default
 ```
 
 Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex preparation is supported subject to runtime gates; Pi, OpenCode, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.

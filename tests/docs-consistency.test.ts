@@ -73,3 +73,8 @@ test('the 0.3.0 changelog states Track E honestly: documented, smoke checks pend
   expect(entry).toMatch(/Track E[^\n]*native-parity\.md/);
   expect(entry).toMatch(/Track E[^\n]*pending/i);
 });
+
+test('the Herdr suite runs with a raised per-test timeout in just test and is documented', () => {
+  expect(read('justfile')).toMatch(/skills\/ruach-herdr && "\{\{bun\}\}" test --timeout 30000/);
+  expect(read('docs/operations.md')).toContain('--timeout 30000');
+});
