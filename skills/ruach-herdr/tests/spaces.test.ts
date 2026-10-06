@@ -21,7 +21,7 @@ async function launch(extra:string[]=[],env:Record<string,string>={},kind='claud
   const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',cwdOverride??repo,'--repo',repo,
     '--kind',kind,'--model','test-model','--temp-dir',temp,...extra],{
     cwd:root,env:{...process.env,HOME:home,CLAUDE_CONFIG_DIR:join(home,'.claude'),CODEX_HOME:join(home,'.codex'),
-      PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
+      PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'',HERDR_WORKSPACE_ID:'',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
   const [stdout,stderr,exit]=await Promise.all([new Response(p.stdout).text(),new Response(p.stderr).text(),p.exited]);
   return {exit,stdout,stderr,data:JSON.parse(stdout)};
 }
@@ -55,7 +55,7 @@ if(behavior.descendant&&args.includes('--show-toplevel')&&!args.includes('--quie
 process.exit(result.status??1);
 `);
   await chmod(join(bin,'git'),0o700);
-  behavior={daemonMissing:true};cwdOverride=undefined;
+  behavior={daemonMissing:true,git,repo};cwdOverride=undefined;
 });
 afterEach(async()=>{await rm(root,{recursive:true,force:true});});
 
@@ -217,4 +217,65 @@ for(const style of ['relative','empty'])test(`the probed native executable is th
   const first=paneEntries.find((dir:string)=>Bun.spawnSync(['test','-x',join(dir,'claude')]).exitCode===0)!;
   const probedDecoy=await Bun.file(marker).exists();
   expect(probedDecoy).toBe(first!==bin);
+});
+
+// Linked mode: the launching workspace comes from HERDR_WORKSPACE_ID and must belong to this repository.
+const parent={HERDR_WORKSPACE_ID:'w1'};
+test('a launching workspace makes the worker a linked worktree of it and preserves checkout, branch, base and recovery fields',async()=>{
+  const base=command(['rev-parse','HEAD']);
+  const r=await launch([],parent);expect(r.exit,r.stderr).toBe(0);
+  expect(r.data.worktree_mode).toBe('linked');expect(r.data.linked_parent).toBe('w1');
+  expect(r.data.worktree).toEqual({path:target,cwd:target,branch:'ruach/designer',base});expect(r.data.worktree_state).toBe('created');
+  expect(r.data.workspace).toBe('w9');expect(r.data.pane).toBe('w9:p2');
+  const mutations=await records('mutations.jsonl');expect(mutations.map(x=>x.action)).toEqual(['worktree','split','start']);
+  const args=mutations[0].args;
+  expect(args.slice(0,2)).toEqual(['worktree','create']);
+  for(const [flag,value] of [['--workspace','w1'],['--branch','ruach/designer'],['--base',base],['--path',target],['--label','designer']])expect(args[args.indexOf(flag)+1]).toBe(value);
+  expect(args).toContain('--no-focus');expect(args).not.toContain('--focus');
+  expect(mutations[1].args).toContain('w9:p1');
+  for(const value of [`PATH=${bin}`,`CODEX_HOME=${join(home,'.codex')}`,`CLAUDE_CONFIG_DIR=${join(home,'.claude')}`])expect(mutations[1].args).toContain(value);
+  expect(mutations.some(x=>x.action==='workspace')).toBe(false);
+  expect((await records('git-calls.jsonl')).some(a=>a.includes('worktree')&&a.includes('add'))).toBe(false);
+  expect(command(['rev-parse','refs/heads/ruach/designer'])).toBe(base);expect(r.data.cleanup).toContain('herdr worktree remove --workspace w9');
+  expect((await records('native-launches.jsonl'))[0].cwd).toBe(target);
+  expect(r.data.inspection.focus).toEqual(['herdr','workspace','focus','w9']);
+});
+test('without a determinable parent the launch keeps today\'s standalone workspace',async()=>{
+  for(const [env,patch,why] of [[{HERDR_WORKSPACE_ID:''},{},'no launching workspace'],[parent,{parentUnknown:true},'not a Git worktree workspace'],[parent,{parentRepoKey:'/elsewhere/.git'},'different repository'],[parent,{noLinked:true},'lacks linked worktree']] as const) {
+    behavior={daemonMissing:true,git,repo,...patch};
+    const r=await launch([],env);expect(r.exit,r.stderr).toBe(0);
+    expect(r.data.worktree_mode).toBe('standalone');expect(r.data.linked_parent).toBeNull();expect(r.data.linked_unavailable).toContain(why);
+    expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['workspace','start']);expect(r.data.workspace).toBe('w2');
+    await rm(join(root,'source-worktrees'),{recursive:true,force:true});command(['worktree','prune']);command(['branch','-D','ruach/designer']);
+    await rm(join(root,'mutations.jsonl'));
+  }
+},40000);
+test('linked creation never overwrites an existing branch or path and mutates nothing',async()=>{
+  command(['branch','ruach/designer']);let r=await launch([],parent);expect(r.exit).toBe(2);expect(r.data.diagnostics[0].code).toBe('branch_unavailable');
+  command(['branch','-D','ruach/designer']);await mkdir(target,{recursive:true});
+  r=await launch([],parent);expect(r.exit).toBe(2);expect(r.data.diagnostics[0].code).toBe('worktree_exists');
+  expect(await records('mutations.jsonl')).toEqual([]);
+});
+test('dry-run reports linked mode without creating resources',async()=>{
+  const r=await launch(['--dry-run'],parent);expect(r.exit,r.stderr).toBe(0);expect(r.data.worktree_mode).toBe('linked');expect(r.data.linked_parent).toBe('w1');
+  expect(await records('mutations.jsonl')).toEqual([]);expect(command(['worktree','list','--porcelain'])).not.toContain(target);
+});
+test('failed linked creation exits 4 with the uncertain path and branch, retained, and never starts or retries',async()=>{
+  behavior.linkedPartial=true;const r=await launch([],parent);expect(r.exit).toBe(4);
+  expect(r.data.diagnostics[0].code).toBe('worktree_uncertain');expect(r.data.worktree_state).toBe('unknown');
+  expect(r.data.worktree.path).toBe(target);expect(r.data.worktree.branch).toBe('ruach/designer');
+  expect(command(['branch','--list','ruach/designer'])).toContain('ruach/designer');
+  expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree']);expect(r.data.cleanup).toContain('Inspect');
+});
+for(const [name,patch,code] of [['an unconfirmed linked registration',{linkedUnlinked:true},'worktree_uncertain'],['a response without its root pane',{linkedMalformed:true},'worktree_uncertain']] as const)test(`${name} after creation exits 4 and retains checkout and branch`,async()=>{
+  behavior={...behavior,...patch};const r=await launch([],parent);expect(r.exit).toBe(4);expect(r.data.diagnostics[0].code).toBe(code);
+  expect(r.data.worktree_state).toBe('unknown');expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
+  expect(command(['rev-parse','refs/heads/ruach/designer'])).toBe(command(['rev-parse','HEAD']));
+  expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree']);
+});
+test('split failure after linked creation retains worktree and branch without submitting an agent',async()=>{
+  behavior.splitFailure=true;const r=await launch([],parent);expect(r.exit).toBe(4);
+  expect(r.data.diagnostics[0].code).toBe('split_uncertain');expect(r.data.worktree_state).toBe('created');expect(r.data.submission_state).toBe('unknown');
+  expect(r.data.workspace).toBe('w9');expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree','split']);
+  expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
 });

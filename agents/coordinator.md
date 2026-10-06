@@ -73,7 +73,7 @@ Advance only when the selected workflow's required dependencies, checks, reviews
 Clean up task resources yourself as soon as their reuse ends, not at the end of the workflow. Keep a worker or worktree only while a concrete pending step, such as a review fix loop, integration, or merge, needs it.
 
 - Close a worker's task session once its durable handoff is preserved and you will not assign it further work, and remove that launch's private temporary directory if its result reported a non-null `temporary_directory`. Never close your own session; its launching parent releases a temporary Coordinator.
-- Remove a task-owned temporary worktree, including any temporary Coordinator or delivery checkout, with `git worktree remove` once its work is committed and reachable from a retained branch and no assignment will use it. Run removal from a retained checkout outside the path and keep the branch.
+- Remove a task-owned temporary worktree, including any temporary Coordinator or delivery checkout, with `herdr worktree remove --workspace <id>` when it is registered with Herdr (a linked launch) or `git worktree remove` otherwise, once its work is committed and reachable from a retained branch and no assignment will use it. Run removal from a retained checkout outside the path and keep the branch.
 - Close a task-created harness workspace once it holds no more needed sessions.
 
 Preserve the original caller pane, the main checkout, retained branches, and unrelated sessions. Never discard uncommitted work or unpreserved evidence. If removal is unsafe or fails, keep the resource and report a blocker. No worker cleanup handoff is required. Report completion only once all task resources are released or reported as blockers.
