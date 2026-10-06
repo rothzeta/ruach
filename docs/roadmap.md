@@ -30,7 +30,8 @@ Principles carried through every release:
 | A4 | Bound processes and artifact reads | RU-05, RU-06 | Hard deadline, bounded cleanup, single settlement; owned helper groups only (never the Herdr server or submitted agent); FIFO/special files yield a structured failed check within a bound; size budget. |
 | A5 | Recoverable installation | RU-07, RU-08, RU-09 | Staged writes with atomic rename and bounded rollback; hardlinked outside copies untouched; incoming skill roots preflighted for leftovers; every successful install passes immediate integrity check. |
 | A6 | Pin launch executable identity | RU-10 | Probed binary equals launched binary, including relative/empty PATH entries. |
-| A7 | Hardening and notices | RU-13, RU-14, packaging | Codex private-instruction transport verified and accurately documented (no invented flags); evidence output descriptor held across execution; LICENSE/PROVENANCE in each standalone skill folder. |
+| A7 | Herdr-linked worktrees for launches | launcher; follows RU-02, RU-10 | Launches create worktrees through `herdr worktree create --workspace <parent>` so workers appear as linked worktrees of the launching workspace (`is_linked_worktree`, listed by `herdr worktree list`) instead of standalone workspaces; checkout, branch, base and recovery results preserved; cleanup uses `herdr worktree remove` for registered worktrees and keeps the branch; top-level launches without a parent keep a standalone workspace; uncertain-state retention unchanged. Display behavior verified on a throwaway worktree first. |
+| A8 | Hardening and notices | RU-13, RU-14, packaging | Codex private-instruction transport verified and accurately documented (no invented flags); evidence output descriptor held across execution; LICENSE/PROVENANCE in each standalone skill folder. |
 
 ### Track B: Verification gate (parallel with A)
 
