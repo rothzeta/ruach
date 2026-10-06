@@ -2,10 +2,10 @@ import { chmodSync, copyFileSync, lstatSync, mkdirSync, mkdtempSync, readFileSyn
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve, sep } from 'node:path';
 import { spawn } from 'node:child_process';
-import { args, canonical, diagnostic, dirty, emit, executable, fail, hash, object, outputPath, repoPath, revision, root, SetupError, string, strings, version } from './common';
+import { type Output, args, canonical, readArtifact, diagnostic, dirty, emit, executable, fail, hash, object, outputPath, repoPath, revision, root, SetupError, string, strings, version } from './common';
 
 const result: any = { schema_version: 1, ok: false, checks: [], diagnostics: [] };
-let output: string | undefined, temporary: string | undefined, repo: string | undefined;
+let output: Output | undefined, temporary: string | undefined, repo: string | undefined;
 const secrets = new Set<string>();
 function redact(text: string) {
   for (const value of [...secrets].sort((a, b) => b.length - a.length)) text = text.split(value).join('[REDACTED]');
@@ -101,33 +101,44 @@ function copyTree(source: string, destination: string, path: string, manifest: a
     chmodSync(destination, stat.mode & 0o777);
   } else {
     mkdirSync(dirname(destination), { recursive: true }); copyFileSync(source, destination); chmodSync(destination, stat.mode & 0o777);
-    manifest.push({ path, mode: stat.mode & 0o777, sha256: hash(readFileSync(source)) });
+    manifest.push({ path, mode: stat.mode & 0o777, sha256: hash(readArtifact(source, 'acceptance.fixtures')) });
   }
 }
+// Grace for output pipes to close after the command exits or is killed. A descendant that left
+// our process group can hold them open indefinitely, so settlement never waits past this.
+const DRAIN_MS = 1000;
 async function execute(argv: string[], cwd: string, env: any, timeout: number): Promise<any> {
   return await new Promise(resolveResult => {
-    let stdout = Buffer.alloc(0), stderr = Buffer.alloc(0), overflow = false, timedOut = false, launchError = false;
+    let stdout = Buffer.alloc(0), stderr = Buffer.alloc(0), overflow = false, timedOut = false, launchError = false, orphaned = false, settled = false;
+    let exitCode: number | null = null, exitSignal: NodeJS.Signals | null = null;
     const command = executable(argv[0], cwd, env);
-    if (!command) { resolveResult({ exit: null, signal: null, timed_out: false, stdout: '', stderr: '', launch_error: true, output_truncated: false }); return; }
+    if (!command) { resolveResult({ exit: null, signal: null, timed_out: false, stdout: '', stderr: '', launch_error: true, output_truncated: false, orphaned_output: false }); return; }
     let child: ReturnType<typeof spawn>;
     try { child = spawn(command, argv.slice(1), { cwd, env, shell: false, detached: process.platform !== 'win32', stdio: ['ignore', 'pipe', 'pipe'] }); }
-    catch { resolveResult({ exit: null, signal: null, timed_out: false, stdout: '', stderr: '', launch_error: true, output_truncated: false }); return; }
+    catch { resolveResult({ exit: null, signal: null, timed_out: false, stdout: '', stderr: '', launch_error: true, output_truncated: false, orphaned_output: false }); return; }
+    // Only the group this check created is ever signalled.
     function kill() {
       try { if (process.platform !== 'win32') process.kill(-child.pid!, 'SIGKILL'); else child.kill('SIGKILL'); } catch {}
     }
-    const timer = setTimeout(() => { timedOut = true; kill(); }, timeout);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    function settle() {
+      if (settled) return; settled = true;
+      for (const timer of timers) clearTimeout(timer);
+      child.stdout!.destroy(); child.stderr!.destroy();
+      resolveResult({ exit: exitCode, signal: exitSignal, timed_out: timedOut, stdout: stdout.toString('utf8'), stderr: stderr.toString('utf8'), launch_error: launchError, output_truncated: overflow, orphaned_output: orphaned });
+    }
+    function bound() { timers.push(setTimeout(() => { orphaned = !timedOut && !overflow; kill(); settle(); }, DRAIN_MS)); }
+    timers.push(setTimeout(() => { timedOut = true; kill(); bound(); }, timeout));
     const capture = (which: 'stdout' | 'stderr', chunk: Buffer) => {
       const previous = which === 'stdout' ? stdout : stderr;
       const next = Buffer.concat([previous, chunk.subarray(0, Math.max(0, 1048576 - previous.length))]);
-      if (previous.length + chunk.length > 1048576) { overflow = true; kill(); }
+      if (previous.length + chunk.length > 1048576 && !overflow) { overflow = true; kill(); bound(); }
       if (which === 'stdout') stdout = next; else stderr = next;
     };
     child.stdout!.on('data', chunk => capture('stdout', chunk)); child.stderr!.on('data', chunk => capture('stderr', chunk));
-    child.on('error', () => { launchError = true; });
-    child.on('close', (exit, signal) => {
-      clearTimeout(timer);
-      resolveResult({ exit, signal, timed_out: timedOut, stdout: stdout.toString('utf8'), stderr: stderr.toString('utf8'), launch_error: launchError, output_truncated: overflow });
-    });
+    child.on('error', () => { launchError = true; settle(); });
+    child.on('exit', (exit, signal) => { exitCode = exit; exitSignal = signal; bound(); });
+    child.on('close', (exit, signal) => { exitCode = exit; exitSignal = signal; settle(); });
   });
 }
 let exit = 2;
@@ -135,13 +146,13 @@ try {
   const options = args(['--config', '--run']);
   if (!options) { process.stdout.write('acceptance.ts --config FILE.json --run ID [--output NEW_FILE.json]\n'); process.exit(0); }
   const configFile = resolve(options['--config']);
-  const config = validate(JSON.parse(readFileSync(configFile, 'utf8'))), base = dirname(configFile);
+  const config = validate(JSON.parse(readArtifact(configFile, 'config').toString('utf8'))), base = dirname(configFile);
   const run = config.runs.find((r: any) => r.id === options['--run']);
   if (!run) fail('run', 'Run ID is not declared');
   repo = root(resolve(base, run.repo)); output = outputPath(options['--output'], repo);
   result.task = config.task; result.run = run.id;
-  result.declared_route = { kind: run.kind, model: run.model, effort: run.effort ?? null, model_use_verified: false, evidence: (run.evidence ?? []).map((p: string) => ({ path: p, sha256: hash(readFileSync(resolve(base, p))) })) };
-  result.assignment_sha256 = hash(readFileSync(resolve(base, config.assignment)));
+  result.declared_route = { kind: run.kind, model: run.model, effort: run.effort ?? null, model_use_verified: false, evidence: (run.evidence ?? []).map((p: string) => ({ path: p, sha256: hash(readArtifact(resolve(base, p), 'runs.evidence')) })) };
+  result.assignment_sha256 = hash(readArtifact(resolve(base, config.assignment), 'assignment'));
   result.acceptance_sha256 = hash(canonical(config.acceptance));
   result.candidate_revision = revision(repo, run.candidate, 'candidate');
   result.head_before = revision(repo, 'HEAD', 'HEAD'); result.tested_revision = result.head_before; result.dirty_before = dirty(repo);
@@ -175,6 +186,7 @@ try {
     const add = (code: string, field: string, message: string) => diagnostics.push({ code, field, message });
     if (observed.launch_error) { setupError = true; add('missing_executable', 'argv[0]', 'Executable unavailable or failed to start'); }
     if (observed.timed_out) add('timeout', 'timeout_ms', 'Command exceeded timeout');
+    if (observed.orphaned_output) add('orphaned_output', 'output', 'A descendant kept the output streams open after the command exited');
     if (observed.output_truncated) add('output_limit', 'output', 'Output exceeded the 1 MiB per-stream limit');
     if (observed.signal && !observed.timed_out && !observed.output_truncated) add('signal', 'exit', 'Command terminated by signal');
     if (expected.exit !== undefined ? observed.exit !== expected.exit : observed.exit === null || observed.exit === 0) add('exit_mismatch', 'expect.exit', 'Exit expectation failed');
@@ -185,7 +197,7 @@ try {
     }
     for (const file of expected.files ?? []) {
       try {
-        const bytes = readFileSync(noSymlinks(cwd, file.path));
+        const bytes = readArtifact(noSymlinks(cwd, file.path), 'expect.files');
         if (file.content !== undefined && bytes.toString('utf8') !== file.content || file.sha256 !== undefined && hash(bytes) !== file.sha256) add('file_mismatch', `expect.files.${file.path}`, 'File expectation failed');
       } catch { add('file_unreadable', `expect.files.${file.path}`, 'Expected regular file unavailable'); }
     }

@@ -14,11 +14,12 @@
     "blockers": { "$ref": "#/definitions/notes" }
   },
   "patternProperties": {
-    "(^|_)(revision|baseline)$|^destination_before$": { "$ref": "#/definitions/text" }
+    "(^|_)(revision|baseline)$|^destination_before$": { "$ref": "#/definitions/revision" }
   },
   "additionalProperties": true,
   "definitions": {
     "text": { "type": "string", "pattern": "\\S" },
+    "revision": { "allOf": [{ "$ref": "#/definitions/text" }, { "not": { "type": "string", "pattern": "\\u0000" } }] },
     "note": {
       "anyOf": [
         { "$ref": "#/definitions/text" },

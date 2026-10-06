@@ -1,9 +1,9 @@
 import { lstatSync, readFileSync, readdirSync, readlinkSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { args, boolean, changes, diagnostic, dirty, emit, fail, git, hash, loadJson, object, outputPath, repoPath, revision, root, string, strings, version } from './common';
+import { type Output, args, boolean, readArtifact, changes, diagnostic, dirty, emit, fail, git, hash, loadJson, object, outputPath, repoPath, revision, root, string, strings, version } from './common';
 
 const result: any = { schema_version: 1, ok: false, diagnostics: [], review_checks: {}, canonical_hashes: {}, tree_checks: {}, evidence_checks: {} };
-let output: string | undefined, exit = 2;
+let output: Output | undefined, exit = 2;
 function pathList(value: any, field: string, prefixes = false) {
   return strings(value, field).map(path => repoPath(path, field, prefixes || path.endsWith('/')));
 }
@@ -20,7 +20,7 @@ function worktreeHash(repo: string, path: string): string | null {
     const parts = path.split('/');
     for (const [i, part] of parts.entries()) { current = join(current, part); if (i < parts.length - 1 && lstatSync(current).isSymbolicLink()) return null; }
     const stat = lstatSync(current);
-    return stat.isSymbolicLink() ? hash(readlinkSync(current)) : stat.isFile() ? hash(readFileSync(current)) : null;
+    return stat.isSymbolicLink() ? hash(readlinkSync(current)) : stat.isFile() ? hash(readArtifact(current, 'canonical_files')) : null;
   } catch { return null; }
 }
 try {

@@ -35,3 +35,13 @@ test('invalid semantic version and native agent identity fail', () => {
   json('package.json', { version: '0.1.0' });
   writeFileSync(join(root, 'agents/coordinator.md'), '---\nname: wrong\ndescription: Coordinate.\n---\n'); expect(run().status).toBe(1);
 });
+test('release requires every standalone skill folder to carry the root LICENSE and PROVENANCE', () => {
+  const skill = join(root, 'skills/ruach-example'); mkdirSync(skill, { recursive: true });
+  for (const name of ['LICENSE', 'PROVENANCE.md']) { writeFileSync(join(root, name), name + '\n'); writeFileSync(join(skill, name), name + '\n'); }
+  expect(run().status).toBe(0);
+  for (const name of ['LICENSE', 'PROVENANCE.md']) {
+    writeFileSync(join(skill, name), 'different\n'); let result = run(); expect(result.status).toBe(1); expect(result.stderr).toContain(`skills/ruach-example/${name}`);
+    rmSync(join(skill, name)); result = run(); expect(result.status).toBe(1); expect(result.stderr).toContain(`skills/ruach-example/${name}`);
+    writeFileSync(join(skill, name), name + '\n');
+  }
+});

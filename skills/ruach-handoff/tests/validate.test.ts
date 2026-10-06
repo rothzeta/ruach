@@ -97,6 +97,41 @@ describe("leading block and schema through the CLI", () => {
     expect(result.json.diagnostics[0].line).toBeGreaterThan(1);
     expect(result.json.diagnostics[0].column).toBeGreaterThan(0);
   }, 2_000 * 11);
+  test("alias and collection mapping keys are rejected, including aliases that duplicate a field", () => {
+    invalid(minimal.replace("status: complete", "&k status: complete") + "\n*k : failed", "YAML_INVALID");
+    invalid(minimal + "\n? [a, b]\n: value", "YAML_INVALID");
+    invalid(minimal + "\n? {a: b}\n: value", "YAML_INVALID");
+    invalid(minimal.replace("verification: not-run", "verification:\n  - ? [a]\n    : b"), "YAML_INVALID");
+  }, 2_000 * 4);
+  test("diagnostic paths are escaped JSON Pointers and stderr cannot be forged by report keys", () => {
+    const result = run([file(`---\n${JSON.stringify({ task: "t", status: "complete", outcome: "o", artifacts: [], verification: "not-run", discoveries: [], blockers: [], "a/b~c_revision": "", "x\nFORGED ok_revision": [] })}\n---`)]);
+    expect(result.exit).toBe(1);
+    const paths = result.json.diagnostics.map((d: any) => d.path);
+    expect(paths).toContain("/a~1b~0c_revision");
+    expect(result.stderr.split("\n").some((line: string) => line.startsWith("FORGED"))).toBe(false);
+    const missing = run([file(`---\n${JSON.stringify({ task: "t", status: "complete", outcome: "o", artifacts: [], verification: "not-run", discoveries: [], blockers: [], "a/b_revision": "no-such-ref" })}\n---`, repository())]);
+    expect(missing.json.diagnostics.map((d: any) => d.path)).toContain("/a~1b_revision");
+  }, 2_000 * 2);
+  test("NUL in a revision is a field error before Git runs", () => {
+    const repo = repository();
+    const result = run([file(`---\ntask: t\nstatus: complete\noutcome: o\nartifacts: []\nverification: not-run\ndiscoveries: []\nblockers: []\ntested_revision: "HEAD\\0"\n---`, repo)], base, cli, { PATH: "/nonexistent" });
+    expect(result.exit).toBe(1);
+    expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["FIELD_INVALID"]);
+    expect(result.json.diagnostics[0].path).toBe("/tested_revision");
+  });
+  test("a FIFO or oversized report is an unreadable input, never a hang or unbounded read", () => {
+    const folder = dir(), fifo = join(folder, "report.md");
+    expect(Bun.spawnSync(["mkfifo", fifo]).exitCode).toBe(0);
+    const started = Date.now();
+    let result = run([fifo]);
+    expect(result.exit).toBe(2);
+    expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["INPUT_UNREADABLE"]);
+    const big = file(minimal + "\n\n" + "x".repeat(20 * 1024 * 1024));
+    result = run([big]);
+    expect(result.exit).toBe(2);
+    expect(result.json.diagnostics.map((d: any) => d.code)).toEqual(["INPUT_UNREADABLE"]);
+    expect(Date.now() - started).toBeLessThan(8000);
+  }, 10_000);
   test("the shipped schema is the structural oracle, including role metadata", () => {
     const schema = JSON.parse(readFileSync(join(skill, "handoff.schema.json"), "utf8"));
     const validate = new Ajv({ strict: true }).compile(schema);

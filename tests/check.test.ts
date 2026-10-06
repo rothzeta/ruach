@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -13,6 +13,7 @@ beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), 'ruach-check-test-')); skill = join(root, 'skills/ruach-example');
   mkdirSync(join(root, 'scripts')); copyFileSync(script, join(root, 'scripts/check.ts'));
   write(join(skill, 'SKILL.md'), header);
+  for (const name of ['LICENSE', 'PROVENANCE.md']) { write(join(root, name), `Root ${name}\n`); write(join(skill, name), `Root ${name}\n`); }
   write(join(root, 'evals/ruach-example/expected/rubric.md'), 'Evaluator-only rubric\n');
 });
 afterEach(() => rmSync(root, { recursive: true, force: true }));
@@ -39,3 +40,12 @@ test('source symlinks are rejected and dependencies are excluded', () => {
   symlinkSync('SKILL.md', join(skill, 'alias.md'));
   expect(check().status).toBe(1); expect(check().stderr).toContain('Symlink in source');
 });
+for (const name of ['LICENSE', 'PROVENANCE.md']) {
+  test(`standalone skill folder must carry the root ${name}`, () => {
+    unlinkSync(join(skill, name));
+    let result = check(); expect(result.status).toBe(1); expect(result.stderr).toContain(`skills/ruach-example/${name}`);
+    write(join(skill, name), 'Altered\n');
+    result = check(); expect(result.status).toBe(1); expect(result.stderr).toContain(`skills/ruach-example/${name}`);
+    write(join(skill, name), `Root ${name}\n`); expect(check().status).toBe(0);
+  });
+}

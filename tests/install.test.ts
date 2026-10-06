@@ -137,6 +137,13 @@ test('Git environment cannot redirect the explicit source', () => {
   });
   expect(result.status, result.stderr).toBe(0); check(true, true);
 });
+test('replacement refs cannot alter the pinned snapshot', () => {
+  write(join(source, 'agents/implementer.md'), 'Forged role\n'); const forged = commit();
+  git('replace', sha, forged);
+  install();
+  expect(readFileSync(join(target, 'agents/implementer.md'), 'utf8')).toBe('Shared role\n');
+  expect(metadata().revision).toBe(sha);
+});
 test('unknown and incomplete CLI options fail without mutation', () => {
   cli(['install', '--source', source], false); cli(['check', '--replace'], false);
   expect(existsSync(join(target, 'ruach.json'))).toBe(false);

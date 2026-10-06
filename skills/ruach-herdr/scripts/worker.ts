@@ -1,9 +1,9 @@
 import { resolve, join } from 'node:path';
-import { mkdtemp, chmod, rm } from 'node:fs/promises';
+import { mkdtemp, chmod, rm, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { contents, directory, fail, Failure, identifier, kinds, efforts, string, type Selection, type Permissions } from './contracts';
-import { executable, json, run } from './process';
+import { environment, executable, json, run } from './process';
 import { routed } from './routing';
 import { prepare } from './adapters';
 import { worktreePlan, createWorktree, type Worktree } from './spaces';
@@ -45,10 +45,10 @@ try {
   const o=options(process.argv.slice(2)),v=o.values;
   if(!await Bun.file(new URL('../node_modules/yaml/package.json',import.meta.url)).exists())fail(2,'dependencies_missing','Run bun install --frozen-lockfile in the skill directory','yaml');
   try{await import('yaml');}catch{fail(2,'dependencies_missing','Run bun install --frozen-lockfile in the skill directory','yaml');}
-  const cwd=resolve(v.cwd);await directory(cwd,'cwd');
+  await directory(resolve(v.cwd),'cwd');const cwd=await realpath(resolve(v.cwd));
   const placement=v.placement??'worktree';
   let gitRoot:string|undefined;
-  if(Bun.which('git')){const g=await run(['git','-C',cwd,'rev-parse','--show-toplevel'],cwd);if(g.exit===0)gitRoot=g.stdout.trim();}
+  if(Bun.which('git',{PATH:environment().PATH??'',cwd:process.cwd()})){const g=await run([executable('git'),'-C',cwd,'rev-parse','--show-toplevel'],cwd);if(g.exit===0)gitRoot=await realpath(g.stdout.trim()).catch(()=>g.stdout.trim());}
   const repo=v.repo ? resolve(v.repo) : gitRoot;
   if(!repo)fail(2,'repository_required','Cannot infer repository; supply --repo','repo');
   await directory(repo,'repo');
@@ -111,7 +111,7 @@ try {
     }
     if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
     phase=placement==='pane'?'split':'workspace';state='unknown';
-    const paneEnvironment=['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).flatMap(key=>['--env',`${key}=${process.env[key]}`]);
+    const paneEnvironment=['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).flatMap(key=>['--env',`${key}=${environment()[key]}`]);
     const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:[herdr,'workspace','create','--label',v.name];
     const created=await run([...topology,'--cwd',selected.cwd,'--no-focus',...paneEnvironment],selected.cwd);
     const code=placement==='pane'?'split_uncertain':'workspace_uncertain';

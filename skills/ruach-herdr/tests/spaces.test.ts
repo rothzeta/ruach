@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
-import { chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { symlink, realpath, chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { delimiter, isAbsolute, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const worker=resolve(import.meta.dir,'../scripts/worker.ts');
 const fake=resolve(import.meta.dir,'fixtures/fake-cli.ts');
 const git=Bun.which('git')!;
-let root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
+let cwdOverride:string|undefined,root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
 function command(args:string[]) {
   const result=Bun.spawnSync([git,'-C',repo,...args],{stdout:'pipe',stderr:'pipe'});
   if(result.exitCode!==0)throw new Error(result.stderr.toString());
@@ -18,7 +18,7 @@ async function records(name:string) {
 }
 async function launch(extra:string[]=[],env:Record<string,string>={},kind='claude') {
   await writeFile(join(root,'behavior.json'),JSON.stringify(behavior));
-  const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',repo,'--repo',repo,
+  const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',cwdOverride??repo,'--repo',repo,
     '--kind',kind,'--model','test-model','--temp-dir',temp,...extra],{
     cwd:root,env:{...process.env,HOME:home,CLAUDE_CONFIG_DIR:join(home,'.claude'),CODEX_HOME:join(home,'.codex'),
       PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
@@ -46,10 +46,16 @@ const args=process.argv.slice(2),root=process.env.FIXTURE_ROOT;
 appendFileSync(root+'/git-calls.jsonl',JSON.stringify(args)+'\\n');
 const behavior=JSON.parse(readFileSync(root+'/behavior.json','utf8'));
 if(behavior.worktreeFailure&&args.includes('add')&&args.includes('worktree'))process.exit(1);
-const result=spawnSync(${JSON.stringify(git)},args,{stdio:'inherit'});process.exit(result.status??1);
+const result=spawnSync(${JSON.stringify(git)},args,{stdio:'inherit'});
+if(behavior.descendant&&args.includes('--show-toplevel')&&!args.includes('--quiet')){
+  // A helper descendant keeps inherited output pipes open after the probe finishes.
+  const child=Bun.spawn([process.execPath,'-e','setTimeout(()=>{},20000)'],{stdio:['ignore','inherit','inherit']});
+  appendFileSync(root+'/descendants.pid',child.pid+'\\n');child.unref();
+}
+process.exit(result.status??1);
 `);
   await chmod(join(bin,'git'),0o700);
-  behavior={daemonMissing:true};
+  behavior={daemonMissing:true};cwdOverride=undefined;
 });
 afterEach(async()=>{await rm(root,{recursive:true,force:true});});
 
@@ -156,4 +162,59 @@ test('invalid placement combinations and branch/base options fail without launch
     expect((await launch(args)).exit).toBe(2);
   }
   expect(await records('mutations.jsonl')).toEqual([]);
+});
+test('a symlinked cwd resolves to the matching location inside the created worktree',async()=>{
+  const real=await realpath(root);
+  await mkdir(join(repo,'pkg'));await writeFile(join(repo,'pkg/file.txt'),'package\n');
+  command(['add','.']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Package']);
+  for(const [link,inside] of [['alias-root',''],['alias-pkg','pkg']]) {
+    await symlink(join(repo,inside),join(root,link));cwdOverride=join(root,link);
+    const r=await launch();
+    expect(r.exit,r.stderr).toBe(0);
+    const expected=join(real,'source-worktrees','designer',inside);
+    expect(await realpath(r.data.worktree.cwd)).toBe(expected);expect(await realpath(r.data.selection.cwd)).toBe(expected);
+    expect(await realpath((await records('native-launches.jsonl')).at(-1).cwd)).toBe(expected);
+    await rm(join(real,'source-worktrees'),{recursive:true,force:true});command(['worktree','prune']);command(['branch','-D','ruach/designer']);
+  }
+});
+test('inherited Git environment cannot move the worktree into another repository',async()=>{
+  const other=join(root,'other');await mkdir(other);
+  Bun.spawnSync([git,'-C',other,'init','--quiet']);
+  const r=await launch([],{GIT_DIR:join(other,'.git'),GIT_WORK_TREE:other});
+  expect(r.exit,r.stderr).toBe(0);
+  expect(await realpath(r.data.worktree.cwd)).toBe(await realpath(target));
+  expect(command(['worktree','list','--porcelain'])).toContain(target);
+  expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
+});
+test('a helper descendant holding probe pipes cannot stall launch and is reaped from the helper group',async()=>{
+  behavior.descendant=true;const started=Date.now();
+  const r=await launch(['--dry-run']);
+  expect(Date.now()-started).toBeLessThan(12000);expect(r.exit,r.stderr).toBe(0);
+  const pids=(await readFile(join(root,'descendants.pid'),'utf8')).trim().split('\n').map(Number);
+  await Bun.sleep(300);
+  for(const pid of pids)expect(()=>process.kill(pid,0)).toThrow();
+},20000);
+test('a FIFO in place of a canonical role file fails promptly as unreadable',async()=>{
+  const role=join(repo,'.agents/agents/architect.md');await rm(role);
+  expect(Bun.spawnSync(['mkfifo',role]).exitCode).toBe(0);
+  const started=Date.now();const r=await launch(['--dry-run']);
+  expect(Date.now()-started).toBeLessThan(8000);expect(r.exit).toBe(2);expect(r.data.diagnostics[0].code).toBe('unreadable_file');
+},20000);
+for(const style of ['relative','empty'])test(`the probed native executable is the one the pane resolves with ${style} PATH entries`,async()=>{
+  // Decoys sit where a relative or empty PATH entry resolves: the worker's cwd and, after the
+  // worktree is created, the worktree itself (committed below).
+  const marker=join(root,'decoy-ran');
+  const decoy=`#!${process.execPath}\nawait import('node:fs').then(m=>m.appendFileSync(${JSON.stringify(marker)},'x'));\nawait import(${JSON.stringify(fake)});\n`;
+  const dirName='rel-bin';await mkdir(join(root,dirName),{recursive:true});
+  for(const dir of [join(root,dirName),root,repo]){await writeFile(join(dir,'claude'),decoy);await chmod(join(dir,'claude'),0o700);}
+  command(['add','-f','claude']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Decoy']);
+  const PATH=style==='relative'?[dirName,bin].join(delimiter):[bin,'',join(root,'elsewhere')].join(delimiter);
+  const r=await launch([],{PATH});expect(r.exit,r.stderr).toBe(0);
+  const workspace=(await records('mutations.jsonl'))[0].args;
+  const paneEntries=workspace.find((x:string)=>x.startsWith('PATH=')).slice(5).split(delimiter);
+  for(const entry of paneEntries){expect(entry).not.toBe('');expect(isAbsolute(entry)).toBe(true);}
+  // First pane PATH match for claude must be the executable that was probed.
+  const first=paneEntries.find((dir:string)=>Bun.spawnSync(['test','-x',join(dir,'claude')]).exitCode===0)!;
+  const probedDecoy=await Bun.file(marker).exists();
+  expect(probedDecoy).toBe(first!==bin);
 });

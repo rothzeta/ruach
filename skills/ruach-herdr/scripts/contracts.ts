@@ -1,4 +1,5 @@
-import { stat, readFile } from 'node:fs/promises';
+import { stat, open } from 'node:fs/promises';
+import { constants } from 'node:fs';
 export const kinds = ['claude', 'codex', 'pi', 'opencode', 'dsh', 'omp', 'agy'] as const;
 export type Kind = typeof kinds[number];
 export const efforts = ['off','none','minimal','low','medium','high','xhigh','max','auto'] as const;
@@ -25,8 +26,18 @@ export function exactKeys(value: Record<string, any>, keys: string[], field: str
 export async function directory(path: string, field: string) {
   if (!(await stat(path).catch(()=>null))?.isDirectory()) fail(2,'missing_directory','Directory must exist',field);
 }
+const contentLimit=4*1024*1024;
 export async function contents(path: string): Promise<string> {
-  try { return await readFile(path,'utf8'); } catch { return fail(2,'unreadable_file','Required file is unreadable',path); }
+  // Bounded regular files only: O_NONBLOCK keeps a FIFO from stalling the open, and the
+  // descriptor check rejects devices, directories and oversized input.
+  let handle;
+  try {
+    handle=await open(path,constants.O_RDONLY|constants.O_NONBLOCK);
+    const info=await handle.stat();
+    if(!info.isFile()||info.size>contentLimit)throw Error('unsuitable');
+    return await handle.readFile('utf8');
+  } catch { return fail(2,'unreadable_file','Required file is unreadable',path); }
+  finally { await handle?.close().catch(()=>{}); }
 }
 export type Permissions = 'inherit' | 'auto-review';
 export interface Selection {

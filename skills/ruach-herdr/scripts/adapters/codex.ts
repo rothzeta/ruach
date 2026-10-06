@@ -26,7 +26,7 @@ export async function prepare(s:Selection,pass:string[]):Promise<Plan> {
   if(!Array.isArray(entries) || entries.some((e:any)=>!e || typeof e.path!=='string' || typeof e.enabled!=='boolean'))fail(3,'codex_config_unavailable','Invalid effective skill overrides','skills.config');
   if(!Array.isArray(native.skills) || native.skills.length!==1 || native.skills[0].cwd!==s.cwd || native.skills[0].errors?.length || !Array.isArray(native.skills[0].skills))fail(3,'codex_catalog_unavailable','Cannot establish the effective skill catalog','skills/list');
   const catalog=native.skills[0].skills;
-  const canonical=await scan(join(s.resources??join(s.repo,'.agents'),'skills'));
+  const canonical=await scan(join(s.resources??join(s.repo,'.agents'),'skills'),undefined,true);
   const workflows=catalog.filter((x:any)=>typeof x.name==='string'&&x.name.startsWith('ruach-workflow-'));
   if(workflows.some((x:any)=>typeof x.path!=='string')) fail(3,'codex_catalog_unavailable','Workflow catalog lacks native paths','skills/list');
   for(const entry of entries) {

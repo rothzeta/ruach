@@ -17,7 +17,7 @@ const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 
 function git(source: string, args: string[], input?: string): Buffer {
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
-  const result = spawnSync('git', ['-C', source, ...args], { input, env, maxBuffer: 128 * 1024 * 1024 });
+  const result = spawnSync('git', ['--no-replace-objects', '-C', source, ...args], { input, env, maxBuffer: 128 * 1024 * 1024 });
   // Git stderr may contain source/host configuration; do not echo it.
   if (result.error || result.status !== 0) throw new Error('Git source/revision unavailable');
   return result.stdout;

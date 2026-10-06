@@ -27,7 +27,7 @@ export async function prepare(s:Selection,pass:string[]):Promise<Plan> {
   const scanLocal=(root:string)=>scan(root,join(claudeHome(s.cwd),'skills','synced'));
   const nested=await nestedClaudeRoots(s.repo);
   const all=[...await localSkills(s.repo,s.cwd),...(await Promise.all(nested.map(scanLocal))).flat(),...(await Promise.all(extraDirectories.flatMap(p=>[join(p,'.claude','skills'),join(p,'.agents','skills')]).map(scanLocal))).flat()];
-  const canonical=await scan(join(s.resources??join(s.repo,'.agents'),'skills'));
+  const canonical=await scan(join(s.resources??join(s.repo,'.agents'),'skills'),undefined,true);
   if(new Set(canonical.map(x=>x.name)).size!==canonical.length)fail(2,'duplicate_skill','Canonical skill names must be unique','skills');
   const discovered=new Set([...all,...canonical].filter(x=>x.workflow).map(x=>x.name));
   const settingsPaths=[join(claudeHome(s.cwd),'settings.json'),...ancestors(s.cwd).reverse().flatMap(p=>[join(p,'.claude','settings.json'),join(p,'.claude','settings.local.json')])];

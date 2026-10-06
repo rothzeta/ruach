@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { accessSync, constants, lstatSync, readFileSync, statSync, realpathSync, writeFileSync } from 'node:fs';
+import { accessSync, closeSync, writeSync, constants, fstatSync, lstatSync, openSync, readFileSync, statSync, realpathSync } from 'node:fs';
 import { delimiter, dirname, isAbsolute, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -29,8 +29,25 @@ export function repoPath(value: any, field: string, prefix = false): string {
   if (isAbsolute(path) || path.includes('\\') || parts.some(p => !p || p === '.' || p === '..' || p.toLowerCase() === '.git') || (prefix && !path.endsWith('/'))) fail(field, 'Expected a repository-relative path (directory prefixes end in /)');
   return path;
 }
+// Largest input or expected-file artifact read into memory.
+export const ARTIFACT_LIMIT = 16 * 1024 * 1024;
+// Read only a bounded regular file. O_NONBLOCK keeps a FIFO from stalling the open and
+// the descriptor check keeps devices, directories and growing files from being read.
+export function readArtifact(path: string, field = 'artifact', limit = ARTIFACT_LIMIT): Buffer {
+  let fd: number | undefined;
+  try {
+    fd = openSync(path, constants.O_RDONLY | constants.O_NONBLOCK);
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.size > limit) throw new Error('unsuitable');
+    const body = readFileSync(fd);
+    if (body.length > limit) throw new Error('unsuitable');
+    return body;
+  } catch { throw new SetupError('unreadable_artifact', field, 'Input must be a readable regular file within the size budget'); }
+  finally { if (fd !== undefined) try { closeSync(fd); } catch {} }
+}
 export function loadJson(path: string): any {
-  try { return JSON.parse(readFileSync(path, 'utf8')); }
+  const body = readArtifact(path, 'config').toString('utf8');
+  try { return JSON.parse(body); }
   catch { throw new SetupError('unreadable_config', 'config', 'Cannot read JSON input'); }
 }
 export function hash(value: string | Buffer) { return createHash('sha256').update(value).digest('hex'); }
@@ -68,7 +85,7 @@ export function git(repo: string, argv: string[], allowFailure = false): { exit:
   // Keep these private probes independent of acceptance checks' intentional env.
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
   env.GIT_OPTIONAL_LOCKS = '0';
-  const child = spawnSync(command, ['-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
+  const child = spawnSync(command, ['--no-replace-objects', '-C', repo, ...argv], { env, maxBuffer: 32 * 1024 * 1024 });
   if (child.error || (!allowFailure && child.status !== 0)) throw new SetupError('git_error', 'repo', 'Git probe failed; check repository and Git availability');
   return { exit: child.status ?? 2, stdout: child.stdout ?? Buffer.alloc(0) };
 }
@@ -97,6 +114,9 @@ export function changes(repo: string, from: string, to: string) {
   return result;
 }
 export function dirty(repo: string) {
+  // assume-unchanged (lowercase tag) and skip-worktree (S) entries hide edits from status; fail closed.
+  const hidden = git(repo, ['ls-files', '-v', '-z']).stdout.toString().split('\0').filter(entry => /^[a-zS] /.test(entry));
+  if (hidden.length) throw new SetupError('hidden_index_state', 'repo', 'Index assume-unchanged or skip-worktree entries hide changes from clean checks');
   const tokens = git(repo, ['status', '--porcelain=v1', '-z', '--untracked-files=all', '--ignore-submodules=none']).stdout.toString().split('\0');
   const result: { status: string; paths: string[]; staged: boolean; unstaged: boolean; untracked: boolean }[] = [];
   for (let i = 0; i < tokens.length - 1;) {
@@ -109,7 +129,10 @@ export function dirty(repo: string) {
 export function diagnostic(error: any): Diagnostic {
   return error instanceof SetupError ? { code: error.code, field: error.field, message: error.message } : { code: 'setup_error', field: 'input', message: 'Input or filesystem operation failed' };
 }
-export function outputPath(path: string | undefined, repo?: string) {
+// Evidence destination reserved exclusively before any check runs. The descriptor is held for the whole
+// run, so a check cannot redirect the final write by replacing the path with a link or another file.
+export type Output = { path: string; fd: number; dev: number; ino: number };
+export function outputPath(path: string | undefined, repo?: string): Output | undefined {
   if (!path) return undefined;
   const target = resolve(realpathSync(dirname(resolve(path))), relative(dirname(resolve(path)), resolve(path)));
   let exists = false;
@@ -123,12 +146,20 @@ export function outputPath(path: string | undefined, repo?: string) {
       if (!rel.startsWith('../') && !isAbsolute(rel)) throw new SetupError('invalid_output', 'output', 'Evidence output must be outside the checkout and Git metadata');
     }
   }
-  return target;
+  let fd: number;
+  try { fd = openSync(target, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600); }
+  catch { throw new SetupError('output_error', 'output', 'Cannot create exclusive evidence file'); }
+  const { dev, ino } = fstatSync(fd);
+  return { path: target, fd, dev, ino };
 }
-export function emit(result: any, exit: number, output?: string) {
+export function emit(result: any, exit: number, output?: Output) {
   if (output) {
-    try { writeFileSync(output, `${JSON.stringify(result, null, 2)}\n`, { flag: 'wx', mode: 0o600 }); }
-    catch { result.ok = false; result.diagnostics.push({ code: 'output_error', field: 'output', message: 'Cannot create exclusive evidence file' }); exit = 2; }
+    try {
+      const now = lstatSync(output.path);
+      if (!now.isFile() || now.dev !== output.dev || now.ino !== output.ino) throw new Error('replaced');
+      writeSync(output.fd, `${JSON.stringify(result, null, 2)}\n`);
+    } catch { result.ok = false; result.diagnostics.push({ code: 'output_error', field: 'output', message: 'Evidence file was replaced or cannot be written' }); exit = 2; }
+    finally { try { closeSync(output.fd); } catch {} }
   }
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
   if (exit) process.stderr.write(`Evaluation failed (${exit}); see JSON diagnostics.\n`);

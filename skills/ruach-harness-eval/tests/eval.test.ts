@@ -389,3 +389,69 @@ test('repository identity permits selected subdirectories and aliases but reject
   const rejectedAcceptance = accept(requested); expect(rejectedAcceptance.exit).toBe(2); expect(rejectedAcceptance.value.diagnostics.some((d: any) => d.code === 'invalid_repository')).toBe(true);
   expect(snapshot(requested.repo)).toEqual(beforeRequested); expect(snapshot(other.repo)).toEqual(beforeOther);
 });
+
+test('replacement refs cannot alter the commits that scope checks read', () => {
+  const f = fixture();
+  write(join(f.repo, 'allowed.txt'), 'real change\n'); const real = commit(f.repo);
+  git(f.repo, 'checkout', '-q', '--detach', f.baseline); write(join(f.repo, 'outside.txt'), 'forged change\n'); const forged = commit(f.repo);
+  git(f.repo, 'checkout', '-q', real);
+  git(f.repo, 'replace', real, forged);
+  const observed = scope(f, { paths: ['allowed.txt'] }, real);
+  expect(observed.value.diagnostics).toEqual([]); expect(observed.exit).toBe(0);
+  expect(observed.value.changed_paths).toEqual(['allowed.txt']);
+});
+
+for (const flag of ['--assume-unchanged', '--skip-worktree']) test(`index flag ${flag} cannot hide a modified tracked file from clean checks`, () => {
+  const f = fixture();
+  write(join(f.repo, 'protected'), 'tampered\n'); git(f.repo, 'update-index', flag, 'protected');
+  const observed = scope(f, {});
+  expect(observed.exit).not.toBe(0); expect(observed.value.ok).toBe(false);
+  expect(observed.value.diagnostics.length).toBeGreaterThan(0);
+  const accepted = accept(f); expect(accepted.exit).not.toBe(0); expect(accepted.value.ok).toBe(false);
+  expect(accepted.value.checks.every((c: any) => c.status !== 'passed')).toBe(true);
+});
+
+// A descendant in its own session keeps inherited output pipes open without being in the check's process group.
+const holder = (seconds: number) => `require("child_process").spawn(process.execPath,["-e","setTimeout(()=>{},${seconds * 1000})"],{detached:true,stdio:["ignore","inherit","inherit"]}).unref()`;
+test('a descendant holding output pipes cannot stall a completed check past its bound', () => {
+  const f = fixture(); const started = Date.now();
+  const observed = accept(f, acceptance(f, [check([bun, '-e', holder(15)], { exit: 0 }, { timeout_ms: 5000 })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.exit).toBe(1); expect(observed.value.checks[0].status).toBe('failed');
+  expect(observed.value.checks[0].diagnostics.map((d: any) => d.code)).toContain('orphaned_output');
+});
+test('timeout settles once within a bound even when a descendant keeps the pipes open', () => {
+  const f = fixture(); const started = Date.now();
+  const observed = accept(f, acceptance(f, [check([bun, '-e', `${holder(15)}; setInterval(()=>{},1000)`], { exit: 0 }, { timeout_ms: 500 })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.value.checks[0].timed_out).toBe(true); expect(observed.value.checks[0].status).toBe('failed');
+});
+test('FIFO and oversized expected files yield structured failed checks within a bound', () => {
+  const f = fixture(); const started = Date.now();
+  const script = 'const fs=require("fs");require("child_process").execFileSync("mkfifo",["pipe"]);fs.closeSync(fs.openSync("big","w"));fs.truncateSync("big",20*1024*1024)';
+  const observed = accept(f, acceptance(f, [check([bun, '-e', script], { exit: 0, files: [{ path: 'pipe', content: 'x' }, { path: 'big', sha256: '0'.repeat(64) }] }, { cwd: '{foreign_cwd}' })]));
+  expect(Date.now() - started).toBeLessThan(9000);
+  expect(observed.exit).toBe(1); const diagnostics = observed.value.checks[0].diagnostics;
+  expect(diagnostics.filter((d: any) => d.code === 'file_unreadable').map((d: any) => d.field)).toEqual(['expect.files.pipe', 'expect.files.big']);
+});
+test('special files as configuration inputs are structured setup errors, not hangs', () => {
+  const f = fixture(); const fifo = join(f.base, 'assignment.fifo');
+  expect(spawnSync('mkfifo', [fifo]).status).toBe(0);
+  const config = acceptance(f); config.assignment = fifo;
+  const observed = accept(f, config);
+  expect(observed.exit).toBe(2); expect(observed.value.diagnostics.map((d: any) => d.code)).toContain('unreadable_artifact');
+  const evidence = join(f.base, 'evidence.fifo'); expect(spawnSync('mkfifo', [evidence]).status).toBe(0);
+  const checked = scope(f, { evidence: { acceptance: 'evidence.fifo' }, task: 't', run: 'r' });
+  expect(checked.exit).toBe(2); expect(checked.value.diagnostics.map((d: any) => d.code)).toContain('unreadable_artifact');
+});
+
+test('the evidence output is reserved before checks run and cannot be redirected during them', () => {
+  const f = fixture(), output = join(f.base, 'reserved.json'), victim = join(f.base, 'victim.txt'); write(victim, 'untouched\n');
+  const observed = accept(f, acceptance(f, [check([bun, '-e', `process.exit(require("fs").existsSync(${JSON.stringify(output)}) ? 0 : 5)`], { exit: 0 })]), 'one', ['--output', output]);
+  expect(observed.exit).toBe(0); expect(JSON.parse(readFileSync(output, 'utf8')).ok).toBe(true);
+  const second = join(f.base, 'swapped.json');
+  const swap = `const fs=require("fs");fs.unlinkSync(${JSON.stringify(second)});fs.symlinkSync(${JSON.stringify(victim)},${JSON.stringify(second)})`;
+  const swapped = accept(f, acceptance(f, [check([bun, '-e', swap], { exit: 0 })]), 'one', ['--output', second]);
+  expect(swapped.exit).toBe(2); expect(swapped.value.diagnostics.map((d: any) => d.code)).toContain('output_error');
+  expect(readFileSync(victim, 'utf8')).toBe('untouched\n');
+});
