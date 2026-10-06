@@ -1,9 +1,19 @@
-import { basename } from 'node:path';
+import { basename, delimiter, resolve } from 'node:path';
 import { fail } from './contracts';
 // Git repository selection must come from the explicit -C path, never inherited GIT_* variables.
-function environment(argv: string[]) {
-  if(basename(argv[0])!=='git') return process.env;
-  return Object.fromEntries(Object.entries(process.env).filter(([name])=>!name.toUpperCase().startsWith('GIT_')));
+// PATH with every entry absolute: empty and relative entries are resolved once against the
+// launcher's cwd. The probes, the helpers and the launched pane then agree on which executable
+// a name means, instead of re-resolving relative entries from different working directories.
+export function pinnedPath(): string|undefined {
+  const path=process.env.PATH;
+  if(path===undefined) return undefined;
+  return path.split(delimiter).map(entry=>resolve(process.cwd(),entry===''?'.':entry)).join(delimiter);
+}
+export function environment(argv: string[]=[]) {
+  const pinned=pinnedPath();
+  const base={...process.env,...(pinned===undefined?{}:{PATH:pinned})};
+  if(basename(argv[0]??'')!=='git') return base;
+  return Object.fromEntries(Object.entries(base).filter(([name])=>!name.toUpperCase().startsWith('GIT_')));
 }
 // Grace for output pipes to close after a helper exits or is killed. Descendants can hold
 // them indefinitely, so no call waits past this bound.
@@ -40,7 +50,7 @@ export async function run(argv: string[], cwd: string, timeout = 10000) {
   } finally {clearTimeout(timer);}
 }
 export function executable(name: string): string {
-  const path=Bun.which(name);
+  const path=Bun.which(name,{PATH:pinnedPath()??'',cwd:process.cwd()});
   if(!path) fail(3,'missing_cli','Required executable is absent from PATH',name);
   return path;
 }

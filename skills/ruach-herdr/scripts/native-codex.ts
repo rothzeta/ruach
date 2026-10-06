@@ -1,5 +1,5 @@
 import { fail, Failure } from './contracts';
-import { json, run } from './process';
+import { environment, json, run } from './process';
 import manifest from '../package.json';
 // Prefer the existing matching daemon; never start or replace a persistent daemon.
 async function daemonRead(exe: string, cwd: string) {
@@ -41,7 +41,7 @@ async function daemonRead(exe: string, cwd: string) {
 // This native reader inherits the actual config environment and cwd. It can
 // initialize Codex runtime state, but never writes user settings or starts a turn.
 async function stdioRead(exe:string,cwd:string) {
-  const proc=Bun.spawn([exe,'app-server','--listen','stdio://'],{cwd,env:process.env,stdin:'pipe',stdout:'pipe',stderr:'ignore'});
+  const proc=Bun.spawn([exe,'app-server','--listen','stdio://'],{cwd,env:environment(),stdin:'pipe',stdout:'pipe',stderr:'ignore'});
   const reader=proc.stdout.getReader(),decoder=new TextDecoder();
   let buffer='',id=0;
   const timer=setTimeout(()=>proc.kill('SIGKILL'),10000);

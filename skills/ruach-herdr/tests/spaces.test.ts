@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { symlink, realpath, chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { delimiter, isAbsolute, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const worker=resolve(import.meta.dir,'../scripts/worker.ts');
@@ -200,3 +200,21 @@ test('a FIFO in place of a canonical role file fails promptly as unreadable',asy
   const started=Date.now();const r=await launch(['--dry-run']);
   expect(Date.now()-started).toBeLessThan(8000);expect(r.exit).toBe(2);expect(r.data.diagnostics[0].code).toBe('unreadable_file');
 },20000);
+for(const style of ['relative','empty'])test(`the probed native executable is the one the pane resolves with ${style} PATH entries`,async()=>{
+  // Decoys sit where a relative or empty PATH entry resolves: the worker's cwd and, after the
+  // worktree is created, the worktree itself (committed below).
+  const marker=join(root,'decoy-ran');
+  const decoy=`#!${process.execPath}\nawait import('node:fs').then(m=>m.appendFileSync(${JSON.stringify(marker)},'x'));\nawait import(${JSON.stringify(fake)});\n`;
+  const dirName='rel-bin';await mkdir(join(root,dirName),{recursive:true});
+  for(const dir of [join(root,dirName),root,repo]){await writeFile(join(dir,'claude'),decoy);await chmod(join(dir,'claude'),0o700);}
+  command(['add','-f','claude']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Decoy']);
+  const PATH=style==='relative'?[dirName,bin].join(delimiter):[bin,'',join(root,'elsewhere')].join(delimiter);
+  const r=await launch([],{PATH});expect(r.exit,r.stderr).toBe(0);
+  const workspace=(await records('mutations.jsonl'))[0].args;
+  const paneEntries=workspace.find((x:string)=>x.startsWith('PATH=')).slice(5).split(delimiter);
+  for(const entry of paneEntries){expect(entry).not.toBe('');expect(isAbsolute(entry)).toBe(true);}
+  // First pane PATH match for claude must be the executable that was probed.
+  const first=paneEntries.find((dir:string)=>Bun.spawnSync(['test','-x',join(dir,'claude')]).exitCode===0)!;
+  const probedDecoy=await Bun.file(marker).exists();
+  expect(probedDecoy).toBe(first!==bin);
+});
