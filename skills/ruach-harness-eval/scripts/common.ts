@@ -119,7 +119,9 @@ export const CLEAN_ENTRY_LIMIT = 100_000;
 export const CLEAN_HASH_LIMIT = 1024 * 1024 * 1024;
 export type Dirt = { status: string; paths: string[]; staged: boolean; unstaged: boolean; untracked: boolean };
 type Manifest = { mode: string; oid: string; size?: number };
-type Context = { format: string; hashed: number; depth: number };
+// One Budget is shared by a dirty() call and every submodule it visits, so the hash bound holds per call.
+type Budget = { hashed: number; limit: number };
+type Context = { format: string; depth: number; budget: Budget };
 const budget = (what: string) => new SetupError('clean_check_budget', 'repo', `Clean check exceeded its ${what} budget; the checkout is not assessed as clean`);
 const typeOf = (mode: string) => mode === '160000' ? 'gitlink' : mode === '120000' ? 'symlink' : 'file';
 function split(output: Buffer): string[] {
@@ -152,8 +154,8 @@ function observe(repo: string, path: string, context: Context, directories: Map<
   const mode = stat.mode & 0o100 ? '100755' : '100644';
   // A differing size already proves a difference from a same-size committed blob, so skip reading it.
   if (expectedSize !== undefined && stat.size !== expectedSize) return { mode, oid: '', size: stat.size };
-  context.hashed += stat.size;
-  if (context.hashed > CLEAN_HASH_LIMIT) throw budget('hash');
+  context.budget.hashed += stat.size;
+  if (context.budget.hashed > context.budget.limit) throw budget('hash');
   let fd: number | undefined;
   try {
     fd = openSync(full, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
@@ -237,14 +239,15 @@ function submodule(repo: string, path: string, entry: Manifest, context: Context
     lstatSync(resolve(inner, '.git'));
     if (realpathSync(root(inner)) !== realpathSync(inner)) return 'T';
     if (git(inner, ['rev-parse', '--verify', 'HEAD'], true).stdout.toString().trim() !== entry.oid) return 'M';
-    return cleanCheck(inner, { format: context.format, hashed: context.hashed, depth: context.depth + 1 }).length ? 'M' : ' ';
+    return cleanCheck(inner, { format: context.format, depth: context.depth + 1, budget: context.budget }).length ? 'M' : ' ';
   } catch (error) { if (error instanceof SetupError && error.code === 'clean_check_budget') throw error; return 'T'; }
 }
 // Cleanliness is decided from committed objects and raw worktree bytes only. The index can never make a path
 // clean and no stat data, index flag, comparison setting, attribute or exclude file is consulted
 // (docs/design/0.3-clean-check.md). Comparison is byte-exact: a checkout whose working copies are converted
 // (CRLF, expanded $Id$, filters, other encodings) reads as dirty.
-export function dirty(repo: string): Dirt[] { return cleanCheck(repo, { format: 'sha1', hashed: 0, depth: 0 }); }
+// `limits.hashLimit` exists so tests can exercise the hash budget; callers use the default.
+export function dirty(repo: string, limits: { hashLimit?: number } = {}): Dirt[] { return cleanCheck(repo, { format: 'sha1', depth: 0, budget: { hashed: 0, limit: limits.hashLimit ?? CLEAN_HASH_LIMIT } }); }
 export function diagnostic(error: any): Diagnostic {
   return error instanceof SetupError ? { code: error.code, field: error.field, message: error.message } : { code: 'setup_error', field: 'input', message: 'Input or filesystem operation failed' };
 }

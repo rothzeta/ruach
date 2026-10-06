@@ -666,3 +666,24 @@ test('34. a committed file over the artifact limit is hashed by streaming: untou
   const edited = Buffer.alloc(size, 97); edited[size - 1] = 98; writeFileSync(join(f.repo, 'big.bin'), edited);
   expectDetected(scope(f, {}, 'HEAD', [], baseline), 'big.bin');
 }, 60000);
+test('R1. the hash budget is shared across submodules within one dirty() call', async () => {
+  // The limit is injected because the real 1 GiB bound is too large to exercise. Three sibling submodules of
+  // 600 bytes each plus .gitmodules exceed 1500 bytes only if their counts accumulate.
+  const { dirty, SetupError } = await import('../scripts/common');
+  const f = fixture();
+  for (const name of ['a', 'b', 'c']) {
+    const source = join(f.base, `module-${name}`); mkdirSync(source); git(source, 'init', '-q'); write(join(source, 'file'), 'x'.repeat(600)); commit(source);
+    git(f.repo, '-c', 'protocol.file.allow=always', 'submodule', 'add', '-q', source, `module-${name}`);
+  }
+  commit(f.repo);
+  expect(dirty(f.repo)).toEqual([]); // under the real limit the checkout is clean
+  let thrown: any; try { dirty(f.repo, { hashLimit: 1500 }); } catch (error) { thrown = error; }
+  expect(thrown).toBeInstanceOf(SetupError); expect(thrown.code).toBe('clean_check_budget');
+});
+test('R4. the documented budget values are the exported constants', async () => {
+  const { CLEAN_ENTRY_LIMIT, CLEAN_HASH_LIMIT } = await import('../scripts/common');
+  const docs = readFileSync(join(skill, 'references/config.md'), 'utf8');
+  expect(docs).toContain(`At most ${CLEAN_ENTRY_LIMIT.toLocaleString('en-US')} paths per listing`);
+  expect(docs).toContain(`${CLEAN_HASH_LIMIT / 1024 ** 3} GiB hashed per call`);
+  expect(readFileSync(join(skill, '../../docs/operations.md'), 'utf8')).toContain(`${CLEAN_ENTRY_LIMIT.toLocaleString('en-US')} paths per listing and ${CLEAN_HASH_LIMIT / 1024 ** 3} GiB hashed per call`);
+});
