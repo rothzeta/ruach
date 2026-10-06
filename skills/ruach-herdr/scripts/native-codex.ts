@@ -41,16 +41,21 @@ async function daemonRead(exe: string, cwd: string) {
 // This native reader inherits the actual config environment and cwd. It can
 // initialize Codex runtime state, but never writes user settings or starts a turn.
 async function stdioRead(exe:string,cwd:string) {
-  const proc=Bun.spawn([exe,'app-server','--listen','stdio://'],{cwd,env:environment(),stdin:'pipe',stdout:'pipe',stderr:'ignore'});
+  const proc=Bun.spawn([exe,'app-server','--listen','stdio://'],{cwd,env:environment(),stdin:'pipe',stdout:'pipe',stderr:'ignore',detached:true});
   const reader=proc.stdout.getReader(),decoder=new TextDecoder();
   let buffer='',id=0;
-  const timer=setTimeout(()=>proc.kill('SIGKILL'),10000);
+  // The reader runs in its own process group, the only group ever signalled. A descendant that
+  // holds stdout open must not outlive the deadline, so every read races it.
+  const killGroup=()=>{try{process.kill(-proc.pid,'SIGKILL');}catch{try{proc.kill('SIGKILL');}catch{}}};
+  let timer:ReturnType<typeof setTimeout>|undefined;
+  const deadline=new Promise<never>((_,reject)=>{timer=setTimeout(()=>{killGroup();reject(Error('native reader deadline'));},10000);});
+  deadline.catch(()=>{});
   async function send(value:any) {proc.stdin.write(JSON.stringify(value)+'\n');await proc.stdin.flush();}
   async function message():Promise<any> {
     while(true) {
       const newline=buffer.indexOf('\n');
       if(newline>=0){const line=buffer.slice(0,newline);buffer=buffer.slice(newline+1);if(line.trim())return JSON.parse(line);continue;}
-      const chunk=await reader.read();if(chunk.done)throw Error('native reader closed');
+      const chunk=await Promise.race([reader.read(),deadline]);if(chunk.done)throw Error('native reader closed');
       buffer+=decoder.decode(chunk.value,{stream:true});
       if(buffer.length>8*1024*1024)throw Error('native response exceeded limit');
     }
@@ -67,10 +72,10 @@ async function stdioRead(exe:string,cwd:string) {
     return {config:config.config,skills:skills.data,reader:'stdio' as const};
   } finally {
     clearTimeout(timer);
-    // EOF permits normal shutdown; force termination if it does not exit promptly.
-    const cleanup=setTimeout(()=>proc.kill('SIGKILL'),1000);
-    try {try{proc.stdin.end();}catch{}await proc.exited;}
-    finally {clearTimeout(cleanup);await reader.cancel().catch(()=>{});}
+    // EOF permits normal shutdown; force termination of the owned group if it does not exit promptly.
+    const cleanup=setTimeout(killGroup,1000);
+    try {try{proc.stdin.end();}catch{}await Promise.race([proc.exited,new Promise(resolve=>setTimeout(resolve,1500).unref())]);}
+    finally {clearTimeout(cleanup);killGroup();await Promise.race([reader.cancel().catch(()=>{}),new Promise(resolve=>setTimeout(resolve,500).unref())]);}
   }
 }
 export async function codexRead(exe:string,cwd:string) {

@@ -62,6 +62,11 @@ else if(args.join(' ')==='app-server daemon version') {
 } else if(exe==='codex'&&args.join(' ')==='app-server --listen stdio://') {
   appendFileSync(join(root,'stdio-processes.jsonl'),JSON.stringify({pid:process.pid,cwd:process.cwd(),configHome:process.env.CODEX_HOME})+'\n');
   if(data.stdioUnavailable){console.error('private native failure');process.exit(1);}
+  if(data.stdioDescendant){
+    // The reader exits but a same-group descendant keeps the inherited stdout open.
+    const child=Bun.spawn([process.execPath,'-e','setTimeout(()=>{},25000)'],{stdio:['ignore','inherit','inherit']});
+    appendFileSync(join(root,'stdio-descendants.pid'),child.pid+'\n');child.unref();process.exit(1);
+  }
   const {createInterface}=await import('node:readline');
   for await(const line of createInterface({input:process.stdin})) {
     const request=JSON.parse(line);appendFileSync(join(root,'stdio-requests.jsonl'),JSON.stringify(request)+'\n');

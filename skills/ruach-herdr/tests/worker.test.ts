@@ -298,6 +298,16 @@ for(const cause of ['daemonMismatch','daemonRpcError'])test(`Codex ${cause} fall
 test('Codex reader is forcibly terminated when it lingers after stdin EOF',async()=>{
   behavior.daemonMissing=true;behavior.stdioStayAlive=true;const r=await launch('resolve',explicit);expect(r.exit).toBe(0);await readersStopped();await noMutation();
 });
+test('a descendant holding the Codex reader stdout cannot stall resolve past its deadline and is reaped',async()=>{
+  behavior.daemonMissing=true;behavior.stdioDescendant=true;const started=Date.now();
+  const r=await launch('resolve',explicit);
+  expect(Date.now()-started).toBeLessThan(15000);
+  expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('codex_config_unavailable');
+  const pids=(await Bun.file(join(root,'stdio-descendants.pid')).text()).trim().split('\n').map(Number);
+  await Bun.sleep(300);
+  for(const pid of pids)expect(()=>process.kill(pid,0)).toThrow();
+  await noMutation();
+},30000);
 test('unavailable daemon and malformed stdio protocol fail without leaking output or leaving a reader',async()=>{
   behavior.daemonMissing=true;behavior.stdioMalformed=true;const r=await launch('resolve',explicit);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('codex_config_unavailable');expect(r.stdout+r.stderr).not.toContain('invalid private output');await readersStopped();await noMutation();
 });
