@@ -444,3 +444,14 @@ test('special files as configuration inputs are structured setup errors, not han
   const checked = scope(f, { evidence: { acceptance: 'evidence.fifo' }, task: 't', run: 'r' });
   expect(checked.exit).toBe(2); expect(checked.value.diagnostics.map((d: any) => d.code)).toContain('unreadable_artifact');
 });
+
+test('the evidence output is reserved before checks run and cannot be redirected during them', () => {
+  const f = fixture(), output = join(f.base, 'reserved.json'), victim = join(f.base, 'victim.txt'); write(victim, 'untouched\n');
+  const observed = accept(f, acceptance(f, [check([bun, '-e', `process.exit(require("fs").existsSync(${JSON.stringify(output)}) ? 0 : 5)`], { exit: 0 })]), 'one', ['--output', output]);
+  expect(observed.exit).toBe(0); expect(JSON.parse(readFileSync(output, 'utf8')).ok).toBe(true);
+  const second = join(f.base, 'swapped.json');
+  const swap = `const fs=require("fs");fs.unlinkSync(${JSON.stringify(second)});fs.symlinkSync(${JSON.stringify(victim)},${JSON.stringify(second)})`;
+  const swapped = accept(f, acceptance(f, [check([bun, '-e', swap], { exit: 0 })]), 'one', ['--output', second]);
+  expect(swapped.exit).toBe(2); expect(swapped.value.diagnostics.map((d: any) => d.code)).toContain('output_error');
+  expect(readFileSync(victim, 'utf8')).toBe('untouched\n');
+});

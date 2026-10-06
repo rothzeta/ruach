@@ -20,6 +20,11 @@ for (const name of readdirSync(join(root, 'skills')).sort()) {
   const header = /^---\n([\s\S]*?)\n---\n/.exec(text)?.[1];
   const identity = header && /^name: (.+)$/m.exec(header)?.[1];
   const description = header && /^description: (.+)$/m.exec(header)?.[1];
+  for (const notice of ['LICENSE', 'PROVENANCE.md']) {
+    // Each skill folder is installable on its own, so it carries the repository notices unchanged.
+    const copy = join(skill, notice), source = join(root, notice);
+    if (!existsSync(copy) || !existsSync(source) || readFileSync(copy, 'utf8') !== readFileSync(source, 'utf8')) errors.push(`Missing or divergent notice: skills/${name}/${notice}`);
+  }
   if (!/^ruach-[a-z0-9-]+$/.test(name) || identity !== name || !description) errors.push(`Invalid skill identity/description: ${name}`);
 }
 for (const relative of walk(root)) {

@@ -2,10 +2,10 @@ import { chmodSync, copyFileSync, lstatSync, mkdirSync, mkdtempSync, readFileSyn
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve, sep } from 'node:path';
 import { spawn } from 'node:child_process';
-import { args, canonical, readArtifact, diagnostic, dirty, emit, executable, fail, hash, object, outputPath, repoPath, revision, root, SetupError, string, strings, version } from './common';
+import { type Output, args, canonical, readArtifact, diagnostic, dirty, emit, executable, fail, hash, object, outputPath, repoPath, revision, root, SetupError, string, strings, version } from './common';
 
 const result: any = { schema_version: 1, ok: false, checks: [], diagnostics: [] };
-let output: string | undefined, temporary: string | undefined, repo: string | undefined;
+let output: Output | undefined, temporary: string | undefined, repo: string | undefined;
 const secrets = new Set<string>();
 function redact(text: string) {
   for (const value of [...secrets].sort((a, b) => b.length - a.length)) text = text.split(value).join('[REDACTED]');

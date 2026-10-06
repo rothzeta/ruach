@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { accessSync, closeSync, constants, fstatSync, lstatSync, openSync, readFileSync, statSync, realpathSync, writeFileSync } from 'node:fs';
+import { accessSync, closeSync, writeSync, constants, fstatSync, lstatSync, openSync, readFileSync, statSync, realpathSync } from 'node:fs';
 import { delimiter, dirname, isAbsolute, relative, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -129,7 +129,10 @@ export function dirty(repo: string) {
 export function diagnostic(error: any): Diagnostic {
   return error instanceof SetupError ? { code: error.code, field: error.field, message: error.message } : { code: 'setup_error', field: 'input', message: 'Input or filesystem operation failed' };
 }
-export function outputPath(path: string | undefined, repo?: string) {
+// Evidence destination reserved exclusively before any check runs. The descriptor is held for the whole
+// run, so a check cannot redirect the final write by replacing the path with a link or another file.
+export type Output = { path: string; fd: number; dev: number; ino: number };
+export function outputPath(path: string | undefined, repo?: string): Output | undefined {
   if (!path) return undefined;
   const target = resolve(realpathSync(dirname(resolve(path))), relative(dirname(resolve(path)), resolve(path)));
   let exists = false;
@@ -143,12 +146,20 @@ export function outputPath(path: string | undefined, repo?: string) {
       if (!rel.startsWith('../') && !isAbsolute(rel)) throw new SetupError('invalid_output', 'output', 'Evidence output must be outside the checkout and Git metadata');
     }
   }
-  return target;
+  let fd: number;
+  try { fd = openSync(target, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600); }
+  catch { throw new SetupError('output_error', 'output', 'Cannot create exclusive evidence file'); }
+  const { dev, ino } = fstatSync(fd);
+  return { path: target, fd, dev, ino };
 }
-export function emit(result: any, exit: number, output?: string) {
+export function emit(result: any, exit: number, output?: Output) {
   if (output) {
-    try { writeFileSync(output, `${JSON.stringify(result, null, 2)}\n`, { flag: 'wx', mode: 0o600 }); }
-    catch { result.ok = false; result.diagnostics.push({ code: 'output_error', field: 'output', message: 'Cannot create exclusive evidence file' }); exit = 2; }
+    try {
+      const now = lstatSync(output.path);
+      if (!now.isFile() || now.dev !== output.dev || now.ino !== output.ino) throw new Error('replaced');
+      writeSync(output.fd, `${JSON.stringify(result, null, 2)}\n`);
+    } catch { result.ok = false; result.diagnostics.push({ code: 'output_error', field: 'output', message: 'Evidence file was replaced or cannot be written' }); exit = 2; }
+    finally { try { closeSync(output.fd); } catch {} }
   }
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
   if (exit) process.stderr.write(`Evaluation failed (${exit}); see JSON diagnostics.\n`);
