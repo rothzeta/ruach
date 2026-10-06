@@ -79,3 +79,25 @@ herdr pane read <returned-pane-id> --source recent-unwrapped --lines 120
 Older releases reported a folder-trust dialog as `start_uncertain` with exit 4. If the existing agent is blocked and the pane shows that dialog, complete the confirmation in that workspace; another launch is unnecessary. A timeout does not prove a start command was never delivered. The launcher does not retry or delete uncertain resources.
 
 After reuse ends, close only the owned session/workspace. Commit useful work and preserve it on a retained branch before removing its worktree with `git worktree remove` from another retained checkout. Keep the branch and unrelated resources. Never discard uncommitted evidence to make cleanup succeed.
+
+## Release verification and toolchain versions
+
+CI (`.github/workflows/ci.yml`) is the reference gate: frozen installs (`just install`), `just check` (resource checks and typecheck), `just release-check`, `bun audit` for the root and each locked skill, and `just test` (root tools plus the handoff, Herdr and harness-eval suites). The runner must permit local sockets because Herdr tests open them. Locally run the same recipes.
+
+Recorded toolchain for the 0.3 line (update with each release that changes it; the CI `BUN_VERSION`/`JUST_VERSION` must match):
+
+| Tool | Version | Pinned in |
+| --- | --- | --- |
+| Bun | 1.4.2 | `.github/workflows/ci.yml` |
+| Just | 1.40.0 | `.github/workflows/ci.yml` |
+| TypeScript | 7.0.2 | root `package.json` and `bun.lock` |
+| `@types/bun`, `@types/ws` | 1.4.2, see lock | root `package.json` and `bun.lock` |
+| Git | 2.47.3 (observed; no pin) | not pinned |
+| Herdr CLI | 0.9.0 (observed) | not pinned; native harness CLIs (`claude`, `codex`) are likewise consumer-provided |
+
+CI action references use version tags, not commit SHAs.
+
+### Snapshot integrity versus runtime/bootstrap integrity
+
+- **Snapshot integrity** covers the files copied into a consumer: resource identities, links, release metadata, and that skill `bun.lock` files exist and are frozen. `just check` and `just release-check` verify it. It says nothing about the machine that runs the snapshot.
+- **Runtime/bootstrap integrity** covers what a run depends on that the snapshot does not contain: the Bun, Git, Herdr and native harness versions, `bun install --frozen-lockfile` having been run inside each executable skill, and resolved executables on `PATH`. Verify it per machine (readiness checks, `bun audit`, the suites); a passing snapshot check does not establish it, and a passing local run does not establish snapshot integrity.
