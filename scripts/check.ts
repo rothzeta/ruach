@@ -26,8 +26,8 @@ for (const name of readdirSync(join(root, 'skills')).sort()) {
     if (!existsSync(copy) || !existsSync(source) || readFileSync(copy, 'utf8') !== readFileSync(source, 'utf8')) errors.push(`Missing or divergent notice: skills/${name}/${notice}`);
   }
   if (!/^ruach-[a-z0-9-]+$/.test(name) || identity !== name || !description) errors.push(`Invalid skill identity/description: ${name}`);
-  const compatibility = header && /^compatibility:(.*)$/m.exec(header)?.[1].trim();
-  if (compatibility !== undefined && compatibility !== false && (!compatibility || compatibility.length > 500)) errors.push(`Invalid compatibility metadata (1-500 characters on one line): ${name}`);
+  const compatibility = header ? /^compatibility:(.*)$/m.exec(header)?.[1].trim() : undefined;
+  if (compatibility !== undefined && (!compatibility || compatibility.length > 500)) errors.push(`Invalid compatibility metadata (1-500 characters on one line): ${name}`);
   if (existsSync(join(skill, 'package.json')) && !/\bBun\b/.test(compatibility || '')) errors.push(`Executable skill must declare Bun compatibility: ${name}`);
 }
 for (const relative of walk(root)) {

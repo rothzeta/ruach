@@ -341,7 +341,7 @@ for(const style of ['no-frontmatter','no-name','nested-unrelated'])test(`valid u
   else await writeFile(join(dir,'SKILL.md'),'---\ndescription: Name comes from the directory.\n---\nBody\n');
   if(style==='nested-unrelated'){await mkdir(join(repo,'pkg','.claude','skills','local'),{recursive:true});await writeFile(join(repo,'pkg','.claude','skills','local','SKILL.md'),'No frontmatter either.\n');}
   for(const [command,extra] of [['resolve',[]],['start',['--dry-run']]] as const){
-    const r=await asRole('architect',command,extra);expect(r.exit,r.stderr).toBe(0);expect(r.result.launchable).toBe(true);
+    const r=await asRole('architect',command,[...extra]);expect(r.exit,r.stderr).toBe(0);expect(r.result.launchable).toBe(true);
   }
   await noMutation();
 });

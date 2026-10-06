@@ -28,7 +28,7 @@ export async function run(argv: string[], cwd: string, timeout = 10000) {
   const kill=()=>{try{process.kill(-proc.pid,'SIGKILL');}catch{try{proc.kill('SIGKILL');}catch{}}};
   let timedOut=false;
   const timer=setTimeout(()=>{timedOut=true;kill();},timeout);
-  const readers:ReadableStreamDefaultReader<Uint8Array>[]=[];
+  const readers:{cancel():Promise<void>}[]=[];
   const collect=async(stream:ReadableStream<Uint8Array>)=>{
     const reader=stream.getReader();readers.push(reader);
     const chunks:Uint8Array[]=[];

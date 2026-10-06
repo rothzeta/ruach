@@ -171,7 +171,7 @@ function install(options: Options) {
   for (const path of paths) if (stat(path) && !stat(path)!.isFile()) throw new Error('Managed destination is not a regular file');
   const next = JSON.stringify(manifest(sha, files, options.version), null, 2) + '\n';
   type Operation = { index: number; name: string; path: string; kind: 'create' | 'replace' | 'remove'; body?: Buffer; mode?: number };
-  const operations: Operation[] = [...removals].filter(name => stat(destination(target, name))).map(name => ({ name, path: destination(target, name), kind: 'remove' as const }))
+  const operations: Operation[] = [...removals].filter(name => stat(destination(target, name))).map((name): Omit<Operation, 'index'> => ({ name, path: destination(target, name), kind: 'remove' }))
     .concat([...files].map(([name, { body, mode }]) => ({ name, path: destination(target, name), kind: stat(destination(target, name)) ? 'replace' as const : 'create' as const, body, mode })))
     .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
     .concat([{ name: METADATA, path: join(target, METADATA), kind: stat(join(target, METADATA)) ? 'replace' as const : 'create' as const, body: Buffer.from(next), mode: 0o644 }])
@@ -233,7 +233,7 @@ function which(name: string): string | undefined {
     try { if (statSync(path).isFile()) { accessSync(path, constants.X_OK); return path; } } catch {}
   }
 }
-function probe(name: string, run: boolean) {
+function probe(name: string, run: boolean): { name: string; found: boolean; path?: string; version?: string } {
   const path = which(name);
   if (!path) return { name, found: false };
   if (!run) return { name, found: true, path: tilde(path) };

@@ -117,7 +117,7 @@ try {
     if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
     phase=placement==='pane'||linkedMode?'split':'workspace';state='unknown';
     const rootPane=linkedMode?pane:undefined;if(linkedMode)pane=undefined;
-    const paneEnvironment=['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).flatMap(key=>['--env',`${key}=${environment()[key]}`]);
+    const paneEnvironment=['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).flatMap(key=>['--env',`${key}=${(environment() as Record<string,string|undefined>)[key]}`]);
     // Herdr's worktree create takes no environment, so the worker pane is split from the linked
     // workspace's root pane to carry the caller's PATH and configuration homes.
     const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:linkedMode?[herdr,'pane','split',rootPane!,'--direction','right']:[herdr,'workspace','create','--label',v.name];
