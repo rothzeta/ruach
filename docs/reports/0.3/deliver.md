@@ -7,7 +7,7 @@ candidate_revision: c6594f57b36863424dc8c7073763e8292fad2ff2
 reviewed_revision: c6594f57b36863424dc8c7073763e8292fad2ff2
 tested_revision: c6594f57b36863424dc8c7073763e8292fad2ff2
 delivered_revision: dd766f34dfe3b8699c40444acd12ffafd411cfb7
-destination_before: 3423387
+destination_before: "3423387"
 artifacts:
   - docs/reports/0.3/deliver.md
   - docs/assignments/0.3/deliver.md
