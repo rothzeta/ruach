@@ -12,11 +12,12 @@ if(exe==='herdr') {
   else if(args.join(' ')==='worktree create --help')console.log(data.noLinked?'--cwd':'--workspace --cwd --branch --base --path --label --focus --no-focus');
   else if(args.slice(0,2).join(' ')==='worktree list') {
     if(data.parentUnknown)process.exit(1);
-    out({result:{source:{repo_key:data.parentRepoKey??join(data.repo,'.git'),source_workspace_id:args[3]},worktrees:[]}});
+    out({result:{source:{repo_key:data.parentRepoKey??join(data.repo,'.git'),source_workspace_id:data.linkedLaunching&&args[3]===data.linkedLaunching?data.sourceWorkspace:args[3]},worktrees:data.linkedLaunching&&args[3]===data.linkedLaunching?[{open_workspace_id:args[3],is_linked_worktree:true}]:[]}});
   } else if(args.slice(0,2).join(' ')==='worktree create') {
     const at=(flag:string)=>args[args.indexOf(flag)+1];
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'worktree',args,cwd:process.cwd()})+'\n');
     if(data.linkedFailure)process.exit(1);
+    if(data.linkedLaunching&&at('--workspace')===data.linkedLaunching){console.log(JSON.stringify({error:{code:'linked_worktree_source',message:'New and open worktree actions start from the repo parent workspace.'}}));process.exit(1);}
     if(data.linkedPartial)Bun.spawnSync([data.git,'-C',data.repo,'branch',at('--branch'),at('--base')]);
     else if(Bun.spawnSync([data.git,'-C',data.repo,'worktree','add','-b',at('--branch'),'--',at('--path'),at('--base')]).exitCode!==0)process.exit(1);
     if(data.linkedPartial)process.exit(1);

@@ -42,14 +42,20 @@ export async function linkedParent(herdr: string, cwd: string, parent: string | 
   if (help.exit !== 0 || help.timedOut || !['--workspace', '--branch', '--base', '--path', '--label', '--no-focus'].every(flag => help.stdout.includes(flag)))
     return { parent: null, reason: 'installed Herdr lacks linked worktree creation' };
   const listed = await run([herdr, 'worktree', 'list', '--workspace', parent], cwd);
-  let key: unknown;
-  try { key = json(listed.stdout, 'worktree list').result?.source?.repo_key; } catch {}
+  let key: unknown, source: unknown, linked = false;
+  try {
+    const result = json(listed.stdout, 'worktree list').result;
+    key = result?.source?.repo_key; source = result?.source?.source_workspace_id;
+    linked = ((result?.worktrees ?? []) as any[]).some(w => w?.open_workspace_id === parent && w?.is_linked_worktree === true);
+  } catch {}
   const common = await run([executable('git'), '--no-replace-objects', '-C', cwd, 'rev-parse', '--path-format=absolute', '--git-common-dir'], cwd);
   if (listed.exit !== 0 || listed.timedOut || typeof key !== 'string' || common.exit !== 0 || common.timedOut)
     return { parent: null, reason: 'launching workspace is not a Git worktree workspace' };
   const [a, b] = await Promise.all([realpath(key).catch(() => null), realpath(common.stdout.trim()).catch(() => null)]);
   if (!a || a !== b) return { parent: null, reason: 'launching workspace belongs to a different repository' };
-  return { parent, reason: null };
+  // Herdr only creates worktrees from the repo parent workspace; from a linked worktree workspace it reports that parent.
+  if (typeof source === 'string' && source) return { parent: source, reason: null };
+  return linked ? { parent: null, reason: 'repo parent workspace of the launching linked worktree is unavailable' } : { parent, reason: null };
 }
 
 export async function createWorktree(cwd: string, worktree: Worktree) {

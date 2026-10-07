@@ -250,6 +250,12 @@ test('a launching workspace makes the worker a linked worktree of it and preserv
   expect((await records('native-launches.jsonl'))[0].cwd).toBe(target);
   expect(r.data.inspection.focus).toEqual(['herdr','workspace','focus','w9']);
 });
+test('a launching workspace that is itself a linked worktree creates from the repo parent workspace',async()=>{
+  behavior={daemonMissing:true,git,repo,linkedLaunching:'w1',sourceWorkspace:'w0'};
+  const r=await launch([],parent);expect(r.exit,r.stderr).toBe(0);
+  expect(r.data.worktree_mode).toBe('linked');expect(r.data.linked_parent).toBe('w0');
+  const args=(await records('mutations.jsonl'))[0].args;expect(args[args.indexOf('--workspace')+1]).toBe('w0');
+});
 test('without a determinable parent the launch keeps today\'s standalone workspace',async()=>{
   for(const [env,patch,why] of [[{HERDR_WORKSPACE_ID:''},{},'no launching workspace'],[parent,{parentUnknown:true},'not a Git worktree workspace'],[parent,{parentRepoKey:'/elsewhere/.git'},'different repository'],[parent,{noLinked:true},'lacks linked worktree']] as const) {
     behavior={daemonMissing:true,git,repo,...patch};
