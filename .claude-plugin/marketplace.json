@@ -3,7 +3,7 @@
   "owner": { "name": "rothzeta" },
   "metadata": {
     "description": "Ruach's versioned roles and skills.",
-    "version": "0.2.1"
+    "version": "0.3.0"
   },
   "plugins": [
     { "name": "ruach", "source": "./", "description": "Engineering roles, skills, and Coordinator workflows." }

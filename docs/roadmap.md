@@ -1,6 +1,6 @@
 # Ruach roadmap
 
-Status at 0.2.1 (`ad79ff0`). Sources: product analysis (5 Oct 2026), security/quality audit (4 Oct 2026), and the 0.4 capability proposal. Finding IDs (RU-xx) refer to the audit.
+Status at 0.3.0 (release preparation; baseline 0.2.1 `ad79ff0`). Sources: product analysis (5 Oct 2026), security/quality audit (4 Oct 2026), and the 0.4 capability proposal. Finding IDs (RU-xx) refer to the audit.
 
 Principles carried through every release:
 

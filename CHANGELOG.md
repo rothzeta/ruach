@@ -8,18 +8,18 @@ Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`
 
 Track A, integrity and security:
 
-- A1: identity guarantees for pinned reads (replacement refs ignored), hidden index flags (`assume-unchanged`, `skip-worktree`), `core.fsmonitor` and tracked files with a Git filter attribute rejected or neutralized by acceptance checks, and verified worker checkouts that ignore inherited `GIT_*` variables.
+- A1: identity guarantees for pinned reads (replacement refs ignored) and verified worker checkouts that ignore inherited `GIT_*` variables. The harness-eval clean check stays `git status --porcelain` with fsmonitor and the untracked cache disabled and replacement refs ignored, and now fails closed (exit 2) with `hidden_index_state` for `assume-unchanged`/`skip-worktree` entries and `content_filter_state` for tracked files with a Git `filter` attribute. No output shape changes; these two setup errors are the only new outcomes ([config reference](skills/ruach-harness-eval/references/config.md#clean-check)).
 - A2: patched `ws` and `yaml` dependencies in Herdr.
 - A3: strict handoff keys, escaped diagnostics and revision checks; native skill discovery tolerates unrelated skills.
 - A4: bounded processes and artifact reads (descendant pipes, FIFOs, oversized files).
 - A5: recoverable snapshot installation with staged writes, rename-only commits (outside hardlinks untouched), rollback, leftover checks and an immediate integrity check; interrupted installs fail `check` until recovered manually ([failures and recovery](docs/operations.md#snapshot-installation-failures-and-recovery)).
 - A6: pinned launch executable identity (relative and empty `PATH` entries resolved once).
-- A7: launches from a Herdr workspace of the same repository create linked worktrees; clean them up with `herdr worktree remove --workspace <id>` (otherwise `git worktree remove`). Standalone launches are unchanged.
+- A7: launches from a Herdr workspace of the same repository create linked worktrees (when the launching workspace is itself a linked worktree, the repository's parent workspace is used); clean them up with `herdr worktree remove --workspace <id>` (otherwise `git worktree remove`). Standalone launches are unchanged.
 - A8: hardening and notices: the evidence output descriptor is held across checks, the Codex instruction transport exposure is documented, and each skill folder ships `LICENSE` and `PROVENANCE.md` verified by `just check`.
 
 Harness-eval boundary: the evaluator trusts the checkout's Git configuration and is not a defense against a hostile candidate; adversarial certification is not a product promise.
 
-Exit notes: GitHub CI and a real consumer-task run are still outstanding for 0.3.
+Known gaps and outstanding at this release: the GitHub CI job has not yet run on GitHub; no real consumer-task run has been recorded; paid per-route smoke tests are pending user authorization; plugin packaging and Codex agent TOML export decisions are open.
 
 Track B, verification gate: typecheck wired into `just check`, a CI job over all suites and audits, toolchain notes, and a regression-case inventory.
 
@@ -30,7 +30,7 @@ Track C, onboarding and installation:
 - Optional `compatibility` metadata on executable skills so Bun, Git and Herdr prerequisites show early; `just check` validates it and requires Bun to be declared by executable skills.
 - `just ready` (`ready` subcommand of the installer): read-only readiness check per route (`skill`, `native`, `herdr`) that reports dependencies, duplicates and prerequisites, prints remediation instead of running it, and never writes.
 
-Track E, native packaging and parity: [native-parity.md](docs/native-parity.md) records offline-verified Codex role and skill discovery, per-harness skill exposure, plugin-cache and snapshot installation facts, the Claude `--agent` versus Herdr append difference, a Codex agent TOML export evaluation and a clean-install smoke checklist. Paid smoke checks per route are pending user authorization; plugin packaging and Codex export remain needs-decision.
+Track E, native packaging and parity (documentation only, no code): [native-parity.md](docs/native-parity.md) records offline-verified Codex role and skill discovery, per-harness skill exposure, plugin-cache and snapshot installation facts, the Claude `--agent` versus Herdr append difference, a Codex agent TOML export evaluation and a clean-install smoke checklist. Paid smoke checks per route are pending user authorization; plugin packaging and Codex export remain needs-decision.
 
 Track D, product consolidation:
 
