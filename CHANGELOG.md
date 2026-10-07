@@ -2,7 +2,7 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
-## 0.3.0 — Unreleased
+## 0.3.0 — 2026-10-07
 
 Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`.
 
