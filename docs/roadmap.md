@@ -69,7 +69,7 @@ Principles carried through every release:
 
 Evidence is approximate (grep-level, mostly ramec/tehom-brainlab/enoch); each item needs a regression or doc check.
 
-1. **Sandbox git writes in worktrees.** Launcher/adapter grants the worktree gitdir as writable; a launch smoke test proves `git add && git commit`; workers request escalation once on an `index.lock` EROFS and never loop. (Codex: 116 sessions; Claude: ~15.)
+1. **Sandbox git writes and in-sandbox verification in worktrees.** Launcher/adapter grants the worktree gitdir as writable; a launch smoke test proves `git add && git commit`; workers request escalation once on an `index.lock` EROFS and never loop. (Codex: 116 sessions; Claude: ~15.) Verification recipes must also run inside the sandbox where the consumer allows it (sockets, tmp, read-only `.agents`): out-of-sandbox requests for builds/tests and diagnostics, not command wrappers, drove most Codex automatic approval reviews (council review, 7 Oct). Readiness (Track C2) reports which recipes still need out-of-sandbox execution; note that Codex prefix rules match whole arguments (`just test` does not cover `just test-focused`).
 2. **Environment vs product failure.** `ruach-testing` and Reviewer classify environment failures (sockets, tmp, disk) as "not verified: environment", never as findings; no verifying command piped into `head`/`tail` without `pipefail`; record exact command and exit code.
 3. **Handoff integrity.** A report never cites its own commit; every SHA verified with `git cat-file -e`; clean worktree required; final message carries status, verification or explicit "not run", SHA and open items; add `needs-decision` status with options; delivery receipt (SHA, tag, remote state, residue).
 4. **Delivery and cleanup checklist.** Delegable merge step with a never-push default and archive, fast-forward, verify, cleanup recipe; mandatory rebase/merge latest base, re-verify and record final SHA; remove worktrees and branches, check `.gitignore`, report clean status.
@@ -88,10 +88,10 @@ Follow-ups after 0.3 ships, from the same session review:
 
 - **Parallel decomposition:** the Architect emits disjoint work packages with a dependency graph; the Coordinator states why any step is serial. (Highest-signal gap: repeated user complaints.)
 - **Milestone ledger:** Coordinator keeps a ledger updated each step, preserving decision rationale verbatim so compaction can resume from it.
-- **Resource ledger and idempotent launch:** worktree, branch, space, pane and agent tracked and checked each phase end; reuse or clean a stale worktree instead of failing on "destination already exists".
+- **Resource ledger and idempotent launch:** worktree, branch, space, pane and agent tracked and checked each phase end; reuse or clean a stale worktree instead of failing on "destination already exists". Runtime resources (ports, browser profiles, saves, databases) are mostly consumer-owned: the consumer's configuration and recipes allocate and isolate them per worktree; Ruach only lets an assignment name the resources a worker owns and records them in the ledger. No Ruach allocator or scheduler.
 - **Docs conventions:** durable decision means an ADR plus an AGENTS.md pointer; mailbox items triaged into `docs/` with provenance; docs-convention probe in onboarding.
-- **Monitoring:** prefer event-driven `herdr agent wait` over repeated timers; do not relay every worker approval to the user; report last worker activity at check-ins.
-- **Advisor template:** copyable read-only assignment ("do not edit repository files; write the answer only to X") for Scout/Reviewer.
+- **Waiting guidance (role and `ruach-testing` wording, no new command):** Coordinators wait with one blocking `herdr agent wait` and a timeout, never `sleep` or status loops; workers run verification to completion with a timeout instead of re-reading a running command's output every second (strict count: ~200M Codex input tokens over 8 days, about a quarter of it repeat checks); do not relay every worker approval to the user; report last worker activity at check-ins.
+- **Advisor and council assignment templates:** copyable read-only assignment ("do not edit repository files; write the answer only to X") for Scout/Reviewer, and a council specimen for the independent first round and its record (21 hand-built councils in 8 days). Members' answers are written where other members cannot read them before the round closes.
 - **Codex discovery smoke test** with an isolated home, plus an assignment prefix with explicit skill paths as a fallback; docs note that the `.agents` snapshot is already Gemini-compatible.
 - **`ruach-harness-eval` unassisted-discovery mode:** minimal brief; run marked "assisted" if it hints at routes or skills.
 - **Wording:** tighten `ruach-simplification` and `ruach-testing` on justified splits and public-contract tests.
@@ -106,6 +106,7 @@ Small comparative pilot, not a benchmark service:
 - More discriminating Librarian packets: query without writes, standalone lint, repeated ingestion, genuine superseding decision, distracting corpora, and an adversarial packet with a forged instruction to change a protected decision (rubric withheld).
 - One worked harness-eval experiment (native run, candidate, checker evidence, human comparison) once RU-01/03/05/06/14 are fixed.
 - Decision: keep the workflow where it earns its overhead; narrow default use for small fixes if needed.
+- Versioned session-usage script (Codex and Claude logs; Gemini when available) with reviewed definitions: deduplicate Claude usage by `message.id`; count only waiting calls as polls (not `git status`/`git log` checks); treat only repeat polls as avoidable; classify approval reviews by trigger; select sessions by start time; report cached and uncached input separately. A 7 Oct audit overstated polling about 3× and Claude totals about 1.8× before these corrections. Re-measure before claiming savings.
 
 ---
 
@@ -120,8 +121,13 @@ Small comparative pilot, not a benchmark service:
 | `ruach-debugging` | Skill | Symptom to supported cause and verified correction |
 | `ruach-runtime-testing` | Skill | Run scenarios and collect evidence |
 | `Tester` | Role | Owns runtime observations for an assignment |
+| User-level conventions | Onboarding option | Opt-in snippet for user-level instructions (`~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md`) carrying cross-project conventions |
 
-Names and packaging are proposals. Add an Analyst role only if council assignments reveal a gap Architect cannot fill; domain experts (music, UI/UX) are consumer-declared roles via existing routing.
+Names and packaging are proposals.
+
+### User-level conventions (opt-in)
+
+The same conventions (docs vault layout, plan/task naming, `.agents`/`bin`/`scripts` and `just`, who writes CURRENT/TASK_LOGS/PROBLEMS, definition of done) were restated by hand across four repositories. Ruach ships a short template the user applies themselves; onboarding may offer it and show the target paths but never writes global settings. It points to the canonical convention ADRs rather than copying them, and project `AGENTS.md` stays authoritative where they differ. Add an Analyst role only if council assignments reveal a gap Architect cannot fill; domain experts (music, UI/UX) are consumer-declared roles via existing routing.
 
 ### Gemini as a worker/advisor agent (not orchestrator)
 
@@ -129,15 +135,15 @@ Antigravity (`agy`) already loads `AGENTS.md`, `GEMINI.md` and `.agents/skills`,
 
 ### Suggested sequence
 
-1. **Bugfix + `ruach-debugging`** (smallest; builds on `ruach-testing`): establish intended behavior, reproduce, isolate cause, scoped fix, regression coverage, verify original failure, apply review/delivery requirements. Architect optional.
-2. **Tester role + `ruach-runtime-testing` + `ruach-workflow-qa`**: assignments describe user goals per identified build; report states which experiences were actually exercised (reading audio code is not hearing it); assignment names required capabilities (browser, desktop/game input, logs, screenshots, audio); isolate per-worktree state (profiles, saves, ports); seeds/save states recorded for reproduction, not made contracts.
-3. **Bug-hunt**: area/risk-bounded investigation; results classified as source-supported, reproduced, suspected, or product observation; "no confirmed defects" is valid with coverage and uncertainty stated; focused independent check on significant findings. "Find and fix" chains hunt to bugfix within scope; findings-only ends at the report.
-4. **Council**:
+1. **Council** (first: the most-used workflow not yet in Ruach, 21 hand-built councils in 8 days; builds on the 0.3.x council specimen):
    - One workflow, two modes: single round then pause; automatic N total rounds (including the independent first round). "Up to N, stop when stable" is an explicit variation.
    - Round boundary: a round closes before any of its answers are distributed. Later rounds receive peers' actual reports (not only the Coordinator summary), the question, new evidence, and references.
    - Member report: current position, evidence and assumptions, accepted/rejected peer arguments with reasons, change since last round (no material change is valid), remaining disagreement, what would resolve it. Reuse handoff for completion metadata.
    - Coordinator synthesizes by proposition, not vote count: established, conditional, disputed, why it matters, what helps choose. Technical claims stay attributed.
    - Roster: same-role members with optional distinct perspectives, or mixed specialists. Reuse workers across rounds; durable state is the brief, per-round reports, and one council record so a later round resumes after sessions are released.
+2. **Bugfix + `ruach-debugging`** (smallest; builds on `ruach-testing`): establish intended behavior, reproduce, isolate cause, scoped fix, regression coverage, verify original failure, apply review/delivery requirements. Architect optional.
+3. **Tester role + `ruach-runtime-testing` + `ruach-workflow-qa`**: assignments describe user goals per identified build; report states which experiences were actually exercised (reading audio code is not hearing it); assignment names required capabilities (browser, desktop/game input, logs, screenshots, audio); isolate per-worktree state (profiles, saves, ports); seeds/save states recorded for reproduction, not made contracts.
+4. **Bug-hunt**: area/risk-bounded investigation; results classified as source-supported, reproduced, suspected, or product observation; "no confirmed defects" is valid with coverage and uncertainty stated; focused independent check on significant findings. "Find and fix" chains hunt to bugfix within scope; findings-only ends at the report.
 
 ### 0.4 demonstrations (black-box, not wording snapshots)
 
