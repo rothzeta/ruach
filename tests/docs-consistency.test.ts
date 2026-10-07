@@ -79,7 +79,8 @@ test('the Herdr suite runs with a raised per-test timeout in just test and is do
   expect(read('docs/operations.md')).toContain('--timeout 30000');
 });
 
-test('known limitations and the harness-eval config reference document the content-based clean check', () => {
-  expect(read('docs/operations.md')).toContain('clean_check_budget');
-  expect(read('skills/ruach-harness-eval/references/config.md')).toContain('0.3 contract change');
+test('known limitations document the filter fail-closed behavior and the trust boundary', () => {
+  expect(read('docs/operations.md')).toContain('content_filter_state');
+  expect(read('docs/operations.md')).toContain('not a defense against a hostile candidate');
+  expect(read('skills/ruach-harness-eval/references/config.md')).toContain('not a defense against a hostile candidate');
 });

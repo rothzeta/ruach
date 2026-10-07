@@ -71,6 +71,8 @@ Offline evidence, the Codex export evaluation and the pending smoke checklist ar
 
 All P1 and P2 findings closed with regressions; CI green on a clean checkout; a newcomer can install and complete a small task by following the README alone; native smoke checks recorded for Claude and Codex.
 
+Still outstanding at the last 0.3 notes: a GitHub CI run and a real consumer-task run.
+
 ---
 
 ## 0.3.x — Measurement (runs alongside 0.3 finishing)
