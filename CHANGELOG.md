@@ -2,6 +2,10 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
+## Unreleased
+
+- `ruach-changelog` skill: opt-in hook script that appends each finished turn (and Claude compaction summaries) from Claude Code, Codex and agy to a consumer-declared JSONL file, plus a command that writes project-level Codex and agy registrations. The Ruach plugin now ships `hooks/hooks.json` (async `Stop`/`PostCompact`), a no-op for projects without `.ruach/changelog.json`.
+
 ## 0.3.0 — 2026-10-07
 
 Scope follows the [roadmap](docs/roadmap.md); evidence is in `docs/reports/0.3/`.
