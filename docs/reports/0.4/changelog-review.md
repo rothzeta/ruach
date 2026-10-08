@@ -2,13 +2,21 @@
 task: RUACH-0.4-changelog-review
 role: reviewer
 status: complete
-outcome: Changes requested. One blocking finding (the config target can write outside the project) and five should-fix findings (Claude project root, lock takeover race and an untested lock, register quoting and duplicates, test gaps). The normalization, opt-in silence, exit 0 / `{}` and the plugin hook file are otherwise sound.
-reviewed_revision: fea6aab8539347b735d35818d63963acf767d32e
-tested_revision: fea6aab8539347b735d35818d63963acf767d32e
+outcome: "Re-review at a32e051: approve. B1, S1-S5, O1, O2 and the missing-bun guard are fixed, and each fix has a test that fails without it. Non-blocking follow-ups: stale lines in the impl report and design §8, plus minor optional edge cases (see Re-review). First round at fea6aab: changes requested." 
+first_round_outcome: Changes requested. One blocking finding (the config target can write outside the project) and five should-fix findings (Claude project root, lock takeover race and an untested lock, register quoting and duplicates, test gaps). The normalization, opt-in silence, exit 0 / `{}` and the plugin hook file are otherwise sound.
+reviewed_revision: a32e051404819c65dfb0a609a0524a423d13f6fe
+first_reviewed_revision: fea6aab8539347b735d35818d63963acf767d32e
+fix_revision: b76ec14a9c16be7d88539a76a15838786dbc16c0
+tested_revision: a32e051404819c65dfb0a609a0524a423d13f6fe
 artifacts:
   - docs/reports/0.4/changelog-review.md
   - docs/assignments/0.4/changelog-review.md
 verification:
+  - "re-review, cd skills/ruach-changelog && bun test (at a32e051): 30 pass, 0 fail"
+  - "re-review, just check (at a32e051): exit 0"
+  - "re-review, bun run test (at a32e051): 90 pass, 0 fail"
+  - "re-review, scratch reproductions on a32e051: ../, absolute, symlinked file, symlinked directory and dangling symlink all refused (stderr, exit 0, {}, nothing outside the project); Claude subdir cwd with CLAUDE_PROJECT_DIR logs; register with a space quotes paths; second copy leaves 1 Stop and 1 PostCompact entry"
+  - "re-review, mutation runs (8 mutants in scratch): every fix reverted makes its tests fail; with both scripts removed, 3 of 30 pass (2 hook-file tests that do not use the scripts, plus the register reject test)"
   - "cd skills/ruach-changelog && bun test (at fea6aab): 16 pass, 0 fail"
   - "just check (at fea6aab): exit 0 (identities, links, tsc)"
   - "bun run test (at fea6aab): 90 pass, 0 fail (root ./tests only; the changelog suite runs under just test)"
@@ -17,6 +25,7 @@ verification:
   - "not run: live Claude, Codex or agy hook invocations"
 discoveries:
   - "The skill PROVENANCE.md is the root copy. It describes extraction from tehom-brainlab and does not list ruach-changelog, which was newly authored. This is a repo-wide mechanism, outside this task's scope."
+  - "Stale lines on the reviewed branch: docs/reports/0.4/changelog-impl.md discoveries[0] says the plugin hook location is not confirmed against the docs (this review confirmed it); its body still describes the <target>.lock lock; design §8 still says it appends under a file lock"
   - "bun run test does not include the skill suites; just test does."
 blockers: []
 ---
@@ -139,3 +148,58 @@ Scope: all changed files are within the assignment's scope (`skills/ruach-change
   - `CLAUDE_PROJECT_DIR` is exported to hook commands and is "the project root where the session started", while `cwd` is the "current working directory when the hook is invoked". This supports S1.
 
 Unconfirmed: the docs do not say what an async hook's non-zero exit does. For example, `bun` missing from `PATH` (127) probably shows a non-blocking failure notice on every turn in every project. Optional: guard the command, e.g. `command -v bun >/dev/null || exit 0`.
+
+## Re-review
+
+Re-reviewed `task/changelog` at `a32e051`: fixes in `b76ec14`, report updates in `4c01700` and `a32e051`. The reviewed worktree was not edited and is still clean.
+
+**Verdict: approve.** Every first-round finding is fixed, and each fix has a test that fails when the fix is reverted. The remaining items are non-blocking. The stale documentation lines are cheap to fix before merge.
+
+### Verification
+
+- **Suites at `a32e051`:**
+  - skill suite: 30 pass, 0 fail;
+  - `just check`: exit 0;
+  - `bun run test`: 90 pass, 0 fail.
+- **Scratch reproductions** on an exported copy of `a32e051`:
+  - `../`, absolute, symlinked file, symlinked directory (both a new subdirectory and a direct file in it) and dangling symlink targets are all refused, with a stderr note, exit 0 and `{}`. Nothing was created outside the project, and the victim file was unchanged.
+  - Claude payload `cwd=proj/sub` with `CLAUDE_PROJECT_DIR=proj` logs to `proj`.
+  - Register with `--project ".../repo with space"` writes single-quoted `bun`, script and project paths for both Codex and agy.
+  - Registering from a second copy leaves 1 `Stop` and 1 `PostCompact` Ruach entry.
+- **Mutation runs:** for each fix, the fix was reverted in a fresh export and the suite run.
+
+| Finding | Mutation | Tests failing |
+| --- | --- | --- |
+| B1 | `resolve` instead of `confine`, no `O_NOFOLLOW` | 4 (the 4 confinement refusals) |
+| S1 | `cwd` before `CLAUDE_PROJECT_DIR` | 1 (`Claude prefers CLAUDE_PROJECT_DIR over a moved cwd`) |
+| S2 | first-round `appendLocked` reinstated | 1 (`no lock file is created and a leftover one never blocks or is removed`) |
+| S3 | `quote` as identity | 2 (exact-files, space-path command really runs) |
+| S4 | `isOurs` by exact script path | 1 (`running from another copy replaces…`) |
+| O1 | event-shape check removed | 1 (`a non-array event value is a clear error…`) |
+| bun guard | guard removed from `hooks/hooks.json` | 2 (exact command, missing-bun) |
+| S5 | both scripts deleted | 27 of 30 fail |
+
+- **S5 detail:** the 3 tests that still pass with the scripts deleted are the 2 `hooks/hooks.json` tests, which do not use the scripts, and `rejects a missing project directory without writing`. The subagent test now fails without the script, and it has a control line.
+- **S2:** the lock is gone. The design now relies on one `O_APPEND` `write` per line, with a short-write check, and SKILL.md documents this for local files. The concurrency test documents that property; it cannot detect a missing lock because there is no lock left.
+- **O2:** the stray `.ruach-tmp` write is removed.
+
+### Stale lines (non-blocking; fix before merge)
+
+1. `docs/reports/0.4/changelog-impl.md` `discoveries[0]`: "Not confirmed against the docs in this session; confirm on first plugin install." This review confirmed the location, format, `${CLAUDE_PLUGIN_ROOT}` and `async` against the official docs (see Claude plugin hook above).
+2. The same report's body: "Lock is a `<target>.lock` file created exclusively (stale after 10 s)." The lock was removed in `b76ec14`.
+3. The same report's discoveries: "target relative to project root". Since `b76ec14` the target must be relative and must stay inside the project.
+4. The same report's verification list mixes first-round lines (`16 pass`) with the review round without labelling which round each belongs to.
+5. `docs/design/0.4-suggestions-from-ramec-orchestration.md:164` (§8, in the implementer's scope): "appends under a file lock". It is now one `O_APPEND` write, with no lock.
+
+### Optional (new, minor)
+
+- **R1. O1 is only partly covered.** `register.ts` checks `codex.hooks` but not the top level of `.codex/hooks.json`:
+  - `null` or `5` still crash with an uncaught `TypeError` (exit 1; nothing is written);
+  - `[]` exits 0, prints "wrote", and writes `[]` back, so the Codex registration is lost without any error (reproduced).
+
+  Direction: apply the same plain-object check as for agy, before `codex.hooks ??= {}`.
+- **R2. `confine` false positive.** `relative(...).startsWith('..')` also rejects in-project names such as `..foo/x.jsonl` (reproduced: "resolves outside the project"). This is safe, but the check is imprecise. Direction: test `rel === '..' || rel.startsWith('..' + sep)`.
+- **R3. Unclear message for a dangling symlink target.** It is rejected with a raw `ENOENT … lstat` message instead of "is a symbolic link". It is safe either way.
+- **R4. Redundant check.** The `isSymbolicLink` check in `confine` is never needed: the realpath check rejects symlinks that point outside, and `O_NOFOLLOW` rejects those that point inside. Removing it left all 30 tests passing. It can stay as an explicit message, or be dropped for simplicity.
+- **R5. `.git` paths are accepted.** A target inside the project but under `.git/` (for example `.git/config`, or the `.git` file of a linked worktree) is accepted and would corrupt Git metadata. This is within "inside the project", so it is not a containment breach. Consider refusing `.git` path segments.
+- **R6. agy quoting unverified.** Single-quoted paths assume agy runs hook commands through a POSIX shell. The Codex form was tested via `sh -c`; agy's execution was not verified, and it was already listed as unverified.
