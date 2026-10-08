@@ -48,6 +48,7 @@ test:
     @cd skills/ruach-handoff && "{{bun}}" test
     @cd skills/ruach-herdr && "{{bun}}" test --timeout 30000
     @cd skills/ruach-harness-eval && "{{bun}}" test
+    @cd skills/ruach-changelog && "{{bun}}" test
 
 # Resolve or launch a role using Ruach's source resources.
 agent-routing *args:

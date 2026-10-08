@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "bun \"${CLAUDE_PLUGIN_ROOT}/skills/ruach-changelog/scripts/changelog.ts\" --harness claude", "async": true } ] }
+    ],
+    "PostCompact": [
+      { "hooks": [ { "type": "command", "command": "bun \"${CLAUDE_PLUGIN_ROOT}/skills/ruach-changelog/scripts/changelog.ts\" --harness claude", "async": true } ] }
+    ]
+  }
+}
