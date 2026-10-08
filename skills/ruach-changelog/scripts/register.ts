@@ -6,6 +6,9 @@ import { join, resolve } from 'node:path';
 const script = resolve(import.meta.dir, 'changelog.ts');
 const bun = process.execPath;
 const marker = 'ruach-changelog';
+// Stable across copies (source checkout, consumer snapshot, plugin cache): recognises our own entries.
+const signature = 'ruach-changelog/scripts/changelog.ts';
+const quote = (value: string) => `'${value.replaceAll("'", "'\\''")}'`;
 
 const i = process.argv.indexOf('--project');
 const project = i >= 0 && process.argv[i + 1] ? resolve(process.argv[i + 1]) : '';
@@ -14,8 +17,8 @@ if (!project || !existsSync(project) || !statSync(project).isDirectory()) {
   process.exit(2);
 }
 
-const command = (harness: string) => `${bun} ${script} --harness ${harness} --project ${project}`;
-const isOurs = (entry: any) => JSON.stringify(entry).includes(script);
+const command = (harness: string) => `${quote(bun)} ${quote(script)} --harness ${harness} --project ${quote(project)}`;
+const isOurs = (entry: any) => JSON.stringify(entry).includes(signature);
 
 function read(path: string): any {
   if (!existsSync(path)) return {};
@@ -34,7 +37,10 @@ function write(path: string, value: unknown): void {
 const codexPath = join(project, '.codex/hooks.json');
 const codex = read(codexPath);
 codex.hooks ??= {};
+const invalid = (what: string): never => { console.error(`${what}: unexpected shape; leaving both files untouched`); process.exit(2); };
+if (typeof codex.hooks !== 'object' || Array.isArray(codex.hooks)) invalid(codexPath);
 for (const event of ['Stop', 'PostCompact']) {
+  if (codex.hooks[event] !== undefined && !Array.isArray(codex.hooks[event])) invalid(`${codexPath} hooks.${event}`);
   const others = (codex.hooks[event] ?? []).filter((entry: unknown) => !isOurs(entry));
   codex.hooks[event] = [...others, { hooks: [{ type: 'command', command: command('codex'), async: true }] }];
 }
@@ -42,6 +48,7 @@ for (const event of ['Stop', 'PostCompact']) {
 // agy: map of hook name -> event arrays; synchronous, Stop only.
 const agyPath = join(project, '.agents/hooks.json');
 const agy = read(agyPath);
+if (typeof agy !== 'object' || agy === null || Array.isArray(agy)) invalid(agyPath);
 agy[marker] = { Stop: [{ type: 'command', command: command('agy'), timeout: 30 }] };
 
 write(codexPath, codex);

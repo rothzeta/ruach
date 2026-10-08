@@ -1,6 +1,6 @@
 # Harness reference
 
-Facts come from probes on this machine (Claude Code hooks reference, Codex 0.161, agy 1.3.1). Detection: `conversationId`/`transcriptPath` → agy; `turn_id` → codex; otherwise claude. Registrations also pass `--harness`, which takes precedence. `--project` fixes the project root; otherwise `cwd`, `workspacePaths[0]`, `CLAUDE_PROJECT_DIR`, then the process cwd.
+Facts come from probes on this machine (Claude Code hooks reference, Codex 0.161, agy 1.3.1). Detection: `conversationId`/`transcriptPath` → agy; `turn_id` → codex; otherwise claude. Registrations also pass `--harness`, which takes precedence. `--project` fixes the project root; otherwise for Claude `CLAUDE_PROJECT_DIR` (the payload `cwd` moves when the agent `cd`s), then `cwd`, `workspacePaths[0]`, then the process cwd.
 
 | | Claude Code | Codex 0.161 | agy 1.3.1 |
 |---|---|---|---|

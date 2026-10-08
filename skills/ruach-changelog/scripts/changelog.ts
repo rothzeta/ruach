@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
-// Append one normalized changelog line per hook payload. Never blocks a turn: always exits 0 and prints `{}`.
-import { closeSync, existsSync, mkdirSync, openSync, readFileSync, statSync, unlinkSync, appendFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+// Append one normalized changelog line per hook payload (single O_APPEND write, no lock). Never blocks a turn: always exits 0 and prints `{}`.
+import { constants, closeSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, writeSync } from 'node:fs';
+import { dirname, isAbsolute, relative, resolve } from 'node:path';
 
 type Payload = Record<string, unknown>;
 type Harness = 'claude' | 'codex' | 'agy';
@@ -49,21 +49,28 @@ export function normalize(p: Payload, hint?: string): Entry | null {
   return { timestamp, harness, session, turn: str(p.turn_id), kind: 'turn', text, ...(text ? {} : { reason: 'payload has no last_assistant_message' }) };
 }
 
-function sleep(ms: number): void { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); }
-
-export function appendLocked(target: string, line: string): void {
-  mkdirSync(dirname(target), { recursive: true });
-  const lock = `${target}.lock`;
-  const deadline = Date.now() + 20_000;
+/** Resolve a configured target inside the project, or throw. Rejects absolute paths, symlinked files and escapes via symlinked directories. */
+export function confine(root: string, configured: string): string {
+  if (isAbsolute(configured)) throw new Error('"target" must be relative to the project');
+  const base = realpathSync(root), target = resolve(base, configured);
+  let ancestor = target;
   for (;;) {
-    try { closeSync(openSync(lock, 'wx')); break; } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-      try { if (Date.now() - statSync(lock).mtimeMs > 10_000) unlinkSync(lock); } catch { /* released meanwhile */ }
-      if (Date.now() > deadline) throw new Error(`timed out waiting for ${lock}`);
-      sleep(5 + Math.random() * 15);
-    }
+    try { lstatSync(ancestor); break; } catch { const parent = dirname(ancestor); if (parent === ancestor) throw new Error('"target" has no existing ancestor'); ancestor = parent; }
   }
-  try { appendFileSync(target, line); } finally { try { unlinkSync(lock); } catch { /* already gone */ } }
+  const real = realpathSync(ancestor), inside = relative(base, real);
+  if (inside.startsWith('..') || isAbsolute(inside) || relative(base, target).startsWith('..')) throw new Error('"target" resolves outside the project');
+  if (ancestor === target && lstatSync(target).isSymbolicLink()) throw new Error('"target" is a symbolic link');
+  return target;
+}
+
+/** One O_APPEND write call per line: the kernel appends it atomically for a regular local file, so concurrent writers cannot interleave. No lock is used. */
+export function appendLine(target: string, line: string): void {
+  mkdirSync(dirname(target), { recursive: true });
+  const fd = openSync(target, constants.O_WRONLY | constants.O_APPEND | constants.O_CREAT | constants.O_NOFOLLOW, 0o600);
+  try {
+    const bytes = Buffer.from(line);
+    if (writeSync(fd, bytes) !== bytes.length) throw new Error('short write; line may be incomplete');
+  } finally { closeSync(fd); }
 }
 
 function option(argv: string[], name: string): string | undefined {
@@ -81,7 +88,9 @@ function main(): void {
   } catch (error) { console.error(`ruach-changelog: unusable hook input: ${(error as Error).message}`); return; }
 
   const workspaces = Array.isArray(payload.workspacePaths) ? str(payload.workspacePaths[0]) : null;
-  const root = option(argv, '--project') ?? str(payload.cwd) ?? workspaces ?? process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
+  const harness = option(argv, '--harness') || detect(payload);
+  const claudeDir = harness === 'claude' ? process.env.CLAUDE_PROJECT_DIR : undefined;
+  const root = option(argv, '--project') || claudeDir || str(payload.cwd) || workspaces || process.env.CLAUDE_PROJECT_DIR || process.cwd();
   const configPath = resolve(root, '.ruach/changelog.json');
   if (!existsSync(configPath)) return; // not opted in
   let target: string, kinds: string[];
@@ -89,13 +98,13 @@ function main(): void {
     const config = JSON.parse(readFileSync(configPath, 'utf8'));
     if (typeof config?.target !== 'string' || !config.target) throw new Error('config declares no "target"');
     if (!Array.isArray(config.kinds)) throw new Error('config declares no "kinds" array');
-    target = resolve(root, config.target);
+    target = confine(root, config.target);
     kinds = config.kinds;
   } catch (error) { console.error(`ruach-changelog: ${configPath}: ${(error as Error).message}`); return; }
 
-  const entry = normalize(payload, option(argv, '--harness'));
+  const entry = normalize(payload, harness);
   if (!entry || !kinds.includes(entry.kind)) return;
-  appendLocked(target, `${JSON.stringify(entry)}\n`);
+  appendLine(target, `${JSON.stringify(entry)}\n`);
 }
 
 if (import.meta.main) {

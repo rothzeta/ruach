@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, test } from 'bun:test';
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -93,12 +93,15 @@ describe('normalized lines', () => {
 });
 
 describe('never blocks, never writes unasked', () => {
-  test('subagent payloads produce nothing', () => {
+  test('subagent payloads produce nothing, but the same project logs a non-subagent control', () => {
     optIn();
-    run({ ...claudeStop(), agent_id: 'a-1' });
-    run({ ...codexStop(), agent_id: 'a-2' });
-    run({ ...agyStop([{ type: 'PLANNER_RESPONSE', content: 'z' }]), agent_id: 'a-3' });
+    for (const payload of [{ ...claudeStop(), agent_id: 'a-1' }, { ...codexStop(), agent_id: 'a-2' }, { ...agyStop([{ type: 'PLANNER_RESPONSE', content: 'z' }]), agent_id: 'a-3' }]) {
+      const r = run(payload);
+      expect([r.status, r.stdout]).toEqual([0, '{}']);
+    }
     expect(lines()).toEqual([]);
+    run(claudeStop());
+    expect(lines().length).toBe(1);
   });
   test('project without config produces nothing, exit 0, stdout {}', () => {
     const r = run(claudeStop());
@@ -119,7 +122,6 @@ describe('never blocks, never writes unasked', () => {
     expect(lines()).toEqual([]);
   });
   test('config without a target does nothing and reports on stderr', () => {
-    writeFileSync(join(project, '.ruach-tmp'), '');
     mkdirSync(join(project, '.ruach'));
     writeFileSync(join(project, '.ruach/changelog.json'), JSON.stringify({ kinds: ['turn'] }));
     const r = run(claudeStop());
@@ -148,6 +150,76 @@ test('concurrent appends do not interleave lines', async () => {
   expect(new Set(parsed.map(p => p.session)).size).toBe(12);
 });
 
+
+describe('target confinement', () => {
+  const rejected = (r: ReturnType<typeof run>) => { expect([r.status, r.stdout]).toEqual([0, '{}']); expect(r.stderr.length).toBeGreaterThan(0); };
+  test('relative escape is refused', () => {
+    const outside = fresh();
+    optIn(['turn'], `../${outside.split('/').pop()}/esc.jsonl`);
+    rejected(run(claudeStop()));
+    expect(readdirSync(outside)).toEqual([]);
+  });
+  test('absolute target is refused', () => {
+    const outside = fresh();
+    optIn(['turn'], join(outside, 'abs.jsonl'));
+    rejected(run(claudeStop()));
+    expect(readdirSync(outside)).toEqual([]);
+  });
+  test('symlinked target file is refused', () => {
+    const outside = fresh();
+    writeFileSync(join(outside, 'victim.txt'), 'keep\n');
+    symlinkSync(join(outside, 'victim.txt'), join(project, 'log.jsonl'));
+    optIn(['turn'], 'log.jsonl');
+    rejected(run(claudeStop()));
+    expect(readFileSync(join(outside, 'victim.txt'), 'utf8')).toBe('keep\n');
+  });
+  test('symlinked directory in the target path is refused', () => {
+    const outside = fresh();
+    symlinkSync(outside, join(project, 'linked'));
+    optIn(['turn'], 'linked/sub/log.jsonl');
+    rejected(run(claudeStop()));
+    expect(readdirSync(outside)).toEqual([]);
+  });
+  test('a nested relative target inside the project still works', () => {
+    optIn(['turn'], 'a/b/c.jsonl');
+    expect(run(claudeStop()).stderr).toBe('');
+    expect(readFileSync(join(project, 'a/b/c.jsonl'), 'utf8').length).toBeGreaterThan(0);
+  });
+});
+
+describe('project root and appending', () => {
+  test('Claude prefers CLAUDE_PROJECT_DIR over a moved cwd', () => {
+    optIn();
+    mkdirSync(join(project, 'sub'));
+    run({ ...claudeStop(), cwd: join(project, 'sub') }, [], { CLAUDE_PROJECT_DIR: project });
+    expect(lines().length).toBe(1);
+  });
+  test('an empty --project falls back to the payload cwd', () => {
+    optIn();
+    run(claudeStop(), ['--project', '']);
+    expect(lines().length).toBe(1);
+  });
+  test('no lock file is created and a leftover one never blocks or is removed', () => {
+    optIn();
+    mkdirSync(join(project, 'logs'));
+    const lock = join(project, 'logs/changelog.jsonl.lock');
+    writeFileSync(lock, '');
+    const r = run(claudeStop());
+    expect([r.status, r.stdout, r.stderr]).toEqual([0, '{}', '']);
+    expect(lines().length).toBe(1);
+    expect(readdirSync(join(project, 'logs')).sort()).toEqual(['changelog.jsonl', 'changelog.jsonl.lock']);
+  });
+  test('appends to existing content without rewriting it', () => {
+    optIn();
+    mkdirSync(join(project, 'logs'));
+    writeFileSync(join(project, 'logs/changelog.jsonl'), '{"old":1}\n');
+    run(claudeStop());
+    const raw = readFileSync(join(project, 'logs/changelog.jsonl'), 'utf8').split('\n');
+    expect(raw[0]).toBe('{"old":1}');
+    expect(raw.length).toBe(3);
+  });
+});
+
 describe('registration command', () => {
   function tree(directory: string, prefix = ''): string[] {
     return readdirSync(directory, { withFileTypes: true }).flatMap(e =>
@@ -163,8 +235,8 @@ describe('registration command', () => {
     const codex = JSON.parse(readFileSync(join(project, '.codex/hooks.json'), 'utf8'));
     expect(Object.keys(codex.hooks).sort()).toEqual(['PostCompact', 'Stop']);
     const command = codex.hooks.Stop[0].hooks[0].command as string;
-    expect(command).toContain(script);
-    expect(command).toContain(`--project ${project}`);
+    expect(command).toContain(`'${script}'`);
+    expect(command).toContain(`--project '${project}'`);
     expect(command).toContain('--harness codex');
     expect(codex.hooks.Stop[0].hooks[0].async).toBe(true);
     const agy = JSON.parse(readFileSync(join(project, '.agents/hooks.json'), 'utf8'));
@@ -179,6 +251,43 @@ describe('registration command', () => {
     expect(stop.length).toBe(2);
     expect(JSON.stringify(stop)).toContain('echo mine');
   });
+  test('quotes paths with spaces and the written command really runs', () => {
+    const spaced = join(fresh(), 'my repo');
+    mkdirSync(spaced);
+    expect(spawnSync(process.execPath, [register, '--project', spaced], { encoding: 'utf8' }).status).toBe(0);
+    mkdirSync(join(spaced, '.ruach'));
+    writeFileSync(join(spaced, '.ruach/changelog.json'), JSON.stringify({ target: 'log.jsonl', kinds: ['turn'] }));
+    const command = JSON.parse(readFileSync(join(spaced, '.codex/hooks.json'), 'utf8')).hooks.Stop[0].hooks[0].command as string;
+    const r = spawnSync('sh', ['-c', command], { input: JSON.stringify({ hook_event_name: 'Stop', session_id: 'q', turn_id: 't', last_assistant_message: 'hi' }), encoding: 'utf8', cwd: tmpdir() });
+    expect([r.status, r.stdout]).toEqual([0, '{}']);
+    expect(readFileSync(join(spaced, 'log.jsonl'), 'utf8')).toContain('"hi"');
+  });
+  test('running from another copy replaces rather than duplicates own entries', () => {
+    const copy = join(fresh(), 'skills/ruach-changelog/scripts');
+    mkdirSync(copy, { recursive: true });
+    writeFileSync(join(copy, 'register.ts'), readFileSync(register, 'utf8'));
+    writeFileSync(join(copy, 'changelog.ts'), readFileSync(script, 'utf8'));
+    for (const r of [register, join(copy, 'register.ts')]) expect(spawnSync(process.execPath, [r, '--project', project], { encoding: 'utf8' }).status).toBe(0);
+    const codex = JSON.parse(readFileSync(join(project, '.codex/hooks.json'), 'utf8'));
+    expect(codex.hooks.Stop.length).toBe(1);
+    expect(codex.hooks.Stop[0].hooks[0].command).toContain(join(copy, 'changelog.ts'));
+  });
+  test('merges with an existing agy hooks.json', () => {
+    mkdirSync(join(project, '.agents'));
+    writeFileSync(join(project, '.agents/hooks.json'), JSON.stringify({ other: { Stop: [{ type: 'command', command: 'echo x' }] } }));
+    expect(spawnSync(process.execPath, [register, '--project', project], { encoding: 'utf8' }).status).toBe(0);
+    const agy = JSON.parse(readFileSync(join(project, '.agents/hooks.json'), 'utf8'));
+    expect(Object.keys(agy).sort()).toEqual(['other', 'ruach-changelog']);
+    expect(agy.other.Stop[0].command).toBe('echo x');
+  });
+  test('a non-array event value is a clear error (exit 2) and writes nothing', () => {
+    mkdirSync(join(project, '.codex'));
+    writeFileSync(join(project, '.codex/hooks.json'), JSON.stringify({ hooks: { Stop: 'nope' } }));
+    const r = spawnSync(process.execPath, [register, '--project', project], { encoding: 'utf8' });
+    expect(r.status).toBe(2);
+    expect(r.stderr).not.toContain('TypeError');
+    expect(existsSync(join(project, '.agents'))).toBe(false);
+  });
   test('rejects a missing project directory without writing', () => {
     const r = spawnSync(process.execPath, [register, '--project', join(project, 'nope')], { encoding: 'utf8' });
     expect(r.status).not.toBe(0);
@@ -186,12 +295,18 @@ describe('registration command', () => {
   });
 });
 
-test('Ruach plugin hook file registers async Stop and PostCompact', () => {
+test('Ruach plugin hook file registers async Stop and PostCompact with the project dir and a bun guard', () => {
   const file = join(import.meta.dir, '../../../hooks/hooks.json');
   const hooks = JSON.parse(readFileSync(file, 'utf8')).hooks;
   for (const event of ['Stop', 'PostCompact']) {
     const entry = hooks[event][0].hooks[0];
     expect(entry.async).toBe(true);
-    expect(entry.command).toContain('${CLAUDE_PLUGIN_ROOT}/skills/ruach-changelog/scripts/changelog.ts');
+    expect(entry.command).toBe('command -v bun >/dev/null 2>&1 || exit 0; bun "${CLAUDE_PLUGIN_ROOT}/skills/ruach-changelog/scripts/changelog.ts" --harness claude --project "${CLAUDE_PROJECT_DIR}"');
   }
+});
+
+test('plugin command exits 0 silently when bun is missing', () => {
+  const entry = JSON.parse(readFileSync(join(import.meta.dir, '../../../hooks/hooks.json'), 'utf8')).hooks.Stop[0].hooks[0];
+  const r = spawnSync('/bin/sh', ['-c', entry.command], { input: '{}', encoding: 'utf8', env: { PATH: '/nonexistent' } });
+  expect([r.status, r.stdout, r.stderr]).toEqual([0, '', '']);
 });
