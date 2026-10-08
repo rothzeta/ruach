@@ -31,12 +31,12 @@ Script `skills/ruach-changelog/scripts/changelog.ts`, command `scripts/register.
 
 ## Review round (changelog-review)
 
-- B1: target must be relative; realpath of the nearest existing ancestor must be inside the realpath of the project; symlinked target refused; file opened with O_NOFOLLOW. Failures: stderr, exit 0, \`{}\`. Tests: \`../\`, absolute, symlinked file, symlinked directory, plus an in-project nested control.
-- S1: plugin command passes \`--project "\${CLAUDE_PROJECT_DIR}"\`; for Claude the script also prefers \`CLAUDE_PROJECT_DIR\` over payload cwd; empty \`--project\` falls through.
-- S2: lock removed. One O_APPEND write per line, documented in SKILL.md. Tests that can fail: a leftover \`.lock\` file neither blocks nor is touched (the old code waited 5 s and failed), no lock is created, existing content is preserved, plus the 12-writer 200 KB concurrency test.
-- S3: all paths single-quoted; test runs the written command via \`sh -c\` from a path with a space.
-- S4: own entries recognised by \`ruach-changelog/scripts/changelog.ts\` and replaced; test registers from two copies.
-- S5: subagent test asserts exit 0 and \`{}\` plus a non-subagent control; added agy merge, exact Claude async command, and missing-bun tests.
+- B1: target must be relative; realpath of the nearest existing ancestor must be inside the realpath of the project; symlinked target refused; file opened with O_NOFOLLOW. Failures: stderr, exit 0, `{}`. Tests: `../`, absolute, symlinked file, symlinked directory, plus an in-project nested control.
+- S1: plugin command passes `--project "${CLAUDE_PROJECT_DIR}"`; for Claude the script also prefers `CLAUDE_PROJECT_DIR` over payload cwd; empty `--project` falls through.
+- S2: lock removed. One O_APPEND write per line, documented in SKILL.md. Tests that can fail: a leftover `.lock` file neither blocks nor is touched (the old code waited 5 s and failed), no lock is created, existing content is preserved, plus the 12-writer 200 KB concurrency test.
+- S3: all paths single-quoted; test runs the written command via `sh -c` from a path with a space.
+- S4: own entries recognised by `ruach-changelog/scripts/changelog.ts` and replaced; test registers from two copies.
+- S5: subagent test asserts exit 0 and `{}` plus a non-subagent control; added agy merge, exact Claude async command, and missing-bun tests.
 - O1: non-array/non-object shapes exit 2 with a message, nothing written. O2: stray test file removed.
-- Plugin command guarded with \`command -v bun\`; tested with an empty PATH.
-- Not changed: O3 (PROVENANCE wording, repo-wide). \`bun run test\` excludes skill suites; \`just test\` includes this one.
+- Plugin command guarded with `command -v bun`; tested with an empty PATH.
+- Not changed: O3 (PROVENANCE wording, repo-wide). `bun run test` excludes skill suites; `just test` includes this one.
