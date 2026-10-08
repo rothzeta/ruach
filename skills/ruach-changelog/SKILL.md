@@ -16,7 +16,7 @@ The hook does nothing until the project has `.ruach/changelog.json`:
 { "target": "docs/session-changelog.jsonl", "kinds": ["turn", "compaction"] }
 ```
 
-There is no default target. `target` must be relative and stay inside the project: absolute paths, `..` escapes and symlinked files or directories are refused (stderr note, exit 0, `{}`). Summaries quote the conversation: git-ignore the target. The hook never commits.
+There is no default target. `target` must be relative and stay inside the project: absolute paths, `..` escapes and symlinked files or directories and paths inside `.git` are refused (stderr note, exit 0, `{}`). Summaries quote the conversation: git-ignore the target. The hook never commits.
 
 ## Register
 

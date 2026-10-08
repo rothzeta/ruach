@@ -36,9 +36,11 @@ function write(path: string, value: unknown): void {
 // Codex: same shape as Claude hook files; Stop and PostCompact.
 const codexPath = join(project, '.codex/hooks.json');
 const codex = read(codexPath);
-codex.hooks ??= {};
 const invalid = (what: string): never => { console.error(`${what}: unexpected shape; leaving both files untouched`); process.exit(2); };
-if (typeof codex.hooks !== 'object' || Array.isArray(codex.hooks)) invalid(codexPath);
+const plain = (v: unknown) => typeof v === 'object' && v !== null && !Array.isArray(v);
+if (!plain(codex)) invalid(codexPath);
+codex.hooks ??= {};
+if (!plain(codex.hooks)) invalid(`${codexPath} hooks`);
 for (const event of ['Stop', 'PostCompact']) {
   if (codex.hooks[event] !== undefined && !Array.isArray(codex.hooks[event])) invalid(`${codexPath} hooks.${event}`);
   const others = (codex.hooks[event] ?? []).filter((entry: unknown) => !isOurs(entry));
@@ -48,7 +50,7 @@ for (const event of ['Stop', 'PostCompact']) {
 // agy: map of hook name -> event arrays; synchronous, Stop only.
 const agyPath = join(project, '.agents/hooks.json');
 const agy = read(agyPath);
-if (typeof agy !== 'object' || agy === null || Array.isArray(agy)) invalid(agyPath);
+if (!plain(agy)) invalid(agyPath);
 agy[marker] = { Stop: [{ type: 'command', command: command('agy'), timeout: 30 }] };
 
 write(codexPath, codex);

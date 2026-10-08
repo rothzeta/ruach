@@ -180,6 +180,17 @@ describe('target confinement', () => {
     rejected(run(claudeStop()));
     expect(readdirSync(outside)).toEqual([]);
   });
+  test('a target under a .git path segment is refused', () => {
+    mkdirSync(join(project, '.git'));
+    optIn(['turn'], '.git/changelog.jsonl');
+    rejected(run(claudeStop()));
+    expect(readdirSync(join(project, '.git'))).toEqual([]);
+  });
+  test('an in-project name that merely starts with two dots is allowed', () => {
+    optIn(['turn'], '..foo/x.jsonl');
+    expect(run(claudeStop()).stderr).toBe('');
+    expect(readFileSync(join(project, '..foo/x.jsonl'), 'utf8').length).toBeGreaterThan(0);
+  });
   test('a nested relative target inside the project still works', () => {
     optIn(['turn'], 'a/b/c.jsonl');
     expect(run(claudeStop()).stderr).toBe('');
@@ -286,6 +297,15 @@ describe('registration command', () => {
     const r = spawnSync(process.execPath, [register, '--project', project], { encoding: 'utf8' });
     expect(r.status).toBe(2);
     expect(r.stderr).not.toContain('TypeError');
+    expect(existsSync(join(project, '.agents'))).toBe(false);
+  });
+  test.each([['null', 'null'], ['5', '5'], ['[]', '[]']])('a top-level %s in .codex/hooks.json is a clear error (exit 2) and writes nothing', (_name, raw) => {
+    mkdirSync(join(project, '.codex'));
+    writeFileSync(join(project, '.codex/hooks.json'), raw);
+    const r = spawnSync(process.execPath, [register, '--project', project], { encoding: 'utf8' });
+    expect(r.status).toBe(2);
+    expect(r.stderr).not.toContain('TypeError');
+    expect(readFileSync(join(project, '.codex/hooks.json'), 'utf8')).toBe(raw);
     expect(existsSync(join(project, '.agents'))).toBe(false);
   });
   test('rejects a missing project directory without writing', () => {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // Append one normalized changelog line per hook payload (single O_APPEND write, no lock). Never blocks a turn: always exits 0 and prints `{}`.
 import { constants, closeSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, realpathSync, writeSync } from 'node:fs';
-import { dirname, isAbsolute, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 
 type Payload = Record<string, unknown>;
 type Harness = 'claude' | 'codex' | 'agy';
@@ -58,7 +58,9 @@ export function confine(root: string, configured: string): string {
     try { lstatSync(ancestor); break; } catch { const parent = dirname(ancestor); if (parent === ancestor) throw new Error('"target" has no existing ancestor'); ancestor = parent; }
   }
   const real = realpathSync(ancestor), inside = relative(base, real);
-  if (inside.startsWith('..') || isAbsolute(inside) || relative(base, target).startsWith('..')) throw new Error('"target" resolves outside the project');
+  const outside = (rel: string) => rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel);
+  if (outside(inside) || outside(relative(base, target))) throw new Error('"target" resolves outside the project');
+  if (relative(base, target).split(sep).includes('.git')) throw new Error('"target" must not be inside .git');
   if (ancestor === target && lstatSync(target).isSymbolicLink()) throw new Error('"target" is a symbolic link');
   return target;
 }
