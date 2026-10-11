@@ -1,0 +1,18 @@
+# Batch 1 combined plan review round 2
+
+Role: Architect. Task: roadmap-batch1-round2-reliability. Worker: sol-roadmap-reliability. Use your existing worktree/branch; resolve current HEAD for the inspected revision.
+
+Owner steering supersedes the original one-correction-round limit: “R1-R3, first when they are done(up to 5 rounds to agree, or puts the disagrements in an arbitration file and move on) next batch, etc.” Two initial independent plans were round 1. This is round 2. Batch 2 must wait for both Architects' agreement or recorded arbitration; the two same authorized Sol sessions will then plan the remaining roadmap batches. No implementation, extra workers, paid eval/smoke sessions, publication or global configuration is authorized.
+
+Read the exact frozen combined round-1 artifacts under `/tmp/ruach-roadmap-planning-20261011/batch1/round1/`: reliability-plan.md, reliability-handoff.md, coordination-plan.md, coordination-handoff.md. Both peers' initial work is complete. R1/R2 plan came from commit a77d5cb3b1f2dd540c10db4942cd7bf5cd668b76; R3 plan came from fc31e91f859f62320d7535321c935ebedd921411. Verify plan digests: reliability ccb146fbcc1f1bc07930a4a37aa666dbd0801227c67b082800b13aaf7360fe94; coordination 2a343fad1fa6fa0f14d29ce57a37a16b3b0d1dfbfa8f44d46dfe8879358f85d9. Frozen roadmap inputs remain authoritative. Current task record is read-only at `/opt/dev/ruach/docs/reports/roadmap-planning/task-record.md`.
+
+Question: Is this exact combined R1–R3 planning package ready for implementation handoff, with compatible scope, ownership, dependency and authority boundaries? This is Architect peer review of plans, not a claim that features, evaluations or release evidence are complete.
+
+Review both plans and their interface. Check exact scope/file ownership and shared-edit serialization; complete first executable packets; tests/support/docs/base/branch/report/permissions; source versus hypotheses; native/Git trust and actual commands; authorization preservation; interrupted-task handling; blind evaluation boundary; review/delivery correctness. Inspect only relevant source when needed; do not load Coordinator workflow bodies. Existing owner choices/factual access gaps may remain named holds without constituting disagreement.
+
+Owned outputs only: `docs/reports/roadmap-planning/batch1-round2-reliability.md` and this unchanged assignment. Do not change either plan in this review round. Report specific necessary corrections with evidence and stable IDs prefixed B1-A-. Distinguish must-fix, consequential disagreement, optional suggestion, factual investigation hold and owner decision. State accepted/rejected peer arguments with reasons, assumptions, disagreement impact and resolving evidence.
+
+Use canonical handoff YAML plus metadata `batch: 1`, `round: 2`, and `agreement: agree|changes|disagree`. “agree” means this exact unchanged pair is ready, with named future holds. “changes” means correctable plan issues prevent agreement. “disagree” means a substantive incompatible position remains. Include reviewed plan digests, findings, readiness and precise owner arbitration question if needed. A completed review report may have status complete while agreement is changes/disagree; do not conflate those states.
+
+Validate your own report with the source handoff validator and --repo; check owned links and git diff --check; do not rerun unrelated suites. Commit only report/unchanged assignment and return creating SHA, agreement, and findings IDs. Wait for the next round's actual reports or next-batch assignment; do not proceed yourself. Both reports are closed before the Coordinator distributes them.
+
