@@ -48,19 +48,20 @@ For the interrupted `CSV-142` task in the [task record specimen](task-record.md#
 
 ```markdown
 # Assignment CSV-142/help-v2 (role: implementer)
-Task/work: CSV-142 / WORK-03. Assignment version 2; supersedes help-v1 for placement only. Workspace: existing worktree, branch task/csv-142-help (retained), base fixture/r0 (resolved existing commit; recheck before launch).
-Binding decisions: DEC-003, "Instead of the inline example, put that same help example in the help file. Keep the quoting fix." DEC-004 is unresolved (see REPLY-001): include neither the second example nor the UTF-8 note.
-Dependencies: none to start. WORK-04 integration waits for this report and WORK-02.
+Task/work: CSV-142 / WORK-03. Assignment version 2; supersedes help-v1 for help placement only. Consumer guidance: GUIDANCE.md (commit record, assignments and reports at phase boundaries; no push).
+Workspace: new worktree /work/csv-wt/help-v2, new branch task/csv-142-help-v2 (checked unused at launch), base fixture/r0 resolved to an existing commit before launch.
+Binding decisions: DEC-001 "Fix CSV quoting and the export screen..." (task scope; no push); DEC-003 "Instead of the inline example, put that same help example in the help file. Keep the quoting fix." DEC-004 is unresolved (REPLY-001): include neither the second example nor the UTF-8 note.
+Dependencies: satisfied: WORK-03 v1 execution observed ended; its branch task/csv-142-help and retained/CSV-142/help.diff are preserved. Nothing blocks start. WORK-04 integration waits for this report and WORK-02.
 
 Outcome: the export help example appears in docs/export-help.md.
-Scope: docs/export-help.md. Do not edit src/ui/, tests/ or the quoting code; do not merge the superseded inline work. Reuse the example text from retained/CSV-142/help.diff after reading it.
-Protected: everything else, including WORK-01/02 paths and the task record.
+Scope: docs/export-help.md only. Read, never edit, retained/CSV-142/help.diff and the old branch; reuse its example text, not its inline code. Do not edit src/, tests/ or the quoting code.
+Protected: everything else, including WORK-01/02 paths, the old branch and worktree, and the task record.
 
-Acceptance: the help file shows the example; the export screen carries no inline example.
-Verification: run `npm test`; no test changes needed, and report a conflict instead of editing tests.
+Acceptance: docs/export-help.md contains the example; this branch changes no file under src/ or tests/.
+Verification: from the worktree root run `npm test` (bound 300 s); no test changes are needed. Report a conflict instead of editing tests.
 Route and resources: default route; no port, profile or save needed.
 Scope changes: stop and send a justification in the report; the Coordinator decides.
-Handoff: docs/reports/CSV-142/help.md with the ruach-handoff leading block and its validator; commit this assignment unchanged with the report. Independent review happens on WORK-04's combined revision, not here.
+Handoff: write reports/CSV-142/help.md with the ruach-handoff leading block, run its validator with --repo, and commit this assignment unchanged with the report. Independent review happens on WORK-04's combined revision.
 ```
 
 Contents every assignment states: role, task ID, workspace and base, outcome, scope and ownership, acceptance, verification and test restrictions, scope-change procedure, report path and commit rule. Add dependencies, expected revisions or review inputs only when they apply. Review assignments also name the exact revision under review.
