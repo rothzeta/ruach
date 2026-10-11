@@ -47,7 +47,12 @@ jobs:
         run: just test
       - name: Fetch history and tags for packet tests
         # The smoke packet's offline install control clones this repository and resolves the v0.3.0 tag.
-        run: git fetch --unshallow --tags origin || git fetch --tags origin
+        run: |
+          if [ "$(git rev-parse --is-shallow-repository)" = true ]; then
+            git fetch --unshallow --tags origin
+          else
+            git fetch --tags origin
+          fi
       - name: Native smoke packet typecheck and tests
         run: |
           node_modules/.bin/tsc -p evals/next-release-native-smoke/tsconfig.json

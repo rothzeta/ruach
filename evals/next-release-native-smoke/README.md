@@ -26,6 +26,9 @@ bun evals/next-release-native-smoke/scripts/check.ts --packet <fresh-dir> [--tag
 # Offline snapshot install control in a temp clone with isolated HOME/CODEX_HOME/CLAUDE_CONFIG_DIR.
 bun evals/next-release-native-smoke/scripts/offline-install.ts --source <repo> --work <fresh-dir> --revision <sha>
 bun evals/next-release-native-smoke/scripts/offline-install.ts --source <repo> --work <fresh-dir> --version 0.3.0
+# The control verifies snapshot, resources and frozen skill dependencies independently of host-native tools. `ready --route herdr`
+# is run and reported as it is (`native_readiness`, exit 0 only when that route is ready, exit 1 with what is missing); a host
+# without Herdr, Claude or Codex still passes the control and is reported not ready. It never proves native readiness.
 # Access probe (see below)
 bun evals/next-release-native-smoke/scripts/probe.ts --spec <spec.json>
 bun test --timeout 30000 evals/next-release-native-smoke
@@ -33,7 +36,7 @@ bun test --timeout 30000 evals/next-release-native-smoke
 node_modules/.bin/tsc -p evals/next-release-native-smoke/tsconfig.json
 ```
 
-`prepare.ts` writes `config.json` (harness-eval acceptance: visible tests with a zero-pass guard, hidden cases, handoff validator), `scope.json`, `manifest.json` (base SHA, the prepared candidate (control only; a live run's candidate is resolved by `check.ts` at check time), subject file digests) and the assignment copy under `<dir>/evidence`, away from the candidate in `<dir>/consumer`. Child processes are bounded and their process groups killed on return. The checker is a pinned copy of `skills/ruach-harness-eval` at the source revision recorded by the future run; `model_use_verified` stays false.
+`prepare.ts` writes `config.json` (harness-eval acceptance: visible tests with a zero-pass guard, hidden cases, handoff validator), `scope.json`, `manifest.json` (base SHA, the prepared candidate (control only; a live run's candidate is resolved by `check.ts` at check time), subject file digests) and the assignment copy under `<dir>/evidence`, away from the candidate in `<dir>/consumer`. Child processes are bounded and their process groups killed on return. The checker is a pinned copy of `skills/ruach-harness-eval` at the source revision recorded by the future run; `model_use_verified` stays false. The run id, kind and `none-no-model-subject` route in `config.json` and checker output are offline placeholders for this control, not the subject's route: a native run records its actual route and model separately in its own evidence, and `model_use_verified` stays false.
 
 ## Blind claims
 

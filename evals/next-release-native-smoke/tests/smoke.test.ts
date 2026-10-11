@@ -96,11 +96,29 @@ test('offline install uses an explicit existing revision and isolated child root
   const report = await offlineInstall({ source: sourceRoot, work: join(temp, 'install'), revision: head, label: 'current-head' });
   expect(process.env.HOME).toBe(before);
   expect(report.source_revision).toBe(head);
-  expect(report.steps.map(s => [s.name, s.exit]), JSON.stringify(report.outputs)).toEqual([['install', 0], ['check', 0], ['frozen-deps:ruach-handoff', 0], ['frozen-deps:ruach-herdr', 0], ['ready', 0]]);
-  expect(report.ok).toBe(true);
+  const ready = JSON.parse(report.outputs.ready.stdout);
+  // Native availability is the host's: the control passes either way, and `ready` is neither forced nor faked.
+  expect(report.steps.map(s => [s.name, s.exit]), JSON.stringify(report.outputs)).toEqual([['install', 0], ['check', 0], ['frozen-deps:ruach-handoff', 0], ['frozen-deps:ruach-herdr', 0], ['ready', ready.routes.herdr.ready ? 0 : 1]]);
+  expect(report.native_readiness!.route_herdr_ready).toBe(ready.routes.herdr.ready);
+  expect(report.ok, JSON.stringify(report.outputs)).toBe(true);
   expect(report.final_candidate_evidence).toBe(false);
   for (const root of [report.isolated_env.HOME, report.isolated_env.CODEX_HOME, report.isolated_env.CLAUDE_CONFIG_DIR]) expect(root.startsWith(join(temp, 'install'))).toBe(true);
   expect(JSON.parse(report.outputs.ready.stdout).routes).toBeDefined();
+}, 200000);
+
+test('offline install control passes and reports unavailable natives when herdr, claude and codex are not on PATH', async () => {
+  const bin = join(temp, 'bin'); mkdirSync(bin); symlinkSync(bun, join(bin, 'bun'));
+  const path = `${bin}:/usr/bin:/bin`;
+  for (const name of ['herdr', 'claude', 'codex']) expect(existsSync(join('/usr/bin', name)) || existsSync(join('/bin', name)), `${name} must be absent for this regression`).toBe(false);
+  const head = await git(sourceRoot, ['rev-parse', 'HEAD']);
+  const report = await offlineInstall({ source: sourceRoot, work: join(temp, 'bare'), revision: head, path });
+  const ready = JSON.parse(report.outputs.ready.stdout);
+  expect(report.steps.map(s => [s.name, s.exit]), JSON.stringify(report.outputs)).toEqual([['install', 0], ['check', 0], ['frozen-deps:ruach-handoff', 0], ['frozen-deps:ruach-herdr', 0], ['ready', 1]]);
+  expect(ready.prerequisites.filter((p: any) => ['herdr', 'claude', 'codex'].includes(p.name)).map((p: any) => [p.name, p.found])).toEqual([['herdr', false], ['claude', false], ['codex', false]]);
+  expect(ready.routes.herdr.ready).toBe(false);
+  expect(ready.routes.herdr.missing.length).toBeGreaterThan(0);
+  expect(report.native_readiness!.route_herdr_ready).toBe(false);
+  expect(report.ok).toBe(true);
 }, 200000);
 
 test('the historical 0.3.0 route resolves its tag separately and is not final-candidate evidence', async () => {

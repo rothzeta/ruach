@@ -1,0 +1,39 @@
+diff --git a/src/Enoch.Ui/src/api.test.ts b/src/Enoch.Ui/src/api.test.ts
+index 69425f1..c71ca70 100644
+--- a/src/Enoch.Ui/src/api.test.ts
++++ b/src/Enoch.Ui/src/api.test.ts
+@@ -1,5 +1,5 @@
+ import { afterEach, describe, expect, it, vi } from 'vitest'
+-import { api } from './api'
++import { api, artifactDownloadUrl, evidenceDownloadUrl } from './api'
+ 
+ afterEach(() => vi.unstubAllGlobals())
+ 
+@@ -44,3 +44,14 @@ describe('API transport', () => {
+     await expect(api.getRun('run')).rejects.toThrow('Invalid run response')
+   })
+ })
++
++describe('download URLs', () => {
++  it('encodes run and publication IDs in artifact and evidence links alike', () => {
++    expect(artifactDownloadUrl('run /?#', 'item /?#')).toBe(
++      '/api/v1/runs/run%20%2F%3F%23/artifacts/item%20%2F%3F%23',
++    )
++    expect(evidenceDownloadUrl('run /?#', 'item /?#')).toBe(
++      '/api/v1/runs/run%20%2F%3F%23/evidence/item%20%2F%3F%23',
++    )
++  })
++})
+diff --git a/src/Enoch.Ui/src/api.ts b/src/Enoch.Ui/src/api.ts
+index 48131de..408381e 100644
+--- a/src/Enoch.Ui/src/api.ts
++++ b/src/Enoch.Ui/src/api.ts
+@@ -30,7 +30,7 @@ export function artifactDownloadUrl(runId: string, artifactId: string): string {
+ }
+ 
+ export function evidenceDownloadUrl(runId: string, evidenceId: string): string {
+-  return `/api/v1/runs/${encodeURIComponent(runId)}/evidence/${encodeURIComponent(evidenceId)}`
++  return `/api/v1/runs/${encodeURIComponent(runId)}/evidence/${evidenceId}`
+ }
+ 
+ async function get(path: string, signal?: AbortSignal): Promise<unknown> {

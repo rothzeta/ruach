@@ -1,0 +1,86 @@
+{
+ "codex-snapshot": {
+  "error": null,
+  "count": 14,
+  "ruach_skills": [
+   [
+    "ruach-changelog",
+    "repo"
+   ],
+   [
+    "ruach-handoff",
+    "repo"
+   ],
+   [
+    "ruach-harness-eval",
+    "repo"
+   ],
+   [
+    "ruach-herdr",
+    "repo"
+   ],
+   [
+    "ruach-librarian",
+    "repo"
+   ],
+   [
+    "ruach-simplification",
+    "repo"
+   ],
+   [
+    "ruach-testing",
+    "repo"
+   ],
+   [
+    "ruach-workflow-feature",
+    "repo"
+   ],
+   [
+    "ruach-workflow-knowledge",
+    "repo"
+   ]
+  ]
+ },
+ "codex-skills-cli": {
+  "error": null,
+  "count": 14,
+  "ruach_skills": [
+   [
+    "ruach-changelog",
+    "user"
+   ],
+   [
+    "ruach-handoff",
+    "user"
+   ],
+   [
+    "ruach-harness-eval",
+    "user"
+   ],
+   [
+    "ruach-herdr",
+    "user"
+   ],
+   [
+    "ruach-librarian",
+    "user"
+   ],
+   [
+    "ruach-simplification",
+    "user"
+   ],
+   [
+    "ruach-testing",
+    "user"
+   ],
+   [
+    "ruach-workflow-feature",
+    "user"
+   ],
+   [
+    "ruach-workflow-knowledge",
+    "user"
+   ]
+  ]
+ }
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "owner_words": "add a fake task to enoch, then discard when done",
+  "original": {"path": "/opt/dev/enoch", "branch": "main", "head": "d163a4132a6840d2604e6e17883612eb77a901ec", "status_before_and_after": "clean (main...origin/main)", "other_branches": ["renovate/configure", "security/source-map-js"], "touched": false},
+  "clone": {"path": "/tmp/ruach-implementation-20261011/enoch-exercise/clone", "cloned_with": "git clone --no-hardlinks --template=, core.hooksPath=/dev/null, origin removed", "branch": "ruach-exercise/url-encoding-seed", "base_commit": "d163a4132a6840d2604e6e17883612eb77a901ec", "seed_commit": "ea33fc70456bf45bdd51e6eedcb83cf5cdf89347", "seed_message": "exercise seed", "node_modules": "copied read-only from the original's ignored src/Enoch.Ui/node_modules (no install, no network)"},
+  "seed_patch_sha256": "b8f48d297e6ad8d0b75fb476c3302022fd9a76d658f6522059e1057c3c88c2d3",
+  "discard": "Coordinator removes /tmp/ruach-implementation-20261011/enoch-exercise after recorded evidence; nothing was installed or linked in the original"
+}
