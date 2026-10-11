@@ -3,38 +3,56 @@ task: roadmap-batch3-reliability
 role: architect
 status: complete
 batch: 3
-round: 1
-outcome: "Independent conditional C2 and C3 implementation handoff designed; actual peer review and execution remain pending."
-inspected_revision: 50f867a3da58a600e37a5dfc602dd459a7a04d30
+round: 3
+agreement: changes
+outcome: "Owned C2/C3 plan corrected for accepted eval typecheck/CI and assistance-versus-answer-access findings; exact revised-pair review remains pending."
+inspected_revision: 9cd5a7ec16f2a3e0e2f77ae61b22778ea0d4b01f
+initial_inspected_revision: 50f867a3da58a600e37a5dfc602dd459a7a04d30
 source_revision: d75039aa7b82b262e2f28af08630258fb7f77180
 accepted_batch1_reliability_plan_revision: 4b62d7b97d6400c4fb2a340c2466ce52d0d86f6e
 accepted_batch1_coordination_plan_revision: 6a08b3f5fa1fb03e0b19024fcec3503d2708e64b
 accepted_batch2_reliability_plan_revision: 0588d5639f52347a116aeb457c63f6d651cbf587
 accepted_batch2_coordination_plan_revision: 36716b46aeab878cc8737a9f980888c28b3be44e
-plan_sha256: 6d986d93816ac6a76f5390529ad98862a5416eec4bc1bf17fc4055ad12b866ce
+closed_reliability_review_revision: 9cd5a7ec16f2a3e0e2f77ae61b22778ea0d4b01f
+closed_coordination_review_revision: a124d3f6b25ebf567ae5a12a499374305ca14ee3
+plan_sha256: e964514692697c011569d49bb92d0a9fa800958020f125bdcfde14912b01eb12
 assignment_sha256: 0892c8af61e367cb815920730c5f1acdebb2226deb5d1ba4c149200cb94b2ba4
+correction_assignment_sha256: e3dccc095dc656d0dece88ac1d9d5c9a05b0082d9cfdbad381c9992d6a2c525a
 artifacts:
   - docs/design/next-adapter-bugfix-plan.md
   - docs/reports/roadmap-planning/batch3-reliability.md
-  - docs/reports/roadmap-planning/assignment-batch3-reliability.md
+  - docs/reports/roadmap-planning/batch3-round3-reliability.md
+  - docs/reports/roadmap-planning/assignment-batch3-round3-reliability.md
+finding_dispositions:
+  B3-A-01: accepted-coordinator-receipt-corrected-history-preserved
+  B3-B-04: accepted-coordinator-receipt-corrected-history-preserved
+  B3-A-02: accepted-corrected-owned-plan
+  B3-B-02: accepted-corrected-owned-plan
+  B3-B-03: accepted-corrected-owned-plan
+  B3-A-03: accepted-own-boundary-retained-peer-correction-awaits-exact-review
+  B3-B-01: accepted-own-boundary-retained-peer-correction-awaits-exact-review
+  B3-A-04: retained-factual-execution-holds
+  B3-A-05: retained-owner-execution-holds
 verification:
-  - "Read frozen roadmap/native-parity/RAMEC inputs and verified their digests; read only relevant accepted prior interfaces and existing contracts/source/tests/authoring. No batch-3 peer answers or workflow bodies loaded."
-  - "Read-only native probes: agy exists but help/version both abort SIGILL, exit 132; gemini absent; Herdr 0.9.0 help recognizes both kinds. Primary agy docs inspected; no native subject or configuration mutation performed."
-  - "Source handoff validator --repo: exit 0, ok true, all six revision fields resolved. Owned links: exit 0, three documents/33 links; two initial source-path errors were corrected before this result."
-  - "git diff --check: exit 0; all three new-file whitespace checks clean (diff exit 1 means different files). Assignment SHA-256 unchanged; status contains only the three owned paths. Default staging failed exit 128 on the linked index.lock (read-only filesystem). One narrow staging/check/local-commit escalation is required; staged whitespace and exact three-file scope gate that action, and its actual result/creating SHA are returned externally."
-review: not-run
+  - "Historical round 1: frozen inputs/relevant source inspected independently; agy help/version SIGILL exit 132, gemini absent, Herdr 0.9.0 kind help. No native probes repeated or subjects run in this correction."
+  - "Read both actual closed round-2 reports and relevant exact round-1 sections; both review SHA-256 values match their named commit blobs. Revisited accepted R1 answer-access boundary."
+  - "Both source handoff validators --repo passed, exit 0/ok true, resolving nine and five revision fields. Owned links passed: four documents/38 links. Final bytes revalidated before commit."
+  - "git diff --check and both new-file whitespace checks passed; both plan digest fields match current bytes, original/current assignment hashes unchanged. Status contains exactly four owned paths. Default staging failed exit 128 on linked index.lock (read-only filesystem); one narrow four-file staging/check/local-commit escalation is required. Staged scope/whitespace gate that action; actual result/creating SHA returned externally."
+review:
+  - "Closed review arguments consumed with actual dispositions; no revised-pair agreement or implementation/native/behavior acceptance claimed."
 discoveries:
-  - "C2 remains need/capability-gated; changelog support and native agent-file docs do not prove additive interactive launch. Initial proposed adapter is non-Coordinator, inherit-only; explicit inherit is required through the auto-review-default development wrapper."
-  - "C3 instruction-only skills can prepare independently. C-IN exclusively writes shared root metadata/docs after accepted prior shared integration and feature inputs; feature packets own local notices and propose shared entries."
+  - "Packet-local tsconfig/pinned compiler commands and C-IN-only CI recipes now cover implemented C3 packets and conditional C2."
+  - "Assisted/unassisted prompts and blind/non-blind/unverified answer access are distinct in protocol and both review/grading briefs."
+  - "Tester readiness requires actual committed-snapshot observations; active role discovery removes the basis for a mandatory registry patch."
 blockers:
-  - "Execution holds: concrete C2 need and functional/versioned additive native proof; authorized isolated subjects; real C3 defect selection/original retest; Coordinator workflow compatibility; actual source/predecessor/delivery scope."
-readiness: "Design ready for actual peer review and Coordinator acceptance; no feature implementation or later batch authorized."
+  - "Execution holds remain: concrete C2 need/versioned additive proof, authorized isolated subjects, real C3 selection/original retest, workflow compatibility, actual predecessor/hosted/delivery evidence and scope."
+readiness: "Owned corrections ready for exact revised-pair review; wait for both correction reports. No batch 4 or feature implementation."
 ---
 
-The [detailed plan](../../design/next-adapter-bugfix-plan.md) separates a capability-first thin agy adapter from technical ruach-debugging guidance and the Coordinator-only ruach-workflow-bugfix. It supplies bounded file ownership, prerequisite reasons, source-base/branch resolution, exact future checks/resources, copyable pending Implementer/Reviewer/evaluator assignments, one future advisory task and one actual defect-selection protocol.
+The [detailed plan](../../design/next-adapter-bugfix-plan.md) retains conditional additive/inherit-only C2 and distinct debugging/Coordinator workflow resources. It now owns packet-local typecheck files and commands, supplies accepted tests/typechecks to C-IN's bounded shared CI phase, and preserves hosted results as future evidence.
 
-Matching C-IN ownership is preserved without an alternative: accepted R3-B → R-IN → B2-IN shared phases precede its shared-file phase; independently reviewed HV-IN stays a B2-IN input. Disjoint preparation remains independent. C2 fixture edits follow accepted overlapping R2-L/R5-L inputs. Root notices/version/catalog edits are distinct from feature-owned local copies; no route activation or release is implied.
+The visibility protocol and copyable Reviewer/evaluator briefs independently record prompt assistance and answer access, retain failed controls and preserve actual native-route/resource equivalence. Tester discovery/readiness evidence comes before any justified bounded installer amendment. Coordinator-only workflow-body compatibility, independent technical/metadata/behavior grading, C-IN predecessor/refresh/full-union review, local notices and consumer authority remain intact.
 
-Proposed C1 → C3 → C4 → C5 interfaces and optional C2 remain subject to actual peer review. Native/behavioral/real-defect proof is held rather than inferred from source, fixtures, metadata or documentation. No planning blocker or arbitration question was found; the listed holds apply to later execution.
+Actual reasons and every finding disposition are in the [correction report](batch3-round3-reliability.md). Coordinator corrected the earlier receipt identity; prior assignments/reviews stay unchanged. No closed-review argument is rejected or sent to arbitration. Exact peer correction bytes and final pair have not been reviewed.
 
-Only the plan, this handoff and the [unchanged assignment](assignment-batch3-reliability.md) are owned. Final artifact checks and local commit results are recorded below/returned externally; no unrelated suites, source changes, feature subjects or later batch. Wait for actual closed peer reports and Coordinator direction within the five-round agreement limit.
+Only the four current owned artifacts are changed/committed; the [correction assignment](assignment-batch3-round3-reliability.md) is unchanged. Validation and actual commit results are recorded/returned externally. Wait for exact-pair review and Coordinator direction.
