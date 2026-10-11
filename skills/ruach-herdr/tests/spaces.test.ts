@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 const worker=resolve(import.meta.dir,'../scripts/worker.ts');
 const fake=resolve(import.meta.dir,'fixtures/fake-cli.ts');
 const git=Bun.which('git')!;
-let cwdOverride:string|undefined,root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
+let verb='start',cwdOverride:string|undefined,root:string,repo:string,home:string,bin:string,temp:string,target:string,behavior:any;
 function command(args:string[]) {
   const result=Bun.spawnSync([git,'-C',repo,...args],{stdout:'pipe',stderr:'pipe'});
   if(result.exitCode!==0)throw new Error(result.stderr.toString());
@@ -18,7 +18,7 @@ async function records(name:string) {
 }
 async function launch(extra:string[]=[],env:Record<string,string>={},kind='claude') {
   await writeFile(join(root,'behavior.json'),JSON.stringify(behavior));
-  const p=Bun.spawn([process.execPath,worker,'start','--name','designer','--role','architect','--cwd',cwdOverride??repo,'--repo',repo,
+  const p=Bun.spawn([process.execPath,worker,verb,'--name','designer','--role','architect','--cwd',cwdOverride??repo,'--repo',repo,
     '--kind',kind,'--model','test-model','--temp-dir',temp,...extra],{
     cwd:root,env:{...process.env,HOME:home,CLAUDE_CONFIG_DIR:join(home,'.claude'),CODEX_HOME:join(home,'.codex'),
       PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'',HERDR_WORKSPACE_ID:'',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
@@ -55,7 +55,7 @@ if(behavior.descendant&&args.includes('--show-toplevel')&&!args.includes('--quie
 process.exit(result.status??1);
 `);
   await chmod(join(bin,'git'),0o700);
-  behavior={daemonMissing:true,git,repo};cwdOverride=undefined;
+  behavior={daemonMissing:true,git,repo};cwdOverride=undefined;verb='start';
 });
 afterEach(async()=>{await rm(root,{recursive:true,force:true});});
 
@@ -278,6 +278,7 @@ test('dry-run reports linked mode without creating resources',async()=>{
 });
 test('failed linked creation exits 4 with the uncertain path and branch, retained, and never starts or retries',async()=>{
   behavior.linkedPartial=true;const r=await launch([],parent);expect(r.exit).toBe(4);
+  expect(r.data.workspace).toBeNull();expect(r.data.pane).toBeNull();
   expect(r.data.diagnostics[0].code).toBe('worktree_uncertain');expect(r.data.worktree_state).toBe('unknown');
   expect(r.data.worktree.path).toBe(target);expect(r.data.worktree.branch).toBe('ruach/designer');
   expect(command(['branch','--list','ruach/designer'])).toContain('ruach/designer');
@@ -286,6 +287,7 @@ test('failed linked creation exits 4 with the uncertain path and branch, retaine
 for(const [name,patch,code] of [['an unconfirmed linked registration',{linkedUnlinked:true},'worktree_uncertain'],['a response without its root pane',{linkedMalformed:true},'worktree_uncertain']] as const)test(`${name} after creation exits 4 and retains checkout and branch`,async()=>{
   behavior={...behavior,...patch};const r=await launch([],parent);expect(r.exit).toBe(4);expect(r.data.diagnostics[0].code).toBe(code);
   expect(r.data.worktree_state).toBe('unknown');expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
+  expect(r.data.workspace).toBe('w9');expect(r.data.pane).toBe(patch.linkedMalformed?null:'w9:p1');expect(r.data.submission_state).toBe('not-submitted');
   expect(command(['rev-parse','refs/heads/ruach/designer'])).toBe(command(['rev-parse','HEAD']));
   expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree']);
 });
@@ -295,3 +297,92 @@ test('split failure after linked creation retains worktree and branch without su
   expect(r.data.workspace).toBe('w9');expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree','split']);
   expect(await readFile(join(target,'tracked.txt'),'utf8')).toBe('Committed source\n');
 });
+
+// Receipts from Herdr are inspection hints only: kept through every failure, never readiness.
+function commit(message:string){command(['add','-A']);command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m',message]);return command(['rev-parse','HEAD']);}
+async function receiptFailure(patch:any,extra:string[]=[]) {
+  behavior={...behavior,...patch};const r=await launch(extra,parent);
+  expect(r.exit,r.stderr).toBe(4);expect(r.data.diagnostics[0].code).toBe('worktree_uncertain');expect(r.data.phase).toBe('worktree');
+  expect(r.data.worktree_state).toBe('unknown');expect(r.data.submission_state).toBe('not-submitted');expect(r.data.cleanup).toContain('Inspect');
+  expect((await records('mutations.jsonl')).map(x=>x.action)).toEqual(['worktree']);
+  expect((await records('native-launches.jsonl'))).toEqual([]);
+  return r;
+}
+test('a created checkout at the wrong HEAD keeps the workspace and root pane IDs without split or start',async()=>{
+  const first=command(['rev-parse','HEAD']);await writeFile(join(repo,'tracked.txt'),'Second\n');commit('Second');
+  const r=await receiptFailure({linkedWrongHead:first});
+  expect(r.data.workspace).toBe('w9');expect(r.data.pane).toBe('w9:p1');expect(r.data.worktree.path).toBe(target);
+  expect(command(['rev-parse','refs/heads/ruach/designer'])).toBe(first);
+});
+test('a response naming a different checkout path keeps the IDs without split or start',async()=>{
+  const r=await receiptFailure({linkedWrongPath:true});
+  expect(r.data.workspace).toBe('w9');expect(r.data.pane).toBe('w9:p1');
+});
+test('a nonzero Herdr result with a parseable receipt keeps its IDs, withholds raw output and never retries',async()=>{
+  const secret='sk-private-native-output';
+  const r=await receiptFailure({linkedNonzero:true,leak:secret});
+  expect(r.data.workspace).toBe('w9');expect(r.data.pane).toBe('w9:p1');
+  expect(r.stdout+r.stderr).not.toContain(secret);
+  expect((await records('git-calls.jsonl')).filter(a=>a.includes('worktree')&&a.includes('add'))).toHaveLength(0);
+});
+test('receipt IDs are validated individually as nonempty single-line strings',async()=>{
+  for(const [ids,workspace,pane] of [
+    [{workspace:'w9\nw10',pane:'w9:p1'},null,'w9:p1'],
+    [{workspace:'w9',pane:'w9:p1\r'},'w9',null],
+    [{workspace:'   ',pane:'w9:p1'},null,'w9:p1'],
+    [{workspace:'w9',pane:''},'w9',null],
+    [{workspace:7,pane:{id:'w9:p1'}},null,null],
+  ] as const) {
+    const r=await receiptFailure({linkedUnlinked:true,linkedIds:ids});
+    expect(r.data.workspace).toBe(workspace);expect(r.data.pane).toBe(pane);
+    await rm(join(root,'mutations.jsonl'),{force:true});await rm(join(root,'source-worktrees'),{recursive:true,force:true});command(['worktree','prune']);command(['branch','-D','ruach/designer']);
+  }
+},60000);
+
+// A requested subdirectory must exist as an ordinary tree in the pinned base.
+async function expectRefused(extra:string[],env:Record<string,string>={}) {
+  for(const [mode,args] of [['start',[]],['resolve',[]],['start',['--dry-run']]] as const) {
+    verb=mode;const r=await launch([...args,...extra],env);
+    expect(r.exit,r.stderr).toBe(2);expect(r.data.ok).toBe(false);
+    expect(r.data.diagnostics[0]).toMatchObject({code:'worktree_cwd_unavailable',field:'cwd'});
+    expect(r.data.worktree_state).toBe('not-created');expect(r.data.submission_state).toBe('not-submitted');
+  }
+  expect(await records('mutations.jsonl')).toEqual([]);expect(await records('native-launches.jsonl')).toEqual([]);
+  expect((await records('git-calls.jsonl')).some(a=>a.includes('worktree')&&a.includes('add'))).toBe(false);
+  expect(command(['branch','--list','ruach/designer'])).toBe('');expect(command(['worktree','list','--porcelain'])).not.toContain(target);
+  expect(await Bun.file(target).exists()).toBe(false);expect(await readdir(temp)).toEqual([]);
+}
+const pkg=()=>join(repo,'pkg');
+const modes=[['standalone',{}],['linked',parent]] as const;
+for(const [mode,env] of modes) {
+  test(`${mode}: an untracked nested directory is refused before any mutation`,async()=>{
+    await mkdir(pkg());await writeFile(join(pkg(),'new.txt'),'untracked\n');cwdOverride=pkg();await expectRefused([],env);
+  });
+  test(`${mode}: an empty directory is refused before any mutation`,async()=>{
+    await mkdir(pkg());cwdOverride=pkg();await expectRefused([],env);
+  });
+  test(`${mode}: a directory introduced after an explicitly older base is refused`,async()=>{
+    const older=command(['rev-parse','HEAD']);await mkdir(pkg());await writeFile(join(pkg(),'file.txt'),'package\n');commit('Package');
+    cwdOverride=pkg();await expectRefused(['--base',older],env);
+  });
+  test(`${mode}: a base path that is a tracked file, symlink or gitlink is refused`,async()=>{
+    // Each older base tracks pkg as a non-directory while the current checkout has a directory there.
+    const bases:string[]=[];
+    await writeFile(pkg(),'file\n');bases.push(commit('Blob'));await rm(pkg());
+    await symlink('tracked.txt',pkg());bases.push(commit('Symlink'));await rm(pkg());
+    command(['update-index','--add','--cacheinfo',`160000,${bases[0]},pkg`]);
+    command(['-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','--quiet','-m','Gitlink']);bases.push(command(['rev-parse','HEAD']));command(['rm','--quiet','--cached','pkg']);
+    await mkdir(pkg());await writeFile(join(pkg(),'file.txt'),'package\n');commit('Directory');
+    cwdOverride=pkg();for(const base of bases)await expectRefused(['--base',base],env);
+  },60000);
+}
+test('a tracked base directory with spaces and Unicode, in both modes, launches in its counterpart inside the worktree',async()=>{
+  const name='pkg ü: dir';const dir=join(repo,name);await mkdir(dir);await writeFile(join(dir,'file.txt'),'package\n');commit('Unicode');
+  cwdOverride=dir;
+  for(const [mode,env] of modes) {
+    const r=await launch([],env);expect(r.exit,r.stderr).toBe(0);expect(r.data.worktree_mode).toBe(mode);
+    expect(r.data.worktree.cwd).toBe(join(target,name));expect((await records('native-launches.jsonl')).at(-1).cwd).toBe(join(target,name));
+    await rm(join(root,'source-worktrees'),{recursive:true,force:true});command(['worktree','prune']);command(['branch','-D','ruach/designer']);
+    await rm(join(root,'native-launches.jsonl'),{force:true});
+  }
+},60000);

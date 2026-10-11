@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task": "native-smoke-range",
+  "assignment": "assignment.md",
+  "acceptance": {
+    "checks": [
+      {
+        "id": "visible-tests",
+        "argv": [
+          "<home>/.local/bin/bun",
+          "test",
+          "--timeout",
+          "30000"
+        ],
+        "cwd": "{repo}",
+        "timeout_ms": 120000,
+        "expect": {
+          "exit": 0,
+          "stderr_not_contains": "\n 0 pass\n"
+        }
+      },
+      {
+        "id": "hidden-cases",
+        "argv": [
+          "<home>/.local/bin/bun",
+          "-e",
+          "import {inclusiveRange as r, rangeSize as s} from './src/range.ts';\nconst eq=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);\nif(!eq(r(-2,2),[-2,-1,0,1,2])||!eq(r(7,7),[7])||!eq(r(3,1),[])||s(-2,2)!==5||s(3,1)!==0)process.exit(1);\nconsole.log('ok');"
+        ],
+        "cwd": "{repo}",
+        "timeout_ms": 60000,
+        "expect": {
+          "exit": 0,
+          "stdout": "ok\n"
+        }
+      },
+      {
+        "id": "handoff-valid",
+        "argv": [
+          "<home>/.local/bin/bun",
+          "<repo>/skills/ruach-handoff/scripts/validate.ts",
+          "docs/reports/smoke.md",
+          "--repo",
+          "{repo}"
+        ],
+        "cwd": "{repo}",
+        "timeout_ms": 60000,
+        "expect": {
+          "exit": 0
+        }
+      }
+    ]
+  },
+  "runs": [
+    {
+      "id": "control",
+      "repo": "../consumer",
+      "candidate": "refs/heads/candidate",
+      "kind": "control",
+      "model": "none-no-model-subject"
+    }
+  ]
+}

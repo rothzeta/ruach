@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "diagnostics": [],
+  "review_checks": {},
+  "canonical_hashes": {},
+  "tree_checks": {},
+  "evidence_checks": {},
+  "task": null,
+  "run": null,
+  "baseline_revision": "5edb120b1fd3f7f112bd66247deb2500620ae750",
+  "candidate_revision": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "worktree_head": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "branch": "candidate",
+  "changes": [
+    {
+      "status": "A",
+      "paths": [
+        "docs/reports/smoke.md"
+      ]
+    },
+    {
+      "status": "M",
+      "paths": [
+        "src/range.ts"
+      ]
+    }
+  ],
+  "dirty": [],
+  "clean": true,
+  "changed_paths": [
+    "docs/reports/smoke.md",
+    "src/range.ts"
+  ],
+  "assessed_paths": [
+    "docs/reports/smoke.md",
+    "src/range.ts"
+  ],
+  "unexpected_paths": [],
+  "protected_changes": []
+}

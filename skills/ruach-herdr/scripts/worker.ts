@@ -101,7 +101,7 @@ try {
   else {
     if(worktree) {
       phase='worktree';worktreeState='unknown';
-      if(linkedMode){const made=await createLinkedWorktree(herdr,cwd,link.parent!,v.name,worktree);workspace=made.workspace;pane=made.pane;}
+      if(linkedMode){const made=await createLinkedWorktree(herdr,cwd,link.parent!,v.name,worktree,ids=>{workspace=ids.workspace;pane=ids.pane;});workspace=made.workspace;pane=made.pane;}
       else await createWorktree(cwd,worktree);
       worktreeState='created';
       selected={...selected,cwd:worktree.cwd,resources};

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "ok": false,
+  "checks": [
+    {
+      "id": "visible-tests",
+      "fingerprint": "1d6f87e6ed69bbf46d43148eb13c7abe706010d8a1f81e7a1aef612eedf83f48",
+      "status": "failed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "test",
+        "--timeout",
+        "30000"
+      ],
+      "cwd": "<scratch>/base/consumer",
+      "timeout_ms": 120000,
+      "expected": {
+        "exit": 0,
+        "stderr_not_contains": "\n 0 pass\n"
+      },
+      "exit": 1,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "bun test v1.4.2 (744846f84)\n",
+      "stderr": "\ntests/range.test.ts:\n1 | import { expect, test } from 'bun:test';\n2 | import { inclusiveRange, rangeSize } from '../src/range';\n3 | \n4 | test('includes both endpoints', () => {\n5 |   expect(inclusiveRange(1, 3)).toEqual([1, 2, 3]);\n                                   ^\nerror: expect(received).toEqual(expected)\n\n@@ -3,3 +3,2 @@\n    2,\n-   3,\n  ]\n\n- Expected  - 1\n+ Received  + 0\n\n      at <anonymous> (<scratch>/base/consumer/tests/range.test.ts:5:32)\n(fail) includes both endpoints [0.36ms]\n3 | \n4 | test('includes both endpoints', () => {\n5 |   expect(inclusiveRange(1, 3)).toEqual([1, 2, 3]);\n6 | });\n7 | test('a single value range has one element', () => {\n8 |   expect(inclusiveRange(4, 4)).toEqual([4]);\n                                   ^\nerror: expect(received).toEqual(expected)\n\n- [\n-   4,\n- ]\n+ []\n\n- Expected  - 3\n+ Received  + 1\n\n      at <anonymous> (<scratch>/base/consumer/tests/range.test.ts:8:32)\n(fail) a single value range has one element [0.09ms]\n11 | test('a reversed range is empty', () => {\n12 |   expect(inclusiveRange(5, 2)).toEqual([]);\n13 |   expect(rangeSize(5, 2)).toBe(0);\n14 | });\n15 | test('size counts both endpoints', () => {\n16 |   expect(rangeSize(0, 9)).toBe(10);\n                               ^\nerror: expect(received).toBe(expected)\n\nExpected: 10\nReceived: 9\n\n      at <anonymous> (<scratch>/base/consumer/tests/range.test.ts:16:27)\n(fail) size counts both endpoints [0.07ms]\n\n 1 pass\n 3 fail\n 5 expect() calls\nRan 4 tests across 1 file. [11.00ms]\n",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": [
+        {
+          "code": "exit_mismatch",
+          "field": "expect.exit",
+          "message": "Exit expectation failed"
+        }
+      ]
+    },
+    {
+      "id": "hidden-cases",
+      "fingerprint": "2dfac9d8d7391ecec441af3b75eae12a0e692ff27a27e86233a6a91d05d81761",
+      "status": "failed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "-e",
+        "import {inclusiveRange as r, rangeSize as s} from './src/range.ts';\nconst eq=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);\nif(!eq(r(-2,2),[-2,-1,0,1,2])||!eq(r(7,7),[7])||!eq(r(3,1),[])||s(-2,2)!==5||s(3,1)!==0)process.exit(1);\nconsole.log('ok');"
+      ],
+      "cwd": "<scratch>/base/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0,
+        "stdout": "ok\n"
+      },
+      "exit": 1,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "",
+      "stderr": "",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": [
+        {
+          "code": "exit_mismatch",
+          "field": "expect.exit",
+          "message": "Exit expectation failed"
+        },
+        {
+          "code": "output_mismatch",
+          "field": "expect.stdout",
+          "message": "Exact output expectation failed"
+        }
+      ]
+    },
+    {
+      "id": "handoff-valid",
+      "fingerprint": "79b0f215d047334260cdae161137c0ba0012f08a3956df6eeaa75cb8922113b9",
+      "status": "failed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "<repo>/skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/smoke.md",
+        "--repo",
+        "<scratch>/base/consumer"
+      ],
+      "cwd": "<scratch>/base/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0
+      },
+      "exit": 2,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "{\"schema_version\":1,\"ok\":false,\"report\":\"<scratch>/base/consumer/docs/reports/smoke.md\",\"revisions\":[],\"diagnostics\":[{\"code\":\"INPUT_UNREADABLE\",\"path\":\"/report\",\"message\":\"Cannot read the report file.\"}]}\n",
+      "stderr": "INPUT_UNREADABLE /report: Cannot read the report file.\n",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": [
+        {
+          "code": "exit_mismatch",
+          "field": "expect.exit",
+          "message": "Exit expectation failed"
+        }
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "task": "native-smoke-range",
+  "run": "base",
+  "declared_route": {
+    "kind": "control",
+    "model": "none-no-model-subject",
+    "effort": null,
+    "model_use_verified": false,
+    "evidence": []
+  },
+  "assignment_sha256": "04697aa27d0921b76b8526f754f790e9b084f510b31ed8ccc1f8e0cad2f352ae",
+  "acceptance_sha256": "39050c52afcd851ac43fefc6fc6fa0a367d5832aa1ed9f7aa0e88623ef6f0683",
+  "candidate_revision": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "head_before": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "tested_revision": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "dirty_before": [],
+  "fixture_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "head_after": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "dirty_after": [],
+  "candidate_after": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d"
+}

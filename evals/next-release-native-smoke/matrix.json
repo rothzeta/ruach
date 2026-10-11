@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "pending-authorization: no row has been run",
+  "task": "native-smoke-range",
+  "live_cap": "one task turn per row plus the separately owner-approved fallback row",
+  "supplied_at_execution": ["installed help and flags", "readiness", "account and model/effort", "registry/network permissions", "native context and isolated config roots", "resource digests", "combined candidate source SHA", "paid budget and turn cap", "effective subject access boundary (for any blind claim)"],
+  "common": {
+    "fixture": "evals/next-release-native-smoke/fixture/consumer via scripts/prepare.ts",
+    "checks": ["consumer bun test", "installed handoff validator on docs/reports/smoke.md --repo <candidate>", "git diff --name-only <base> <candidate> plus status", "harness-eval acceptance and scope-check via scripts/check.ts, fresh outputs outside the candidate"],
+    "classification": "every run records assisted|unassisted and blind|non-blind|unverified separately; default is non-blind (blind unverified) unless packet probes pass inside the actual boundary"
+  },
+  "rows": [
+    {"id": "claude-plugin-native-agent", "install": "clean source clone at selected SHA; claude plugin marketplace add <clone> --scope user; claude plugin install ruach@ruach --scope user (isolated CLAUDE_CONFIG_DIR/HOME in child env)", "entry": "claude --agent ruach:implementer", "brief": "briefs/assisted.md", "compare_with": "claude-snapshot-adapter", "observe": ["role behavior", "discovered skills", "allowed edits", "test output", "valid handoff", "worker does not load workflow bodies"]},
+    {"id": "claude-snapshot-adapter", "install": "scripts/offline-install.ts-style .agents snapshot + frozen skill deps + ready --route herdr", "entry": "bun <consumer>/.agents/skills/ruach-herdr/scripts/worker.ts start --role implementer --kind claude --model <authorized> --effort <authorized> --base <base> --branch <unused> --worktree <fresh>", "brief": "briefs/assisted.md", "compare_with": "claude-plugin-native-agent", "same_as_plugin_row": ["fixture", "base", "task", "model", "effort", "permissions"], "observe": ["adapter role composition vs native result, not assumed equivalent", "hidden workflow exclusion"]},
+    {"id": "codex-snapshot", "install": "project .agents snapshot, isolated CODEX_HOME", "entry": "authorized installed codex CLI with assigned role file explicitly supplied", "brief": "briefs/assisted.md", "observe": ["actual skills/list names, paths and scope before launch", "boundaries", "tests", "handoff"], "note": "direct role instruction is assisted; no native TOML export"},
+    {"id": "claude-skills-cli", "install": "bun x --bun skills@1.7.0 add <clone>/skills --global --agent codex --agent claude-code --skill '*' with isolated child env; install executable-skill dependencies", "entry": "claude with skills invoked on the same task", "brief": "briefs/assisted.md", "observe": ["skills-only route has no installed roles: role evidence comes from the assignment, not named-agent discovery"]},
+    {"id": "codex-skills-cli", "install": "same isolated Skills CLI install, Codex roots", "entry": "authorized installed codex CLI", "brief": "briefs/assisted.md", "observe": ["user-scope catalog discovery recorded"], "fallback_row": "codex-skills-cli-fallback"},
+    {"id": "codex-skills-cli-fallback", "separately_named": true, "requires": "owner approval and a recorded failed discovery attempt in codex-skills-cli", "install": "explicit canonical skill-path fallback", "brief": "briefs/assisted.md", "classification_floor": "assisted; discovery fallback never counts as unassisted success"}
+  ],
+  "historical_route": {"version": "0.3.0", "note": "offline installation control only; a historical release route, not the latest Unreleased candidate"}
+}

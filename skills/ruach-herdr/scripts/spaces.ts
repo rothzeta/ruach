@@ -31,6 +31,12 @@ export async function worktreePlan(cwd: string, name: string, values: Record<str
   if (exists.exit !== 1 || exists.timedOut) fail(2, 'branch_unavailable', 'Branch exists or cannot be checked; choose a fresh branch', 'branch');
   const base = await run([git, '--no-replace-objects', '-C', cwd, 'rev-parse', '--verify', '--end-of-options', `${values.base ?? 'HEAD'}^{commit}`], cwd);
   if (base.exit !== 0 || base.timedOut || !/^[a-f0-9]{40,64}$/.test(base.stdout.trim())) fail(2, 'invalid_base', 'Worktree base must resolve to a commit', 'base');
+  // A requested subdirectory must be an ordinary tree in the pinned base, or the new checkout cannot contain it.
+  if (inside) {
+    const type = await run([git, '--no-replace-objects', '-C', cwd, 'cat-file', '-t', `${base.stdout.trim()}:${inside}`], cwd);
+    if (type.exit !== 0 || type.timedOut || type.stdout.trim() !== 'tree')
+      fail(2, 'worktree_cwd_unavailable', 'Launch directory is absent or not an ordinary directory in the worktree base', 'cwd');
+  }
   return { path, cwd: join(path, inside), branch, base: base.stdout.trim() };
 }
 
@@ -64,17 +70,22 @@ export async function createWorktree(cwd: string, worktree: Worktree) {
   await verifyWorktree(worktree);
 }
 
+// Herdr-supplied IDs are inspection hints only; each must be a nonempty single-line string.
+const hint = (value: unknown) => typeof value === 'string' && value.trim() !== '' && !/\p{Cc}/u.test(value) ? value : undefined;
+
 // Registers the checkout with Herdr as a linked worktree of the parent workspace.
-export async function createLinkedWorktree(herdr: string, cwd: string, parent: string, label: string, worktree: Worktree): Promise<{ workspace: string; pane: string }> {
+// `receipt` receives any usable IDs before response or identity validation, so a later failure keeps them.
+export async function createLinkedWorktree(herdr: string, cwd: string, parent: string, label: string, worktree: Worktree, receipt: (ids: { workspace?: string; pane?: string }) => void = () => {}): Promise<{ workspace: string; pane: string }> {
   const created = await run([herdr, 'worktree', 'create', '--workspace', parent, '--branch', worktree.branch, '--base', worktree.base, '--path', worktree.path, '--label', label, '--no-focus'], cwd, 30000);
-  if (created.exit !== 0 || created.timedOut) fail(4, 'worktree_uncertain', 'Worktree creation failed or timed out; inspect the reported path and branch before retrying', 'worktree');
-  await verifyWorktree(worktree);
   let workspace: unknown, pane: unknown, linked: unknown, path: unknown;
   try {
     const result = JSON.parse(created.stdout).result;
     workspace = result?.workspace?.workspace_id; pane = result?.root_pane?.pane_id;
     linked = result?.worktree?.is_linked_worktree; path = result?.worktree?.path;
   } catch {}
+  receipt({ workspace: hint(workspace), pane: hint(pane) });
+  if (created.exit !== 0 || created.timedOut) fail(4, 'worktree_uncertain', 'Worktree creation failed or timed out; inspect the reported path and branch before retrying', 'worktree');
+  await verifyWorktree(worktree);
   const canonical = async (value: string) => realpath(value).catch(() => null);
   if (typeof workspace !== 'string' || !workspace || typeof pane !== 'string' || !pane || linked !== true || typeof path !== 'string' || await canonical(path) !== await canonical(worktree.path))
     fail(4, 'worktree_uncertain', 'Linked worktree response does not confirm its workspace and checkout; inspect the reported path and branch before retrying', 'worktree');
