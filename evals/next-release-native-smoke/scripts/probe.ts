@@ -3,12 +3,14 @@
 // permissions it runs with; a result supports a blind claim only when executed inside the subject's actual
 // effective boundary (same filesystem/tool permissions), which this offline packet cannot establish.
 //   bun probe.ts --spec spec.json
-// spec: { marker, negative: [paths], positive: [{path, sha256}], inventory_roots?: [paths] }
+// spec: { marker, negative: [paths], positive: [{path, sha256}], inventory_roots?: [paths], evaluator_confirmed?: [paths] }
+// evaluator_confirmed lists negative paths / inventory roots whose marker presence (or existence) the evaluator
+// confirmed OUTSIDE the subject boundary; an absent path without that record is unverified, never exclusion.
 import { lstatSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { arg, sha256 } from './lib';
 
-export interface Spec { marker: string; negative: string[]; positive: { path: string; sha256: string }[]; inventory_roots?: string[] }
+export interface Spec { marker: string; negative: string[]; positive: { path: string; sha256: string }[]; inventory_roots?: string[]; evaluator_confirmed?: string[] }
 
 function attempt(path: string): { state: 'denied' | 'absent' | 'exposed' | 'readable-no-marker'; real?: string } {
   let real: string | undefined;
@@ -41,6 +43,8 @@ export function probe(spec: Spec) {
     catch { return { path, readable: false, digest_match: false }; }
   });
   const inv = inventory(spec.inventory_roots ?? [], spec.marker);
+  const confirmed = new Set(spec.evaluator_confirmed ?? []);
+  const unconfirmedAbsent = [...negative.filter(n => n.state === 'absent').map(n => n.path), ...(spec.inventory_roots ?? []).filter(root => { try { lstatSync(root); return false; } catch { return true; } })].filter(path => !confirmed.has(path));
   const exposed = negative.filter(n => n.state === 'exposed').map(n => n.path);
   const reasons: string[] = [];
   if (!negative.length) reasons.push('no negative probes supplied');
@@ -48,6 +52,7 @@ export function probe(spec: Spec) {
   if (exposed.length) reasons.push('answer marker readable at ' + exposed.join(', '));
   if (inv.marker_paths.length) reasons.push('answer marker present in inventoried roots');
   if (positive.some(p => !p.readable || !p.digest_match)) reasons.push('a required task/resource read failed or differs from recorded bytes');
+  if (unconfirmedAbsent.length) reasons.push('absent without evaluator-side confirmation (unverified, not exclusion): ' + unconfirmedAbsent.join(', '));
   // 'readable-no-marker' proves nothing about exclusion: the marker file itself was not reached.
   if (negative.some(n => n.state === 'readable-no-marker')) reasons.push('a negative path was readable but lacks the marker (control invalid)');
   const verdict = reasons.length ? 'non-blind-or-unverified' : 'exclusion-evidenced-for-this-boundary-only';

@@ -37,11 +37,16 @@ export async function run(argv: string[], cwd: string, env: Record<string, strin
   } finally { clearTimeout(timer); kill(); }
 }
 
-export async function git(repo: string, args: string[], extra: string[] = []): Promise<string> {
-  const result = await run(['git', '--no-replace-objects', '-c', 'user.name=Smoke Fixture', '-c', 'user.email=smoke@example.test', ...extra, '-C', repo, ...args], repo, childEnv({ GIT_OPTIONAL_LOCKS: '0' }), 30000);
+async function runGit(repo: string, args: string[], extra: string[], env: Record<string, string>): Promise<string> {
+  const result = await run(['git', '--no-replace-objects', '-c', 'user.name=Smoke Fixture', '-c', 'user.email=smoke@example.test', ...extra, '-C', repo, ...args], repo, childEnv({ GIT_OPTIONAL_LOCKS: '0', ...env }), 30000);
   if (result.exit !== 0) throw new Error(`git ${args[0]} failed (exit ${result.exit})`);
   return result.stdout.trim();
 }
+/** Git for source and installer checkouts: inherits the host Git configuration like the real installer. */
+export const git = (repo: string, args: string[], extra: string[] = []) => runGit(repo, args, extra, {});
+/** Git for packet-owned fixture repositories only: host signing, hooks and global config cannot affect it. */
+export const fixtureGit = (repo: string, args: string[]) =>
+  runGit(repo, args, ['-c', 'commit.gpgsign=false', '-c', 'tag.gpgsign=false', '-c', 'core.hooksPath=/dev/null'], { GIT_CONFIG_GLOBAL: '/dev/null', GIT_CONFIG_NOSYSTEM: '1' });
 
 /** Regular files under a root as sorted relative paths; symlinks and special files are rejected. */
 export function listFiles(root: string): string[] {

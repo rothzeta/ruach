@@ -4,7 +4,7 @@
 //   bun prepare.ts --out FRESH_DIR [--control] [--handoff-validator PATH]
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { arg, digests, git, listFiles, packet, sha256, sourceRoot } from './lib';
+import { arg, digests, fixtureGit as git, listFiles, packet, sha256, sourceRoot } from './lib';
 
 const CONTROL_REPORT = `task: smoke-range-fix
 status: complete

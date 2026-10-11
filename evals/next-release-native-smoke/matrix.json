@@ -6,7 +6,7 @@
   "supplied_at_execution": ["installed help and flags", "readiness", "account and model/effort", "registry/network permissions", "native context and isolated config roots", "resource digests", "combined candidate source SHA", "paid budget and turn cap", "effective subject access boundary (for any blind claim)"],
   "common": {
     "fixture": "evals/next-release-native-smoke/fixture/consumer via scripts/prepare.ts",
-    "checks": ["consumer bun test", "installed handoff validator on docs/reports/smoke.md --repo <candidate>", "git diff --name-only <base> <candidate> plus status", "harness-eval acceptance and scope-check via scripts/check.ts, fresh outputs outside the candidate"],
+    "checks": ["consumer bun test", "installed handoff validator on docs/reports/smoke.md --repo <candidate>", "git diff --name-only <base> <candidate> plus status", "harness-eval acceptance and scope-check via scripts/check.ts (candidate = the commit on the consumer's checked-out branch, pinned; fresh outputs outside the candidate)"],
     "classification": "every run records assisted|unassisted and blind|non-blind|unverified separately; default is non-blind (blind unverified) unless packet probes pass inside the actual boundary"
   },
   "rows": [

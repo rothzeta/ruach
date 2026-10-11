@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { check } from '../scripts/check';
-import { git, listFiles, packet, run, sourceRoot } from '../scripts/lib';
+import { fixtureGit, git, listFiles, packet, run, sourceRoot } from '../scripts/lib';
 import { offlineInstall } from '../scripts/offline-install';
 import { prepare } from '../scripts/prepare';
 import { probe } from '../scripts/probe';
@@ -52,19 +52,15 @@ test('the corrected control passes the checker and scope; a second run needs a n
 
 test('the unfixed base fails acceptance, and a protected test edit fails scope', async () => {
   const prepared = await prepare(join(temp, 'base'));
-  const base = await check(join(temp, 'base'), undefined, 'base');
+  const base = await check(join(temp, 'base'), undefined, 'base', { allowBase: true });
   expect(base.acceptance.exit).toBe(1);
   expect(base.acceptance.result.checks.map((c: any) => c.status)).toEqual(['failed', 'failed', 'failed']);
 
   const tampered = await prepare(join(temp, 'tampered'), { control: true });
   writeFileSync(join(tampered.consumer, 'tests', 'range.test.ts'), '// weakened\n');
-  await git(tampered.consumer, ['add', '-A']);
-  await git(tampered.consumer, ['commit', '--quiet', '-m', 'Weaken tests']);
-  const manifestPath = join(tampered.evidence, 'manifest.json');
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-  manifest.candidate = await git(tampered.consumer, ['rev-parse', 'HEAD']);
-  writeFileSync(manifestPath, JSON.stringify(manifest));
-  const scope = await check(join(temp, 'tampered'), undefined, 'scope');
+  await fixtureGit(tampered.consumer, ['add', '-A']);
+  await fixtureGit(tampered.consumer, ['commit', '--quiet', '-m', 'Weaken tests']);
+  const scope = await check(join(temp, 'tampered'), undefined, 'scope'); // no manifest edit: the candidate is resolved from the checked-out branch
   expect(scope.scope.exit).toBe(1);
   expect(JSON.stringify(scope.scope.result.protected_changes)).toContain('tests/range.test.ts');
 });
@@ -121,4 +117,55 @@ test('the matrix names five rows plus a separate fallback and forbids live opera
   expect(matrix.rows.map((r: any) => r.id)).toEqual(['claude-plugin-native-agent', 'claude-snapshot-adapter', 'codex-snapshot', 'claude-skills-cli', 'codex-skills-cli', 'codex-skills-cli-fallback']);
   expect(matrix.rows.at(-1).separately_named).toBe(true);
   expect(matrix.status).toContain('no row has been run');
+});
+
+// The documented live flow: the subject commits on the checked-out branch, then the checker runs with no manifest edit.
+async function subjectCommit(consumer: string, reportFrom: string) {
+  copyFileSync(join(packet, 'evaluator', 'solved', 'src', 'range.ts'), join(consumer, 'src', 'range.ts'));
+  copyFileSync(reportFrom, join(consumer, 'docs', 'reports', 'smoke.md'));
+  await fixtureGit(consumer, ['add', '-A']);
+  await fixtureGit(consumer, ['commit', '--quiet', '-m', 'Subject work']);
+  return fixtureGit(consumer, ['rev-parse', 'HEAD']);
+}
+test('documented flow: a subject commit on the checked-out branch is the evaluated candidate', async () => {
+  const reference = await prepare(join(temp, 'reference'), { control: true });
+  const prepared = await prepare(join(temp, 'live'));
+  const head = await subjectCommit(prepared.consumer, join(reference.consumer, 'docs', 'reports', 'smoke.md'));
+  expect(head).not.toBe(prepared.base);
+  const result = await check(join(temp, 'live'), undefined, 'flow');
+  expect(result.acceptance.exit, JSON.stringify(result.acceptance.result?.diagnostics)).toBe(0);
+  expect(result.scope.exit, JSON.stringify(result.scope.result)).toBe(0);
+  expect(result.candidate).toBe(head);
+  expect(result.acceptance.result.candidate_revision).toBe(head); expect(result.acceptance.result.tested_revision).toBe(head);
+  expect(result.scope.result.baseline_revision).toBe(prepared.base); expect(result.scope.result.candidate_revision).toBe(head);
+  expect(JSON.stringify(result.scope.result.changes)).toContain('src/range.ts');
+});
+test('a live check refuses a candidate equal to the base unless the base run is explicit', async () => {
+  await prepare(join(temp, 'idle'));
+  await expect(check(join(temp, 'idle'), undefined, 'idle')).rejects.toThrow(/equals the base/);
+  expect(existsSync(join(temp, 'idle', 'results'))).toBe(true);
+  expect(readFileSync(join(temp, 'idle', 'evidence', 'manifest.json'), 'utf8')).toContain('"base"');
+});
+test('a detached or unrelated HEAD is refused rather than guessed', async () => {
+  const prepared = await prepare(join(temp, 'detached'));
+  await subjectCommit(prepared.consumer, join(prepared.consumer, 'docs', 'reports', '.gitkeep'));
+  await fixtureGit(prepared.consumer, ['checkout', '--quiet', '--detach']);
+  await expect(check(join(temp, 'detached'), undefined, 'detached')).rejects.toThrow(/checked-out branch/);
+});
+test('probe: an absent negative path or inventory root is unverified without evaluator confirmation', () => {
+  const task = join(temp, 'task.md'); writeFileSync(task, 'raw task\n');
+  const positive = [{ path: task, sha256: new Bun.CryptoHasher('sha256').update('raw task\n').digest('hex') }];
+  const missing = join(temp, 'typo', 'answer.ts');
+  const blind = probe({ marker: MARKER, negative: [missing], positive, inventory_roots: [join(temp, 'no-root')] });
+  expect(blind.verdict).toBe('non-blind-or-unverified');
+  expect(blind.reasons.join(' ')).toMatch(/absent/);
+  const confirmed = probe({ marker: MARKER, negative: [missing], positive, inventory_roots: [join(temp, 'no-root')], evaluator_confirmed: [missing, join(temp, 'no-root')] });
+  expect(confirmed.verdict).toBe('exclusion-evidenced-for-this-boundary-only');
+});
+test('fixture Git commands ignore host signing and hook configuration but installer clones keep it', async () => {
+  const home = join(temp, 'home'); mkdirSync(home);
+  writeFileSync(join(home, '.gitconfig'), '[commit]\n\tgpgsign = true\n[core]\n\thooksPath = /nonexistent\n[gpg]\n\tprogram = /nonexistent-signer\n');
+  const saved = process.env.HOME; process.env.HOME = home;
+  try { const prepared = await prepare(join(temp, 'hermetic')); expect(prepared.base).toMatch(/^[0-9a-f]{40}$/); }
+  finally { process.env.HOME = saved; }
 });
