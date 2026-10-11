@@ -1,0 +1,84 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode-go/deepseek-v4.1-flash",
+  "small_model": "opencode-go/deepseek-v4.1-flash",
+  "enabled_providers": ["opencode-go"],
+  "share": "disabled",
+  "autoupdate": false,
+  "skills": {
+    "paths": [
+      "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-handoff",
+      "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-herdr",
+      "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-workflow-feature"
+    ]
+  },
+  "permission": {
+    "*": "deny",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "skill": "allow",
+    "todowrite": "allow",
+    "task": "deny",
+    "question": "deny",
+    "webfetch": "deny",
+    "websearch": "deny",
+    "doom_loop": "deny",
+    "edit": {
+      "*": "deny",
+      "record.md": "allow",
+      "drafts/**": "allow"
+    },
+    "bash": {
+      "*": "deny",
+      "bun /tmp/ruach-implementation-20261011/live/source/skills/ruach-handoff/scripts/validate.ts *": "allow"
+    },
+    "external_directory": {
+      "*": "deny",
+      "/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/**": "allow",
+      "/tmp/ruach-implementation-20261011/live/r3/resources/skills/**": "allow"
+    }
+  },
+  "agent": {
+    "ruach-coordinator": {
+      "description": "Canonical Ruach Coordinator for the oc-ambiguity subject",
+      "mode": "primary",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "prompt": "{file:/tmp/ruach-implementation-20261011/live/source/agents/coordinator.md}",
+      "steps": 48,
+      "permission": {
+        "*": "deny",
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "skill": "allow",
+        "todowrite": "allow",
+        "task": "deny",
+        "question": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "doom_loop": "deny",
+        "edit": {
+          "*": "deny",
+          "record.md": "allow",
+          "drafts/**": "allow"
+        },
+        "bash": {
+          "*": "deny",
+          "bun /tmp/ruach-implementation-20261011/live/source/skills/ruach-handoff/scripts/validate.ts *": "allow"
+        },
+        "external_directory": {
+          "*": "deny",
+          "/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/**": "allow",
+          "/tmp/ruach-implementation-20261011/live/r3/resources/skills/**": "allow"
+        }
+      }
+    },
+    "build": { "disable": true },
+    "plan": { "disable": true },
+    "general": { "disable": true },
+    "explore": { "disable": true }
+  }
+}

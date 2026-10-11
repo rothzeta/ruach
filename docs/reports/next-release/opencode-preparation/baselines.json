@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent, grader-side baselines for the five OpenCode subjects. Prepared by the preparation worker without launching any subject.",
+  "smoke": {
+    "root": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+    "base": "868159c737895b4c0a4d58c628379b9cd9877857",
+    "branch": "main",
+    "packet": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot",
+    "protected": {
+      "tests/range.test.ts": "cba19ec815bb12fe63169a8ce6cfc32fa6510a8e586b615f157541cc6df3abc2",
+      "package.json": "8ab77dc40b35141272118c15dea12de7b4d445a82822cafd6981059db56869b8",
+      "AGENTS.md": "73ab1a9507ee521c85da02f368fc4c9064bda816b5826235a6499d7dc0fe2b7d"
+    },
+    "baseline_unmodified": {
+      "src/range.ts": "1dce2d2fa126098372718142e4ced1ff2bec64c308809719d2ab4bc1531a5676"
+    }
+  },
+  "enoch": {
+    "root": "/tmp/ruach-implementation-20261011/enoch-exercise/clone",
+    "base": "ea33fc70456bf45bdd51e6eedcb83cf5cdf89347",
+    "seed_branch": "ruach-exercise/url-encoding-seed",
+    "subject_branch": "ruach-exercise/url-encoding-subject",
+    "mutable": [
+      "src/Enoch.Ui/src/api.ts",
+      "docs/TASK_LOGS.md",
+      "docs/exercise/report.md"
+    ],
+    "protected": {
+      "src/Enoch.Ui/src/api.test.ts": "51938899ebde49b6d55b8e2c38021e7e2aec1768e71d704f4afc27da586c45e7",
+      "src/Enoch.Ui/src/App.test.ts": "be0a8176c9e31ab97392a5aa025eb0bc0c977bc6efafe67a22bbfd346c108df8",
+      "src/Enoch.Ui/src/App.vue": "6c7bed8b26d0981c2891782dff4ed396ec8ea2c39d73db17bf5adb6c766ad3b1",
+      "src/Enoch.Ui/package.json": "31f8d7939406348e4b79ca6ea9ab812863e1854b98c7a31786d54bf96173d346",
+      "src/Enoch.Ui/package-lock.json": "89cd5ce3c52ba9da526f4f13d395003912e7d5eabc1e39fb593aa02372faf38f",
+      "docs/PROBLEMS.md": "59526ae94f75a05639798b5655ad8b9729705bdff8c2e0fcdcee16161b6b6fb9"
+    },
+    "seed_unmodified": {
+      "src/Enoch.Ui/src/api.ts": "a7bbf300a143011ee12ed5bbaef333e550a27eaab2aad712a14951cceff3969e"
+    }
+  },
+  "r3": {
+    "evaluator_manifest": "/tmp/ruach-implementation-20261011/live/r3/packet/evaluator/manifest.json",
+    "protected_root": "/tmp/ruach-implementation-20261011/live/r3/packet/protected",
+    "subject_root": "/tmp/ruach-implementation-20261011/live/r3/packet/subject",
+    "cases": ["01-resume", "02-ambiguity", "03-authorization"],
+    "allowed_edits": ["record.md", "drafts/", "intents.jsonl"]
+  },
+  "prepared_assets_sha256": {
+    "README.md": "246c960b3dbb6312212a575f18713478c2f77dfc2942d75943cca60c6f2040bc",
+    "prep-evidence.md": "e5af7e33241e278a35886259b70ae8c010ea9e12b661c2de82354f4e33dc4ce2",
+    "root-launch-packet.md": "7d4f97b1ef538636ab5eb636642911a962ff33a16a22a0d4e8e6f6f3f333bcbc",
+    "reviewer-grading-packet.md": "192c96e71957c70556454b484353418ebbd853d698e2b743f9b3e7ad431bef0c",
+    "tools/verify-baselines.ts": "599df82647c3cf028ea99df0c1d5ef6ebea23c5d7a79e3b9131ccce5217cfbd2",
+    "configs/oc-smoke.json": "9c8e9d61970984c677eeb884e58b27a1a851960eab9656d6a7d3aac9f572b4cb",
+    "configs/oc-resume.json": "ef334ada7aa8626b2958fbbc4b3092082aedfefb0c4188254f8af5500233963e",
+    "configs/oc-ambiguity.json": "59ef8f78d840da49f00301ead32aef863ac008bd81ad08faaedc4b125949c19e",
+    "configs/oc-authorization.json": "923c6b9905beebdc10d7374ede423f5a1f2aafc76cacc569b21f7e6fae6bfeca",
+    "configs/oc-enoch.json": "f78b89a4d974bda0a909558b7097dd8cacbce173e25b30eb81691f3721aab7f1",
+    "briefs/oc-smoke.md": "d967964cf64d87f0373ca89d4c4fa82edd89d47de1f3217abf18b2c5e291d47c",
+    "briefs/oc-resume.md": "ee6b2390f188ff745d9c60d34def07fadd387e594f98844bba3a4e060d4bada2",
+    "briefs/oc-ambiguity.md": "5add9afc5422bc74f41728b197feacc78a822a9d8c7c3221bde57124ccd90e9c",
+    "briefs/oc-authorization.md": "53ef46e5b8d59099eba3cfc95d4fe0df0d0adc80cfe18a7eb33c41ab5724f85b",
+    "briefs/oc-enoch.md": "e5389a426de0cc1241c2a5ef71fdc7862a9ad7b19947b2761194e0badb63bbd4"
+  },
+  "limits": [
+    "Digests are of the fixture state before any subject ran; recompute after edits.",
+    "prepared_assets_sha256 records this preparation turn; the committed files are the source of truth."
+  ]
+}

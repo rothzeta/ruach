@@ -1,0 +1,11 @@
+# R-OPENCODE-PREP version 4 amendment
+
+Same canonical Implementer, accepted source94cdfa1a, original preparation scope and Go Flash route **opencode-go/deepseek-v4.1-flash**. Read this amendment first. Commit all four assignment files unchanged with the report; assignments are immutable and have no native edit permission. No subject launches, provider changes, extra paid diagnostic requests or security dialog approval.
+
+The previous Go preparation turn reached actual model/tool work but write/edit requests to owned report and scratch paths were denied. Coordinator stopped generation and observed done before this replacement. No preparation report or subject solution was created. This is a launch-permission correction, not acceptance or an evaluation subject attempt. Five subject turns remain reserved, zero submitted.
+
+Runtime preparer-v4.json now grants only the same assigned report and scratch write locations, with native-relative and absolute path representations. No product/source/test/assignment write scope is added. Handoff's already-installed pinned dependency directory is linked at skills/ruach-handoff/node_modules; use the canonical validator here without installing packages. The Go catalog read command is allowed. No raw provider config, credentials or auth/status inspection.
+
+First make one minimal owned report or scratch write to establish actual native permission behavior. If it fails, stop and return the exact denied tool/path in the terminal; do not spend the turn repeatedly trying every path or read the entire repository. If it succeeds, finish the five concrete native configs/briefs and separated root launch recipes/independent grading packet from the previously specified existing fixtures. Account for native path representations in generated rules while preserving default-deny and exact owned targets. Relative paths must not expand permission outside those same locations.
+
+Own preparation checks and handoff validation. Preserve redacted native observations and actual limits. Use task-local TypeScript/Bun for code/probes; no product edits or full root suites. Focus on sufficient concrete assets for independent inspection; native config visibility is not subject success. Report any remaining blocker explicitly. The independent Reviewer will inspect exact preparation before any subject runs.
