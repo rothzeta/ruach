@@ -71,8 +71,8 @@ Run from the task worktree on the content committed as
 - Disposable task-temp `verify-examples.ts` -> exit 0. It extracts the three
   shipped YAML blocks from `references/delivery.md`, builds real temporary Git
   objects (branches `fixture/before`, `fixture/reviewed`, `fixture/target`,
-  `fixture/report`), and validates each example with
-  `bun skills/ruach-handoff/scripts/validate.ts`. The `needs-decision` example
+  `fixture/report`), and validates each example with the canonical handoff
+  validator (`bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts`). The `needs-decision` example
   needs no repository; the delivery receipt resolves six refs; the evidence-only
   successor resolves three. Negative control: a promised `fixture/absent` ref
   fails exit 1 with `REVISION_MISSING`.
@@ -93,7 +93,7 @@ Not run: no native subject, packet/model run, graded evaluation, Herdr suite
 
 ## Scope and boundaries
 
-Owned paths only: the five changed source/doc paths above, the new report, and
+Owned paths only: the changed source/doc paths listed above, the new report, and
 the unchanged committed assignment `docs/assignments/wave2/r67-guidance.md`. No
 other path was edited. The report was written against tested revision
 `d657f71`; its own creating SHA is returned externally and is not predicted
