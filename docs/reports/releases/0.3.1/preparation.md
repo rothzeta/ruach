@@ -21,7 +21,7 @@ verification:
   - "skills/ruach-changelog (cwd that dir): bun test: exit 0, 35 pass 0 fail."
   - "Packet typechecks (cwd root): bun x tsc -p evals/next-release-native-smoke/tsconfig.json and bun x tsc -p evals/ruach-coordination/tsconfig.json, exit 0 each, no diagnostics."
   - "Packet suites (cwd root): bun test --timeout 30000 evals/next-release-native-smoke exit 0, 14 pass 0 fail; bun test --timeout 30000 evals/ruach-coordination exit 0, 10 pass 0 fail; bound 120 s each."
-  - "Integrity (helper verify.ts): 92 delivered files byte-identical to the reviewed revision 94cdfa1a68e214a07d27fc5d413863dcbe3e7459, 0 mismatches; docs/operations.md differs only by the sanctioned link repair."
+  - "Integrity (helper verify.ts and reviewer correspondence): 91 of the 93 payload paths shared with the reviewed delivery are byte-identical to revision 94cdfa1a68e214a07d27fc5d413863dcbe3e7459; docs/operations.md differs only by the sanctioned R2-B link repair and CHANGELOG.md differs only by the 0.3.1 release entry."
   - "Publication scope (helper scope.ts): 0 excluded private paths present (.worktrees/.agents/.codex, node_modules, next-release/r3 reports and assignments, roadmap-implementation, release-wave2, native prep/login, enoch prep)."
   - "Content scan (helper scan.ts; diagnostics only, values never echoed): no credentials, private keys or home paths; only benign matches, 'source/root/release' prose and the pre-existing synthetic test literals in skills/ruach-herdr/tests."
   - "git diff --check HEAD: exit 0, no whitespace diagnostics."
@@ -36,7 +36,7 @@ blockers: []
 
 # Ruach 0.3.1 preparation
 
-Prepared the reviewable candidate on branch `ruach/release-0.3.1` at `4cca79b9c628f80d4d20b897ac65dac7bcc85190` from base `d75039aa7b82b262e2f28af08630258fb7f77180`. The exact published path set is `docs/reports/releases/0.3.1/publication-manifest.txt` (174 payload files). No tag, merge, main write, push or publication was performed, and main was not mutated.
+Prepared the reviewable candidate on branch `ruach/release-0.3.1` at `4cca79b9c628f80d4d20b897ac65dac7bcc85190` from base `d75039aa7b82b262e2f28af08630258fb7f77180`. The exact published path set is `docs/reports/releases/0.3.1/publication-manifest.txt` (173 payload files; 174 changed files including the manifest itself). No tag, merge, main write, push or publication was performed, and main was not mutated.
 
 ## What is in the candidate
 
