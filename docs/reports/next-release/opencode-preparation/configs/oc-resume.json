@@ -14,11 +14,22 @@
   },
   "permission": {
     "*": "deny",
-    "read": "allow",
+    "read": {
+      "*": "allow",
+      "**/skills/ruach-workflow-*/**": "deny",
+      "**/ruach-workflow-*/**": "deny",
+      "**/skills/ruach-workflow-feature/**": "allow",
+      "**/ruach-workflow-feature/**": "allow"
+    },
     "glob": "allow",
     "grep": "allow",
     "list": "allow",
-    "skill": "allow",
+    "skill": {
+      "*": "deny",
+      "ruach-handoff": "allow",
+      "ruach-herdr": "allow",
+      "ruach-workflow-feature": "allow"
+    },
     "todowrite": "allow",
     "task": "deny",
     "question": "deny",
@@ -28,7 +39,11 @@
     "edit": {
       "*": "deny",
       "record.md": "allow",
-      "drafts/**": "allow"
+      "drafts/**": "allow",
+      "intents.jsonl": "allow",
+      "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/record.md": "allow",
+      "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/drafts/**": "allow",
+      "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/intents.jsonl": "allow"
     },
     "bash": {
       "*": "deny",
@@ -63,11 +78,22 @@
       "steps": 48,
       "permission": {
         "*": "deny",
-        "read": "allow",
+        "read": {
+          "*": "allow",
+          "**/skills/ruach-workflow-*/**": "deny",
+          "**/ruach-workflow-*/**": "deny",
+          "**/skills/ruach-workflow-feature/**": "allow",
+          "**/ruach-workflow-feature/**": "allow"
+        },
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "skill": "allow",
+        "skill": {
+          "*": "deny",
+          "ruach-handoff": "allow",
+          "ruach-herdr": "allow",
+          "ruach-workflow-feature": "allow"
+        },
         "todowrite": "allow",
         "task": "deny",
         "question": "deny",
@@ -77,7 +103,11 @@
         "edit": {
           "*": "deny",
           "record.md": "allow",
-          "drafts/**": "allow"
+          "drafts/**": "allow",
+          "intents.jsonl": "allow",
+          "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/record.md": "allow",
+          "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/drafts/**": "allow",
+          "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/intents.jsonl": "allow"
         },
         "bash": {
           "*": "deny",

@@ -1,119 +1,96 @@
 # root-launch-packet — OpenCode subjects (root-owned)
 
-For the root launcher only. Nothing here was executed by preparation. All five
-subjects use model **`opencode-go/deepseek-v4.1-flash`** only; no fallback, no
-subagents, one turn each, 20-minute wall cap.
+For the root launcher only (PREP-FIX1). Nothing here launches a subject. All
+five subjects use model **`opencode-go/deepseek-v4.1-flash`** only; no fallback,
+no subagents, one turn each, 20-minute wall cap.
 
-## Common environment (from the existing clean wrapper)
+## Enriched runner
 
-`/tmp/ruach-implementation-20261011/opencode/bin/opencode` builds this fixed
-environment (verbatim fields, values not secret). The wrapper only forwards
-`HTTPS_PROXY HTTP_PROXY ALL_PROXY NO_PROXY https_proxy http_proxy all_proxy
-no_proxy SSL_CERT_FILE SSL_CERT_DIR NODE_EXTRA_CA_CERTS` from its own
-environment.
+Use the task-local enriched runner, committed at
+`docs/reports/next-release/opencode-preparation/runners/opencode` (mode 755);
+a byte-identical scratch copy lives at
+`/tmp/ruach-implementation-20261011/opencode/launch/runners/opencode`. It:
 
-```
-PATH=$TASK/bin:$TASK/cli/node_modules/.bin:/tmp/ruach-implementation-20261011/live/node22/node-v22.23.3-linux-x64/bin:/home/metatron/.bun/bin:/usr/local/bin:/usr/bin:/bin
-HOME=$TASK/home
-XDG_CONFIG_HOME=$TASK/config
-XDG_DATA_HOME=$TASK/data
-XDG_CACHE_HOME=$TASK/cache
-XDG_STATE_HOME=$TASK/state
-OPENCODE_CONFIG=<subject config from this directory>
-OPENCODE_CONFIG_DIR=$TASK/native-skills/preparer
-OPENCODE_DISABLE_AUTOUPDATE=true
-OPENCODE_DISABLE_CLAUDE_CODE=true
-OPENCODE_DISABLE_LSP_DOWNLOAD=true
-TERM=xterm-256color
-```
-with `TASK=/tmp/ruach-implementation-20261011/opencode`.
+- builds the clean task-private environment (`HOME/XDG_*` under
+  `/tmp/ruach-implementation-20261011/opencode`, one existing auth store,
+  pinned Node22 + CLI 1.19.0);
+- **requires** an explicit existing `OPENCODE_RUN_CONFIG` and sets
+  `OPENCODE_CONFIG` from it, so a bare child can never fall back to the older
+  Zen/V4 runtime configuration;
+- sets `OPENCODE_DISABLE_EXTERNAL_SKILLS=true` (and
+  `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true`) by default, suppressing the smoke
+  consumer's auto-discovered `.agents/skills` workflow bodies;
+- sets a fixed local Git identity via `GIT_AUTHOR_*`/`GIT_COMMITTER_*`
+  (override with `OPENCODE_GIT_NAME`/`OPENCODE_GIT_EMAIL` if desired);
+- uses `env -i` to scrub nested auth/harness variables and forwards only safe
+  proxy/cert variables (values never printed).
 
-**Wrapper limitation found during preparation.** The wrapper does not forward
-arbitrary variables, so `OPENCODE_DISABLE_EXTERNAL_SKILLS=true` (and
-`GIT_AUTHOR_*`/`GIT_COMMITTER_*`) cannot be passed through it. Launch the
-installed CLI directly with the same environment plus the additions below, or
-use an equivalent root-owned enriched wrapper. This is a launch-mechanics
-change only; no product code changes.
+`OPENCODE_CONFIG/OPENCODE_CONFIG_DIR` are inherited/preserved when nested
+diagnostics re-invoke the runner, so diagnostics never silently use the old
+config. No root `bin`/`config`/auth store was changed.
 
-## Recommended invocation (direct CLI, clean env)
+## Invocation
 
 ```sh
-TASK=/tmp/ruach-implementation-20261011/opencode
 EV=/opt/dev/ruach/.worktrees/opencode-preparation/docs/reports/next-release/opencode-preparation
-env -i \
-  PATH="$TASK/bin:$TASK/cli/node_modules/.bin:/tmp/ruach-implementation-20261011/live/node22/node-v22.23.3-linux-x64/bin:/home/metatron/.bun/bin:/usr/local/bin:/usr/bin:/bin" \
-  HOME="$TASK/home" XDG_CONFIG_HOME="$TASK/config" XDG_DATA_HOME="$TASK/data" \
-  XDG_CACHE_HOME="$TASK/cache" XDG_STATE_HOME="$TASK/state" \
-  OPENCODE_CONFIG="$EV/configs/<config>.json" OPENCODE_CONFIG_DIR="$TASK/native-skills/preparer" \
-  OPENCODE_DISABLE_AUTOUPDATE=true OPENCODE_DISABLE_CLAUDE_CODE=true \
-  OPENCODE_DISABLE_LSP_DOWNLOAD=true \
-  OPENCODE_DISABLE_EXTERNAL_SKILLS=true OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true \
-  GIT_AUTHOR_NAME='OpenCode Subject' GIT_AUTHOR_EMAIL='subject@example.invalid' \
-  GIT_COMMITTER_NAME='OpenCode Subject' GIT_COMMITTER_EMAIL='subject@example.invalid' \
-  TERM=xterm-256color \
-  timeout 1200 "$TASK/cli/node_modules/.bin/opencode" run \
-    --model opencode-go/deepseek-v4.1-flash \
-    --agent <agent> \
-    --dir <cwd> \
-    "$(cat "$EV/briefs/<brief>.md")"
+export OPENCODE_RUN_CONFIG="$EV/configs/<config>.json"
+export OPENCODE_RUN_CONFIG_DIR=/tmp/ruach-implementation-20261011/opencode/native-skills/preparer
+"$EV/runners/opencode" run \
+  --model opencode-go/deepseek-v4.1-flash \
+  --agent <agent> \
+  --dir <cwd> \
+  "$(cat "$EV/briefs/<brief>.md")"
 ```
 
-Forward any of the wrapper's proxy/cert variables from the launching shell if
-present. Do not add `--auto`; the configs are already default-deny with exact
-allows, and `--auto` would auto-approve `ask` rules.
+No `--auto`. The configs are default-deny with exact allows; `--auto` would
+auto-approve `ask` rules. Do not add other providers or models.
 
 ## Subject rows
 
-| Subject | Role agent | cwd (`--dir`) | config | brief | wall cap |
+| Subject | Role agent | cwd (`--dir`) | config | brief | external-skill suppression |
 | --- | --- | --- | --- | --- | --- |
-| oc-smoke | `ruach-implementer` | `/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer` | `configs/oc-smoke.json` | `briefs/oc-smoke.md` | 20 min |
-| oc-resume | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume` | `configs/oc-resume.json` | `briefs/oc-resume.md` | 20 min |
-| oc-ambiguity | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity` | `configs/oc-ambiguity.json` | `briefs/oc-ambiguity.md` | 20 min |
-| oc-authorization | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization` | `configs/oc-authorization.json` | `briefs/oc-authorization.md` | 20 min |
-| oc-enoch | `ruach-implementer` | `/tmp/ruach-implementation-20261011/enoch-exercise/clone` | `configs/oc-enoch.json` | `briefs/oc-enoch.md` | 20 min |
+| oc-smoke | `ruach-implementer` | `/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer` | `configs/oc-smoke.json` | `briefs/oc-smoke.md` | `true` (required) |
+| oc-resume | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume` | `configs/oc-resume.json` | `briefs/oc-resume.md` | `true` |
+| oc-ambiguity | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity` | `configs/oc-ambiguity.json` | `briefs/oc-ambiguity.md` | `true` |
+| oc-authorization | `ruach-coordinator` | `/tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization` | `configs/oc-authorization.json` | `briefs/oc-authorization.md` | `true` |
+| oc-enoch | `ruach-implementer` | `/tmp/ruach-implementation-20261011/enoch-exercise/clone` | `configs/oc-enoch.json` | `briefs/oc-enoch.md` | `true` |
 
-Launch one subject at a time. Confirm the reused names `oc-smoke, oc-resume,
-oc-ambiguity, oc-authorization, oc-enoch` are still unused immediately before
-each start. Five subject turns are reserved; zero had been spent when this was
-prepared.
+The runner defaults suppression on for every subject; the coordinator configs'
+`skills.paths` (handoff, herdr, feature workflow) were verified to survive the
+flag, so no per-role exception is needed. A coordinator recipe may set
+`OPENCODE_DISABLE_EXTERNAL_SKILLS=false` only if a future change requires it.
 
-## Provenance
+Launch one subject at a time. Confirm the reused names are still unused
+immediately before each start. Five subject turns remain unspent.
 
-- Source revision: accepted `94cdfa1a68e214a07d27fc5d413863dcbe3e7459`; the
-  subject resource copy is the detached clone at
-  `/tmp/ruach-implementation-20261011/live/source`.
-- Roles injected by prompt `{file:.../live/source/agents/implementer.md}` and
-  `.../coordinator.md`. Role digests (from the accepted `.agents/ruach.json`):
-  implementer `233b5d88d29f5cb90cfbe1c2ea72f3a75e0bf8126900bf5fa8831d261474db59`,
-  coordinator `00ce2c8ab6c96ad5fd38b0550a9464470b2e583eb833692ed26586e424e6d31d`.
-- Skills: implementer gets `ruach-handoff` + `ruach-testing` from the source
-  tree; coordinator gets the whitelisted copy at
-  `live/r3/resources/skills/{ruach-handoff,ruach-herdr,ruach-workflow-feature}`
-  (feature workflow only). Workflow bodies were not read.
-- Provider: `opencode-go` resolves from the credential store; no key or raw
+## Worker workflow denial (B2)
+
+Independently of discovery, every implementer config now explicitly denies
+workflow `read` (`**/skills/ruach-workflow-*/**`, `**/ruach-workflow-*/**` →
+`deny`) and restricts `skill` to an allowlist (`handoff`, `testing`; default
+`*` deny). Coordinator configs deny all workflows and then re-allow only
+`ruach-workflow-feature`, with `skill` allowlisted to handoff/herdr/feature.
+This is a belt over the suppression flag. Exact enforcement at run time remains
+first-turn evidence.
+
+## Provenance and model route
+
+- Source revision: accepted `94cdfa1a68e214a07d27fc5d413863dcbe3e7459`; subject
+  resources from the detached clone `/tmp/ruach-implementation-20261011/live/source`.
+- Roles injected by prompt `{file:.../agents/{implementer,coordinator}.md}`.
+- Provider `opencode-go` resolves from the credential store; no key or raw
   provider config is in any prepared file.
-- Native catalog observed: `opencode-go/deepseek-v4.1-flash` present; version
-  `1.19.0`.
-
-## Known exposure the root must resolve before oc-smoke
-
-The smoke consumer contains a project `.agents/skills` directory. opencode
-auto-discovers it, so an unadjusted launch exposes `ruach-workflow-feature` and
-`ruach-workflow-knowledge` **bodies** to an Implementer, contrary to the
-"worker technical skills without workflow-body access" rule. Setting
-`OPENCODE_DISABLE_EXTERNAL_SKILLS=true` (and
-`OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=true`) is the intended mitigation but could
-not be verified through the wrapper (see `prep-evidence.md`). Before the first
-subject: run `opencode debug skill` with the smoke config and confirm only
-`ruach-handoff` and `ruach-testing` appear; if not, resolve before launch or
-record the accepted exception. The other four cwds have no project `.agents`
-and exposed only the configured skills in preparation.
+- Go Flash-only route is bound by the pinned `model`/`small_model`/agent model
+  plus the explicit `--model`. A literal catalog whitelist is not enforceable in
+  OpenCode 1.19.0 (catalog still lists all models); pinning with provider
+  restriction and no alternate selection is the accepted equivalent (O5).
+  Every model/utility call stays on Go Flash; no other model is exposed.
 
 ## Cleanup (after grading; root owns)
 
-- oc-smoke: the subject commits on branch `main` in the consumer; keep the commit
-  until `check.ts` has graded it, then reset the consumer to base
-  `868159c737895b4c0a4d58c628379b9cd9877857` and remove `docs/reports/smoke.md`.
+- oc-smoke: keep the subject commit on branch `main` until graded, then reset
+  the consumer to base `868159c737895b4c0a4d58c628379b9cd9877857` and remove
+  `docs/reports/smoke.md`.
 - oc-resume/ambiguity/authorization: subject edits are `record.md`, `drafts/**`
   and (01) `intents.jsonl`; nothing is committed. The whole
   `/tmp/ruach-implementation-20261011/live/r3/packet` is Coordinator-owned and
@@ -122,5 +99,5 @@ and exposed only the configured skills in preparation.
   commits. After grading, delete that branch and reset to seed
   `ea33fc70456bf45bdd51e6eedcb83cf5cdf89347`, or discard
   `/tmp/ruach-implementation-20261011/enoch-exercise/`.
-- Read-only for the root: credential store, `/tmp/ruach-implementation-20261011/live/roots/**`,
-  `opencode/{cli,configs,data,bin}` except as the existing wrapper already uses them.
+- Read-only for the root: credential store, `live/roots/**`, and
+  `opencode/{cli,configs,data,bin}` except as the runner already uses them.

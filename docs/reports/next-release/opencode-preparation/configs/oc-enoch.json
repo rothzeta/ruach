@@ -13,11 +13,19 @@
   },
   "permission": {
     "*": "deny",
-    "read": "allow",
+    "read": {
+      "*": "allow",
+      "**/skills/ruach-workflow-*/**": "deny",
+      "**/ruach-workflow-*/**": "deny"
+    },
     "glob": "allow",
     "grep": "allow",
     "list": "allow",
-    "skill": "allow",
+    "skill": {
+      "*": "deny",
+      "ruach-handoff": "allow",
+      "ruach-testing": "allow"
+    },
     "todowrite": "allow",
     "task": "deny",
     "question": "deny",
@@ -28,7 +36,10 @@
       "*": "deny",
       "src/Enoch.Ui/src/api.ts": "allow",
       "docs/TASK_LOGS.md": "allow",
-      "docs/exercise/report.md": "allow"
+      "docs/exercise/report.md": "allow",
+      "/tmp/ruach-implementation-20261011/enoch-exercise/clone/src/Enoch.Ui/src/api.ts": "allow",
+      "/tmp/ruach-implementation-20261011/enoch-exercise/clone/docs/TASK_LOGS.md": "allow",
+      "/tmp/ruach-implementation-20261011/enoch-exercise/clone/docs/exercise/report.md": "allow"
     },
     "bash": {
       "*": "deny",
@@ -64,11 +75,19 @@
       "steps": 40,
       "permission": {
         "*": "deny",
-        "read": "allow",
+        "read": {
+          "*": "allow",
+          "**/skills/ruach-workflow-*/**": "deny",
+          "**/ruach-workflow-*/**": "deny"
+        },
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "skill": "allow",
+        "skill": {
+          "*": "deny",
+          "ruach-handoff": "allow",
+          "ruach-testing": "allow"
+        },
         "todowrite": "allow",
         "task": "deny",
         "question": "deny",
@@ -79,7 +98,10 @@
           "*": "deny",
           "src/Enoch.Ui/src/api.ts": "allow",
           "docs/TASK_LOGS.md": "allow",
-          "docs/exercise/report.md": "allow"
+          "docs/exercise/report.md": "allow",
+          "/tmp/ruach-implementation-20261011/enoch-exercise/clone/src/Enoch.Ui/src/api.ts": "allow",
+          "/tmp/ruach-implementation-20261011/enoch-exercise/clone/docs/TASK_LOGS.md": "allow",
+          "/tmp/ruach-implementation-20261011/enoch-exercise/clone/docs/exercise/report.md": "allow"
         },
         "bash": {
           "*": "deny",

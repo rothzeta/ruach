@@ -1,0 +1,60 @@
+#!/bin/bash
+# Task-local enriched OpenCode runner (PREP-FIX1) — public copy.
+#
+# Purpose: launch a subject/diagnostic with the clean task-private environment
+# (private HOME/XDG, one existing auth store, pinned Node22/CLI 1.19.0), bound to
+# the Go Flash-only route by the explicit config, with external skill
+# auto-discovery suppressed and a fixed local Git identity.
+#
+# Safety: env -i scrubs nested auth/harness variables; only safe proxy/cert
+# variables are forwarded and their values are never printed. It refuses to run
+# without an explicit existing config, so a bare child can never silently fall
+# back to the older Zen/V4 runtime configuration.
+set -euo pipefail
+
+task_root=/tmp/ruach-implementation-20261011/opencode
+task_path="$task_root/bin:$task_root/cli/node_modules/.bin:/tmp/ruach-implementation-20261011/live/node22/node-v22.23.3-linux-x64/bin:/home/metatron/.bun/bin:/usr/local/bin:/usr/bin:/bin"
+
+task_config="${OPENCODE_RUN_CONFIG:-}"
+if [[ -z "$task_config" || ! -f "$task_config" ]]; then
+  echo "opencode runner: set OPENCODE_RUN_CONFIG to an existing explicit config" >&2
+  exit 2
+fi
+task_config_dir="${OPENCODE_RUN_CONFIG_DIR:-$task_root/native-skills/preparer}"
+
+git_name="${OPENCODE_GIT_NAME:-OpenCode Subject}"
+git_email="${OPENCODE_GIT_EMAIL:-subject@example.invalid}"
+
+# Per-subject suppression (O1): default on; a coordinator recipe may set it to
+# false only after confirming its selected skills.paths survive.
+suppress_external_skills="${OPENCODE_DISABLE_EXTERNAL_SKILLS:-true}"
+suppress_claude_skills="${OPENCODE_DISABLE_CLAUDE_CODE_SKILLS:-true}"
+
+task_env=(
+  "PATH=$task_path"
+  "HOME=$task_root/home"
+  "XDG_CONFIG_HOME=$task_root/config"
+  "XDG_DATA_HOME=$task_root/data"
+  "XDG_CACHE_HOME=$task_root/cache"
+  "XDG_STATE_HOME=$task_root/state"
+  "OPENCODE_CONFIG=$task_config"
+  "OPENCODE_CONFIG_DIR=$task_config_dir"
+  "OPENCODE_RUN_CONFIG=$task_config"
+  "OPENCODE_RUN_CONFIG_DIR=$task_config_dir"
+  "OPENCODE_DISABLE_AUTOUPDATE=true"
+  "OPENCODE_DISABLE_CLAUDE_CODE=true"
+  "OPENCODE_DISABLE_LSP_DOWNLOAD=true"
+  "OPENCODE_DISABLE_EXTERNAL_SKILLS=$suppress_external_skills"
+  "OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=$suppress_claude_skills"
+  "GIT_AUTHOR_NAME=$git_name"
+  "GIT_AUTHOR_EMAIL=$git_email"
+  "GIT_COMMITTER_NAME=$git_name"
+  "GIT_COMMITTER_EMAIL=$git_email"
+  "TERM=${TERM:-xterm-256color}"
+)
+
+for name in HTTPS_PROXY HTTP_PROXY ALL_PROXY NO_PROXY https_proxy http_proxy all_proxy no_proxy SSL_CERT_FILE SSL_CERT_DIR NODE_EXTRA_CA_CERTS; do
+  if [[ -v "$name" ]]; then task_env+=("$name=${!name}"); fi
+done
+
+exec env -i "${task_env[@]}" "$task_root/cli/node_modules/.bin/opencode" "$@"

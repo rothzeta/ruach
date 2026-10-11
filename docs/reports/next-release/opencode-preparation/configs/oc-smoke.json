@@ -13,11 +13,19 @@
   },
   "permission": {
     "*": "deny",
-    "read": "allow",
+    "read": {
+      "*": "allow",
+      "**/skills/ruach-workflow-*/**": "deny",
+      "**/ruach-workflow-*/**": "deny"
+    },
     "glob": "allow",
     "grep": "allow",
     "list": "allow",
-    "skill": "allow",
+    "skill": {
+      "*": "deny",
+      "ruach-handoff": "allow",
+      "ruach-testing": "allow"
+    },
     "todowrite": "allow",
     "task": "deny",
     "question": "deny",
@@ -27,7 +35,9 @@
     "edit": {
       "*": "deny",
       "src/**": "allow",
-      "docs/reports/smoke.md": "allow"
+      "docs/reports/smoke.md": "allow",
+      "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/src/**": "allow",
+      "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/docs/reports/smoke.md": "allow"
     },
     "bash": {
       "*": "deny",
@@ -56,11 +66,19 @@
       "steps": 40,
       "permission": {
         "*": "deny",
-        "read": "allow",
+        "read": {
+          "*": "allow",
+          "**/skills/ruach-workflow-*/**": "deny",
+          "**/ruach-workflow-*/**": "deny"
+        },
         "glob": "allow",
         "grep": "allow",
         "list": "allow",
-        "skill": "allow",
+        "skill": {
+          "*": "deny",
+          "ruach-handoff": "allow",
+          "ruach-testing": "allow"
+        },
         "todowrite": "allow",
         "task": "deny",
         "question": "deny",
@@ -70,7 +88,9 @@
         "edit": {
           "*": "deny",
           "src/**": "allow",
-          "docs/reports/smoke.md": "allow"
+          "docs/reports/smoke.md": "allow",
+          "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/src/**": "allow",
+          "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/docs/reports/smoke.md": "allow"
         },
         "bash": {
           "*": "deny",
