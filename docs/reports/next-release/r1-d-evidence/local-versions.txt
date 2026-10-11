@@ -1,0 +1,6 @@
+d75039aa7b82b262e2f28af08630258fb7f77180
+1.4.2
+just 1.40.0
+git version 2.47.3
+Linux 6.12.111+deb13-amd64 x86_64
+1000

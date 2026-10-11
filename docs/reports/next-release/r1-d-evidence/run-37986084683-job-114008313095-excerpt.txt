@@ -1,0 +1,71 @@
+2026-10-09T20:18:27.7979592Z ##[group]Runner Image Provisioner
+2026-10-09T20:18:27.7981100Z Version: 20261002.596
+2026-10-09T20:18:27.7990167Z ##[group]Runner Image
+2026-10-09T20:18:27.7990846Z Image: ubuntu-24.04
+2026-10-09T20:18:27.7991504Z Version: 20261004.327.1
+2026-10-09T20:18:27.7992831Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-09T20:18:27.7994469Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+52:2026-10-09T20:18:28.9124933Z   BUN_VERSION: 1.4.2
+58:2026-10-09T20:18:29.0153041Z [command]/usr/bin/git version
+59:2026-10-09T20:18:29.0178187Z git version 2.55.0
+123:2026-10-09T20:18:29.7414124Z   bun-version: 1.4.2
+127:2026-10-09T20:18:29.7426381Z   BUN_VERSION: 1.4.2
+130:2026-10-09T20:18:30.0510959Z Downloading a new version of Bun: https://github.com/oven-sh/bun/releases/download/bun-v1.4.2/bun-linux-x64.zip
+133:2026-10-09T20:18:30.9640899Z 1.4.2+744846f84
+139:2026-10-09T20:18:30.9804702Z   BUN_VERSION: 1.4.2
+152:2026-10-09T20:18:31.9666504Z   BUN_VERSION: 1.4.2
+155:2026-10-09T20:18:31.9800560Z 1.4.2
+156:2026-10-09T20:18:31.9812404Z just 1.40.0
+157:2026-10-09T20:18:31.9828013Z git version 2.55.0
+162:2026-10-09T20:18:31.9939096Z   BUN_VERSION: 1.4.2
+165:2026-10-09T20:18:32.0083239Z bun install v1.4.2 (744846f84)
+167:2026-10-09T20:18:32.1804451Z + @types/bun@1.4.2
+172:2026-10-09T20:18:32.1835260Z bun install v1.4.2 (744846f84)
+178:2026-10-09T20:18:32.2778920Z bun install v1.4.2 (744846f84)
+184:2026-10-09T20:18:32.3323559Z bun install v1.4.2 (744846f84)
+191:2026-10-09T20:18:32.3462682Z   BUN_VERSION: 1.4.2
+201:2026-10-09T20:18:32.7769711Z   BUN_VERSION: 1.4.2
+213:2026-10-09T20:18:32.8113119Z   BUN_VERSION: 1.4.2
+216:2026-10-09T20:18:32.8220041Z bun audit v1.4.2 (744846f84)
+219:2026-10-09T20:18:32.9152868Z bun audit v1.4.2 (744846f84)
+222:2026-10-09T20:18:33.0090919Z bun audit v1.4.2 (744846f84)
+229:2026-10-09T20:18:33.1593051Z   BUN_VERSION: 1.4.2
+233:2026-10-09T20:18:33.1752570Z bun test v1.4.2 (744846f84)
+346:2026-10-09T20:18:39.7340990Z (pass) an executable skill must declare its Bun prerequisite early [27.93ms]
+368:2026-10-09T20:18:40.0324760Z Ran 90 tests across 10 files. [6.86s]
+369:2026-10-09T20:18:40.0365803Z bun test v1.4.2 (744846f84)
+406:2026-10-09T20:18:48.2848638Z Ran 28 tests across 1 file. [8.25s]
+407:2026-10-09T20:18:48.2935429Z bun test v1.4.2 (744846f84)
+464:2026-10-09T20:19:29.1921070Z 175 | test('standalone skill without installed dependencies fails clearly without implicit installation',async()=>{const copy=join(root,'uninstalled skill');await mkdir(copy);await cp(resolve(import.meta.dir
+489:2026-10-09T20:19:29.1969093Z (fail) standalone skill without installed dependencies fails clearly without implicit installation [32.73ms]
+596:2026-10-09T20:20:11.3461796Z 1 tests failed:
+597:2026-10-09T20:20:11.3462235Z (fail) standalone skill without installed dependencies fails clearly without implicit installation [32.73ms]
+602:2026-10-09T20:20:11.3463342Z Ran 149 tests across 2 files. [83.05s]
+603:2026-10-09T20:20:11.3489798Z error: Recipe `test` failed on line 49 with exit code 1
+604:2026-10-09T20:20:11.3500124Z ##[error]Process completed with exit code 1.
+606:2026-10-09T20:20:11.4536967Z [command]/usr/bin/git version
+607:2026-10-09T20:20:11.4582066Z git version 2.55.0
+
+--- assertion failure block (log lines 466-487) ---
+2026-10-09T20:19:29.1928349Z error: expect(received).toEqual(expected)
+2026-10-09T20:19:29.1928566Z 
+2026-10-09T20:19:29.1928967Z   [
+2026-10-09T20:19:29.1929258Z -   "package.json",
+2026-10-09T20:19:29.1929562Z     "scripts",
+2026-10-09T20:19:29.1929866Z +   "package.json",
+2026-10-09T20:19:29.1930071Z   ]
+2026-10-09T20:19:29.1930176Z 
+2026-10-09T20:19:29.1930312Z - Expected  - 1
+2026-10-09T20:19:29.1930621Z + Received  + 1
+2026-10-09T20:19:29.1930805Z 
+2026-10-09T20:19:29.1931174Z       at <anonymous> (~runner/work/ruach/ruach/skills/ruach-herdr/tests/worker.test.ts:175:768)
+2026-10-09T20:19:29.1931719Z 
+2026-10-09T20:19:29.1959296Z ##[error]  [
+-   "package.json",
+    "scripts",
++   "package.json",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
