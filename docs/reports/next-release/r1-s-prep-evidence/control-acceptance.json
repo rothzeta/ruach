@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "checks": [
+    {
+      "id": "visible-tests",
+      "fingerprint": "1d6f87e6ed69bbf46d43148eb13c7abe706010d8a1f81e7a1aef612eedf83f48",
+      "status": "passed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "test",
+        "--timeout",
+        "30000"
+      ],
+      "cwd": "<scratch>/control/consumer",
+      "timeout_ms": 120000,
+      "expected": {
+        "exit": 0,
+        "stderr_not_contains": "\n 0 pass\n"
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "bun test v1.4.2 (744846f84)\n",
+      "stderr": "\n 4 pass\n 0 fail\n 6 expect() calls\nRan 4 tests across 1 file. [11.00ms]\n",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    },
+    {
+      "id": "hidden-cases",
+      "fingerprint": "2dfac9d8d7391ecec441af3b75eae12a0e692ff27a27e86233a6a91d05d81761",
+      "status": "passed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "-e",
+        "import {inclusiveRange as r, rangeSize as s} from './src/range.ts';\nconst eq=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);\nif(!eq(r(-2,2),[-2,-1,0,1,2])||!eq(r(7,7),[7])||!eq(r(3,1),[])||s(-2,2)!==5||s(3,1)!==0)process.exit(1);\nconsole.log('ok');"
+      ],
+      "cwd": "<scratch>/control/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0,
+        "stdout": "ok\n"
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "ok\n",
+      "stderr": "",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    },
+    {
+      "id": "handoff-valid",
+      "fingerprint": "79b0f215d047334260cdae161137c0ba0012f08a3956df6eeaa75cb8922113b9",
+      "status": "passed",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "<repo>/skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/smoke.md",
+        "--repo",
+        "<scratch>/control/consumer"
+      ],
+      "cwd": "<scratch>/control/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "{\"schema_version\":1,\"ok\":true,\"report\":\"<scratch>/control/consumer/docs/reports/smoke.md\",\"repo\":\"<scratch>/control/consumer\",\"revisions\":[],\"diagnostics\":[]}\n",
+      "stderr": "",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    }
+  ],
+  "diagnostics": [],
+  "task": "native-smoke-range",
+  "run": "control",
+  "declared_route": {
+    "kind": "control",
+    "model": "none-no-model-subject",
+    "effort": null,
+    "model_use_verified": false,
+    "evidence": []
+  },
+  "assignment_sha256": "04697aa27d0921b76b8526f754f790e9b084f510b31ed8ccc1f8e0cad2f352ae",
+  "acceptance_sha256": "39050c52afcd851ac43fefc6fc6fa0a367d5832aa1ed9f7aa0e88623ef6f0683",
+  "candidate_revision": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "head_before": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "tested_revision": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "dirty_before": [],
+  "fixture_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "head_after": "7b22f2330b6c6af59a039524ef2fb419ae011702",
+  "dirty_after": [],
+  "candidate_after": "7b22f2330b6c6af59a039524ef2fb419ae011702"
+}

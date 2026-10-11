@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "label": "packet-commit",
+  "source_revision": "5ab142bd9e1307681b87df8443ca4dcf771eec19",
+  "historical_release": false,
+  "final_candidate_evidence": false,
+  "isolated_env": {
+    "HOME": "<scratch>/inst-head/home",
+    "CODEX_HOME": "<scratch>/inst-head/codex",
+    "CLAUDE_CONFIG_DIR": "<scratch>/inst-head/claude",
+    "BUN_INSTALL_CACHE_DIR": "<home>/.bun/install/cache"
+  },
+  "steps": [
+    {
+      "name": "install",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "<scratch>/inst-head/source/scripts/install.ts",
+        "install",
+        "--source",
+        "<scratch>/inst-head/source",
+        "--revision",
+        "5ab142bd9e1307681b87df8443ca4dcf771eec19",
+        "--target",
+        "<scratch>/inst-head/consumer/.agents"
+      ],
+      "exit": 0,
+      "timed_out": false
+    },
+    {
+      "name": "check",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "<scratch>/inst-head/consumer/.agents/ruach-install.ts",
+        "check",
+        "--target",
+        "<scratch>/inst-head/consumer/.agents",
+        "--source",
+        "<scratch>/inst-head/source"
+      ],
+      "exit": 0,
+      "timed_out": false
+    },
+    {
+      "name": "frozen-deps:ruach-handoff",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "exit": 0,
+      "timed_out": false
+    },
+    {
+      "name": "frozen-deps:ruach-herdr",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "exit": 0,
+      "timed_out": false
+    },
+    {
+      "name": "ready",
+      "argv": [
+        "<home>/.local/bin/bun",
+        "<scratch>/inst-head/consumer/.agents/ruach-install.ts",
+        "ready",
+        "--route",
+        "herdr",
+        "--project",
+        "<scratch>/inst-head/consumer",
+        "--json"
+      ],
+      "exit": 0,
+      "timed_out": false
+    }
+  ],
+  "outputs": {
+    "install": {
+      "stdout": "Installed 84 files from 5ab142bd9e1307681b87df8443ca4dcf771eec19\n",
+      "stderr": ""
+    },
+    "check": {
+      "stdout": "Snapshot verified: 5ab142bd9e1307681b87df8443ca4dcf771eec19 (84 files)\n",
+      "stderr": ""
+    },
+    "frozen-deps:ruach-handoff": {
+      "stdout": "bun install v1.4.2 (744846f84)\n\n+ ajv@8.20.0\n+ yaml@2.9.1\n\n6 packages installed [16.00ms]\n",
+      "stderr": ""
+    },
+    "frozen-deps:ruach-herdr": {
+      "stdout": "bun install v1.4.2 (744846f84)\n\n+ ws@8.22.0\n+ yaml@2.9.1\n\n2 packages installed [6.00ms]\n",
+      "stderr": ""
+    },
+    "ready": {
+      "stdout": "{\n  \"schema_version\": 1,\n  \"active\": {\n    \"kind\": \"snapshot\",\n    \"revision\": \"5ab142bd9e1307681b87df8443ca4dcf771eec19\",\n    \"path\": \"<scratch>/inst-head/consumer/.agents\",\n    \"integrity\": \"ok\"\n  },\n  \"locations\": [\n    {\n      \"scope\": \"snapshot\",\n      \"kind\": \"skills\",\n      \"path\": \"<scratch>/inst-head/consumer/.agents/skills\",\n      \"items\": [\n        {\n          \"name\": \"ruach-changelog\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-changelog\",\n          \"version\": \"0.4.0\"\n        },\n        {\n          \"name\": \"ruach-handoff\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-handoff\",\n          \"version\": \"1.0.0\"\n        },\n        {\n          \"name\": \"ruach-harness-eval\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-harness-eval\",\n          \"version\": \"1.0.0\"\n        },\n        {\n          \"name\": \"ruach-herdr\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-herdr\",\n          \"version\": \"0.2.1\"\n        },\n        {\n          \"name\": \"ruach-librarian\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-librarian\"\n        },\n        {\n          \"name\": \"ruach-simplification\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-simplification\"\n        },\n        {\n          \"name\": \"ruach-testing\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-testing\"\n        },\n        {\n          \"name\": \"ruach-workflow-feature\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-workflow-feature\"\n        },\n        {\n          \"name\": \"ruach-workflow-knowledge\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-workflow-knowledge\"\n        }\n      ]\n    },\n    {\n      \"scope\": \"snapshot\",\n      \"kind\": \"agents\",\n      \"path\": \"<scratch>/inst-head/consumer/.agents/agents\",\n      \"items\": [\n        {\n          \"name\": \"architect\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/architect.md\"\n        },\n        {\n          \"name\": \"coordinator\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/coordinator.md\"\n        },\n        {\n          \"name\": \"implementer\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/implementer.md\"\n        },\n        {\n          \"name\": \"librarian\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/librarian.md\"\n        },\n        {\n          \"name\": \"reviewer\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/reviewer.md\"\n        },\n        {\n          \"name\": \"scout\",\n          \"path\": \"<scratch>/inst-head/consumer/.agents/agents/scout.md\"\n        }\n      ]\n    }\n  ],\n  \"packages\": [\n    {\n      \"skill\": \"ruach-handoff\",\n      \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-handoff\",\n      \"state\": \"ready\"\n    },\n    {\n      \"skill\": \"ruach-herdr\",\n      \"path\": \"<scratch>/inst-head/consumer/.agents/skills/ruach-herdr\",\n      \"state\": \"ready\"\n    }\n  ],\n  \"prerequisites\": [\n    {\n      \"name\": \"bun\",\n      \"found\": true,\n      \"path\": \"<home>/.local/bin/bun\",\n      \"version\": \"1.4.2\"\n    },\n    {\n      \"name\": \"git\",\n      \"found\": true,\n      \"path\": \"/usr/bin/git\",\n      \"version\": \"git version 2.47.3\"\n    },\n    {\n      \"name\": \"herdr\",\n      \"found\": true,\n      \"path\": \"<home>/.local/bin/herdr\",\n      \"version\": \"herdr 0.9.0\",\n      \"session\": true\n    },\n    {\n      \"name\": \"claude\",\n      \"found\": true,\n      \"path\": \"<home>/.local/bin/claude\"\n    },\n    {\n      \"name\": \"codex\",\n      \"found\": true,\n      \"path\": \"<home>/.local/bin/codex\"\n    }\n  ],\n  \"routes\": {\n    \"skill\": {\n      \"ready\": true,\n      \"missing\": [],\n      \"warnings\": []\n    },\n    \"native\": {\n      \"ready\": true,\n      \"missing\": [],\n      \"warnings\": []\n    },\n    \"herdr\": {\n      \"ready\": true,\n      \"missing\": [],\n      \"warnings\": []\n    }\n  }\n}\n",
+      "stderr": ""
+    }
+  },
+  "ok": true,
+  "limits": [
+    "Offline snapshot installation only: no Claude plugin, Skills CLI, Codex discovery, Herdr or model operation was performed.",
+    "Not final combined-candidate evidence; live rows must supply their own source SHA."
+  ]
+}
