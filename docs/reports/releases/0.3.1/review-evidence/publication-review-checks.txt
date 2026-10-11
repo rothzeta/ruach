@@ -1,0 +1,61 @@
+RUACH 0.3.1 PUBLICATION REVIEW — RAW CHECK EVIDENCE
+Reviewer: canonical Reviewer. Read-only. Helpers:
+  /tmp/ruach-release-wave2-20261011/opencode/workers/reviewer/verify.ts
+  /tmp/ruach-release-wave2-20261011/opencode/workers/reviewer/check15.ts
+
+== IDENTITY ==
+root /opt/dev/ruach HEAD (and main)         -> 15b7ef71aaf1b52f1d76b0687949a1aadf760b4a
+review worktree HEAD (own checkout)          -> 4c16ed776a852661bd661ff40bd6ea792eaaecd1
+tag v0.3.1^{commit}                          -> 363da220d06017101a5c85d876ae75da15171d73
+tag ruach--v0.3.1^{commit}                   -> 363da220d06017101a5c85d876ae75da15171d73
+
+== METADATA DELTA 363da220..15b7ef7 (all ADDED, none modified) ==
+A docs/assignments/release-0.3.1/delivery.md
+A docs/assignments/release-0.3.1/publication-fix.md
+A docs/assignments/release-0.3.1/review.md
+A docs/assignments/release-0.3.1/review2.md
+A docs/reports/releases/0.3.1/delivery.md
+A docs/reports/releases/0.3.1/publication-fix.md
+A docs/reports/releases/0.3.1/review-evidence/publication-scan.txt
+A docs/reports/releases/0.3.1/review-evidence/review2.md
+A docs/reports/releases/0.3.1/review-evidence/verification.txt
+A docs/reports/releases/0.3.1/review.md
+non-added / non-docs entries                 -> NONE
+
+== TWO-LINK REPAIR ==
+git show --numstat --format= c2e6d4c       -> 2  2  docs/reports/releases/0.3.1/review.md
+668028a:review.md == cf7c77eb:review.md     -> IDENTICAL
+review.md 4c16ed7..15b7ef7                  -> IDENTICAL
+review.md 4-level CHANGELOG targets         -> 2   (../../../../CHANGELOG.md; repo-root CHANGELOG.md exists)
+review.md 2-level CHANGELOG targets         -> 0
+
+== FULL-RANGE DIFF --CHECK (exit 0, no diagnostics each) ==
+git diff --check d75039a..15b7ef7
+git diff --check 363da220..15b7ef7
+git diff --check 4c16ed7..15b7ef7
+
+== TRACKED 15b7ef7 CONTENT vs checked link rule (check15.ts) ==
+tracked markdown files: 277
+relative targets checked: 457
+broken tracked targets: 0
+RESULT: tracked 15b7ef7 content passes scripts/check.ts link rule
+
+== FINAL CHECKS, read-only, cwd /opt/dev/ruach @ 15b7ef7 ==
+just release-check                            -> exit 0
+   Release v0.3.1: package, plugin, marketplace, agents and changelog verified
+just check                                    -> exit 1
+   Broken target in .worktrees/release-0.3.1-publication-review/docs/reports/releases/0.3.1/publication-fix.md: path
+
+== SAME COMMAND, own worktree @ 4c16ed7 ==
+just check                                    -> exit 1
+   Broken target in docs/reports/releases/0.3.1/publication-fix.md: path
+
+Cause: scripts/check.ts:33-44 recursively walks the repository ignoring only
+node_modules/.git/__pycache__ and parses [text](target) including inline code. The
+untracked .worktrees tree is scanned, and the stale 4c16ed7 review worktree's
+publication-fix.md line 26 contains the literal "[text](path)". No tracked 15b7ef7
+path produced a diagnostic.
+
+== PLAN LINK UNDER REVIEW (docs/design/next-coordination-plan.md:27) ==
+[Unreleased](../../CHANGELOG.md#unreleased)   (literal plan target; resolves from docs/design/)
+review.md:30,58 quote ../../../../CHANGELOG.md#unreleased  (report-relative; differs from the plan literal)
