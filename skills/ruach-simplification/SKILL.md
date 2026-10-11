@@ -30,7 +30,7 @@ Look for:
 
 - Fewer lines alone do not establish a better design.
 - Do not simplify by hiding complexity or weakening required behavior.
-- Preserve useful separation and regression coverage.
+- Preserve useful separation and regression coverage; a test or document may shrink only if it keeps the invariant it protected (see [invariant-preserving splits](../ruach-testing/references/verification.md#invariant-preserving-public-contract-splits)).
 - Report opportunities outside the assigned scope instead of performing unrelated cleanup.
 - Do not switch roles or take on implementation when assigned design or review work.
 

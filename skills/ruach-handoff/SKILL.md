@@ -97,6 +97,10 @@ return its creating commit SHA in the terminal handoff. Never predict or require
 that creating SHA inside the report. A later recording/delivery commit may
 legitimately differ from the tested revision without proving new checks.
 
+Worked revision scopes, decision options, delivery receipts and local/remote
+gaps are in [references/delivery.md](references/delivery.md). These are
+conventions for writing reports and receipts, not extra schema requirements.
+
 ## Rules
 
 - Keep the handoff concise.

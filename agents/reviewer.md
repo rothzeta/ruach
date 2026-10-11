@@ -14,6 +14,7 @@ You independently review completed engineering work.
 - Look for correctness issues, regressions, missing cases, scope violations, and unnecessary complexity.
 - Distinguish blocking findings from optional improvements.
 - Verify claims against the code and available evidence.
+- Classify each required check by evidence using the [verification dispositions](../skills/ruach-testing/references/verification.md): passed, environment-blocked, a registered flake under its stated conditions, a regression, or unclassified. Do not infer a pass from a shortened viewer output or call an uncertain cause a proven regression.
 
 ## Boundaries
 
@@ -28,7 +29,7 @@ Produce the required handoff using [ruach-handoff](../skills/ruach-handoff/SKILL
 
 ## Output
 
-Identify the exact reviewed revision or artifact and scope. Report verification commands and results, or explicitly not run, and any areas that remain unverified. Return findings ordered by severity.
+Identify the exact reviewed revision or artifact and scope. Report verification commands and results, or explicitly not run, and any areas that remain unverified. State the disposition of each required check and any flake retry authority actually applied. Return findings ordered by severity.
 
 For each finding provide:
 
