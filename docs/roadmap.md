@@ -1,180 +1,187 @@
 # Ruach roadmap
 
-Status at 0.3.0 (release preparation; baseline 0.2.1 `ad79ff0`). Sources: product analysis (5 Oct 2026), security/quality audit (4 Oct 2026), and the 0.4 capability proposal. Finding IDs (RU-xx) refer to the audit.
+Backlog reconciled **2026-10-11** against the 0.3.0 release, current source and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
 
-Principles carried through every release:
+Current state: **0.3.0 released locally**, with `ruach-changelog` integrated under **Unreleased**. Most original 0.3 work is complete. Release confidence still needs green hosted CI and consumer/native smoke evidence. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
 
-- Keep the small boundaries: native tools own accounts and sessions, Herdr owns terminal primitives, consumers own project authority and routing, existing services own Git hosting, CI and tracking.
-- Reuse the Skills CLI, native plugin lifecycle, and the consumer's tracker; no new package manager, session database or service.
-- Each change ships with a failing public-boundary regression test first. Black-box contracts, not generated-output snapshots.
-- Product claims (cost, quality, review accuracy) stay unproved until measured in the pilot.
+## Priorities and sequencing
 
-| Release | Purpose |
-|---|---|
-| 0.2.2 (optional patch) | Security-critical identity fixes only, if 0.3 is far off |
-| 0.3 | Fix integrity defects, make install and use dependable, consolidate the existing product |
-| 0.4 | Council, bug-hunt, bugfix, QA/playtesting |
-| After 0.4 | Use on real projects; let recurring friction set priorities |
+| Order | Packages | Outcome |
+| --- | --- | --- |
+| Next | R1, R2, R3 | Close evidence gaps, fix documented reliability gaps, preserve decisions and running work |
+| Follow-up, suitable for 0.3.x | R4–R7 | Improve permissions, communication, handoffs and verification within existing resources |
+| 0.4 capability sequence | C1 → C3 → C4 → C5 | Council, known-bug correction, runtime QA, then defect discovery |
+| Conditional 0.4 companion | C2 | Gemini advisors when needed; council can use supported harnesses first |
+| Measurement | M1 | Establish whether the workflow earns its overhead; prepare cases early, run after R1 |
+| Decisions / later | D1–D3 and parked proposals | Resolve packaging choices separately; expand from demonstrated need |
 
----
+R1/R2/R3 can proceed independently. R4/R5 use R3's resource record; R6/R7 can proceed independently with coordinated edits to shared files. Council uses R3's decision/assignment record and R5's waiting guidance. Runtime QA uses the bugfix path; hunt follows once findings can be reproduced and corrected. Every 0.3.x improvement need not ship before any 0.4 work starts.
 
-## 0.3 — Trustworthy and usable
+## Active backlog
 
-### Track A: Integrity and security (do first)
+### R1 — Close release and native-use evidence gaps
 
-| Order | Work | Findings | Done when |
-|---|---|---|---|
-| A1 | Restore identity guarantees | RU-01, RU-02, RU-03 | Replacement refs cannot alter pinned reads (`--no-replace-objects` on all private probes); `assume-unchanged`/`skip-worktree` fail closed; worker cwd and Git identity always belong to the created worktree (canonicalize cwd and Git root, verify after creation). |
-| A2 | Patch dependencies | ws 8.18.3 (2 advisories), yaml 2.8.1 | Herdr on ws >= 8.21.0 and yaml >= 2.8.3 (or 2.9.1 to match handoff); lock regenerated; `bun audit` clean; tests pass. |
-| A3 | Handoff and native discovery parsing | RU-04, RU-11, RU-15 | Alias/collection mapping keys rejected; valid unrelated Claude skills (no `name`, no frontmatter) do not block launch while Ruach-owned resources stay strictly validated; diagnostics escaped, JSON Pointer paths correct, NUL revisions rejected before Git. |
-| A4 | Bound processes and artifact reads | RU-05, RU-06 | Hard deadline, bounded cleanup, single settlement; owned helper groups only (never the Herdr server or submitted agent); FIFO/special files yield a structured failed check within a bound; size budget. |
-| A5 | Recoverable installation | RU-07, RU-08, RU-09 | Staged writes with atomic rename and bounded rollback; hardlinked outside copies untouched; incoming skill roots preflighted for leftovers; every successful install passes immediate integrity check. |
-| A6 | Pin launch executable identity | RU-10 | Probed binary equals launched binary, including relative/empty PATH entries. |
-| A7 | Herdr-linked worktrees for launches | launcher; follows RU-02, RU-10 | Launches create worktrees through `herdr worktree create --workspace <parent>` so workers appear as linked worktrees of the launching workspace (`is_linked_worktree`, listed by `herdr worktree list`) instead of standalone workspaces; checkout, branch, base and recovery results preserved; cleanup uses `herdr worktree remove` for registered worktrees and keeps the branch; top-level launches without a parent keep a standalone workspace; uncertain-state retention unchanged. Display behavior verified on a throwaway worktree first. |
-| A8 | Hardening and notices | RU-13, RU-14, packaging | Codex private-instruction transport verified and accurately documented (no invented flags); evidence output descriptor held across execution; LICENSE/PROVENANCE in each standalone skill folder. |
+**Next action:** investigate the failing CI test step and record a green run on the resulting revision. Latest observed [run 37986084683](https://github.com/rothzeta/ruach/actions/runs/37986084683), at `d75039a`, passed installation, resource/type checks, release metadata and audit, then failed “Test root tools and all executable skills.” Earlier [run 37661762155](https://github.com/rothzeta/ruach/actions/runs/37661762155) also failed. The old “CI has not run” note is superseded.
 
-### Track B: Verification gate (parallel with A)
+Then complete the [native smoke checklist](native-parity.md#clean-install-smoke-checklist) and one real consumer task. Preserve role/skill discovery, scope, handoff and tool-version evidence; compare Claude native `--agent` and adapter composition on the same task. Include isolated-home Codex discovery and explicit skill-path fallback. Keep paid runs pending their required authorization. Harness-eval's unassisted brief must not hint at routes/skills; label hinted runs assisted.
 
-- RU-12: fix the two source type errors, add tsconfig and a pinned typecheck, annotate tests.
-- One CI job: pinned Bun/Just, frozen installs, resource and release checks, typecheck, all four suites, dependency audit, on a runner permitting local sockets.
-- Add the missing regression cases listed per finding (replacement refs, index flags, symlinked cwd, FIFOs, descendant pipes, hardlinks, alias keys, relative PATH).
-- Release discipline: record Bun/native versions; distinguish snapshot integrity from runtime/bootstrap integrity.
+**Local status (2026-10-11):** the hosted failure was diagnosed as an order-dependent `readdir` assertion at `skills/ruach-herdr/tests/worker.test.ts` and corrected locally (R1-F, exact local gate and unit review). The failing run URLs above are unchanged history; there is no resulting hosted green run, no native route result and no real consumer-task report yet. An offline smoke packet exists for later authorized rows and is pending independent review; every route gap below stays open.
 
-### Track C: Onboarding and installation
+**Done when:** a linked green GitHub run and consumer-task report exist, with results or explicit remaining gaps for every install route. Local tests alone do not close live-use evidence. Sources: former Tracks B/E, 0.3 exit notes, 0.3.x discovery/harness-eval.
 
-1. Choose-by-job README: standalone skill, direct native role, or coordinated Herdr use, with a table of what each route installs and what it still needs. Move source-development detail after the consumer snapshot path.
-2. One readiness/setup command for the chosen route: reports active version and source, locates roles and skills, checks nested packages, names missing prerequisites; never rewrites global config silently. Decide packaging changes (plugin-root package.json vs per-skill) only after exercising a clean installed-plugin path.
-3. Lifecycle docs: inspect active version, upgrade pin to pin, dependency prep after updates, resolve duplicate installs, remove while preserving local resources.
-4. Optional compatibility metadata so Bun/Git/Herdr prerequisites show early.
+### R2 — Fix documented install and linked-launch recovery gaps
 
-### Track D: Product consolidation
+**Next action:** reproduce the open cases in [operations limitations](operations.md#known-limitations-in-03), then split into bounded fixes:
 
-- One complete consumer example: request → role/route → startup → assignment → handoff → acceptance/delivery → release or retention, using the consumer's existing tracker.
-- Concise assignment specimen (input-side counterpart to the handoff).
-- Make direct, compact and full use explicit: worked small bugfix, review-only task, medium feature; a proportionate selection rule for Coordinator overhead.
-- Delivery and recovery wording: an explicitly requested uncommitted diff and an intentionally retained checkout are normal successful outcomes; example task record (assignment/report refs, candidate, blockers, resource IDs, next action) for resuming an interrupted Coordinator.
-- Role wording fixes: Implementer "justification" vs Coordinator "approval" for scope changes; Reviewer wording generalized to assigned artifacts and the responsible worker.
-- Discovery metadata: feature workflow described as Coordinator-only; Librarian description covers query if supported; `ruach-harness-eval` described clearly as a checker, not a benchmark runner (`model_use_verified` stays false).
-- Trim common-path repetition: link handoff parser detail, deduplicate cleanup rules. Document one coordination owner per task for Hermes integration.
-- Add before/after test examples to `ruach-testing` (including replacing a fixed-seed snapshot with property assertions).
+- Revalidate installer state under the staging lock so concurrent plans cannot act on stale state.
+- Report the Herdr workspace when identity verification fails after linked-worktree creation.
+- Preflight a requested subdirectory against the base commit before creating a checkout.
+- Establish the replacement-ref boundary of Herdr-owned `git worktree add`; retain fail-closed identity checks and document remaining limitations.
 
-### Track E: Native packaging and parity checks
+**Local status (2026-10-11):** installer revalidation under the staging lock (with the symlinked-target preflight) and the linked-launch receipt and `--cwd` preflight are fixed locally with failing-before regressions and independent unit review; see [operations](operations.md#known-limitations-in-03) and the [regression inventory](regression-cases.md). The replacement-ref boundary is established but not fixed: public Herdr v0.9.0 source and a fake probe show linked creation is unprotected, live behavior is unverified, and the limitation stays documented. No hosted or live claim.
 
-- Clean-install smoke test per route (plugin, snapshot, Skills CLI): a small real task with the expected role, skills, authority and handoff.
-- Verify Codex role discovery; evaluate exporting canonical Markdown roles to native Codex agent TOML while keeping one source of truth.
-- Document the Claude `--agent` (system prompt) vs Herdr adapter (appended) composition difference and check it with the same small task.
-- Verify source-mode skill exposure per harness.
+**Done when:** resolved cases have failing-before public-boundary regressions and accurate recovery instructions; unresolved cases remain listed. Keep the accepted harness-eval Git-configuration trust boundary; do not restore the superseded content-hashing design. Sources: shipped 0.3 limitations, A1/A7 follow-ups.
 
-Offline evidence, the Codex export evaluation and the pending smoke checklist are in [native-parity.md](native-parity.md).
+### R3 — One durable coordination record and complete assignments
 
-### Track F: Session-derived fixes (from 7 days of Claude, Codex and Gemini sessions)
+Consolidate decision, milestone/work and resource ledgers, assignment lint, decomposition and session-route notes into the existing [task record](examples/task-record.md) and [assignment specimen](examples/assignment-specimen.md). Extend Coordinator/Architect guidance before creating bookkeeping skills.
 
-Evidence is approximate (grep-level, mostly ramec/tehom-brainlab/enoch); each item needs a regression or doc check.
+The record retains owner decision words, date, stable IDs, authority and supersession; separates proposals from Coordinator choices; lists running/queued units, dependency reasons, assignment/report paths, branches, workers, resources, blockers and next actions. Update it at decisions/phase changes and read it after compaction. Ambiguous replies remain unresolved until mapped; never reconstruct missing rulings from memory. Consumers choose durable locations and commit policy.
 
-1. **Sandbox git writes and in-sandbox verification in worktrees.** Launcher/adapter grants the worktree gitdir as writable; a launch smoke test proves `git add && git commit`; workers request escalation once on an `index.lock` EROFS and never loop. (Codex: 116 sessions; Claude: ~15.) Verification recipes must also run inside the sandbox where the consumer allows it (sockets, tmp, read-only `.agents`): out-of-sandbox requests for builds/tests and diagnostics, not command wrappers, drove most Codex automatic approval reviews (council review, 7 Oct). Readiness (Track C2) reports which recipes still need out-of-sandbox execution; note that Codex prefix rules match whole arguments (`just test` does not cover `just test-focused`).
-2. **Environment vs product failure.** `ruach-testing` and Reviewer classify environment failures (sockets, tmp, disk) as "not verified: environment", never as findings; no verifying command piped into `head`/`tail` without `pipefail`; record exact command and exit code.
-3. **Handoff integrity.** A report never cites its own commit; every SHA verified with `git cat-file -e`; clean worktree required; final message carries status, verification or explicit "not run", SHA and open items; add `needs-decision` status with options; delivery receipt (SHA, tag, remote state, residue).
-4. **Delivery and cleanup checklist.** Delegable merge step with a never-push default and archive, fast-forward, verify, cleanup recipe; mandatory rebase/merge latest base, re-verify and record final SHA; remove worktrees and branches, check `.gitignore`, report clean status.
-5. **Role-first precedence and Coordinator discipline.** Role files state that the assignment names the role and orchestrator sections of AGENTS.md are ignored by workers; Coordinator delegates routine work (merges, test runs, log reading) and never reads source.
-6. **Assignment lint and decision list.** Coordinator checks task text, base SHA freshness, unused branch name and ownership paths; each assignment opens with the user's decisions, which are not reopened; standard assignment template and mailbox path convention in `ruach-handoff`.
+Assignments name the role, binding decisions, current base, unused branch, owned source/tests/support/docs, verification permissions and report path. Architect emits disjoint packages and dependencies; Coordinator explains serial steps. Workers follow their role rather than inherited orchestrator instructions. Record route overrides and ownership of ports/profiles/saves; consumers allocate them. Check stale resources before relaunch while preserving active workers and partial work.
 
-### 0.3 exit criteria
+**Local status (2026-10-11):** the task-record and assignment specimens and the Coordinator/Architect guidance are updated and independently reviewed statically. Static review and a prepared packet are not behavioral evidence: the held-out behavioral evaluation (R3-E) stays pending its native budget, access and source gates.
 
-All P1 and P2 findings closed with regressions; CI green on a clean checkout; a newcomer can install and complete a small task by following the README alone; native smoke checks recorded for Claude and Codex.
+**Done when:** an interrupted multi-unit task resumes without losing decisions or repeating handled work, and assignments avoid predictable ownership questions. Preserve still-valid user authorization. Sources: Track F5/F6; 0.3.x decomposition/ledgers/route overrides; RAMEC §§3.2/3.3/3.7/4, F1–F3/F8/F12.
 
-Still outstanding at the last 0.3 notes: a GitHub CI run and a real consumer-task run.
+### R4 — Sandbox permissions and readiness for worktree tasks
 
----
+Prove permission mapping lets authorized workers stage/commit in linked worktrees and run allowed verification recipes, including sockets/temp paths. Request required escalation once on a gitdir `index.lock` permission failure and report the result. Assignments name allowed requests; readiness identifies recipes needing execution outside the sandbox. Document whole-argument prefix matching (`just test` does not cover `just test-focused`).
 
-## 0.3.x — Session-derived improvements and measurement
+**Done when:** an isolated launch smoke proves staging/commit and permitted verification; missing permissions produce actionable diagnostics without loops. No global settings writes or approvals on workers' behalf. Sources: Track F1; RAMEC F6/§3.5.
 
-Follow-ups after 0.3 ships, from the same session review:
+### R5 — Reliable assignment submission and completion waits
 
-- **Parallel decomposition:** the Architect emits disjoint work packages with a dependency graph; the Coordinator states why any step is serial. (Highest-signal gap: repeated user complaints.)
-- **Milestone ledger:** Coordinator keeps a ledger updated each step, preserving decision rationale verbatim so compaction can resume from it.
-- **Resource ledger and idempotent launch:** worktree, branch, space, pane and agent tracked and checked each phase end; reuse or clean a stale worktree instead of failing on "destination already exists". Runtime resources (ports, browser profiles, saves, databases) are mostly consumer-owned: the consumer's configuration and recipes allocate and isolate them per worktree; Ruach only lets an assignment name the resources a worker owns and records them in the ledger. No Ruach allocator or scheduler.
-- **Docs conventions:** durable decision means an ADR plus an AGENTS.md pointer; mailbox items triaged into `docs/` with provenance; docs-convention probe in onboarding.
-- **Waiting guidance (role and `ruach-testing` wording, no new command):** Coordinators wait with one blocking `herdr agent wait` and a timeout, never `sleep` or status loops; workers run verification to completion with a timeout instead of re-reading a running command's output every second (strict count: ~200M Codex input tokens over 8 days, about a quarter of it repeat checks); do not relay every worker approval to the user; report last worker activity at check-ins.
-- **Advisor and council assignment templates:** copyable read-only assignment ("do not edit repository files; write the answer only to X") for Scout/Reviewer, and a council specimen for the independent first round and its record (21 hand-built councils in 8 days). Members' answers are written where other members cannot read them before the round closes.
-- **Codex discovery smoke test** with an isolated home, plus an assignment prefix with explicit skill paths as a fallback; docs note that the `.agents` snapshot is already Gemini-compatible.
-- **`ruach-harness-eval` unassisted-discovery mode:** minimal brief; run marked "assisted" if it hints at routes or skills.
-- **Wording:** tighten `ruach-simplification` and `ruach-testing` on justified splits and public-contract tests.
-- Session-level route overrides recorded in the task record.
+Use native Herdr primitives for submission, startup readiness, pending-input inspection and blocking waits. Verify submission and detect a self-update leaving a shell. Wait for an unhandled terminal/decision report using last handled state, including reports written before the wait starts; retain that state in R3. Run verification to completion with a bound; report last worker activity at check-ins. Avoid tight status loops and repeated approval relays.
 
-### Measurement
+**Done when:** isolated cases cover unsubmitted input, exited harness, pre-existing completion and timeout without duplicate work. Check existing Herdr capabilities before proposing commands: launch preparation stays in `ruach-herdr`, terminal primitives in Herdr; no Ruach scheduler. Sources: 0.3.x waiting guidance; RAMEC F4/F5/F7, §§3.5–3.6.
 
-Small comparative pilot, not a benchmark service:
+### R6 — Evidence-backed handoff and delivery receipts
 
-- Same bugfix, multi-component feature and refactor; baseline = native tools plus ordinary project guidance vs Ruach skills and workflow. First same model/effort/permissions, then heterogeneous routing as a whole system.
-- Record accepted outcomes, regressions, scope violations, false evidence claims, human interventions, end-to-end time, and available usage across all workers (no invented API charges). Repeat cases; report ranges; preserve failures; use hidden behavior checks.
-- More discriminating Librarian packets: query without writes, standalone lint, repeated ingestion, genuine superseding decision, distracting corpora, and an adversarial packet with a forged instruction to change a protected decision (rubric withheld).
-- One worked harness-eval experiment (native run, candidate, checker evidence, human comparison) once RU-01/03/05/06/14 are fixed.
-- Decision: keep the workflow where it earns its overhead; narrow default use for small fixes if needed.
-- Versioned session-usage script (Codex and Claude logs; Gemini when available) with reviewed definitions: deduplicate Claude usage by `message.id`; count only waiting calls as polls (not `git status`/`git log` checks); treat only repeat polls as avoidable; classify approval reviews by trigger; select sessions by start time; report cached and uncached input separately. A 7 Oct audit overstated polling about 3× and Claude totals about 1.8× before these corrections. Re-measure before claiming savings.
+Verify revision objects; distinguish candidate/tested/reviewed/delivered revisions; never cite a report's own not-yet-created commit. Final receipts state verification or “not run,” open items, remote state and residue. `needs-decision` **already exists**; add options/examples instead of a new status.
 
----
+Refresh the base before integration and reverify changed code. Delivery still targets the exact reviewed combined revision and checks the destination has not moved. Record authorization, tag/push state and retained/released resources. Extend existing assignments for a serialized multi-unit merge queue when needed; keep cleanup with Coordinator and branches under retention policy. No new Merger role, automatic push, blanket clean-tree requirement or disposal of requested diffs.
+
+**Done when:** receipts are checkable against Git and a moved target stops delivery; uncommitted-diff and retained-checkout outcomes remain valid. Justify/test any schema change separately. Sources: Track F3/F4; RAMEC §3.4 and steward proposal, reconciled with current role contracts.
+
+### R7 — Verification failures and proportionate test guidance
+
+Consolidate environment classification, known-flake disposition and wording in `ruach-testing`, `ruach-simplification` and Reviewer guidance. Socket/tmp/disk failures are “not verified: environment”; record command/exit code and preserve verifier status in truncation pipelines. Consumer flake records name symptom, environment and allowed rerun; repeated main-environment failures become defects. Preserve invariants and justify splits through public contracts.
+
+**Done when:** isolated packets distinguish environment blocks, registered flakes and regressions without weakening tests or claiming unrun checks. Public-contract and before/after examples already shipped; extend missing guidance only. Sources: Track F2; 0.3.x wording; RAMEC F9/§3.9.
 
 ## 0.4 — Deliberate, find, fix, exercise
 
-| Addition | Type | Purpose |
-|---|---|---|
-| `ruach-workflow-council` | Workflow | Independent answers and optional iterative deliberation |
-| `ruach-workflow-bug-hunt` | Workflow | Find and substantiate defects |
-| `ruach-workflow-bugfix` | Workflow | Diagnose and correct a known failure |
-| `ruach-workflow-qa` | Workflow | Exercise the running product and report observations |
-| `ruach-debugging` | Skill | Symptom to supported cause and verified correction |
-| `ruach-runtime-testing` | Skill | Run scenarios and collect evidence |
-| `Tester` | Role | Owns runtime observations for an assignment |
-| User-level conventions | Onboarding option | Opt-in snippet for user-level instructions (`~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md`) carrying cross-project conventions |
+Names/packaging remain proposals. Keep one coordination owner per task; consumers declare domain experts through existing routing. Council chair can be an Architect assignment and steward a delivery Implementer assignment, without new reusable roles.
 
-Names and packaging are proposals.
+### C1 — Council workflow and read-only assignment specimen
 
-### User-level conventions (opt-in)
+Add `ruach-workflow-council` and a copyable advisor/member brief: owner decisions, question, inputs, output-only edit scope, roster, evidence and round mode. Assign evidence collection when needed; Coordinator synthesizes reports.
 
-The same conventions (docs vault layout, plan/task naming, `.agents`/`bin`/`scripts` and `just`, who writes CURRENT/TASK_LOGS/PROBLEMS, definition of done) were restated by hand across four repositories. Ruach ships a short template the user applies themselves; onboarding may offer it and show the target paths but never writes global settings. It points to the canonical convention ADRs rather than copying them, and project `AGENTS.md` stays authoritative where they differ. Add an Analyst role only if council assignments reveal a gap Architect cannot fill; domain experts (music, UI/UX) are consumer-declared roles via existing routing.
+Manual mode runs one independent round then pauses. Automatic mode runs N total rounds including the first; “up to N, stop when stable” is explicit. Close each round before distributing answers; keep first-round peers' answers inaccessible. Later rounds receive actual peer reports, question and new evidence. Members state positions, assumptions, accepted/rejected arguments with reasons, changes, disagreement and resolving evidence. Synthesize by proposition/attribution rather than votes; preserve supported minority objections. Retain round artifacts and support later resumption after releasing sessions. APPROVE/CHANGES is an optional specimen, not a universal three-round rule.
 
-### Gemini as a worker/advisor agent (not orchestrator)
+**Done when:** manual/automatic runs obey independence/counts, preserve consequential objections and resume from artifacts. Compare final output with round one for corrected assumptions and missed requirements, not consensus rate. Sources: original 0.4 council; 0.3.x advisor/council templates; RAMEC §§3.1/4.
 
-Antigravity (`agy`) already loads `AGENTS.md`, `GEMINI.md` and `.agents/skills`, so snapshots work unmodified. Add a thin Gemini launch adapter for non-Coordinator roles, chiefly council advisors, reviewers and read-only Scouts (33 of 36 recent Gemini sessions were read-only advisory). The Coordinator stays on a supported orchestrator harness. Adapter needs: start `agy` in a linked worktree workspace; deliver the startup role turn and the assignment separately; pass large prompts by file path (inline hit "argument list too long"); seed the `settings.json` allowlist/`trustedWorkspaces` only as a consumer-owned step, never global settings; a Gemini route in the consumer catalogs. Verify `agy` headless flags and approval behavior before claiming support.
+### C2 — Gemini worker/advisor adapter
 
-### Suggested sequence
+Add a thin `agy` adapter for non-Coordinator roles when needed. Snapshots fit `.agents/skills`, but the current adapter deliberately returns `unsupported_adapter`; changelog-hook support does not establish launch support. Verify additive role delivery, workflow exclusion, headless flags and approval behavior before emitting argv. Launch linked worktrees, deliver role/assignment separately, pass large prompts by file path. Trust/allowlists and routing stay consumer-owned; no global writes or automatic substitution.
 
-1. **Council** (first: the most-used workflow not yet in Ruach, 21 hand-built councils in 8 days; builds on the 0.3.x council specimen):
-   - One workflow, two modes: single round then pause; automatic N total rounds (including the independent first round). "Up to N, stop when stable" is an explicit variation.
-   - Round boundary: a round closes before any of its answers are distributed. Later rounds receive peers' actual reports (not only the Coordinator summary), the question, new evidence, and references.
-   - Member report: current position, evidence and assumptions, accepted/rejected peer arguments with reasons, change since last round (no material change is valid), remaining disagreement, what would resolve it. Reuse handoff for completion metadata.
-   - Coordinator synthesizes by proposition, not vote count: established, conditional, disputed, why it matters, what helps choose. Technical claims stay attributed.
-   - Roster: same-role members with optional distinct perspectives, or mixed specialists. Reuse workers across rounds; durable state is the brief, per-round reports, and one council record so a later round resumes after sessions are released.
-2. **Bugfix + `ruach-debugging`** (smallest; builds on `ruach-testing`): establish intended behavior, reproduce, isolate cause, scoped fix, regression coverage, verify original failure, apply review/delivery requirements. Architect optional.
-3. **Tester role + `ruach-runtime-testing` + `ruach-workflow-qa`**: assignments describe user goals per identified build; report states which experiences were actually exercised (reading audio code is not hearing it); assignment names required capabilities (browser, desktop/game input, logs, screenshots, audio); isolate per-worktree state (profiles, saves, ports); seeds/save states recorded for reproduction, not made contracts.
-4. **Bug-hunt**: area/risk-bounded investigation; results classified as source-supported, reproduced, suspected, or product observation; "no confirmed defects" is valid with coverage and uncertainty stated; focused independent check on significant findings. "Find and fix" chains hunt to bugfix within scope; findings-only ends at the report.
+**Done when:** capability checks and an authorized advisory task establish launch, authority, discovery and handoff. Coordinator stays on a supported harness. Sources: original 0.4 Gemini; RAMEC F11; [adapter evidence](../skills/ruach-herdr/references/adapters.md).
 
-### 0.4 demonstrations (black-box, not wording snapshots)
+### C3 — Known-bug correction
 
-- **Feedback loop:** Tester finds a runtime defect (e.g. controls dead after encounter restart) on an identified build, bug-hunt preserves steps and state, bugfix isolates and corrects it with a regression test, Tester repeats the original sequence on the fixed build, Reviewer checks, Coordinator delivers and records remaining issues.
-- **Council:** manual mode runs one round and returns; automatic mode runs the requested rounds; round-1 answers preserved before peer exposure; every member receives completed peer reports; a supported minority position survives; synthesis separates agreement from unresolved choice; a later round resumes from artifacts.
-- **Council value check:** compare final output to round-1 answers (research suggests much of debate's benefit may come from combining initial answers). Judge by corrected false assumptions, missed requirements found, reconciled proposals, clearer tradeoffs, and preserved consequential objections, not consensus rate.
+Add `ruach-debugging` and `ruach-workflow-bugfix`: intended behavior → reproduce → supported cause → scoped correction → regression coverage → repeat failure → required review/delivery. Architect is optional.
 
-### 0.4 exit criteria
+**Done when:** a small real defect completes the sequence with evidence and proportionate overhead. Source: original 0.4 bugfix/debugging.
 
-Both demonstrations complete on the music software and one playable prototype; new skills pass resource/release checks and CI; one coordination owner per task remains documented.
+### C4 — Runtime QA and Tester
 
----
+Add Tester, `ruach-runtime-testing` and `ruach-workflow-qa`. Assign goals, identified build and required capabilities (browser/desktop input, logs, screenshots, audio). State actual exercised experiences: reading audio code is not hearing it. Consumers isolate profiles/saves/ports/databases; record seeds/save states for reproduction without making them contracts.
 
-## After 0.4: use it
+UI/measurement specimens use real-size data, named viewports, existing palette and recorded fields. Distinguish script/component timing from browser layout/paint; carry unmet budgets into named follow-ups with measured inputs. Reuse this package for UI budgets, design-to-build and measurement specimens before adding skills/workflows.
 
-Pause catalog expansion. Run Ruach on real projects, log recurring friction, and prioritize from that. Add only task-driven items:
+**Done when:** observations reproduce on an identified build and the original failure can be retested after C3. Sources: original 0.4 QA; RAMEC F10/§§3.8/4–5.
 
-- **Agent profiles:** run the same workflow with a different set of agents by selecting a named profile, e.g. `--profile cheap`, `--profile deep-review`, `--profile codex-only`. A profile is a consumer-owned overlay on the existing catalogs (a `roles.yaml`, plus extra routes/models if needed) that replaces role-to-route preferences and alternatives for one run. Requirements:
-  - Explicit selection only; the default profile is today's catalogs. No automatic switching, and escalation still uses only the active profile's declared alternatives.
-  - Workflow, role files and assignments are unchanged; only routing differs.
-  - The active profile name is recorded in the task record and handoff, so runs are comparable.
-  - Validated like the base catalogs; works through `just agent-routing` and the Herdr skill, not a new orchestrator.
-  - Enables the same-task A/B comparisons the measurement pilot needs and cheap/strong or Claude-only/Codex-only switching without editing shared files.
-- Additional adapters (Pi, OpenCode, etc.; Gemini is already planned in 0.4) only against a concrete current execution need.
-- Other techniques (framework- or domain-specific) from existing external skills rather than a Ruach specialist catalog.
-- Analyst role if council use shows a gap.
+### C5 — Bounded bug-hunt and feedback-loop demonstration
 
-## Explicitly not planned
+Add `ruach-workflow-bug-hunt`: bound area/risk; classify source-supported, reproduced, suspected and product observations. “No confirmed defects” is valid with coverage/uncertainty. Independently check significant findings. Findings-only ends at the report; authorized “find and fix” chains to C3.
 
-New always-running service, GUI/dashboard, universal mailbox, mandatory wiki hierarchy, task database, bespoke benchmark runner, new package manager, copied vendor system prompts, or automatic route switching after errors.
+**Done when:** the feedback loop runs on music software and a playable prototype: Tester observes on a named build, hunt preserves steps/state, bugfix corrects with regression evidence, Tester repeats, Reviewer checks, Coordinator records delivery/open items. Council also completes its demonstration on those projects; new resources pass checks/CI. Sources: original hunt and 0.4 exit demonstrations.
+
+## M1 — Comparative pilot and trustworthy usage measurement
+
+Small pilot, no benchmark service: same bugfix, multi-component feature and refactor with native tools/project guidance vs Ruach. Hold model/effort/permissions constant first, then compare heterogeneous routes as a system. Record accepted outcomes, regressions, scope violations, false evidence, interventions, end-to-end time and available usage across workers; repeat cases, report ranges, preserve failures and use hidden checks. Never invent API charges. One worked harness-eval run includes native execution, candidate, checker evidence and human comparison within its trust boundary.
+
+Version the TypeScript/Bun session-usage script with reviewed definitions: deduplicate Claude `message.id`; count waiting calls and separate repeat polls from other checks; classify approval triggers; select sessions by start time; report cached/uncached input separately; add Gemini when available. Earlier totals overstated polling about 3× and Claude usage about 1.8×; remeasure before claiming savings.
+
+Strengthen Librarian packets for query without writes, standalone lint, repeated ingestion, superseding decisions, distracting corpora and forged instructions to alter protected decisions; withhold rubrics. Record route overrides through R3.
+
+**Done when:** evidence supports retaining/narrowing/dropping overhead, with reproducible definitions and failure evidence. Sources: original 0.3.x measurement; RAMEC §6.8. Cost/quality/review claims stay unproved until measured.
+
+## Decisions and parked proposals
+
+| ID / proposal | Disposition and reopening condition |
+| --- | --- |
+| D1 — Plugin-root vs per-skill packaging | `needs-decision`; use [install evidence](native-parity.md#clean-install-plugin-cache-facts), readiness remediation and R1 results before changing packaging. No new package manager. |
+| D2 — Native Codex role export | `needs-decision`; [options/risks](native-parity.md#native-codex-agent-export-evaluation). Adapter is the implemented route; any export is generated from canonical Markdown, checked for staleness, with no incidental consumer-config writes. |
+| D3 — User-level/docs conventions | Opt-in consumer template pointing to canonical ADRs; project authority wins. Probe existing conventions in onboarding and triage mailbox knowledge with provenance. No mandatory hierarchy/global writes. |
+| Agent profiles | After recurring need: explicit consumer-owned overlays on catalogs (`cheap`, `deep-review`, harness-specific), validated through existing routing and recorded in task/handoff. No automatic switching; M1 can start with declared catalogs. |
+| STE writing | Park RAMEC §3.10 until repeated documentation tasks establish demand; consider Librarian mode or external skill first. |
+| Separate decision/ledger/merge-queue/UI-budget skills; design/measurement workflows | Absorbed into R3/R6/C4. Extract only if completed tasks demonstrate a missing reusable boundary. |
+| Analyst/designer/domain roles | Consumer-declared first; add Analyst only if council reveals a gap Architect cannot fill. |
+| Other adapters/specialist techniques | Concrete execution need only; reuse external domain/framework skills. Gemini remains C2. |
+
+After 0.4, pause catalog expansion and prioritize recurring friction recorded on real projects.
+
+## Completed baseline — 0.3 and integrated follow-ups
+
+Historical track/finding IDs remain for evidence references. Details are in the [0.3 changelog](../CHANGELOG.md#030--2026-10-07), [release report](reports/0.3/ship.md) and [regression inventory](regression-cases.md). Implementation completion does not close R1's live-use gaps.
+
+### Track A: Integrity and security
+
+| Item | Delivered outcome |
+| --- | --- |
+| A1 | Pinned reads, canonical worker identity, hidden index/filter checks; accepted Git-configuration trust boundary retained. |
+| A2 | Patched Herdr ws/yaml and frozen locks. |
+| A3 | Strict handoff parsing, escaped diagnostics, NUL revision checks, tolerant unrelated skill discovery. |
+| A4 | Bounded processes/cleanup/artifact reads, including descendant pipes/special files. |
+| A5 | Staged/atomic snapshot installation, rollback, hardlink protection, leftovers/integrity checks; concurrency in R2. |
+| A6 | Probed/launch executable identity, including relative/empty PATH. |
+| A7 | Herdr-linked worktrees for launches and registered cleanup; recovery gaps in R2. |
+| A8 | Hardening and notices: evidence descriptor, instruction-transport limits, per-skill LICENSE/PROVENANCE. |
+
+### Track B: Verification gate
+
+Typecheck, pinned toolchain, CI definition, audit and regression inventory shipped. Green hosted CI evidence remains R1.
+
+### Track C: Onboarding and installation
+
+Choose-by-job README, read-only `just ready`, lifecycle instructions and compatibility metadata shipped. Packaging remains D1.
+
+### Track D: Product consolidation
+
+Consumer/assignment/task specimens, direct/compact/full use, scope/review wording, discovery metadata, cleanup rules and testing examples shipped. Gated delivery Implementer assignments and declared-route escalation shipped; R3/R6 extend these contracts.
+
+### Track E: Native packaging and parity checks
+
+Offline evidence and export evaluation shipped in [native-parity.md](native-parity.md). Paid/native checks remain R1; export remains D2.
+
+### Integrated after 0.3, unreleased
+
+`ruach-changelog` logs finished turns and supported compaction summaries to consumer JSONL, with project registration and an opt-in plugin hook. [Implementation/review evidence](reports/0.4/changelog-review.md) exists. This is implemented, not future work, and does not replace the decision/work record.
+
+## Boundaries and source reconciliation
+
+Native tools own accounts/sessions, Herdr owns terminal primitives, consumers own authority/routing/runtime resources, existing services own hosting/CI/tracking. Reuse native plugin lifecycle and Skills CLI. No always-running service, GUI/dashboard, universal mailbox, task database, bespoke benchmark runner, copied vendor prompts or automatic route switching. Preserve contracts and appropriate public-boundary regressions; consequential instruction changes need isolated behavioral evidence.
+
+The [pre-cleanup roadmap](https://github.com/rothzeta/ruach/blob/d75039aa7b82b262e2f28af08630258fb7f77180/docs/roadmap.md) preserves original scope/provenance: product analysis (5 Oct), audit (4 Oct), session review (7 Oct) and capability proposal. Former F1–F6 map to R4/R7/R6/R6/R3/R3. Former 0.3.x items map to R1/R3/R5/R7/C1/M1; no second follow-up list is maintained. The [RAMEC disposition map](design/0.4-suggestions-from-ramec-orchestration.md#backlog-disposition-2026-10-11) locates every suggestion.

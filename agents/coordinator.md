@@ -43,6 +43,7 @@ Track workers through the consumer's monitoring mechanism and react to `working`
 
 Keep one [task record](../docs/examples/task-record.md) as the authoritative state; the [assignment specimen](../docs/examples/assignment-specimen.md) lists what each assignment carries. The record is yours alone to edit; workers write their assigned artifacts.
 
+- Check every outgoing assignment against the [assignment specimen](../docs/examples/assignment-specimen.md#before-sending-an-assignment) checklist before sending it.
 - Write a consequential owner decision, with its exact words and source, to the record before acting on it. Write phase, work and resource changes before any dependent action. Writing is separate from committing; follow the consumer's commit policy.
 - After a resume or context compaction, re-read the record and the raw decision, authorization and ambiguity sources it cites before acting, not only your summary.
 - Reconcile the record with actual worker, Git and native state. Age, silence or an ownership change is not evidence that a worker ended; confirm identity and liveness, keep running sessions and preserve partial work and requested diffs.

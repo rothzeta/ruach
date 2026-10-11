@@ -2,7 +2,7 @@
 
 Evidence for roadmap [Track E](roadmap.md) collected 2026-10-06 with Claude Code 2.1.292, codex-cli 0.160.1, Skills CLI 1.7.0, Bun 1.4.2 and Herdr 0.9.0 on Linux. Every experiment used a temporary `HOME`, `CODEX_HOME` and `CLAUDE_CONFIG_DIR`, and none sent a model prompt. Nothing here was run with a paid session. Statements are marked **verified** (observed locally, offline), **documented** (taken from vendor documentation or installed help, not observed in a session) or **unverified**.
 
-Two decisions are deliberately left open and marked `needs-decision`: plugin-root versus per-skill packaging, and native Codex agent export.
+Two decisions are deliberately left open and marked `needs-decision`: plugin-root versus per-skill packaging, and native Codex agent export. The current backlog tracks smoke/discovery evidence under [R1](roadmap.md#r1--close-release-and-native-use-evidence-gaps) and these choices under [D1/D2](roadmap.md#decisions-and-parked-proposals); the observations below remain dated evidence.
 
 ## Codex role and skill discovery
 
@@ -37,7 +37,7 @@ Source mode means the repository's own skills are visible only when they sit in 
 - Consequences, verified in the cache: `bun scripts/install.ts ready --route native` reports `missing` nested packages for `ruach-handoff` and `ruach-herdr`; `bun skills/ruach-handoff/scripts/validate.ts <report>` exits 2 with `DEPENDENCY_UNAVAILABLE`. After `bun install --frozen-lockfile` in each skill (no `--ignore-scripts` needed, packages come from the lock) the same readiness check is `ok`. This is the same for the snapshot route (verified below).
 - The marketplace declaration `source: "./"` makes the plugin root the repository root. Skills are found at `skills/`, agents at `agents/` without any extra manifest field.
 
-Evidence for the packaging decision, not a decision: the plugin-root approach copies everything and already triggers a root install but never installs skill-level dependencies; a per-skill approach (each skill folder self-contained) would need a post-install step either way because the Skills CLI also installs no dependencies. `needs-decision`: whether to ship a plugin that is rooted at a trimmed directory, add a documented post-install step, vendor dependencies, or keep the current behavior with the existing `ready` remediation.
+Evidence for the packaging decision, not a decision: the plugin-root approach copies everything and installs no dependencies (the cache experiment found no `node_modules/` anywhere, so no root install is triggered either); a per-skill approach (each skill folder self-contained) would need a post-install step either way because the Skills CLI also installs no dependencies. `needs-decision`: whether to ship a plugin that is rooted at a trimmed directory, add a documented post-install step, vendor dependencies, or keep the current behavior with the existing `ready` remediation.
 
 Snapshot route, run offline into a temporary directory:
 
