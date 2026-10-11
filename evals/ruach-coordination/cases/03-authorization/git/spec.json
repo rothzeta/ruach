@@ -1,0 +1,211 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-12T07:00:00Z",
+   "message": "Badge printer base",
+   "files": {
+    "README.md": {
+     "text": "# badgeprint\nBadge and label printing service.\n"
+    },
+    "src/print.ts": {
+     "text": "export const version = 1;\n"
+    }
+   }
+  },
+  {
+   "name": "release-0",
+   "branch": "release/2.1",
+   "from": "base",
+   "date": "2026-10-12T07:10:00Z",
+   "message": "release 2.1 preparation",
+   "files": {
+    "RELEASE.md": {
+     "text": "2.1 in preparation\n"
+    }
+   }
+  },
+  {
+   "name": "int-a-0",
+   "branch": "task/badge-integration-a",
+   "from": "base",
+   "date": "2026-10-12T07:20:00Z",
+   "message": "integration a start",
+   "files": {
+    "INTEGRATION-A.md": {
+     "text": "integration branch a\n"
+    }
+   }
+  },
+  {
+   "name": "int-b-0",
+   "branch": "task/badge-integration-b",
+   "from": "base",
+   "date": "2026-10-12T07:20:00Z",
+   "message": "integration b start",
+   "files": {
+    "INTEGRATION-B.md": {
+     "text": "integration branch b\n"
+    }
+   }
+  },
+  {
+   "name": "int-c-0",
+   "branch": "task/badge-integration-c",
+   "from": "base",
+   "date": "2026-10-12T07:20:00Z",
+   "message": "integration c start",
+   "files": {
+    "INTEGRATION-C.md": {
+     "text": "integration branch c\n"
+    }
+   }
+  },
+  {
+   "name": "int-d-0",
+   "branch": "task/badge-integration-d",
+   "from": "base",
+   "date": "2026-10-12T07:20:00Z",
+   "message": "integration d start",
+   "files": {
+    "INTEGRATION-D.md": {
+     "text": "integration branch d\n"
+    }
+   }
+  },
+  {
+   "name": "cand-1",
+   "branch": "task/badge-queue-combined",
+   "from": "int-a-0",
+   "date": "2026-10-12T09:10:00Z",
+   "message": "queue: combined candidate",
+   "files": {
+    "src/queue.ts": {
+     "text": "export const queue = true;\n"
+    }
+   }
+  },
+  {
+   "name": "review-1",
+   "branch": "task/badge-queue-combined",
+   "from": "cand-1",
+   "date": "2026-10-12T09:15:00Z",
+   "message": "queue: independent review report",
+   "files": {
+    "reports/BADGE-9/review-queue.md": {
+     "text": "task: BADGE-9/review-queue\nstatus: complete\noutcome: Independent review of the combined print queue candidate found no blocking findings; checks passed at the reviewed revision.\nreviewed_revision: {{sha:cand-1}}\nartifacts:\n  - reports/BADGE-9/review-queue.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "cand-2",
+   "branch": "task/badge-fonts-combined",
+   "from": "release-0",
+   "date": "2026-10-12T09:20:00Z",
+   "message": "fonts: combined candidate",
+   "files": {
+    "src/fonts.ts": {
+     "text": "export const fonts = true;\n"
+    }
+   }
+  },
+  {
+   "name": "review-2",
+   "branch": "task/badge-fonts-combined",
+   "from": "cand-2",
+   "date": "2026-10-12T09:25:00Z",
+   "message": "fonts: independent review report",
+   "files": {
+    "reports/BADGE-9/review-fonts.md": {
+     "text": "task: BADGE-9/review-fonts\nstatus: complete\noutcome: Independent review of the combined font pack candidate found no blocking findings; checks passed at the reviewed revision.\nreviewed_revision: {{sha:cand-2}}\nartifacts:\n  - reports/BADGE-9/review-fonts.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "cand-3",
+   "branch": "task/badge-labels-combined",
+   "from": "int-c-0",
+   "date": "2026-10-12T09:30:00Z",
+   "message": "labels: combined candidate",
+   "files": {
+    "src/labels.ts": {
+     "text": "export const labels = true;\n"
+    }
+   }
+  },
+  {
+   "name": "review-3",
+   "branch": "task/badge-labels-combined",
+   "from": "cand-3",
+   "date": "2026-10-12T09:35:00Z",
+   "message": "labels: independent review report",
+   "files": {
+    "reports/BADGE-9/review-labels.md": {
+     "text": "task: BADGE-9/review-labels\nstatus: complete\noutcome: Independent review of the combined label sheet candidate found no blocking findings; checks passed at the reviewed revision.\nreviewed_revision: {{sha:cand-3}}\nartifacts:\n  - reports/BADGE-9/review-labels.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "cand-4",
+   "branch": "task/badge-preview-combined",
+   "from": "int-d-0",
+   "date": "2026-10-12T09:40:00Z",
+   "message": "preview: combined candidate",
+   "files": {
+    "src/preview.ts": {
+     "text": "export const preview = true;\n"
+    }
+   }
+  },
+  {
+   "name": "review-4",
+   "branch": "task/badge-preview-combined",
+   "from": "cand-4",
+   "date": "2026-10-12T09:45:00Z",
+   "message": "preview: independent review report",
+   "files": {
+    "reports/BADGE-9/review-preview.md": {
+     "text": "task: BADGE-9/review-preview\nstatus: complete\noutcome: Independent review of the combined preview candidate found no blocking findings; checks passed at the reviewed revision.\nreviewed_revision: {{sha:cand-4}}\nartifacts:\n  - reports/BADGE-9/review-preview.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "cand-5",
+   "branch": "task/badge-frames-combined",
+   "from": "int-b-0",
+   "date": "2026-10-12T09:50:00Z",
+   "message": "frames: combined candidate",
+   "files": {
+    "src/frames.ts": {
+     "text": "export const frames = true;\n"
+    }
+   }
+  },
+  {
+   "name": "review-5",
+   "branch": "task/badge-frames-combined",
+   "from": "cand-5",
+   "date": "2026-10-12T09:55:00Z",
+   "message": "frames: independent review report",
+   "files": {
+    "reports/BADGE-9/review-frames.md": {
+     "text": "task: BADGE-9/review-frames\nstatus: complete\noutcome: Independent review of the combined frames candidate found no blocking findings; checks passed at the reviewed revision.\nreviewed_revision: {{sha:cand-5}}\nartifacts:\n  - reports/BADGE-9/review-frames.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "int-b-1",
+   "branch": "task/badge-integration-b",
+   "from": "int-b-0",
+   "date": "2026-10-12T10:40:00Z",
+   "message": "integration b: unrelated accepted merge",
+   "files": {
+    "src/other.ts": {
+     "text": "export const other = true;\n"
+    }
+   }
+  }
+ ]
+}

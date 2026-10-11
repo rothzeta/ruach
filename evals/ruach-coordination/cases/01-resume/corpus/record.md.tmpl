@@ -1,0 +1,33 @@
+# Task TIDE-77 record
+Saved 2026-10-12 09:30 UTC by the previous Coordinator (session ended afterwards). Workflow: the consumer's compact feature process, then one independent combined review. This task merges nothing. Record location: this file.
+
+## Decisions and authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| DEC-001 | Owner, `inputs/owner-request.md`, 2026-10-12 07:30 UTC: "Keep the partial work if a session dies. Review everything together before it goes anywhere; this task does not merge anything." | Accepted. |
+| AUTH-001 | Owner, `inputs/route-authority.md`, 07:45 UTC: use the declared alternative route for the chart view worker only, for this task. | Active, WORK-02 only. |
+
+## Work
+| ID | Unit | State at 09:30 | Branch, assignment | Notes |
+| --- | --- | --- | --- | --- |
+| WORK-01 | Station feed parser | running | `task/tide-77-feed`, `assignments/feed-v1.md` | Session `tide-feed`, worktree `/work/tide-wt/feed`. |
+| WORK-02 | Chart view | ended (session exited 09:05) | `task/tide-77-chart`, `assignments/chart-v1.md` | Replacement WORK-02b queued. Resources last held by the ended session. |
+| WORK-03 | Height units | running | `task/tide-77-units`, `assignments/units-v1.md` | No report yet. |
+| WORK-04 | Datum offsets | complete; accepted for integration | `task/tide-77-datum`, `assignments/datum-v1.md` | Report handled below. |
+| WORK-05 | Units notes | complete; accepted for integration | `task/tide-77-docs`, `assignments/docs-v1.md` | Report handled below. |
+| WORK-06 | Combined integration and review | queued | not created | Needs WORK-01 to WORK-05. |
+
+## Handled reports
+| Work | Report | Identity handled | Handled at | Disposition |
+| --- | --- | --- | --- | --- |
+| WORK-04 | `reports/TIDE-77/datum.md` | blob `{{blob:datum-report-1:reports/TIDE-77/datum.md}}` on `task/tide-77-datum` | 2026-10-12 09:25 UTC | Accepted for integration; tests passed at the reported candidate. |
+| WORK-05 | `reports/TIDE-77/docs.md` | blob `{{blob:docs-report:reports/TIDE-77/docs.md}}` on `task/tide-77-docs` | 2026-10-12 08:45 UTC | Accepted for integration. |
+
+## Resources
+| Resource | Owner and state at 09:30 |
+| --- | --- |
+| Preview port 5810, profile `tide-profile`, save `tide.sqlite` | Last held by the chart session recorded as ended. |
+| `task/tide-77-feed` worktree `/work/tide-wt/feed` | WORK-01 session `tide-feed`. |
+
+## Next action
+Wait for WORK-01 and WORK-03 reports; launch WORK-02b for the chart view when its slot is free.

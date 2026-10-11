@@ -1,0 +1,7 @@
+roles:
+  implementer:
+    preferred: claude-sonnet-medium
+    alternatives: [codex-terra-high]
+routes:
+  claude-sonnet-medium: {harness: claude, model: sonnet, effort: medium, permissions: auto-review}
+  codex-terra-high: {harness: codex, model: terra-2, effort: high, permissions: auto-review}

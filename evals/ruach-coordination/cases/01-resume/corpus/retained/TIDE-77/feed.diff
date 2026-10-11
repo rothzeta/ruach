@@ -1,0 +1,11 @@
+diff --git a/src/feed.ts b/src/feed.ts
+--- a/src/feed.ts
++++ b/src/feed.ts
+@@ -1,4 +1,8 @@
+ export function parseStation(line: string) {
+-  // partial: only the id column is read so far
+-  return { id: line.split(',')[0] };
++  const [id, name, lat, lon] = line.split(',');
++  // uncommitted: coordinates parsed, tests not written yet
++  return { id, name, lat: Number(lat), lon: Number(lon) };
+ }
