@@ -2,9 +2,10 @@ task: multi-machine-council-sonnet-round-2
 role: architect
 council_round: 2
 status: needs-decision
-outcome: "Round 2 revision after reading the Sol and Opus designs and the latest setup evidence. Same boundary as round 1 (run the unchanged launcher on the target machine), now invoked through a fixed stdin-request helper with a per-launch exclusive record and result file, local route resolution with direct remote selection, push-then-fetch Git handoff with immutable receipt refs, and a three-way split of local transfer, hosted feature publication and polled-branch delivery. Smallest reliable deliverable defined. Five owner decisions remain."
+outcome: "Round 2 revision (corrected: absence of a launch record never authorizes a new attempt) after reading the Sol and Opus designs and the latest setup evidence. Same boundary as round 1 (run the unchanged launcher on the target machine), now invoked through a fixed stdin-request helper with a per-launch exclusive record and result file, local route resolution with direct remote selection, push-then-fetch Git handoff with immutable receipt refs, and a three-way split of local transfer, hosted feature publication and polled-branch delivery. Smallest reliable deliverable defined. Five owner decisions remain."
 baseline_revision: d75039aa7b82b262e2f28af08630258fb7f77180
 round1_revision: 511c329c111c618e087dce72a0fc8af02ebf08d5
+round2_revision: 37160b4b3b4208cfcf4e673b72d0204fa472fbe7
 peer_round1_inputs: "Sol design e4f2dc2, Opus design c79d665 (read only, absolute paths under the sibling worktrees)"
 artifacts:
   - docs/design/multi-machine-sonnet.md
@@ -19,7 +20,7 @@ review: not-run
 discoveries:
   - "Peers agree with round 1 on launcher-on-target, scoped IDs, Git for source, one integration authority, no blind retry. Real differences: remote command shape, route resolution, lost-response mechanism, outbound transfer, assignment delivery, branch spelling, dirty-work handling and the HERDR_ENV gate. The design records each with a resolution."
   - "A fixed target-side helper that reads one JSON request on stdin removes the shell-quoting boundary instead of testing around it, and needs no worker.ts change: it creates an exclusive per-launch record, then spawns the launcher detached with stdout to a result file."
-  - "Because the record is created before the launcher is spawned, a reachable host with no record proves the launcher never ran, so that case is safe to redispatch. Every other case is retained and inspected, never retried."
+  - "Correction accepted after the final check: a launch record proves the launcher may have been spawned, but its absence proves nothing alone, because a single negative observation can race an in-flight SSH dispatch that has not yet claimed its record. Absence never authorizes a new request or attempt. The helper's atomic exclusive claim is the only arbiter; the same immutable launch ID plus digest may be replayed only through it; observe never resubmits; unknown is preserved until bounded evidence shows no in-flight producer, and an abandon tombstone then closes the race."
   - "A branch name cannot protect a receipt. The receipt SHA must be pinned on the remote (refs/ruach/receipts/*) and then on the control machine with a create-only ref (refs/ruach/received/*). Without a pin, a rewrite plus remote gc loses the candidate."
   - "WIP commits transfer freely; only publication to polled or deployment branches and delivery to protected targets need authorization. Round 1 over-merged these."
   - "Herdr API forwarding can carry list, get, read, wait, prompt and workspace calls, but never reaches target files, so native preparation and worktree verification must run on the target."
@@ -30,7 +31,7 @@ blockers:
   - "Owner decision 3: first project (recommend ramec), integration machine, and which acceptance environments must run where."
   - "Owner decision 4: remote snapshot and mirror maintenance (detect-and-refuse versus fast-forward clean remote checkouts)."
   - "Owner decision 5: non-Git assets and secrets (which datasets or images may be copied by hash manifest, from where; secrets only provisioned by the owner)."
-  - "Unverified before implementation: SSH-specific Git behavior (ssh:// or scp URLs, host keys, fetch by SHA through a real server), remote socket reachability under an explicit environment allowlist, dropped-session behavior, and remote .agents snapshot state per repository."
+  - "Unverified before implementation: push into refs/ruach/incoming/* over SSH, fetch by SHA through a real server and the pin refs (the Coordinator separately verified direct SSH fetch of d75039a from each remote into a temporary bare repository, not my evidence), ssh option effects, remote socket reachability under an explicit environment allowlist, dropped-session behavior, and remote .agents snapshot state per repository."
 design_scope: round 2; independent round-1 reasoning preserved in the design from section 1 onward
 
 # Sonnet 5.5 council report, round 2
@@ -64,7 +65,7 @@ v1 is (1) verified Git handoff recipes and receipt rules in operations documenta
 
 The control machine retrieves a returned commit by SSH fetch, so the remote needs no credentials for the control machine. The receipt SHA is authoritative: the worker pins it as `refs/ruach/receipts/<task>/<seq>` on the remote, the control machine fetches the branch, verifies tip, ancestry and base, falls back to fetch-by-SHA if the branch was rewritten, and creates `refs/ruach/received/<task>/<seq>` create-only. Only then may the remote pin be removed. The design lists the exact commands and what was observed in disposable repositories.
 
-An uncertain launch is preserved. The record-before-spawn order makes "reachable host, no record" provably not started; every other state is inspected, adopted or reported, and replacement uses a new worker name, launch ID and branch after the old execution is confirmed ended.
+An uncertain launch is preserved. The helper's atomic exclusive claim is the only arbiter. A record shows a launch may exist; its absence alone does not show that none will, because a single observation can race an in-flight SSH dispatch (corrected after the final check). Absence never authorizes a new request or attempt: the state stays `unclaimed-unknown`, `observe` never resubmits, and the same immutable launch ID and digest may be replayed only through the claim, where competing or delayed requests converge. After bounded evidence that no producer is in flight (dispatch process gone, a bound exceeding SSH timeouts has elapsed, a second observation still empty), an `abandon` tombstone makes any delayed request refuse, and only then does a new attempt (new worker name, launch ID and branch) become possible. Every other state is inspected, adopted or reported.
 
 ## Local transfer, publication and delivery
 
@@ -72,4 +73,4 @@ Three different operations: local transfer between owned machines (no per-transf
 
 ## What this report does not establish
 
-No remote machine was contacted and nothing was mutated. No SSH Git transfer was exercised, no live launch was run, and no application or runtime test was run. The Git evidence is local `file://` only. Network behavior, host-key handling and fetch-by-SHA through a real SSH server need one authorized live rehearsal.
+No remote machine was contacted and nothing was mutated. No SSH Git transfer was exercised, no live launch was run, and no application or runtime test was run. My Git evidence is local `file://` only. The Coordinator separately verified direct SSH fetch of `d75039a` from each remote into a temporary bare repository (not my evidence). Push over SSH, fetch-by-SHA through a real server and the pin refs need one authorized live rehearsal.
