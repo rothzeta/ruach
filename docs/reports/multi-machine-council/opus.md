@@ -1,54 +1,110 @@
 ---
-task: multi-machine-council-round-1-opus
+task: multi-machine-council-round-2-opus
 role: architect
 council_member: Opus 5.5 (high)
-round: 1
+round: 2
 status: needs-decision
-outcome: "Independent design: add an explicit --machine to ruach-herdr that runs the existing launcher unchanged on the target machine over its saved Herdr SSH target and relays one machine-qualified result. Use Git for source handoff, with direct SSH Git as the default transport: the integration checkout pushes bases only into refs/ruach/incoming/* on the remote and fetches worker branches into refs/remotes/<machine>/*. Git bundles are the fallback. Central origin is an owner option. Patches, rsync and shared filesystems are rejected for source. One Coordinator and one integration checkout keep merge authority. Revised once for the Coordinator setup update (remote Herdr 0.9.3, --machine forwarding via a 0.9.3 client, bundle seeding, no push credentials). The recommendation is unchanged. Forwarding becomes the near-term monitoring transport, and remote linked mode moves into Phase 2. Ready for the second council round. Implementation waits on owner decisions D1-D12."
+outcome: "Round 2 after reading Sol (e4f2dc2) and Sonnet (511c329). All three agree on target-side launcher execution, machine-scoped IDs, per-host native config, resources and worktrees, Git for committed source only, one integration authority and inspect-first recovery. My revised first version is a sibling skills/ruach-herdr/scripts/machine.ts (list, preflight, start, observe) with worker.ts unchanged. A wrapper-owned remote launch record (atomic mkdir by launch ID, request digest before dispatch, setsid -w with outputs to files) replaces my launcher --result-file and is the minimal form of Sol's request identity; Sol's per-phase journal is deferred. Ref transfer is control-initiated only: push into refs/ruach/incoming/* (bundles first-class), create-only pin refs refs/ruach/handoff/* on the remote and refs/ruach/receipts/* locally, non-forced fetch, and a bundle streamed over the same SSH when direct Git fails. Ref transfer, feature publication and deployment-branch publication are separated. Herdr forwarding carries monitoring later; target-side preparation cannot be forwarded. Five owner decisions remain."
 baseline: d75039a
 artifacts:
   - docs/design/multi-machine-opus.md
   - docs/reports/multi-machine-council/opus.md
   - branch ruach/council-machines-opus
 verification:
-  - "Repository inspection at d75039a: agents/*.md, skills/ruach-herdr (SKILL.md, references, scripts/worker.ts, spaces.ts, process.ts, contracts.ts), skills/ruach-handoff (SKILL.md, schema), config/agent-routing, scripts/agent-routing.ts, README.md, docs/roadmap.md, docs/coordination.md, docs/operations.md, docs/examples. Cited line numbers rechecked with sed/grep."
-  - "Local read-only probes: herdr --version = 0.9.0; herdr status = client/server protocol 22, server running; herdr --machine oholiab agent list = 'unknown option: --machine'; herdr machine list --json = oholiab and tubal enabled, session default; herdr worktree create --help flags; installed ~/.agents/skills/herdr/SKILL.md documents --machine; local repos ruach/ramec/enoch/eden have GitHub origin."
-  - "bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/multi-machine-council/opus.md --repo . : ok true, exit 0 (baseline d75039a resolved)"
-  - "just check: exit 0 (resource identities, eval placement, relative Markdown targets; tsc), after just install of frozen dependencies in this worktree. A first run before the install failed typecheck only on missing node_modules (environment)."
-  - "git diff --check on both artifacts: exit 0"
-  - "Setup update facts F21-F28 (remote Herdr 0.9.3, forwarding with a 0.9.3 client, bundle seeding, toolchains, no push credentials, remote workspaces) are Coordinator-supplied and not re-verified. A read-only local search did not find the temporary client."
-  - "not run: application or runtime tests, remote machine probes, live launches (the design is documentation only)"
+  - "Peer artifacts read only (absolute paths): council-machines-sol docs/design/multi-machine-sol.md and docs/reports/multi-machine-council/sol.md at e4f2dc2; council-machines-sonnet docs/design/multi-machine-sonnet.md and docs/reports/multi-machine-council/sonnet.md at 511c329. Not edited."
+  - "Disposable Git repositories in session scratch (git 2.47.3, file transport; SSH transport not exercised): base push into refs/ruach/incoming of a non-bare clone with main checked out left its status unchanged; create-only update-ref pin succeeded, then a second attempt failed with 'reference already exists'; pin and branch fetched without force into new refs, received ref equals H, base is an ancestor; after the remote branch was rewritten a non-forced fetch exited 1 and the local receipt pin still named H; fetch by bare SHA worked under protocol v2 (via pin and, before gc, unreferenced)."
+  - "Bundles in the same repositories: 'bundle create - <ref> ^B' streamed to stdout; verify exit 0 where B exists and failed where it is missing ('lacks these prerequisite commits'); fetch from the bundle gave H; a bare-SHA bundle was refused ('Refusing to create empty bundle'); an outbound ref bundle verified and imported into the remote incoming ref at the expected commit."
+  - "Launch-record primitives: setsid -w returned the child's exit status (4) with output redirected to files; mkdir of an existing launch directory failed."
+  - "bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/multi-machine-council/opus.md --repo . : ok true, exit 0, baseline d75039a resolved (round-2 content)"
+  - "just check and git diff --check on both artifacts: exit 0 before the round-2 commit"
+  - "Round 1: repository inspection at d75039a and local read-only Herdr probes (0.9.0 rejects --machine; two enabled profiles); setup-update facts F21-F28 Coordinator-supplied, not re-verified."
+  - "not run: application or runtime tests, remote machine probes, live launches, SSH Git transport"
 review: not-run
 discoveries:
-  - "The installed Herdr skill (~/.agents/skills/herdr/SKILL.md) documents a global --machine that the installed 0.9.0 binary rejects. Detect capabilities from --help, never from documentation."
-  - "Herdr API forwarding, even when available, does not forward local configuration. It cannot replace remote native preparation (Claude settings overlay, Codex config reader), so launch must run on the target machine."
-  - "worker.ts already forwards PATH/HOME/CODEX_HOME/CLAUDE_CONFIG_DIR from its own process env. Running it remotely gives the correct ownership, as long as the SSH invocation does not carry the caller's values."
-  - "resolve --offline returns roleHash write-free, so it can serve as a remote resource-compatibility probe without new code."
-  - "Herdr --machine forwarding depends on the client binary version (0.9.3), not the local server (F22). Feature detection must use the selected client's --help, and Ruach must not install or copy clients."
-  - "Two Bun versions coexist on the remotes (F24). Preflight must record the resolved Bun path and version, not only presence."
-  - "Remote parent workspaces exist (oholiab/w4:p1, tubal/w2:p1), so remote linked mode can use the existing linkedParent check with an explicit remote parent ID."
-  - "Bundles are proven for seeding new machines. Direct SSH Git stays the steady-state recommendation. Each repository (including the Eden children) gets its own receipt, with no cross-repository atomicity."
-  - "The handoff schema already validates any top-level *_revision field. Receipt fields (base_revision, received_revision) need no schema change, but validate locally only after the fetch."
+  - "A dropped non-pty SSH session may let the remote launcher continue, but worker.ts writes its one result to stdout at the end, so that result is lost exactly in the uncertain case. Redirecting launcher output to a remote launch record makes detached execution essential in v1, not hardening."
+  - "A single remote mkdir per launch ID gives both a lock and duplicate-request detection without changing worker.ts."
+  - "Git bundles must name a ref; bundling a bare SHA is refused. Transfer recipes therefore pin a ref first and bundle the ref."
+  - "Protocol v2 fetch by bare SHA succeeds even for unreferenced objects until gc. That is useful for diagnosis but not durable, so pin refs are required."
+  - "Git cannot hold both ruach/<label> and ruach/<label>/<x>. A worker named like a machine label would fail only at worktree add, after mutation began, so the wrapper must reject it before SSH."
+  - "Herdr API forwarding can carry workspace, pane and agent operations, but the agent start argv references target-side temp material from native preparation. Launch cannot be split across forwarding and SSH without two partial-failure seams."
 blockers:
-  - "D1 central remote with credentials and WIP publication vs direct SSH Git (recommended direct)"
-  - "D2 permission to write refs/ruach/incoming/* in remote checkouts"
-  - "D3 integration machine: Coordinator local by default, or a declared remote"
-  - "D4 fetch by URL and refspec vs named Git remotes"
-  - "D5 machines.yaml beside the catalogs vs wrapper flags only"
-  - "D6 accept HERDR_ENV=1 set by an explicit --machine SSH launch as authorization"
-  - "D7 branch namespace ruach/<machine>/<worker>"
-  - "D8 when to make a forwarding-capable client (0.9.3 or later) the local default (launch does not need it; monitoring benefits)"
-  - "D9 roadmap placement (other agents own docs/roadmap.md)"
-  - "D10 datasets, Docker images and accounts provisioned per machine by the owner, referenced only by manifest"
-  - "D11 declared remote PATH (recommended) vs sourcing the user-local dev-env on each launch"
-  - "D12 where an owner-supplied forwarding Herdr client path is declared for --machine monitoring"
+  - "D1 remote launch authorization: machine.ts sets HERDR_ENV=1 on the target only for an authorized Herdr caller naming an enabled machine with a passing remote herdr status (recommend yes)"
+  - "D2 acceptance environment: which machine's verification counts for each repository or target, and whether a remote may be a task's integration machine (recommend control machine integrates; acceptance environments named per repository)"
+  - "D3 feature publication: may the control machine publish ruach/* and task/* feature refs (including WIP) to origin, and which branches are deployment-polled and delivery-only (recommend yes; list polled branches)"
+  - "D4 unfinished work across machines: WIP commits only vs also manifest-described uncommitted diffs (recommend WIP commits only)"
+  - "D5 roadmap placement and first real cross-machine task (recommend 0.3.x with a bounded ramec task)"
 ---
 
-# Multi-machine council, round 1: Opus
+# Multi-machine council: Opus
 
-The full design is in [docs/design/multi-machine-opus.md](../../design/multi-machine-opus.md). This report summarizes it for the council and the Coordinator.
+The full design is in [docs/design/multi-machine-opus.md](../../design/multi-machine-opus.md). §0 holds the round-2 position. §1–§14 keep the independent round-1 reasoning and its setup-update revision.
 
-## Position
+## Round 2
+
+### Agreement
+
+All three members favor:
+- launcher execution on the target, with native config, accounts, temp material and worktrees kept on that host;
+- machine-scoped opaque IDs, keyed by the Herdr profile ID;
+- target-side preflight that fails closed;
+- Git for committed source only; dirty work, caches, datasets, secrets and sessions use their own channels;
+- one Coordinator and one integration checkout;
+- inspect-first recovery after a lost response.
+
+Herdr API forwarding is not a launch transport.
+
+### Differences and resolutions
+
+- **Wrapper.** Adopt Sonnet's sibling `machine.ts` (`list`, `preflight`, `start`, `observe`). `worker.ts` stays unchanged. My launcher `--machine` flag is withdrawn.
+- **Lost response.** The essential v1 is a remote launch record:
+  - atomic `mkdir` keyed by launch ID;
+  - `request.json` written before dispatch;
+  - `setsid -w` with stdout, stderr and exit status in files;
+  - a read-only `observe`.
+
+  This is the minimal form of Sol's request identity, and it is stronger than Sonnet's "detach later". Sol's per-phase journal is deferred until `observe` cannot classify real gaps.
+- **Outbound transport.** Push into `refs/ruach/incoming/*` by default. Bundles (Sol) are first-class and already proven for seeding. Both are control-initiated.
+- **Publication.** Separate ref transfer between owned machines, feature publication to origin (allowed by policy, from the control machine only), and deployment-branch publication (delivery only, with an expected-old-value check). My round-1 "no central remote" was too broad.
+- **IDs.** Structured `{machine, id}` pairs (Sonnet), carrying the profile session (Sol).
+- **Assignment.** It travels as a commit where possible (Sonnet).
+- **Branch name.** `ruach/<machine>/<worker>`, with task- and attempt-unique worker names. The wrapper rejects a worker name equal to a machine label.
+- **Machine descriptor.** Flags in v1; `machines.yaml` once the flags repeat.
+
+### Smallest deliverable
+
+`machine.ts` v1:
+- profile resolution;
+- read-only preflight with an environment fingerprint and role-hash comparison;
+- start through the remote launch record, with an unchanged launcher result inside a machine envelope;
+- observe classifications: `not-started`, `running`, `partial`, `started`, `awaiting-input`, `unknown`.
+
+Alongside it: a documentation runbook for ref transfer, pins and receipts, and tests with a fake `ssh` and real temporary repositories. Later: Herdr forwarding for monitoring, `machines.yaml`, a per-phase journal, a receive-verification script, remote linked mode.
+
+### Retrieval, exact SHAs and uncertain launches
+
+- **Retrieval.** Every connection starts on the control machine:
+  - The worker pins `H` create-only at `refs/ruach/handoff/<task>/<worker>/<n>`.
+  - The control machine fetches that pin and the worker branch without force over SSH into `refs/ruach/received/…` and `refs/remotes/<M>/…`.
+  - It verifies `H`, base ancestry, the assignment blob and the report.
+  - It pins `refs/ruach/receipts/…` create-only and branches `task/<worker>` from `H`.
+  - Fallback: `ssh <target> git -C <checkout> bundle create - <pin> ^<B> > h.bundle`, then verify and fetch.
+- **Exact SHAs.** Receipts name SHAs, not branches. Pins on both sides survive rewrites and garbage collection. Non-forced fetch surfaces rewrites. A tip that moves forward after the report means a new candidate with a new pin number.
+- **Uncertain launches.** Each `observe` classification has one allowed next step (design §0.9). `running` means wait, never dispatch again. `partial` means keep and decide. A relaunch always uses a new launch ID, and an existing name or branch is rejected by the launcher.
+
+### Owner decisions (five)
+
+D1–D5 in the leading block and design §0.10:
+1. remote launch authorization semantics;
+2. acceptance environment and integration machine;
+3. feature publication policy and the list of deployment-polled branches;
+4. WIP-only rule for unfinished work across machines;
+5. roadmap placement and the first real task.
+
+Branch and ref namespaces, push into incoming refs (bundles are the drop-in), flags versus `machines.yaml`, the Herdr client upgrade and per-machine provisioning are no longer asked.
+
+## Round 1 record
+
+### Position
 
 1. **Boundary.** `ruach-herdr start|resolve --machine <declared>`:
    - resolves the saved Herdr profile (stable profile ID, label for display);
@@ -68,7 +124,7 @@ The full design is in [docs/design/multi-machine-opus.md](../../design/multi-mac
 6. **What moves.** Only commits move. Dirty work becomes a commit, or a salvage commit after a crash. Ignored caches are rebuilt per machine. Datasets move only by a declared checksum manifest. Secrets never move. Test evidence is bound to `(revision, machine, toolchain)`, and the integrated candidate is verified on the integration machine.
 7. **Authority.** One Coordinator. One integration checkout per task. Remotes own only their worker branches and never merge or push to origin.
 
-## Handoff sequence (summary)
+### Handoff sequence (summary)
 
 Outbound:
 - deliver the base;
@@ -85,7 +141,7 @@ Return:
 
 The receipt fields are in design §9.
 
-## Phases
+### Phases
 
 | Phase | Content |
 |---|---|
@@ -95,7 +151,7 @@ The receipt fields are in design §9.
 | 3 | Monitoring through SSH, switching to Herdr `--machine` when feature-detected |
 | 4 | Bundle helper, checkpoint fetches, remote linked parent; only when use shows the need |
 
-## Setup update (revision of round 1)
+### Setup update (revision of round 1)
 
 The Coordinator's update did not change the boundary, for one reason: Herdr forwarding still forwards only the Herdr API, and remote native preparation must run on the remote machine. What changed:
 
@@ -106,7 +162,7 @@ The Coordinator's update did not change the boundary, for one reason: Herdr forw
 - **Credentials.** No push credentials on the remotes confirms that bases come from the integration machine.
 - **Several repositories.** Each repository gets its own receipt, with no cross-repository atomicity.
 
-## Assumptions to verify before Phase 2
+### Assumptions to verify before Phase 2
 
 These are not verified:
 - remote harness versions (Herdr itself is now 0.9.3);
@@ -118,9 +174,10 @@ These are not verified:
 - whether a noninteractive `herdr` reaches the default socket under the `env -i` allowlist;
 - remote native account login.
 
-## Scope and limits
+### Scope and limits
 
 - Only the two artifacts above were written.
 - Nothing was mutated on oholiab or tubal. No branch was pushed, nothing was merged, and routing and the roadmap were not changed.
 - No application or runtime tests are claimed.
 - The single `herdr --machine` probe was local and read-only, and the local CLI rejected it.
+- Round 2: peer artifacts were read only. Git and bundle commands were checked in disposable scratch repositories over file transport only. No SSH transport, remote command or launch was run.

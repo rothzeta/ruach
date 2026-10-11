@@ -1,6 +1,6 @@
 # Multi-machine application development through Herdr (Opus council design)
 
-Status: council round 1, independent proposal by the Opus 5.5 Architect, revised once for the Coordinator's setup update (§1, F21–F28). That revision did not change the recommendation. It made Herdr `--machine` forwarding a near-term monitoring transport, recorded bundles as the proven seeding path, and added decisions D11 and D12. This is architecture advice. It is not implementation authority and does not change the roadmap, routing or any existing contract.
+Status: council round 2. §0 holds the round-2 position after reading the Sol and Sonnet artifacts, and supersedes later sections where stated. §1–§14 preserve the independent round-1 proposal by the Opus 5.5 Architect, revised once for the Coordinator's setup update (§1, F21–F28). That revision did not change the recommendation. It made Herdr `--machine` forwarding a near-term monitoring transport, recorded bundles as the proven seeding path, and added decisions D11 and D12. This is architecture advice. It is not implementation authority and does not change the roadmap, routing or any existing contract.
 
 Question: how should Ruach support application development across machines that Herdr controls, and is Git the best tool for feature/branch handoffs between those machines?
 
@@ -10,7 +10,200 @@ Short answer:
 2. **Git is the right tool for source handoff,** because commits give the content-addressed identity that handoff revision fields already depend on. The recommended transport is **direct Git over SSH between the integration checkout and each machine's checkout**. The integration machine writes only a private ref namespace on the remote to deliver bases, and fetches result branches back into a machine-scoped namespace. A central remote (GitHub) is an owner option, not the default. Git bundles are the fallback when direct SSH Git is unavailable. Patches, rsync and shared filesystems are not source-handoff mechanisms.
 3. **Authority stays single.** One Coordinator owns the task. One integration checkout, normally on the Coordinator's machine, is the only place where integration and merges happen. Remote machines host workers and their branches. They never merge.
 
-The rest of this document separates **verified facts** (§1), **assumptions** (§2), **proposals** (§3–§11) and **owner decisions** (§12).
+The rest of this document separates **verified facts** (§1), **assumptions** (§2), **proposals** (§3–§11) and **owner decisions** (§12). Round 2 (§0) revises the boundary shape, recovery, publication and decisions.
+
+---
+
+## 0. Round 2 position (supersedes round 1 where stated)
+
+Round 2 was written after reading the peers' committed artifacts: Sol `multi-machine-sol.md` and `sol.md` at `e4f2dc2`, and Sonnet `multi-machine-sonnet.md` and `sonnet.md` at `511c329`. Sections 1–14 below keep the independent round-1 reasoning, including the setup-update revision. This section records what changed and why. Where it conflicts with §1–§14, this section wins.
+
+### 0.1 Changes from round 1
+
+| Round-1 position (Opus) | Round-2 position | Reason |
+|---|---|---|
+| `--machine` flag inside `worker.ts` (§3.1) | A sibling wrapper, **`skills/ruach-herdr/scripts/machine.ts`**, with `list`, `preflight`, `start [--dry-run]` and `observe`. `worker.ts` is unchanged in the first version. | Sonnet's shape. It keeps the audited single-host launcher byte-identical and gives read-only `preflight` and `observe` a natural home. It is the same delegation boundary as round 1, with one fewer change to security-sensitive code. |
+| New `--result-file` option in the launcher, plus `setsid` (§5.2) | A **wrapper-owned launch record** on the target, created with an atomic `mkdir` keyed by launch ID. The request digest is written before dispatch. The launcher runs under `setsid -w` with stdout, stderr and exit status redirected into the record. No launcher change. | Combines Sol's request identity (the `mkdir` doubles as lock and duplicate-request detector) with my lost-response protection, without touching `worker.ts`. Sol's per-phase intent journal is deferred (§0.5). |
+| Qualified string `<label>/<id>` (§4) | A **structured pair** `{machine: <profile id or "local">, id: <opaque native id>}` is canonical. Strings are display only. | Sonnet: native IDs contain `:` and labels can be renamed. Sol: keep the session too. Pairs carry `session` from the profile. |
+| Assignment written over SSH stdin and checked by hash (§7) | Preferred: the **assignment travels as a commit**. The Coordinator commits it on a task branch, and that commit is the worker's base. Fallback: SSH stdin plus hash, when the base must equal an existing revision exactly. | Sonnet: there is no out-of-band remote file write, and Git itself verifies the content. |
+| Central remote "not the default", D1 recommends no (§8.2, §12) | **Three distinct operations** (§0.8). Remotes never publish (they have no credentials, F26). The control machine may publish task feature refs when task policy allows. Polled deployment branches change only through authorized delivery. | The Coordinator's guidance: ref transfer, feature publication and deployment publication differ. My round-1 restriction was too broad. |
+| Bundles only as a fallback (§8.2) | Bundles are **first-class** for seeding and for any outbound path the owner prefers over inbound pushes (Sol). Push into `refs/ruach/incoming/*` remains the default for steady-state outbound transfer. | Both need only control→remote access. Sol's bundle path and my push path are equivalent in identity. |
+| Exact SHAs protected only by non-forced fetch (§8.3) | **Create-only pin refs** on both sides (§0.7). | Branches move after handoff, and a non-forced fetch alone does not keep the received commit reachable. |
+| Twelve owner decisions (§12) | **Five** (§0.10). | Conventions and steps already authorized in this session are no longer asked. |
+| `machines.yaml` in the first version (§3.2) | The first version takes **explicit flags** (`--remote-path`, `--remote-repo`) from the consumer wrapper. `machines.yaml` comes when the flags repeat. | Sonnet and Sol: smaller. The flags live in a consumer recipe, so they stay auditable. |
+| Remote linked worktrees in Phase 2 (setup revision) | Later, not essential. Standalone remote workspaces are sufficient. | All three agree. Remote parent workspaces existing (F27) makes the feature possible, not necessary. |
+
+Unchanged from round 1:
+- remote delegation of the whole launcher;
+- route resolution on the control machine, sent to the target as direct selection;
+- role-hash comparison through `resolve --offline`;
+- `env -i` with an allowlisted environment and declared PATH;
+- branch `ruach/<machine>/<worker>`;
+- no automatic retry and no machine, route or name fallback;
+- one Coordinator and one integration checkout;
+- per-machine test evidence;
+- Git for committed source only.
+
+### 0.2 Agreement across all three members
+
+1. The launcher runs **on the target machine**. Native config, accounts, private launch material, worktrees and Git administration stay there. No local preparation is shipped to a remote pane.
+2. **Machine-scoped opaque IDs.** The profile ID is the key. Labels are display. IDs are never compared or reused across servers.
+3. **Target-side preflight** covers versions, capabilities, the role and resource hash, and the base commit's presence. Capability mismatch fails closed, with no host, transport or route fallback.
+4. **Git is the right tool for committed source.** Dirty work, ignored files, caches, datasets, secrets and native sessions do not travel by Git. Secrets never travel at all.
+5. **One Coordinator and one integration authority.** Remote machines produce candidate branches. They never merge.
+6. **Conservative lost-response recovery.** After an uncertain launch, inspect by deterministic keys. Never retry blindly.
+7. Herdr API forwarding is not a launch transport, because target-side preparation needs the target filesystem and processes.
+
+### 0.3 Disagreements and how I resolve them
+
+| Topic | Sol | Opus (round 1) | Sonnet | Round-2 resolution |
+|---|---|---|---|---|
+| Where the dispatcher lives | Dispatcher inside `ruach-herdr` with a versioned request to the core | `--machine` in `worker.ts` | Separate `machine.ts` | **`machine.ts`**. The versioned-request idea survives as the launch record's `request.json`. |
+| Lost response | Request ID, target lock, per-phase journal, matching request returns the existing receipt | Result file and `setsid` | Observe by keys; detach later only if needed | **Launch record, detached run and observe in v1. Per-phase journal later.** Detaching is not optional hardening. Even if a dropped non-pty SSH session lets the launcher continue (Sonnet A5), its single final stdout write goes to a dead pipe, so the result is lost exactly when it is needed. Redirecting to files costs a few lines of the remote command. A per-phase journal needs `worker.ts` changes. Observing worktree, branch and agent by deterministic keys already covers the phase gaps. |
+| Outbound base | Bundle (the remote cannot fetch local) | Push into `refs/ruach/incoming/*` | Push into `refs/ruach/in/*` | **Push by default, bundle supported.** Both use only control→remote. Push is one atomic, incremental command. A bundle needs create, copy, verify, fetch and cleanup, but needs no `git-receive-pack` and is already proven (F23). Not an owner decision. |
+| Central remote | Preferred longer-term rendezvous when authorized | Not the default | Publication only after merge | **Separate operations** (§0.8). The control machine may publish feature refs under task policy. Remotes cannot publish. Deployment branches change only through delivery. |
+| Branch name | `ruach/<task>/<machine>/<worker>/<attempt>` | `ruach/<machine>/<worker>` | `ruach/<machine>/<name>` | **`ruach/<machine>/<worker>`**, with worker names unique per task and per attempt. The launcher already rejects reused names and branches. The task and attempt go into the receipt. Consumers may pass Sol's longer form through `--branch`. The wrapper rejects a worker name equal to a declared machine label: Git cannot hold both `ruach/oholiab` and `ruach/oholiab/<x>`, and the launcher's branch check would only fail at `worktree add`, after mutation began. |
+| `HERDR_ENV=1` on the target | Not authorization by itself; needs a narrow endpoint check | Set through declared `--machine` | Set only when the local caller satisfies the gate | **Sonnet's precondition, documented as Sol's narrow endpoint authorization.** The caller must itself be an authorized Herdr session, the machine must be named explicitly and enabled, and remote `herdr status` must report a compatible running server. The result records `authorization: machine-endpoint`. It never claims an SSH login is a Herdr pane. Needs owner approval (D1). |
+| Machine descriptor | Invocation descriptor first | `machines.yaml` | Flags first, then YAML | **Flags first** (§0.1). |
+| Environment fingerprint | Recorded fields | `tested_on` fields | SHA-256 fingerprint | **Both.** `preflight` prints the normalized environment object and its SHA-256. Receipts and reports cite the fingerprint, which is cheap and binds evidence to an environment. |
+
+### 0.4 Herdr API forwarding versus target-side preparation
+
+| Operation | Herdr API (forwardable with a 0.9.3+ client, F22) | Must run on the target filesystem or processes |
+|---|---|---|
+| Workspace, tab and pane create/list, `pane split` | Yes | |
+| `agent start`, `get`, `read`, `wait`, `prompt`, `send-keys` | Yes. The argv of `agent start`, though, references target temp files | |
+| `worktree create` with an absolute remote path | Yes | Identity verification afterwards (`rev-parse`, realpath) |
+| Resolve repository, cwd and base; fresh path and branch checks | | Yes (`spaces.ts`) |
+| Role file read and hash; canonical skills | | Yes |
+| Claude private settings overlay and skill symlinks | | Yes (temp directory on the target) |
+| Codex effective config through daemon or stdio app-server | | Yes |
+| Executable identity on the declared PATH; Bun dependencies | | Yes |
+| Test runs, builds, Git commits and pin refs | | Yes (worker or SSH) |
+
+Consequence: forwarding is useful for **monitoring and prompting** (v1.x) and could eventually carry workspace creation. Launch stays a target-side launcher run, because half of a launch cannot be forwarded.
+
+### 0.5 First reliable version (smallest deliverable)
+
+Scope, all in `skills/ruach-herdr`, with `worker.ts` unchanged:
+
+1. **`machine.ts list`.** Wraps `herdr machine list --json`. Fixes the structured identity form and rejects disabled, ambiguous or `local`-named profiles.
+2. **`machine.ts preflight --machine M --remote-repo DIR --remote-path P [--base SHA] [--role R ...]`.** Strictly read-only over `ssh -a -o BatchMode=yes -o ConnectTimeout=10`. Checks:
+   - executable paths and versions, which matters because two Bun versions coexist (F24);
+   - remote `herdr status`;
+   - `agent start --help` kinds;
+   - remote `worker.ts resolve --offline` role hash against the local value;
+   - `cat-file -e <base>^{commit}`;
+   - the checkout's cleanliness and HEAD.
+
+   It prints the environment object and its fingerprint.
+3. **`machine.ts start --machine M … [--dry-run]`.**
+   - Resolve the route locally.
+   - Build one remote command, quoted once and validated, with no shell interpolation of values.
+   - Remotely: `mkdir <temp>/ruach-launch-<launch_id>`, which fails if it exists. Write `request.json` (argv digest, machine, keys) before dispatch. Then run `setsid -w env -i <allowlist> PATH=<declared> HERDR_ENV=1 <bun> <resources>/skills/ruach-herdr/scripts/worker.ts start … --branch ruach/<M>/<worker> --base <SHA> > result.json 2> stderr; echo $? > exit`. Then `cat` the record.
+   - Return one envelope: the machine pair, the launch ID, the record path, the unchanged launcher result, and machine-qualified inspection argv.
+   - Exit classes stay 0, 2, 3 and 4. Transport failure before dispatch is 3. After dispatch it is 4, `result_lost`.
+4. **`machine.ts observe --machine M (--launch-id ID | --name N)`.** Read-only. It reads the record, `herdr agent get N`, `git worktree list` and `show-ref ruach/<M>/<N>`, and classifies the launch as `not-started`, `running` (the record exists but has no exit file), `partial`, `started`, `awaiting-input` or `unknown`.
+5. **Documentation runbook** (no script) for ref transfer, pins, verification and receipts (§0.6–§0.7), and receipt fields in the assignment specimen.
+6. **Tests** with a fake `ssh` that executes the remote command locally under a separate HOME, PATH and fake Herdr, plus real temporary Git repositories:
+   - Sonnet's tests 1–10, and the quoting and environment-leak tests from §13;
+   - same launch ID twice: the second `mkdir` fails, and the wrapper reports the existing record instead of dispatching;
+   - transport drop after dispatch: exit 4, then `observe` returns `running` or `started` from the record, and no second `agent start` is ever issued;
+   - worker name equal to a machine label: rejected before SSH;
+   - the existing `worker.test.ts` passes untouched.
+
+   Plus one owner-authorized live smoke per machine (preflight, dry-run, throwaway start, fetch back, cleanup), reported as runtime evidence.
+
+Explicitly **not** in v1: Herdr `--machine` transport, `machines.yaml`, per-phase journal in `worker.ts`, remote linked worktrees, a transfer helper script, automatic adoption or cleanup of partial launches, central publication.
+
+Later, each only when use shows the need:
+- forwarding for `observe`, `read`, `wait` and `prompt` behind feature detection, using an owner-declared 0.9.3+ client (Phase 3 in round 1);
+- `machines.yaml`;
+- per-phase intent records in `worker.ts`, if `observe` cannot classify real gaps;
+- a `verify-received.ts` script, if the runbook steps repeat;
+- remote linked mode with `--parent-workspace`;
+- a checkpoint-fetch ledger convention.
+
+### 0.6 Retrieving a returned remote commit without remote→local authentication
+
+Every connection starts on the control machine. The remote never opens a connection to the control machine or to GitHub. Commands below use `-c core.sshCommand='ssh -a -o BatchMode=yes'`, abbreviated `$SSHC`. `<url>` is `ssh://<target>/<abs checkout>`, where `<target>` comes from the Herdr profile.
+
+1. **The worker pins its handoff commit `H`** in its worktree, as part of the assigned handoff. Refs are shared with the main checkout:
+   `git update-ref refs/ruach/handoff/<task>/<worker>/<n> <H> ""`
+   The empty old value makes this create-only. A second attempt with any value fails with "reference already exists". The report names `H` and the pin ref. If the worker cannot create it, the integration Implementer creates it over SSH from the SHA in the report.
+2. **Fetch from the control machine** with no force prefix, into new refs:
+   `git $SSHC fetch --no-tags <url> refs/ruach/handoff/<task>/<worker>/<n>:refs/ruach/received/<M>/<task>/<worker>/<n> refs/heads/ruach/<M>/<worker>:refs/remotes/<M>/ruach/<M>/<worker>`
+3. **Verify on the control machine:**
+   - `rev-parse refs/ruach/received/…` equals `H`;
+   - `cat-file -e H^{commit}`;
+   - `merge-base --is-ancestor <B> <H>`;
+   - the assignment blob in `H` equals the assignment blob in the base commit;
+   - the report at `H` validates with `ruach-handoff --repo`.
+4. **Pin the receipt locally**, create-only: `git update-ref refs/ruach/receipts/<task>/<worker>/<n> <H> ""`. Create the retained branch `task/<worker>` from `H`, not from the tracking ref.
+5. **No direct Git path?** Stream a bundle through the same control-initiated SSH:
+   `ssh -a -o BatchMode=yes <target> git -C <abs checkout> bundle create - refs/ruach/handoff/<task>/<worker>/<n> ^<B> > h.bundle`
+   Then run `git bundle verify "$PWD/h.bundle"`, record its SHA-256, and fetch `h.bundle refs/ruach/handoff/…:refs/ruach/received/…`. A bundle must name a ref; a bare SHA argument gives "Refusing to create empty bundle". Verification fails explicitly when the receiver lacks the prerequisite `B`.
+6. **Fetch by bare SHA** (`git fetch <url> <H>`) worked under protocol v2 in testing, even for an unreferenced object. That only lasts until the remote garbage-collects it. Use it for diagnosis, never as the transport of record.
+
+Outbound is symmetric. The control machine runs `git $SSHC push <url> <B>:refs/ruach/incoming/<task>/<worker>`, which leaves the remote's checked-out branch, index and working tree untouched (verified). The bundle alternative: `git bundle create base.bundle <ref> ^<remote-known>`, copy it, remote `git bundle verify`, then remote `git fetch base.bundle <ref>:refs/ruach/incoming/…`. Again, a bundle needs a ref, not a bare SHA.
+
+### 0.7 Protecting exact receipt SHAs when branches move
+
+- A receipt and a report name **SHAs**, never branch tips. Branches are mutable pointers. Pins are the durable references.
+- **Pins on both sides** are create-only (`update-ref <ref> <sha> ""`): `refs/ruach/handoff/…` on the remote and `refs/ruach/receipts/…` on the control machine. They keep `H` reachable through garbage collection and branch rewrites. They are outside `refs/heads` and `refs/tags`, so default fetch, push and clone refspecs do not carry or clobber them.
+- **Non-forced fetch** of the worker branch: a rewritten branch is rejected (verified, exit 1), the tracking ref keeps its old value, and the local receipt pin still names `H` (verified). Rewrites are surfaced as a decision. They are never accepted as the newer truth.
+- **A tip that moved forward after the report** (the worker kept committing) does not change the receipt. `H` is still the candidate. Later commits form a new candidate with a new report and a new pin number `<n+1>`.
+- **Integration, review and delivery** refer to `H` or to the new integration commit, never to `refs/remotes/<M>/…`. Delivery keeps the existing destination-unmoved rule (`destination_before`).
+- **Cleanup** deletes remote pins and incoming refs only after the receipt pin exists on the control machine and the retained branch contains `H`. Local receipt pins follow the consumer's evidence-retention policy.
+
+### 0.8 Ref transfer, feature publication and deployment publication
+
+| Operation | Example | Authority |
+|---|---|---|
+| **Ref transfer between owned machines** | Push into `refs/ruach/incoming/*`; fetch into `refs/ruach/received/*` and `refs/remotes/<M>/*`; bundles | Part of an authorized multi-machine task, the same class as the repository seeding and fast-forward already performed in this session. Nothing leaves the owner's machines. Not "publication". |
+| **Feature publication to the central remote** | The control machine pushes `ruach/<M>/<worker>` or `task/<worker>` to `origin`, including WIP | Allowed when task or consumer policy says so. It gives off-machine durability, CI and review. Remotes cannot do it (no credentials, F26). It is never forced. It is not a merge. |
+| **Deployment publication** | Updating a branch that CI or deployment polls (`main`, `deploy/*`) | Only through the authorized delivery step, from the integration checkout, against the reviewed revision, with an expected-old-value check (`--force-with-lease=<ref>:<destination_before>` or a plain fast-forward). Never as a side effect of transfer. |
+
+WIP content is not the risk. Side effects are: triggering deployment, or overwriting someone else's ref. The policy should restrict those two, not WIP refs in general.
+
+### 0.9 Preserving uncertain launches without blind retry
+
+| `observe` classification | Evidence | Allowed next step |
+|---|---|---|
+| `not-started` | No launch record, or a record with an exit file showing a preflight failure (exit 2 or 3). No worktree, branch or agent for the keys. | Fix the cause. Relaunch with a **new** launch ID. The same worker name is allowed only because nothing exists; the launcher rejects existing names and branches anyway. |
+| `running` | The record exists and the exit file is absent | Wait (bounded) and observe again. **Never dispatch again.** |
+| `started` or `awaiting-input` | `result.json` reports it, or `agent get N` matches name, kind and pane | Use the existing agent. For `awaiting-input`, the user answers on the target (`herdr --remote M`). |
+| `partial` | Worktree or branch exists; no matching agent | Keep everything. The Coordinator either assigns completion by hand on that machine, or, once any work is reachable from a retained branch, removes the worktree and launches with a new name. Partial resources are never adopted or deleted automatically. |
+| `unknown` | Record unreadable, or keys conflict with the record | Report to the user with the record path and raw observations. Do nothing else. |
+
+The launch record (`request.json`, `result.json`, `stderr`, `exit`) lives in the remote OS temp directory with mode 0700. It is kept until the Coordinator releases the launch, and its path is recorded in the task record before dispatch. A sent prompt is subject to the same rule (Sol): a lost `agent prompt` response is reconciled by reading the agent, and the prompt is never re-sent blind.
+
+### 0.10 Owner decisions (at most five; supersedes §12)
+
+1. **Remote launch authorization.** May `machine.ts start` set `HERDR_ENV=1` on the target when the caller is an authorized Herdr session, names an enabled machine explicitly, and remote `herdr status` passes (recorded as `authorization: machine-endpoint`)? *Recommendation:* yes. Without it, no remote launch can be built on the unchanged launcher.
+2. **Integration and acceptance environment.** All members agree on one integration checkout. The decision is **which machine's verification counts as acceptance evidence** for each repository or target, for example Debian remotes for ramec versus the control machine, and anything needing desktop, audio or GPU. Also whether a remote may be the declared integration machine for a task. *Recommendation:* the control machine integrates; acceptance environments are named per repository in consumer guidance.
+3. **Feature publication policy.** May the control machine publish task feature refs, including WIP, to `origin` routinely for durability and CI? Which branches are deployment-polled and therefore delivery-only (§0.8)? Remote machines stay without push credentials either way. *Recommendation:* allow `ruach/*` and `task/*` feature refs from the control machine; list the deployment-polled branches explicitly.
+4. **Unfinished work across machines.** Should only WIP commits travel, or are manifest-described uncommitted diffs also accepted (Sol's exception)? *Recommendation:* WIP commits only across machines; uncommitted-diff outcomes stay local-checkout results, as today.
+5. **Placement and first use.** Where Phase 1 (`machine.ts` v1) sits in the roadmap (0.3.x next to the resource ledger, or after 0.4 as task-driven), and which real bounded task is the first cross-machine handoff (Sol suggests a ramec task the Debian hosts can verify). *Recommendation:* 0.3.x, with a ramec task.
+
+Not asked, because they are conventions or already within authorized preparation:
+- branch and ref namespaces;
+- push into incoming refs, with bundles as the drop-in if the owner objects;
+- flags versus `machines.yaml`;
+- the Herdr client upgrade, which the first version does not need;
+- per-machine dataset and toolchain provisioning, which the owner is already doing.
+
+### 0.11 Evidence for round 2
+
+Disposable repositories under session scratch, git 2.47.3, file transport. SSH transport was not exercised. No remote machine was touched, and no launch was run.
+
+- Pushing a base SHA into `refs/ruach/incoming/T/w1` of a non-bare clone with `main` checked out succeeded. The clone's status was unchanged.
+- A create-only pin (`update-ref <ref> <sha> ""`) succeeded the first time. The second attempt failed with "reference already exists".
+- Fetching the pin and the worker branch into new refs gave a received ref equal to `H`, and the base was an ancestor. The create-only local receipt pin succeeded.
+- After the remote branch was rewritten, a non-forced fetch exited 1, and the receipt pin still named `H`.
+- Fetching by bare SHA worked under protocol v2, both via a pin and unreferenced before garbage collection.
+- `git bundle create - <ref> ^<B>` streamed to stdout. Verify passed in the repository holding `B` and failed in one lacking it ("lacks these prerequisite commits"). Fetching from the bundle into the received ref gave `H`. A bare-SHA bundle was refused ("Refusing to create empty bundle"). An outbound ref bundle verified, and importing it into the remote's incoming ref gave the expected commit.
+- `setsid -w` returned the child's exit status (4 in the test) with output redirected to files. A second `mkdir` of an existing launch directory failed.
 
 ---
 
@@ -305,6 +498,8 @@ The top-level `base_revision` and `received_revision` are validated mechanically
 
 ## 12. Owner decisions required
 
+*Round 2: superseded by the five decisions in §0.10. Kept as the round-1 record.*
+
 - D1. **Central remote.** Should remote machines get GitHub push credentials, so that WIP branches are published to origin (durability, but outward-facing and credential-bearing)? *Recommendation:* no. Use direct SSH Git, plus checkpoint fetches.
 - D2. **Pushing into remote repositories.** May the integration machine write `refs/ruach/incoming/*` in remote checkouts? This is a mutation of owned machines, outside `refs/heads`. The alternative is remote→local SSH (A2) or origin-published bases only. *Recommendation:* allow it, limited to that namespace.
 - D3. **Integration machine.** Should integration always happen on the Coordinator's local machine, or may a remote be declared the integration machine, for example for Linux-only verification? *Recommendation:* the Coordinator's machine by default, with a declared alternative per task.
@@ -319,6 +514,8 @@ The top-level `base_revision` and `received_revision` are validated mechanically
 - D10. **Datasets and secrets.** Per-machine provisioning of datasets, Docker images and accounts stays with the owner. Confirm that Ruach should only reference declared manifests and never transport them.
 
 ## 13. Phased implementation plan
+
+*Round 2: the first version is defined in §0.5 (`machine.ts` with `worker.ts` unchanged). The phases below remain the round-1 record. Their test lists still apply.*
 
 Each phase starts with a failing public-boundary regression (roadmap principle). No phase mutates remote machines in tests.
 
