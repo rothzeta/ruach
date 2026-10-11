@@ -1,6 +1,6 @@
 # Multi-machine application development through Herdr (Opus council design)
 
-Status: council round 1, independent proposal by the Opus 5.5 Architect. This is architecture advice. It is not implementation authority and does not change the roadmap, routing or any existing contract.
+Status: council round 1, independent proposal by the Opus 5.5 Architect, revised once for the Coordinator's setup update (§1, F21–F28). That revision did not change the recommendation. It made Herdr `--machine` forwarding a near-term monitoring transport, recorded bundles as the proven seeding path, and added decisions D11 and D12. This is architecture advice. It is not implementation authority and does not change the roadmap, routing or any existing contract.
 
 Question: how should Ruach support application development across machines that Herdr controls, and is Git the best tool for feature/branch handoffs between those machines?
 
@@ -47,14 +47,27 @@ Repository facts were checked in this worktree at `d75039a`. Environment facts w
 - F19. Local repositories `ruach`, `ramec`, `enoch` and `eden` each have a GitHub `origin` (`git@github.com:rothzeta/<repo>.git`). Local `ramec` has Herdr worktrees under `~/.herdr/worktrees/ramec/`.
 - F20. *(coordinator)* `oholiab` and `tubal` run Debian 13 x86_64. `/opt/dev` there is writable by `metatron`, and each has an existing `ramec` checkout. Bun and .NET are installed under user directories, and Git, Just, Python and Docker are present. Herdr servers are running, and Codex and Claude are installed. Noninteractive SSH PATH omits user bins. Remote commands work over the saved SSH targets using the remote user-bin Herdr.
 
+### Setup update (coordinator, 2026-10-11, after the first draft)
+
+Supplied by the Coordinator and not re-verified here. A read-only local search did not find the temporary client.
+
+- F21. Both remote machines run Herdr 0.9.3, protocol 22, with compatible running servers.
+- F22. A copy of the 0.9.3 client in a local `/tmp` path forwarded `workspace list` and `workspace create` with `--machine`. The local default client stays 0.9.0, and no server was restarted. Forwarding therefore depends on the **client** binary used, not on the local server version. The Coordinator classifies this as evidence, **not an accepted Ruach transport decision**.
+- F23. Ten independent repositories were seeded on the remotes through Git bundles from exact committed source. Eden's children (jachin, boaz) are separate repositories. The existing clean `ramec` checkout was fast-forwarded.
+- F24. Bun 1.4.2, Node 22.23.3 and .NET SDKs 8.0.425, 10.0.110 and 10.0.401 are present on both hosts. An existing Bun 1.4.3 was preserved, so two Bun versions coexist and PATH order decides which one runs.
+- F25. A user-local dev-env sets PATH on the remotes.
+- F26. Git push authentication, data and secrets were **not** copied to the remotes. Dependency, build and test checks are still running, so no claims are made about them.
+- F27. Background Ruach development workspaces exist: `oholiab/w4:p1` and `tubal/w2:p1`. Under identical-looking local IDs these would collide, which illustrates §4.
+- F28. Local Bun in this worktree reported 1.4.2 (`bun install v1.4.2`, observed here).
+
 ## 2. Assumptions (not verified here)
 
-- A1. Remote Herdr and harness versions are unknown to this design. Assume they may differ from local versions, and probe them at use.
+- A1. *Partly resolved by F21 and F24.* Remote Herdr is 0.9.3. Remote Claude and Codex versions are still unknown. Keep probing every version at use, because the versions can drift.
 - A2. It is not known whether the remote machines can reach the local machine over SSH (remote→local). Assume they cannot: only local→remote SSH is established.
-- A3. It is not known whether the remote machines hold GitHub read or push credentials. The Coordinator is not copying credentials, so assume none for push.
+- A3. *Confirmed for push by F26:* the remotes have no Git push credentials. GitHub *read* access from the remotes is still unknown. Bases must therefore come from the integration machine, either pushed into incoming refs or delivered as bundles (F23), unless read access is later shown.
 - A4. No shared filesystem spans the machines.
-- A5. The remote `ramec` checkouts track the same GitHub origin. Their HEAD, cleanliness and committed `.agents` snapshot version are unknown.
-- A6. The remote Herdr default session socket is reachable by a noninteractive SSH command when `herdr` is invoked by absolute path or with an explicit PATH. Behavior for non-default sessions is unverified.
+- A5. *Partly resolved by F23.* The repositories were seeded from exact commits, and `ramec` was fast-forwarded clean. Remote `origin` URLs and the `.agents` snapshot versions of the other repositories are unknown, so the role-hash preflight (§5.1 step 5) still applies.
+- A6. The remote Herdr default session socket is reachable by a noninteractive SSH command when `herdr` is invoked by absolute path or with an explicit PATH. Behavior for non-default sessions is unverified. F22 shows forwarding works for the default session. It does not show how a noninteractive SSH launcher reaches the socket under the `env -i` allowlist.
 - A7. Remote native accounts (Claude, Codex) are already authenticated by the owner on each machine.
 
 ## 3. Machine selection and transport boundary in `ruach-herdr`
@@ -89,7 +102,7 @@ Why this boundary:
 Rejected alternatives:
 
 - *Per-operation remote calls* (remote `git`, remote `realpath`, remote `herdr` one call at a time from the local launcher). This touches nearly every function in `spaces.ts` and the adapters, multiplies partial-failure points, and still cannot run native config readers remotely.
-- *Herdr `--machine` forwarding as the launch transport.* It is unavailable in installed 0.9.0 (F15) and, as designed, covers only the Herdr API. Adopt it later for monitoring commands only (§3.3).
+- *Herdr `--machine` forwarding as the launch transport.* A 0.9.3 client forwards workspace operations (F22), but forwarding covers only the Herdr API. Workspaces, splits and `agent start` could run remotely through it. The Claude settings overlay and symlinks, the Codex effective-config reader, skill discovery and the role-hash recheck would still need the remote filesystem and processes. A hybrid (SSH for preparation, forwarding for the launch space) would split one launch across two transports with two partial-failure seams, and the private material would live on a different machine than the launcher that created it. Use forwarding for monitoring and inspection (§3.3). Revisit if Herdr gains remote native preparation, which is not expected given its configuration-is-not-forwarded rule (F16).
 - *A Ruach daemon or agent on each machine.* This contradicts the roadmap's no-service principle (F13).
 
 ### 3.2 Machine declaration (consumer-owned)
@@ -115,7 +128,9 @@ machines:
 ### 3.3 After launch: monitoring and inspection
 
 - Inspection argv in results is machine-qualified, for example `["ssh","oholiab","--","env","PATH=…","herdr","agent","read","N","--source","recent-unwrapped"]`. Users attach interactively with `herdr --remote oholiab` (supported in 0.9.0, F15).
-- When `herdr --help` (feature detection, never documentation) shows a global `--machine`, inspection argv may switch to `herdr --machine <id> agent read …`. This is a transport substitution for Herdr API calls only. Launch remains remote delegation.
+- When the *selected client's* `--help` (feature detection, never documentation) shows a global `--machine`, inspection argv may switch to `herdr --machine <id> agent read …`. This is a transport substitution for Herdr API calls only. Launch remains remote delegation.
+- F22 shows that the client version, not the local server, determines forwarding. Ruach must not download, install or copy a client. An owner-supplied client path, declared per consumer or user (D12), is feature-detected and recorded with its version in results. Without one, SSH remains the monitoring transport. The temporary `/tmp` client is not a durable dependency.
+- Read-only monitoring (`agent list|get|read|wait`) is the first forwarding use. Mutating forwarded calls (`agent prompt`, `send-keys`) follow the same no-retry rule as launch: after a connection failure, inspect before resending (F16).
 
 ## 4. Machine-scoped opaque identifiers
 
@@ -134,7 +149,7 @@ In order, each failing closed with exit 2 or 3 and no fallback to local:
 
 1. The profile exists, is enabled, and its label resolves to the declared ID.
 2. SSH reachability with `BatchMode=yes`. Interactive auth prompts are failures, not dialogs to answer.
-3. Remote executables are present under the declared PATH: `bun`, `git`, `herdr` and the selected harness, with versions recorded.
+3. Remote executables are present under the declared PATH: `bun`, `git`, `herdr` and the selected harness, recording **resolved absolute paths and versions**. Two Bun versions coexist (F24), so the preflight reports which one the declared PATH selects. An assignment or consumer recipe that needs a specific version names it, and a mismatch fails exit 3.
 4. Remote Herdr server status and protocol come from remote `herdr status`. The client and server on the remote must be compatible with each other. Local↔remote protocol equality is required only once `--machine` forwarding is used.
 5. Remote Ruach resources come from remote `worker.ts resolve --offline --role R --kind K --model M` in the declared checkout. Its `selection.roleHash` must equal the local role hash, which catches stale or locally edited remote snapshots. Its `schema_version` must be one the local wrapper understands. For a consumer with a committed `.agents` snapshot, matching role hashes mostly follows from both checkouts being at the same snapshot version.
 6. The base commit exists on the remote: `git -C <checkout> cat-file -e <SHA>^{commit}`. If it is absent, deliver it first (§8). The launcher never fetches or pushes on its own.
@@ -166,7 +181,7 @@ The remote launcher already probes native help and versions and Herdr kind suppo
 - Default branch for remote launches: **`ruach/<machine-label>/<worker-name>`**. Local launches keep `ruach/<name>`. Branches created on different machines therefore cannot collide when fetched into one integration repository, even if a name were reused. `ruach/oholiab/x` and `ruach/x` can coexist as ref names, because `ruach/oholiab` is not itself a branch.
 - In the integration checkout, fetched branches land in **`refs/remotes/<machine-label>/<branch>`** through an explicit refspec, without adding a configured remote unless the owner chooses to (§12, D4). Local `refs/heads` stay owned by the integration machine, so a remote can never move a local branch.
 - Bases delivered to a remote land in **`refs/ruach/incoming/<task>/<worker>`** on the remote. That namespace is outside `refs/heads`, so it never touches the remote's checked-out branch and cannot trip `receive.denyCurrentBranch`. It is removed during cleanup.
-- Linked mode on a remote requires a remote parent workspace ID for that repository. Phase 2 uses standalone remote workspaces (F2 fallback). An explicit `--parent-workspace <remote id>`, verified remotely with `herdr worktree list --workspace`, can come later.
+- Linked mode on a remote requires a remote parent workspace ID for that repository. Background development workspaces now exist (F27, for example `oholiab/w4:p1` for Ruach), so linked mode is practical sooner than first assumed. Pass the remote parent explicitly as `--parent-workspace <id>`. The remote launcher sets `HERDR_WORKSPACE_ID` from it, and the existing `linkedParent` check verifies it against the remote repository (F2). An ID from another machine fails that check. Without a parent, Phase 2 keeps standalone remote workspaces.
 
 ## 7. Self-contained assignments and durable reports
 
@@ -194,7 +209,7 @@ The remote launcher already probes native help and versions and Herdr kind suppo
 |---|---|---|---|---|---|---|
 | **Central remote** (GitHub origin) | Exact SHAs | Remote push credentials (A3; owner is not copying them) | Yes: WIP branches on the hosting service | No | Durable even if a machine dies; idempotent push and fetch | Good when the owner authorizes credentials and WIP publication. Not the default |
 | **Direct SSH Git** (integration↔remote) | Exact SHAs | None beyond the existing local→remote SSH (F17, F20) | No | No | Fetch and push are atomic per ref and idempotent to rerun; work since the last fetch depends on the remote disk | **Recommended default** |
-| **Git bundle** (create, copy, verify, fetch) | Exact SHAs; the bundle file can be checksummed and archived | None, but a file transfer is still required | No | No | Works without live bidirectional Git; stale-prerequisite errors are explicit (`git bundle verify`) | **Fallback** for no-direct-Git paths, jump hosts, archival or offline transfer |
+| **Git bundle** (create, copy, verify, fetch) | Exact SHAs; the bundle file can be checksummed and archived | None, but a file transfer is still required | No | No | Works without live bidirectional Git; stale-prerequisite errors are explicit (`git bundle verify`) | **Proven for initial seeding** (F23). **Fallback** for steady-state handoff when direct Git is unavailable, and for archival or offline transfer |
 | **Patches** (`format-patch`/`am`) or diffs | **Lost**: `am` creates new commits, and binaries or modes are fragile | None | No | Only what the diff contains | Partial application possible | Not for reviewed handoff. Acceptable only as a human-readable proposal |
 | **rsync of a worktree** | None | None | No | **Yes** (danger: secrets, caches, half-written files, `.git` corruption if included) | Non-atomic | Not for source. Allowed only for declared non-source assets with a checksum manifest |
 | **Shared filesystem** (NFS or sshfs for `/opt/dev`) | Same repository, so no transfer | Mount setup | No | Everything is shared | Cross-host Git locking, `index.lock` and mmap hazards, a single point of failure, latency; absolute `gitdir` paths tie worktrees to one mount layout | Rejected for source repositories. At most a read-only dataset mount, owner-provisioned |
@@ -211,6 +226,8 @@ The remote launcher already probes native help and versions and Herdr kind suppo
   Do not use a `+` force prefix. A non-fast-forward update means the branch history was rewritten, and that is surfaced for a decision.
 - `git -c protocol.version=2` is fine. The remote needs only `git-upload-pack` and `git-receive-pack` on the noninteractive PATH; `/usr/bin` already covers them (F20).
 - Fetching from a non-bare remote repository with linked worktrees is safe, because refs and objects are shared by the main checkout's `.git`.
+- **Seeding versus steady state.** Bundles suit creating a repository on a new machine (F23): one verified file per repository and no pre-existing remote repository needed. Once a checkout exists, direct SSH Git is cheaper per handoff, because it transfers only missing objects and no file has to be copied, verified and cleaned up. Both preserve exact SHAs, so a later receipt can name either method.
+- **Several repositories.** Eden's children and the other seeded repositories are independent (F23). Each repository gets its own base, branch, fetch and receipt, so a feature that spans repositories has one receipt per repository. Ruach claims no cross-repository atomicity. The task record lists the set of per-repository revisions that were integrated and verified together.
 
 ### 8.4 Machine-specific test evidence
 
@@ -295,7 +312,9 @@ The top-level `base_revision` and `received_revision` are validated mechanically
 - D5. **Machine declaration location.** Consumer `machines.yaml` beside the catalogs (recommended), or CLI flags only through wrappers?
 - D6. **Remote `HERDR_ENV=1`.** The launcher's "authorized Herdr session" check would be satisfied by an explicit machine launch over SSH rather than by an inherited pane. Is that acceptable authorization semantics? *Recommendation:* yes, only through `--machine` with a declared machine and a passing remote `herdr status`.
 - D7. **Branch namespace.** `ruach/<machine-label>/<worker>` for remote launches (recommended) or a flat `ruach/<worker>` with task-unique names only.
-- D8. **Herdr upgrade.** If and when to move to a Herdr version with `--machine` forwarding. This design does not depend on it. Not done by the current Coordinator (F20).
+- D8. **Herdr upgrade.** If and when to make a forwarding-capable client (0.9.3 or later, F21 and F22) the local default. The launch design does not depend on it. Monitoring benefits from it. Not done by the current Coordinator.
+- D11. **Remote environment source.** Should the launcher use an explicitly declared PATH (recommended: reproducible, recorded, independent of dotfiles), or source the user-local dev-env (F25), which runs user-owned shell code on every launch? If dev-env is chosen, declare its path in `machines.yaml`, and record its hash and the resulting PATH in the result.
+- D12. **Forwarding client.** Should an owner-supplied Herdr client path be declared for `--machine` monitoring (per user or per consumer), and where? Ruach never installs or copies one.
 - D9. **Roadmap placement.** For example, as a 0.3.x item next to the resource ledger and idempotent launch, which it extends with a machine field, or as a 0.4 or after-0.4 task-driven item. Other roadmap agents own that file.
 - D10. **Datasets and secrets.** Per-machine provisioning of datasets, Docker images and accounts stays with the owner. Confirm that Ruach should only reference declared manifests and never transport them.
 
@@ -304,13 +323,13 @@ The top-level `base_revision` and `received_revision` are validated mechanically
 Each phase starts with a failing public-boundary regression (roadmap principle). No phase mutates remote machines in tests.
 
 **Phase 0: runbook only, no code (immediately usable).**
-Document in `docs/operations.md` the manual sequence from §9, using today's tools: `ssh <target> env PATH=… herdr …`, the remote launcher invoked over SSH, push-into-incoming, fetch-into-namespace, and the receipt template. Record the read-only verification of A1, A5 and A6 on `oholiab` and `tubal`. This lets the owner run multi-machine work now with full auditability. Tests: docs and link checks only.
+Document in `docs/operations.md` the manual sequence from §9, using today's tools: `ssh <target> env PATH=… herdr …`, the remote launcher invoked over SSH, push-into-incoming, fetch-into-namespace, and the receipt template. Record the read-only verification of the remaining assumptions on `oholiab` and `tubal`: remote harness versions, GitHub read access, the socket under the `env -i` allowlist, which Bun the PATH selects, and the dev-env PATH contents (F24, F25). Include the bundle seeding procedure already used (F23) as the documented new-machine bootstrap. This lets the owner run multi-machine work now with full auditability. Tests: docs and link checks only.
 
 **Phase 1: transport checks as receipt conventions (no launcher change).**
 Add the receipt block and the "evidence is per machine" rule to `ruach-handoff` guidance and to the assignment specimen. Optionally add a tiny verification script, `verify-received.ts` (ancestor, ref equality, assignment blob hash, report validation), if Phase 0 use shows repeated friction. Tests: real temporary Git repositories standing in for two machines (file-path URLs), covering fetch into a namespace, rejection of non-fast-forward, assignment hash mismatch, and report revision resolution only after fetch.
 
 **Phase 2: `--machine` remote delegation in `ruach-herdr`.**
-`machines.yaml` validation; profile resolution against `herdr machine list --json`; local selection with direct remote invocation; the SSH argv builder with `env -i` and declared PATH; remote `resolve --offline` role-hash comparison; `--result-file` with `setsid`; the machine envelope and qualified inspection argv; the default branch `ruach/<label>/<name>`. Required tests, using a **fake `ssh`** that executes the remote argv locally under a separate fake HOME, PATH and Herdr (the existing `fake-cli.ts` pattern):
+`machines.yaml` validation; profile resolution against `herdr machine list --json`; local selection with direct remote invocation; the SSH argv builder with `env -i` and declared PATH; remote `resolve --offline` role-hash comparison; `--result-file` with `setsid`; the machine envelope and qualified inspection argv; the default branch `ruach/<label>/<name>`; optional `--parent-workspace <remote id>` for linked mode, verified remotely (a wrong-machine ID must fail before mutation). Required tests, using a **fake `ssh`** that executes the remote argv locally under a separate fake HOME, PATH and Herdr (the existing `fake-cli.ts` pattern):
 - an undeclared, disabled or ambiguous machine fails exit 2 with zero SSH invocations;
 - a label renamed so that it no longer matches the declared ID fails before mutation;
 - remote PATH missing `bun` or `herdr` fails exit 3 with a diagnostic naming the remote and the executable, and never falls back to local;
@@ -325,9 +344,9 @@ Add the receipt block and the "evidence is per machine" rule to `ruach-handoff` 
 Plus one owner-authorized live smoke per machine: dry-run, then a trivial assignment start, fetch back and cleanup. It is recorded as runtime evidence, separate from the fake tests.
 
 **Phase 3: monitoring transport and feature detection.**
-Inspection and readiness commands through SSH, switching to `herdr --machine` only when detected in `--help`. Tests: feature detection on fake help output, and a fake rejecting `--machine` that proves SSH is still used.
+Inspection and readiness commands through SSH, switching to `herdr --machine` only when the declared client's `--help` shows it (F22 makes this immediately useful with a 0.9.3 client). This phase can run in parallel with Phase 2, because it touches only result inspection argv and documentation. Tests: feature detection on fake help output; a fake 0.9.0-style client rejecting `--machine` proves SSH is still used; a forwarded connection failure on a mutating call yields inspect-first diagnostics with no resend.
 
-**Phase 4 (task-driven only): bundle fallback helper, checkpoint-fetch convention in the ledger, remote linked-worktree parent.**
+**Phase 4 (task-driven only): bundle fallback helper, checkpoint-fetch convention in the ledger.** (The remote linked-worktree parent moved into Phase 2 as an optional `--parent-workspace`, because remote parent workspaces exist (F27).)
 Each item only after Phase 0–2 use shows the need.
 
 ## 14. Tradeoffs accepted

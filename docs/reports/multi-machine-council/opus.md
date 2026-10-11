@@ -4,7 +4,7 @@ role: architect
 council_member: Opus 5.5 (high)
 round: 1
 status: needs-decision
-outcome: "Independent design: add an explicit --machine to ruach-herdr that runs the existing launcher unchanged on the target machine over its saved Herdr SSH target and relays one machine-qualified result. Use Git for source handoff, with direct SSH Git as the default transport: the integration checkout pushes bases only into refs/ruach/incoming/* on the remote and fetches worker branches into refs/remotes/<machine>/*. Git bundles are the fallback. Central origin is an owner option. Patches, rsync and shared filesystems are rejected for source. One Coordinator and one integration checkout keep merge authority. Ready for the second council round. Implementation waits on owner decisions D1-D10."
+outcome: "Independent design: add an explicit --machine to ruach-herdr that runs the existing launcher unchanged on the target machine over its saved Herdr SSH target and relays one machine-qualified result. Use Git for source handoff, with direct SSH Git as the default transport: the integration checkout pushes bases only into refs/ruach/incoming/* on the remote and fetches worker branches into refs/remotes/<machine>/*. Git bundles are the fallback. Central origin is an owner option. Patches, rsync and shared filesystems are rejected for source. One Coordinator and one integration checkout keep merge authority. Revised once for the Coordinator setup update (remote Herdr 0.9.3, --machine forwarding via a 0.9.3 client, bundle seeding, no push credentials). The recommendation is unchanged. Forwarding becomes the near-term monitoring transport, and remote linked mode moves into Phase 2. Ready for the second council round. Implementation waits on owner decisions D1-D12."
 baseline: d75039a
 artifacts:
   - docs/design/multi-machine-opus.md
@@ -16,6 +16,7 @@ verification:
   - "bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/multi-machine-council/opus.md --repo . : ok true, exit 0 (baseline d75039a resolved)"
   - "just check: exit 0 (resource identities, eval placement, relative Markdown targets; tsc), after just install of frozen dependencies in this worktree. A first run before the install failed typecheck only on missing node_modules (environment)."
   - "git diff --check on both artifacts: exit 0"
+  - "Setup update facts F21-F28 (remote Herdr 0.9.3, forwarding with a 0.9.3 client, bundle seeding, toolchains, no push credentials, remote workspaces) are Coordinator-supplied and not re-verified. A read-only local search did not find the temporary client."
   - "not run: application or runtime tests, remote machine probes, live launches (the design is documentation only)"
 review: not-run
 discoveries:
@@ -23,6 +24,10 @@ discoveries:
   - "Herdr API forwarding, even when available, does not forward local configuration. It cannot replace remote native preparation (Claude settings overlay, Codex config reader), so launch must run on the target machine."
   - "worker.ts already forwards PATH/HOME/CODEX_HOME/CLAUDE_CONFIG_DIR from its own process env. Running it remotely gives the correct ownership, as long as the SSH invocation does not carry the caller's values."
   - "resolve --offline returns roleHash write-free, so it can serve as a remote resource-compatibility probe without new code."
+  - "Herdr --machine forwarding depends on the client binary version (0.9.3), not the local server (F22). Feature detection must use the selected client's --help, and Ruach must not install or copy clients."
+  - "Two Bun versions coexist on the remotes (F24). Preflight must record the resolved Bun path and version, not only presence."
+  - "Remote parent workspaces exist (oholiab/w4:p1, tubal/w2:p1), so remote linked mode can use the existing linkedParent check with an explicit remote parent ID."
+  - "Bundles are proven for seeding new machines. Direct SSH Git stays the steady-state recommendation. Each repository (including the Eden children) gets its own receipt, with no cross-repository atomicity."
   - "The handoff schema already validates any top-level *_revision field. Receipt fields (base_revision, received_revision) need no schema change, but validate locally only after the fetch."
 blockers:
   - "D1 central remote with credentials and WIP publication vs direct SSH Git (recommended direct)"
@@ -32,9 +37,11 @@ blockers:
   - "D5 machines.yaml beside the catalogs vs wrapper flags only"
   - "D6 accept HERDR_ENV=1 set by an explicit --machine SSH launch as authorization"
   - "D7 branch namespace ruach/<machine>/<worker>"
-  - "D8 timing of a Herdr upgrade that provides --machine (not required)"
+  - "D8 when to make a forwarding-capable client (0.9.3 or later) the local default (launch does not need it; monitoring benefits)"
   - "D9 roadmap placement (other agents own docs/roadmap.md)"
   - "D10 datasets, Docker images and accounts provisioned per machine by the owner, referenced only by manifest"
+  - "D11 declared remote PATH (recommended) vs sourcing the user-local dev-env on each launch"
+  - "D12 where an owner-supplied forwarding Herdr client path is declared for --machine monitoring"
 ---
 
 # Multi-machine council, round 1: Opus
@@ -88,14 +95,26 @@ The receipt fields are in design §9.
 | 3 | Monitoring through SSH, switching to Herdr `--machine` when feature-detected |
 | 4 | Bundle helper, checkpoint fetches, remote linked parent; only when use shows the need |
 
+## Setup update (revision of round 1)
+
+The Coordinator's update did not change the boundary, for one reason: Herdr forwarding still forwards only the Herdr API, and remote native preparation must run on the remote machine. What changed:
+
+- **Monitoring.** Herdr `--machine` is now a practical monitoring and inspection transport, through an owner-declared 0.9.3+ client that is feature-detected (D12). The temporary `/tmp` client remains evidence only.
+- **Bundles.** The bundle seeding path is recorded as the new-machine bootstrap. Steady-state handoffs stay on direct SSH Git.
+- **PATH and Bun.** Preflight records resolved Bun paths, because 1.4.2 and 1.4.3 coexist. D11 settles declared PATH versus dev-env.
+- **Remote linked mode** uses an explicit `--parent-workspace` checked remotely, for example `oholiab/w4:p1`.
+- **Credentials.** No push credentials on the remotes confirms that bases come from the integration machine.
+- **Several repositories.** Each repository gets its own receipt, with no cross-repository atomicity.
+
 ## Assumptions to verify before Phase 2
 
 These are not verified:
-- remote Herdr and harness versions;
+- remote harness versions (Herdr itself is now 0.9.3);
+- which Bun the declared PATH selects;
+- remote GitHub read access;
 - whether remote→local SSH exists;
-- remote GitHub credentials;
 - that no shared filesystem exists;
-- remote ramec HEAD and snapshot state;
+- remote `.agents` snapshot versions per repository (ramec was fast-forwarded clean);
 - whether a noninteractive `herdr` reaches the default socket under the `env -i` allowlist;
 - remote native account login.
 
