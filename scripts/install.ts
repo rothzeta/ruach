@@ -143,6 +143,8 @@ function install(options: Options) {
   if (options.version !== undefined && version !== options.version) throw new Error('Release tag does not match the committed package version');
   if (stat(staging)) throw new Error(`Interrupted install: ${STAGING} exists in the target; recover or remove it before installing`);
   if (stat(join(target, METADATA))?.isSymbolicLink()) throw new Error('Snapshot metadata must not be a symlink');
+  // Refuse a symlinked target or ancestor before creating or locking anything through it; the lock never legitimizes an unsafe root.
+  destination(target, 'ruach-install.ts');
   // The exclusive mkdir is both the concurrency lock and the marker of an interrupted install. Creating a missing root first is harmless.
   mkdirSync(target, { recursive: true });
   try { mkdirSync(staging); }
