@@ -14,7 +14,7 @@ Fact (given, setup update): both remotes run Herdr 0.9.3, protocol 22, with comp
 
 Consequences: A2 and A3 are supported for push credentials (remotes hold none); the capability-mismatch risk from server versions is largely retired but preflight stays; bundles are a proven seeding path; the two-Bun situation means the launcher environment must name an absolute Bun, not just a `PATH`.
 
-Fact (session, this round, disposable local repositories, Git 2.47.3, `file://` transport only): the Git commands in R2.5 were run and behaved as described. `ssh://` transport was not exercised (no SSH was used), so SSH-specific behavior (agent forwarding off, `BatchMode`, host-key checking) is unverified. No live launch test is claimed.
+Fact (session, this round, disposable local repositories, Git 2.47.3, `file://` transport only): the Git commands in R2.5 were run and behaved as described. `ssh://` transport was not exercised by me (no SSH was used). Separately, the Coordinator reports (not my evidence) that a direct SSH fetch from each real remote into an isolated temporary bare repository succeeded and retrieved exact Ruach `d75039aa7b82b262e2f28af08630258fb7f77180` without remote-to-local credentials. That supports the inbound path over real SSH. Still unverified: push into `refs/ruach/incoming/*` over SSH, fetch by SHA through a real server, the pin refs, and `-a`/`BatchMode` option effects. No live launch test is claimed.
 
 ### R2.1 Where the three designs agree
 
@@ -106,7 +106,7 @@ Observed:
 
 Order that follows: the control machine creates `refs/ruach/received/$TASK/$SEQ` first; only then may the remote pin `refs/ruach/receipts/$TASK/$SEQ` be removed, and only at cleanup. Report text with a different `candidate_revision` than the verified `H` is rejected.
 
-Not verified: `ssh://` or scp-form URLs, ssh options, host-key behavior and fetch-by-SHA over a real SSH server (it depends on the server's upload-pack accepting the object, which worked here with protocol v2 and a reachable pin). The sequence needs one authorized live rehearsal before it is relied on.
+Coordinator-verified (not my evidence): direct SSH fetch of exact `d75039a…` from each real remote into an isolated temporary bare repository, with no remote-to-local credentials. Not verified: push over SSH, fetch-by-SHA over a real SSH server, ssh option effects (it depends on the server's upload-pack accepting the object, which worked here with protocol v2 and a reachable pin). The sequence needs one authorized live rehearsal before it is relied on.
 
 ### R2.6 Local transfer versus publication
 
@@ -122,13 +122,23 @@ Three operations are different and need different authority; the round-1 text ov
 
 Control-side, before dispatch, the wrapper records in the task record: `launch_id`, machine ID, deterministic keys (agent name, branch, worktree path), request digest and `dispatched: false`. Remote-side the helper's first action is to create `launch-<launch_id>.json` exclusively (mode 0600, private directory under the remote OS temp or state directory) and only then to spawn the launcher.
 
-The record's order gives a property worth using: **if the host is reachable and no record exists, the launcher was never spawned**, so that case is provably `not-started` and a fresh dispatch of the same request is safe. Every other case keeps the launch.
+**Correction (final check, accepted):** the record's order gives a one-way property only. A record proves the launcher may have been spawned. Its absence proves nothing by itself, because a single negative observation can race an SSH dispatch that is still in flight and has not yet claimed its record. An earlier draft of this section said a reachable host with no record proves "not started"; that was wrong. **Absence alone never authorizes a new request or a new attempt.**
+
+Rules:
+
+1. **Immutable identity, single arbiter.** The launch ID and request digest never change. The helper's atomic exclusive claim (exclusive create of the record, before any mutation) is the only arbiter. Every dispatch of that ID (the original, a delayed one, or an intentional replay) goes through the helper. Whichever reaches the claim first wins; every other request with the same ID and digest converges on the existing record and returns its state without spawning; a different digest is refused.
+2. **Replay versus attempt.** Replaying the same ID and digest is safe only because of rule 1. A new attempt is a new worker name, launch ID and branch.
+3. **`observe` never submits.** It is read-only in every state and never resubmits a request. Only the dispatch path may claim, and only through the helper.
+4. **Unknown is preserved.** No record leaves the state `unclaimed-unknown`. It becomes quiescent only on bounded evidence that no producer is in flight: (a) the originating dispatch process on the control machine has exited and been reaped; (b) a configured bound has elapsed that exceeds the SSH connect timeout plus the keepalive limit (`ServerAliveInterval` times `ServerAliveCountMax`) plus the claim-to-spawn latency; and (c) a second observation still finds no record, worktree, branch or agent for the keys. Without all three the state stays unknown and no new attempt is made.
+5. **Abandon closes the race.** After quiescence, the Coordinator may run `abandon`, which asks the helper to claim the ID exclusively with a tombstone (`state: abandoned`, time, reason). A delayed in-flight request for that ID then finds the tombstone and refuses. Only then is a new attempt authorized. The tombstone is the one thing absence cannot give.
 
 | Observation | State | Allowed next step |
 | --- | --- | --- |
-| Failure before the SSH session reached the helper | `not-dispatched` | Fix and rerun; nothing exists |
-| Reachable host, no record | `not-started` | Redispatch the same request |
-| Record exists, same digest, no result | `in-progress` or `unknown` | `observe` only; never spawn again. The helper returns the current state for a repeated request |
+| Local validation failure before `ssh` is spawned | `not-dispatched` | Fix and rerun; nothing was sent |
+| `ssh` failed or ended before the helper printed its `accepted` line (any exit, including 255 and a connect timeout) | `unclaimed-unknown` | `observe` later; no resubmission by `observe`; replay of the same ID and digest only through the helper claim; a new attempt only after rule 4 and `abandon` |
+| Reachable host, no record, bounded evidence of rule 4 satisfied | `quiescent` | Replay the same ID and digest through the helper claim (safe), or `abandon` and start a new attempt |
+| Tombstone exists | `abandoned` | Refuse the old ID; any further work uses a new ID |
+| Record exists, same digest, no result | `in-progress` or `unknown` | `observe` only; never spawn again. A repeated request to the helper returns the current state |
 | Record exists, different digest | `conflict` | Refuse; investigate; use a new name |
 | Result present, launcher exit 0 and `started` | `started` | Adopt; record IDs; proceed to the assignment |
 | Result present, `awaiting-input` | `awaiting-input` | Owner answers the native dialog on that machine; no replacement |
@@ -301,8 +311,8 @@ Sequence:
 3. Dispatch `start`. On a returned launcher JSON, wrap it (§4.3) and finish.
 4. If SSH fails *before* dispatch (connect refused, auth failed): exit 3, nothing mutated.
 5. If SSH ends *after* dispatch with no JSON: exit 4 `result_lost`, `submission_state: unknown`. The only permitted next step is `machine observe --machine M --name N`.
-6. `observe` is read-only. It reports by the deterministic keys: `herdr agent get N` (name, kind, pane, status), the workspace, `git worktree list` and the branch tip, whether the worktree is clean, and whether a report file exists. It classifies the launch as `not-started`, `partial` (worktree without agent), `started`, `awaiting-input` or `unknown`.
-7. `not-started` after a confirmed absence of the worktree, branch and agent allows a fresh launch with a *new* name (existing rejection of used names and branches already makes a same-name retry safe by failing). `partial` and `started` are adopted, never recreated; a partial launch is completed by the owner or removed after its work is known to be reachable from a retained branch.
+6. `observe` is read-only. It reports by the deterministic keys: `herdr agent get N` (name, kind, pane, status), the workspace, `git worktree list` and the branch tip, whether the worktree is clean, and whether a report file exists. It classifies the launch as `not-started` **[R2: no longer a state; absence is `unclaimed-unknown`, see R2.7]**, `partial` (worktree without agent), `started`, `awaiting-input` or `unknown`.
+7. **[R2: superseded by R2.7. Absence of the worktree, branch and agent does not by itself authorize a new launch; it can race an in-flight dispatch. The text below is the round-1 wording.]** `not-started` after a confirmed absence of the worktree, branch and agent allows a fresh launch with a *new* name (existing rejection of used names and branches already makes a same-name retry safe by failing). `partial` and `started` are adopted, never recreated; a partial launch is completed by the owner or removed after its work is known to be reachable from a retained branch.
 8. Phase 2 hardening: run the remote launcher detached (`setsid`, output to a private result file under the remote OS temp) so a dropped connection cannot interrupt it between worktree creation and agent start; the wrapper reads the file on reconnect. Needed only if A5 proves false or `result_lost` occurs in practice.
 
 Awaiting-input (native trust or onboarding dialog) is the same exit-0 state as locally. The result's inspection argv is machine-qualified; the owner opens the remote session with `herdr --remote <target>` (the TUI) to answer the dialog. Ruach never answers it.
@@ -446,7 +456,7 @@ Validation note: `base_revision` and `candidate_revision` are checked by `ruach-
 
 ## 5. Required tests (public-boundary, failing first, offline)
 
-**[R2: tests 2 and 3 now cover the stdin request helper (no shell interpolation of values, explicit environment) instead of quoting; add: exclusive launch record, duplicate request with same and different digest, no record means not-started, result file written once, direct selection forwarded and local route recorded, receipt ref create-only, rewritten-branch fetch rejection, fetch-by-SHA with a remote pin, bundle prerequisite failure. The Git cases listed under R2.5 were run once by hand in disposable repositories; they are not yet tests.]**
+**[R2: tests 2 and 3 now cover the stdin request helper (no shell interpolation of values, explicit environment) instead of quoting; add: exclusive launch record, duplicate request with same and different digest, a delayed duplicate dispatch after an `observe` that saw no record converges on the single claim and spawns once, `observe` makes no mutating or claiming call in any state, quiescence requires all three R2.7 conditions, `abandon` writes a tombstone and a later in-flight request refuses, result file written once, direct selection forwarded and local route recorded, receipt ref create-only, rewritten-branch fetch rejection, fetch-by-SHA with a remote pin, bundle prerequisite failure. The Git cases listed under R2.5 were run once by hand in disposable repositories; they are not yet tests.]**
 
 Existing conventions: Bun test with temporary HOME and fake CLIs (`tests/fixtures/fake-cli.ts`); no claim about live runtime. I have not run any application or runtime tests for this proposal.
 
@@ -459,7 +469,7 @@ Wrapper (`skills/ruach-herdr/tests/machine.test.ts`, fake `ssh` and `herdr` on `
 5. Transport failure classes: exit 255 before dispatch gives exit 3; stream closed after dispatch gives exit 4 with `result_lost` and keys present; a successful launcher JSON is passed through with an envelope and unchanged launcher fields.
 6. `HERDR_ENV` gate: refused when the local caller lacks `HERDR_ENV=1`; set remotely only for `start`/`--dry-run`.
 7. Capability mismatch: server `endpoint_compatible: no`, missing agent kind, missing worktree flags (falls back to standalone and reports), harness version below gate, role-hash mismatch, none of which mutates.
-8. `observe`: fixtures for not-started, partial, started, awaiting-input, and stale-ID cases.
+8. `observe`: fixtures for unclaimed-unknown, quiescent, abandoned, partial, started, awaiting-input, and stale-ID cases (**[R2]** "not-started" is no longer a state).
 9. Scoped IDs: two machines returning `w1:p1` and the same agent name stay distinct in the envelope; a local `herdr` command is never built from a remote ID.
 10. Unchanged launcher: the existing `worker.test.ts` suite passes untouched.
 
