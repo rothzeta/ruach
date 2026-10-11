@@ -116,6 +116,7 @@ function drift(target: string, data: Manifest, extraSkills: Iterable<string> = [
 }
 const skillRoots = (names: Iterable<string>) => new Set([...names].filter(name => name.startsWith('skills/')).map(name => name.split('/')[1]));
 class RollbackIncomplete extends Error {}
+type Operation = { index: number; name: string; path: string; kind: 'create' | 'replace' | 'remove'; body?: Buffer; mode?: number };
 type Step = { kind: 'mkdir'; path: string } | { kind: 'backup'; path: string; saved: string } | { kind: 'place'; path: string; dev: number; ino: number };
 // Undo this run's steps in reverse, once each; never delete recursively or follow links. Returns paths needing manual recovery.
 function rollback(done: Step[]): string[] {
@@ -142,44 +143,47 @@ function install(options: Options) {
   if (options.version !== undefined && version !== options.version) throw new Error('Release tag does not match the committed package version');
   if (stat(staging)) throw new Error(`Interrupted install: ${STAGING} exists in the target; recover or remove it before installing`);
   if (stat(join(target, METADATA))?.isSymbolicLink()) throw new Error('Snapshot metadata must not be a symlink');
-  const old = existsSync(join(target, METADATA)) ? load(target) : undefined;
-  const roots = skillRoots([...Object.keys(old?.files ?? {}), ...files.keys()]);
-  const problems = old ? drift(target, old, roots) : [];
-  const known = new Set([...Object.keys(old?.files ?? {}), ...files.keys()]);
-  const leftovers = new Set<string>();
-  for (const skill of roots) for (const name of walk(join(target, 'skills', skill), `skills/${skill}`)) {
-    const info = stat(join(target, name));
-    if (info?.isSymbolicLink() || info && !info.isFile() && !info.isDirectory()) throw new Error('Skill roots contain a non-regular entry; remove it manually');
-    if (info?.isFile() && !known.has(name)) leftovers.add(name);
-  }
-  if ((problems.length || leftovers.size) && !options.replace) throw new Error('Installed snapshot has drift or unrecorded files; use --replace to overwrite explicitly');
-  for (const [name, { body }] of files) {
-    const path = destination(target, name), info = stat(path);
-    if (info && !info.isFile()) throw new Error('Managed destination is not a regular file');
-    if (info && (!old || !Object.hasOwn(old.files, name)) && !readFileSync(path).equals(body) && !options.replace) throw new Error('Conflicting destination; use --replace to adopt explicitly');
-    // A file standing where a parent directory is needed would fail mid-commit.
-    for (let parent = dirname(path); parent !== target && parent.startsWith(target); parent = dirname(parent)) if (stat(parent) && !stat(parent)!.isDirectory()) throw new Error('Managed destination parent is not a directory');
-  }
-  const removals = new Set<string>();
-  if (old) {
-    if (options.replace) for (const name of problems) if (!Object.hasOwn(old.files, name) && !files.has(name)) removals.add(name);
-    for (const name of Object.keys(old.files)) if (!files.has(name)) removals.add(name);
-  }
-  if (options.replace) for (const name of leftovers) removals.add(name);
-  // Validate every removal before mutation, including obsolete managed paths.
-  const paths = [...removals].map(name => destination(target, name));
-  for (const path of paths) if (stat(path) && !stat(path)!.isFile()) throw new Error('Managed destination is not a regular file');
-  const next = JSON.stringify(manifest(sha, files, options.version), null, 2) + '\n';
-  type Operation = { index: number; name: string; path: string; kind: 'create' | 'replace' | 'remove'; body?: Buffer; mode?: number };
-  const operations: Operation[] = [...removals].filter(name => stat(destination(target, name))).map((name): Omit<Operation, 'index'> => ({ name, path: destination(target, name), kind: 'remove' }))
-    .concat([...files].map(([name, { body, mode }]) => ({ name, path: destination(target, name), kind: stat(destination(target, name)) ? 'replace' as const : 'create' as const, body, mode })))
-    .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
-    .concat([{ name: METADATA, path: join(target, METADATA), kind: stat(join(target, METADATA)) ? 'replace' as const : 'create' as const, body: Buffer.from(next), mode: 0o644 }])
-    .map((operation, index) => ({ ...operation, index }));
-  // The exclusive mkdir is both the concurrency lock and the marker of an interrupted install.
+  // The exclusive mkdir is both the concurrency lock and the marker of an interrupted install. Creating a missing root first is harmless.
   mkdirSync(target, { recursive: true });
   try { mkdirSync(staging); }
   catch (error: any) { throw error.code === 'EEXIST' ? new Error(`Interrupted install: ${STAGING} exists in the target`) : error; }
+  // Only the lock is held from here: plan from the target state this run now owns, never from an earlier read.
+  let operations: Operation[], roots: Set<string>, next: string;
+  try {
+    const old = existsSync(join(target, METADATA)) ? load(target) : undefined;
+    roots = skillRoots([...Object.keys(old?.files ?? {}), ...files.keys()]);
+    const problems = old ? drift(target, old, roots) : [];
+    const known = new Set([...Object.keys(old?.files ?? {}), ...files.keys()]);
+    const leftovers = new Set<string>();
+    for (const skill of roots) for (const name of walk(join(target, 'skills', skill), `skills/${skill}`)) {
+      const info = stat(join(target, name));
+      if (info?.isSymbolicLink() || info && !info.isFile() && !info.isDirectory()) throw new Error('Skill roots contain a non-regular entry; remove it manually');
+      if (info?.isFile() && !known.has(name)) leftovers.add(name);
+    }
+    if ((problems.length || leftovers.size) && !options.replace) throw new Error('Installed snapshot has drift or unrecorded files; use --replace to overwrite explicitly');
+    for (const [name, { body }] of files) {
+      const path = destination(target, name), info = stat(path);
+      if (info && !info.isFile()) throw new Error('Managed destination is not a regular file');
+      if (info && (!old || !Object.hasOwn(old.files, name)) && !readFileSync(path).equals(body) && !options.replace) throw new Error('Conflicting destination; use --replace to adopt explicitly');
+      // A file standing where a parent directory is needed would fail mid-commit.
+      for (let parent = dirname(path); parent !== target && parent.startsWith(target); parent = dirname(parent)) if (stat(parent) && !stat(parent)!.isDirectory()) throw new Error('Managed destination parent is not a directory');
+    }
+    const removals = new Set<string>();
+    if (old) {
+      if (options.replace) for (const name of problems) if (!Object.hasOwn(old.files, name) && !files.has(name)) removals.add(name);
+      for (const name of Object.keys(old.files)) if (!files.has(name)) removals.add(name);
+    }
+    if (options.replace) for (const name of leftovers) removals.add(name);
+    // Validate every removal before mutation, including obsolete managed paths.
+    const paths = [...removals].map(name => destination(target, name));
+    for (const path of paths) if (stat(path) && !stat(path)!.isFile()) throw new Error('Managed destination is not a regular file');
+    next = JSON.stringify(manifest(sha, files, options.version), null, 2) + '\n';
+    operations = [...removals].filter(name => stat(destination(target, name))).map((name): Omit<Operation, 'index'> => ({ name, path: destination(target, name), kind: 'remove' }))
+      .concat([...files].map(([name, { body, mode }]) => ({ name, path: destination(target, name), kind: stat(destination(target, name)) ? 'replace' as const : 'create' as const, body, mode })))
+      .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+      .concat([{ name: METADATA, path: join(target, METADATA), kind: stat(join(target, METADATA)) ? 'replace' as const : 'create' as const, body: Buffer.from(next), mode: 0o644 }])
+      .map((operation, index) => ({ ...operation, index }));
+  } catch (error) { rmSync(staging, { recursive: true, force: true }); throw error; }
   const saved = (operation: Operation) => join(staging, 'old', String(operation.index)), fresh = (operation: Operation) => join(staging, 'new', String(operation.index));
   try {
     mkdirSync(join(staging, 'new')); mkdirSync(join(staging, 'old'));
