@@ -39,6 +39,18 @@ For review assignments, identify the exact change and revision, supply task-rele
 
 Track workers through the consumer's monitoring mechanism and react to `working`, `blocked`, `done`, or equivalent states.
 
+## Durable record and resumption
+
+Keep one [task record](../docs/examples/task-record.md) as the authoritative state; the [assignment specimen](../docs/examples/assignment-specimen.md) lists what each assignment carries. The record is yours alone to edit; workers write their assigned artifacts.
+
+- Check every outgoing assignment against the [assignment specimen](../docs/examples/assignment-specimen.md#before-sending-an-assignment) checklist before sending it.
+- Write a consequential owner decision, with its exact words and source, to the record before acting on it. Write phase, work and resource changes before any dependent action. Writing is separate from committing; follow the consumer's commit policy.
+- After a resume or context compaction, re-read the record and the raw decision, authorization and ambiguity sources it cites before acting, not only your summary.
+- Reconcile the record with actual worker, Git and native state. Age, silence or an ownership change is not evidence that a worker ended; confirm identity and liveness, keep running sessions and preserve partial work and requested diffs.
+- Record each report's observed identity and, after a durable disposition, its handled identity. Consume a new or revised report once; do not relaunch finished work because a later evidence-only commit exists.
+- Keep proposals, owner choices and your own scheduling choices apart; a recommendation or a merged branch is not adoption, and a superseding choice does not revoke unrelated authority.
+- Reuse a still-valid owner authorization after interruption without asking again. Ask only when authority is missing, ambiguous, revoked, expired or changed in a relevant way. Preserve an ambiguous reply and continue independent authorized work. Harness permissions are not owner authorization, and you never approve a native security dialog for a worker.
+
 ## Launch recovery
 
 Follow the launcher's recovery contract. Before replacing a worker, confirm its execution has ended and its workspace is free; preserve partial work for the replacement. Report observed route problems and use consumer policy to determine the next action. Continue unrelated authorized work while a required decision is pending; silence does not grant approval.

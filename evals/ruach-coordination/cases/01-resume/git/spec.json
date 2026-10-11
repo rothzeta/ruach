@@ -1,0 +1,139 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-12T07:00:00Z",
+   "message": "Tidepool base",
+   "files": {
+    "README.md": {
+     "text": "# tidepool\nTide table command line tool.\n"
+    },
+    "src/tide.ts": {
+     "text": "export const version = 1;\n"
+    }
+   }
+  },
+  {
+   "name": "feed-partial",
+   "branch": "task/tide-77-feed",
+   "from": "base",
+   "date": "2026-10-12T09:41:00Z",
+   "message": "feed: partial station parser",
+   "files": {
+    "src/feed.ts": {
+     "text": "export function parseStation(line: string) {\n  // partial: only the id column is read so far\n  return { id: line.split(',')[0] };\n}\n"
+    }
+   }
+  },
+  {
+   "name": "chart-1",
+   "branch": "task/tide-77-chart",
+   "from": "base",
+   "date": "2026-10-12T08:55:00Z",
+   "message": "chart: axis scaffolding",
+   "files": {
+    "src/chart.ts": {
+     "text": "export const axes = ['time', 'height'];\n"
+    }
+   }
+  },
+  {
+   "name": "units-impl",
+   "branch": "task/tide-77-units",
+   "from": "base",
+   "date": "2026-10-12T09:50:00Z",
+   "message": "units: metric and imperial heights",
+   "files": {
+    "src/units.ts": {
+     "text": "export const toFeet = (m: number) => m * 3.28084;\n"
+    }
+   }
+  },
+  {
+   "name": "units-report",
+   "branch": "task/tide-77-units",
+   "from": "units-impl",
+   "date": "2026-10-12T10:25:00Z",
+   "message": "units: handoff report",
+   "files": {
+    "reports/TIDE-77/units.md": {
+     "text": "task: TIDE-77/units\nstatus: complete\noutcome: Height unit conversion added and tested.\ncandidate_revision: {{sha:units-impl}}\ntested_revision: {{sha:units-impl}}\nartifacts:\n  - src/units.ts\nverification:\n  - \"bun test: exit 0\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "datum-impl-1",
+   "branch": "task/tide-77-datum",
+   "from": "base",
+   "date": "2026-10-12T09:10:00Z",
+   "message": "datum: chart datum offsets",
+   "files": {
+    "src/datum.ts": {
+     "text": "export const offset = (h: number, datum: number) => h - datum;\n"
+    }
+   }
+  },
+  {
+   "name": "datum-report-1",
+   "branch": "task/tide-77-datum",
+   "from": "datum-impl-1",
+   "date": "2026-10-12T09:20:00Z",
+   "message": "datum: handoff report",
+   "files": {
+    "reports/TIDE-77/datum.md": {
+     "text": "task: TIDE-77/datum\nstatus: complete\noutcome: Datum offsets added; rounding is exact.\ncandidate_revision: {{sha:datum-impl-1}}\ntested_revision: {{sha:datum-impl-1}}\nartifacts:\n  - src/datum.ts\nverification:\n  - \"bun test: exit 0 at the candidate\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "datum-impl-2",
+   "branch": "task/tide-77-datum",
+   "from": "datum-report-1",
+   "date": "2026-10-12T10:10:00Z",
+   "message": "datum: round offsets to centimetres",
+   "files": {
+    "src/datum.ts": {
+     "text": "export const offset = (h: number, datum: number) => Math.round((h - datum) * 100) / 100;\n"
+    }
+   }
+  },
+  {
+   "name": "datum-report-2",
+   "branch": "task/tide-77-datum",
+   "from": "datum-impl-2",
+   "date": "2026-10-12T10:20:00Z",
+   "message": "datum: revised handoff report",
+   "files": {
+    "reports/TIDE-77/datum.md": {
+     "text": "task: TIDE-77/datum\nstatus: blocked\noutcome: Rounding added at a new candidate; the offset test fails for negative heights.\ncandidate_revision: {{sha:datum-impl-2}}\ntested_revision: {{sha:datum-impl-2}}\nartifacts:\n  - src/datum.ts\nverification:\n  - \"bun test: exit 1 (negative-height offset case) at the new candidate\"\ndiscoveries: []\nblockers:\n  - \"Negative-height offset test fails; no passing run at this candidate\"\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "docs-impl",
+   "branch": "task/tide-77-docs",
+   "from": "base",
+   "date": "2026-10-12T08:30:00Z",
+   "message": "docs: units and datum notes",
+   "files": {
+    "docs/units.md": {
+     "text": "# Units\nHeights are metres unless a unit flag says otherwise.\n"
+    }
+   }
+  },
+  {
+   "name": "docs-report",
+   "branch": "task/tide-77-docs",
+   "from": "docs-impl",
+   "date": "2026-10-12T08:40:00Z",
+   "message": "docs: handoff report",
+   "files": {
+    "reports/TIDE-77/docs.md": {
+     "text": "task: TIDE-77/docs\nstatus: complete\noutcome: Unit notes documented.\ncandidate_revision: {{sha:docs-impl}}\ntested_revision: {{sha:docs-impl}}\nartifacts:\n  - docs/units.md\nverification:\n  - \"link check: exit 0\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  }
+ ]
+}

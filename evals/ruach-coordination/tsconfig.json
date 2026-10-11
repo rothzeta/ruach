@@ -1,0 +1,4 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["prepare.ts", "tests/**/*.ts", "cases/01-resume/corpus/app/**/*.ts"]
+}

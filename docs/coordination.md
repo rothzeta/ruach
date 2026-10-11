@@ -9,4 +9,6 @@ This matters when an outer orchestrator such as Hermes launches or supervises Ru
 - Cleanup authority follows ownership: the owning Coordinator releases the task's sessions, workspaces and worktrees. An outer orchestrator releases only what it created for itself, such as the Coordinator's own session.
 - Parallel tasks may each have their own Coordinator. They share no worker or worktree unless a consumer assignment says so.
 
+The [task record](examples/task-record.md) also holds decisions with their owner words, authorizations, work and resource ownership and report handling, so a replacement resumes from it without repeating handled work. The optional [changelog hook](../skills/ruach-changelog/SKILL.md) is a discovery breadcrumb, not that record.
+
 Ruach does not provide a scheduler or mailbox for this. The owner is recorded in the task record and in the assignments the Coordinator writes.

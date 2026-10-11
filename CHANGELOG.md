@@ -2,8 +2,16 @@
 
 Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` Git tags. Release tags are immutable.
 
-## Unreleased
+## 0.3.1 — 2026-10-11
 
+Scope follows the [roadmap](docs/roadmap.md); the preparation and evidence summary is in the release preparation report `docs/reports/releases/0.3.1/preparation.md`.
+
+- R1 (local only): the hosted-failing order assertion in the Herdr worker test now sorts the directory listing; no hosted green run, native route result or real consumer-task report exists yet.
+- R2 installer: `install` plans from the target state it reads under the `.ruach-staging` lock (drift, roots, conflicts, removals and operation kinds), refuses a symlinked target or ancestor before creating or locking anything, and removes only its own staging; recovery guidance is in [operations](docs/operations.md#snapshot-installation-failures-and-recovery).
+- R2 linked launches: a linked-worktree failure keeps the workspace and root pane IDs Herdr returned as recovery hints when valid (they may be null), and a requested `--cwd` that is not an ordinary tree in the base is refused with exit 2 before any checkout. Linked creation by Herdr remains unprotected against replacement refs; that boundary is documented, not fixed, and live Herdr behavior is unverified.
+- R3 coordination guidance: the task-record and assignment specimens gain decision, authorization, supersession, report-handling and resource contracts, manual pre-send checks and a filled interrupted multi-unit example. The Coordinator role requires the record duties (decision and phase writes before dependent action, re-reading after compaction, state reconciliation, assignment checks); the Architect role requires disjoint work packages with dependency reasons. No new tool, role or schema.
+- Developer evidence packets: `evals/next-release-native-smoke` (offline install/native smoke whose control requires the install, check and frozen dependency steps plus a consistent actual readiness result) and `evals/ruach-coordination` (resume, ambiguity and authorization cases with a separate rubric). `.github/workflows/ci.yml` runs both packets' pinned typecheck and tests after the existing suites. These are prepared offline developer fixtures, not native or behavioral results.
+- Accepted roadmap plans: the eight agreed implementation plans for R1–R7, C1–C5 and M1 and the RAMEC disposition map are added under `docs/design/` (index: [next-roadmap-plans.md](docs/design/next-roadmap-plans.md)) with their public planning receipts under `docs/reports/roadmap-planning/`. They are specifications for future assignments, not completed implementation or execution authority.
 - `ruach-changelog` skill: opt-in hook script that appends each finished turn (and Claude compaction summaries) from Claude Code, Codex and agy to a consumer-declared JSONL file, plus a command that writes project-level Codex and agy registrations. The Ruach plugin now ships `hooks/hooks.json` (async `Stop`/`PostCompact`), a no-op for projects without `.ruach/changelog.json`.
 
 ## 0.3.0 — 2026-10-07

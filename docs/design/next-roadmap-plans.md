@@ -1,0 +1,22 @@
+# Roadmap implementation plans
+
+Two `gpt-6.1-sol` Architects completed eight detailed handoff plans for all 13 active roadmap packages, in four sequential batches. Each batch reached agreement in round 4, within the owner's five-round limit. No unresolved disagreement required arbitration. The plans contain bounded assignments, file ownership, dependencies, acceptance criteria, verification commands, resource/permission needs, and independent review/delivery boundaries.
+
+| Batch | Roadmap packages | Detailed plans | Planning disposition |
+| --- | --- | --- | --- |
+| 1 | R1–R3 | [Release evidence and reliability](next-release-reliability-plan.md); [Durable coordination](next-coordination-plan.md) | Both Architects agree in round 4 |
+| 2 | R4–R7 | [Permissions and communication](next-permissions-communication-plan.md); [Handoff and verification](next-handoff-verification-plan.md) | Both Architects agree in round 4 |
+| 3 | C1–C5 | [Conditional adapter and bugfix](next-adapter-bugfix-plan.md); [Council, runtime QA and hunt](next-council-qa-hunt-plan.md) | Both Architects agree in round 4 |
+| 4 | M1 | [Comparative pilot](next-comparative-pilot-plan.md); [Usage measurement and Librarian evaluation](next-usage-librarian-plan.md) | Both Architects agree in round 4 |
+
+Batch 1's agreement receipts are [Reliability](../reports/roadmap-planning/batch1-round4-reliability.md) and [Coordination](../reports/roadmap-planning/batch1-round4-coordination.md). Batch 2 receipts are [Reliability](../reports/roadmap-planning/batch2-round4-reliability.md) and [Coordination](../reports/roadmap-planning/batch2-round4-coordination.md). All assignments, handoffs and correction/review reports are retained under `docs/reports/roadmap-planning/`. The [task record](../reports/roadmap-planning/task-record.md) preserves owner instructions, input provenance, handled reports and batch state.
+
+Implementation and live evidence remain future assignments. The committed source base is `d75039aa7b82b262e2f28af08630258fb7f77180`; plans use the owner's current reconciled roadmap bytes, whose provenance is recorded in the task record. Owner edits to the roadmap, native-parity guide and RAMEC disposition document are preserved. D1–D3 remain owner decisions and parked proposals remain parked.
+
+To dispatch, select a bounded unit in its plan, resolve the actual accepted source/base and fresh branch, fill its named consumer inputs/resources/authority, and copy its Implementer assignment. Keep the independent Reviewer/evaluator packet separate. Follow the dependency and shared-file gates; disjoint preparation can proceed where explicitly allowed. Plans name the checks and evidence each unit must return, including exact candidate/review/delivery revisions and remaining holds. A plan is a specification, not a completed implementation or permission for a later paid run.
+
+Batch 3 receipts: [Reliability](../reports/roadmap-planning/batch3-round4-reliability.md), [Coordination](../reports/roadmap-planning/batch3-round4-coordination.md). Batch 4 receipts: [Reliability](../reports/roadmap-planning/batch4-round4-reliability.md), [Coordination](../reports/roadmap-planning/batch4-round4-coordination.md). There is no unresolved Architect arbitration question. Hosted CI/native/consumer evidence, independent behavioral execution, real-project demonstrations, native telemetry/human comparison, and applicable execution/publication authority remain named holds in the plans; plan agreement does not claim those outcomes.
+
+Some plan headers describe their correction-round state. The exact round-4 receipts linked above establish acceptance of those unchanged bytes; headers were preserved to keep reviewed revisions and digests reproducible. Worker branches `ruach/sol-roadmap-reliability` and `ruach/sol-roadmap-coordination` retain the creating commits and complete review history.
+
+Validation: `just check` passed, repository tests passed 90/90, and all 32 handoff/review/correction reports validate against retained revisions. The handoff suite passed 28/28. Both owned worker workspaces/worktrees are released; branches and canonical artifacts remain. The original three owner-edited input documents retain their initial hashes. The [ruach-herdr](../../skills/ruach-herdr/SKILL.md) launch skill and [ruach-handoff](../../skills/ruach-handoff/SKILL.md) report skill governed the worker and receipt boundaries.

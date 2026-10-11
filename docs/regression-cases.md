@@ -18,5 +18,11 @@ Status: `[ ]` not yet implemented, `[x]` implemented, followed by the test files
 | NUL in revision rejected before Git is invoked | RU-15 / A3 | Validator `--repo` run with NUL revision exits 1 | impl-a | [x] `skills/ruach-handoff/tests/validate.test.ts` |
 | Type errors fail the gate | RU-12 / B | `tests/typecheck.test.ts` | impl-b | [x] |
 | Patched dependency floors (ws, yaml) | A2 | `tests/dependencies.test.ts` | impl-b | [x] |
+| Installer plans from state under the staging lock | R2-I | Paused second install via test-only preload; stale drift, removals, stale create, invalid post-lock state, `--replace` current state | R2-I | [x] `tests/install.test.ts` (`R2-I:` cases; original source fails 5 of the new cases) |
+| Symlinked install target or ancestor refused before creating or locking | R2-I-FIX1 | Public CLI; nothing created through the link, staging boundary not reached | R2-I | [x] `tests/install.test.ts` (symlinked target ancestor, symlinked target root) |
+| Linked-worktree failure keeps valid workspace and pane IDs as hints | R2-L | Fake Herdr wrong HEAD, wrong path, nonzero receipt, per-ID validation; no split or start | R2-L | [x] `skills/ruach-herdr/tests/spaces.test.ts` (fake Herdr only; live Herdr not run) |
+| Requested `--cwd` must be an ordinary tree in the base before any checkout | R2-L | Untracked, empty, older-base, file/symlink/gitlink cwd in both modes; exit 2 | R2-L | [x] `skills/ruach-herdr/tests/spaces.test.ts`; positive control for Unicode/space directories |
+| Hosted-failing readdir order assertion | R1-F | Worker standalone-skill test sorts the listing | R1-F | [x] `skills/ruach-herdr/tests/worker.test.ts` ("standalone skill without installed dependencies"); fixed locally, hosted result pending |
+| Linked-mode replacement refs can change checked-out bytes | R2-B | Not fixed | R2-B | [ ] documented limitation only (fake probe and Herdr v0.9.0 source; live unverified); standalone covered by `spaces.test.ts` |
 
-Every case now has a test at its public boundary (the Status column names it). The owner column records which 0.3 worker wrote it.
+Every case above except the last has a test at its public boundary (the Status column names it). The owner column records which worker wrote it.

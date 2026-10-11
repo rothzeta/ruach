@@ -21,7 +21,7 @@ The result reports the workspace ID, worktree path, branch and base. If it repor
 
 ## 3. Assignment
 
-The Coordinator writes a self-contained assignment in the worker's worktree (see the [assignment specimen](assignment-specimen.md)) and sends it separately after startup. The worker receives its role and the assignment, not the workflow.
+The Coordinator writes a self-contained assignment in the worker's worktree (see the [assignment specimen](assignment-specimen.md) and its pre-send checklist) and sends it separately after startup. The worker receives its role and the assignment, not the workflow.
 
 ## 4. Work and handoff
 
@@ -33,7 +33,7 @@ A Reviewer, in a separate worker, receives the exact revision, acceptance condit
 
 ## 6. Delivery
 
-After the Reviewer reports no blocking findings on the combined revision and the checks pass on it, the Coordinator confirms that the owner authorized delivery to the named target. Here the request itself ("merged to `main` locally") is that authorization; silence would not be.
+After the Reviewer reports no blocking findings on the combined revision and the checks pass on it, the Coordinator confirms that the owner authorized delivery to the named target. Here the request itself ("merged to `main` locally") is that authorization if it is recorded and still valid for this action and target; it survives an interrupted Coordinator and is reused without asking again, while silence would not be authorization. A different target branch or a revocation needs a new owner answer; a destination that merely moved needs refreshed integration, checks and review, not a new grant.
 
 The Coordinator then assigns a separate delivery Implementer (there is no Merger role). The assignment names the target branch (`main`, local only) and the exact reviewed revision, and says to merge only if the destination has not moved since the candidate was prepared. If `main` moved, or the merge needs any change to the candidate, the worker stops and reports; integration is refreshed and the affected checks and review repeat. The worker returns a handoff with `delivered_revision`, the reviewed revision, the destination and the outcome. The Coordinator does not perform or validate the merge itself, comments the outcome and report links on `PROJ-142`, updates only the records the consumer assigns to it, and then cleans up as in the next section. Delivery stops at the local merge; push or publication would need its own authorization and assignment.
 
@@ -41,4 +41,4 @@ The Coordinator then assigns a separate delivery Implementer (there is no Merger
 
 The Coordinator releases resources as soon as each is no longer needed: closes finished sessions and workspaces, and removes task worktrees whose commits are reachable from a retained branch. It keeps the branches and the durable reports under the consumer's retention policy. A checkout intentionally kept for a pending step, or an uncommitted diff the owner asked for, is a valid end state: record it with the reason. The Coordinator reports done only when every task resource is released or listed as a blocker.
 
-For resuming a Coordinator that was interrupted in the middle of this flow, see the [task record example](task-record.md).
+For resuming a Coordinator that was interrupted in the middle of this flow, see the [task record example](task-record.md), which also has a filled multi-unit specimen.

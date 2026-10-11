@@ -10,6 +10,8 @@ Coordinator overhead should match the task. Choose the lightest level that still
 | Compact | One bounded change needs independent verification or review but no design phase | A Coordinator, one Implementer and one Reviewer. Skip Scout and Architect. One assignment each; handoffs required. |
 | Full | The work spans components, needs design decisions, or has parallel tasks and an integration step | The whole feature workflow: optional Scout and Architect, several Implementers with file ownership, integration, combined verification, review, a separate delivery assignment and cleanup. |
 
+The record scales too: direct work needs none, compact work a small [task record](task-record.md), and full work the fuller sections for decisions, authorization, units and resources. Do not add them to a task that does not need them.
+
 Move up a level when a trigger appears: unclear scope, more than one owner of the same files, a design question, or a result you cannot judge alone. Move down when roles would only repeat the same check. Extra workers add launch, reading and cleanup cost; they are not free assurance.
 
 ## Worked small bugfix (direct, or compact if review is required)

@@ -1,7 +1,7 @@
 // Exercise install/check through CLI and Git objects, including installed resources.
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { createHash } from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { chmodSync, copyFileSync, existsSync, linkSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, statSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -292,4 +292,128 @@ test('RU-07: structural conflicts are rejected before any mutation, even with --
   rmSync(join(target, 'skills'), { recursive: true }); writeFileSync(join(target, 'skills'), 'not a directory');
   before = treeHash(); install(sha, ['--replace'], false); expect(treeHash()).toEqual(before);
   expect(existsSync(join(target, 'agents'))).toBe(false);
+});
+
+// ---- R2-I: the target is planned from the state owned under the staging lock. ----
+const preload = resolve(import.meta.dir, 'fixtures/install-lock-preload.ts');
+// Run an installer that stops at the staging-lock boundary so the test can change the target first.
+async function paused(args: string[], during: () => void) {
+  const barrier = mkdtempSync(join(base, 'barrier-')), outcome = { stdout: '', stderr: '' };
+  const child = spawn(process.execPath, ['--preload', preload, script, 'install', '--source', source, ...args, '--target', target], {
+    cwd: base, env: { ...process.env, RUACH_INSTALL_BARRIER_DIR: barrier, RUACH_INSTALL_BARRIER_MS: '20000' },
+  });
+  child.stdout.on('data', chunk => outcome.stdout += chunk); child.stderr.on('data', chunk => outcome.stderr += chunk);
+  const exited = new Promise<number | null>(done => child.on('close', done));
+  try {
+    for (const end = Date.now() + 15000; !existsSync(join(barrier, 'reached')); await Bun.sleep(20)) if (Date.now() > end) throw new Error('installer never reached the barrier: ' + outcome.stderr);
+    during();
+    writeFileSync(join(barrier, 'release'), '');
+    const code = await Promise.race([exited, Bun.sleep(20000).then(() => 'timeout' as const)]);
+    expect(code, outcome.stderr).not.toBe('timeout');
+    return { status: code as number | null, ...outcome };
+  } finally { child.kill('SIGKILL'); }
+}
+const staging = () => join(target, '.ruach-staging');
+// A product refusal, not a barrier timeout or a mutate-then-rollback outcome.
+function refused(result: { status: number | null; stdout: string; stderr: string }, diagnostic: RegExp) {
+  expect(result.status, result.stdout).toBe(1);
+  expect(result.stderr).toMatch(diagnostic);
+  expect(result.stderr).not.toContain('barrier deadline'); expect(result.stderr).not.toContain('rolled back');
+}
+const revisions = (...bodies: string[]) => bodies.map(body => updateSource(() => write(join(source, 'agents/implementer.md'), body)));
+
+test('R2-I: drift created while waiting for the lock is refused without overwriting', async () => {
+  install(); const [one, two] = revisions('Role one\n', 'Role two\n');
+  let before: string[] = [];
+  const result = await paused(['--revision', two], () => {
+    install(one); write(join(target, 'skills/ruach-example/SKILL.md'), 'local edit\n'); before = treeHash();
+  });
+  expect(result.status, result.stdout).toBe(1); expect(result.stderr).toContain('drift');
+  expect(treeHash()).toEqual(before); expect(existsSync(staging())).toBe(false);
+  expect(readFileSync(join(target, 'skills/ruach-example/SKILL.md'), 'utf8')).toBe('local edit\n');
+  expect(readFileSync(join(target, 'roles.yaml'), 'utf8')).toBe('consumer preference\n');
+});
+test('R2-I: removals come from the manifest current under the lock', async () => {
+  install(); const [omits] = revisions('Omitting role\n');
+  const added = updateSource(() => write(join(source, 'skills/ruach-example/extra.md'), 'Added later\n'));
+  const result = await paused(['--revision', omits], () => install(added));
+  expect(result.status, result.stderr).toBe(0);
+  expect(existsSync(join(target, 'skills/ruach-example/extra.md'))).toBe(false);
+  expect(readFileSync(join(target, 'agents/implementer.md'), 'utf8')).toBe('Omitting role\n');
+  check(true, true); expect(existsSync(staging())).toBe(false);
+});
+test('R2-I: a path another install creates is not planned as a create and lost', async () => {
+  const next = incomingSkill(); let before: string[] = [], manifestBytes = '', skill = { body: '', mode: 0, ino: 0 };
+  const result = await paused(['--revision', next], () => {
+    install(next); write(join(target, 'skills/ruach-new/stale.md'), 'stale\n');
+    before = treeHash(); manifestBytes = readFileSync(join(target, 'ruach.json'), 'utf8'); skill = fileState(join(target, 'skills/ruach-new/SKILL.md'));
+  });
+  refused(result, /drift or unrecorded files/);
+  expect(fileState(join(target, 'skills/ruach-new/SKILL.md'))).toEqual(skill);
+  expect(readFileSync(join(target, 'ruach.json'), 'utf8')).toBe(manifestBytes);
+  expect(readFileSync(join(target, 'roles.yaml'), 'utf8')).toBe('consumer preference\n');
+  expect(treeHash()).toEqual(before); expect(existsSync(staging())).toBe(false);
+});
+test('R2-I: another owner of the staging lock is left untouched', async () => {
+  install(); const next = revisions('Role one\n')[0]; let before: string[] = [];
+  const result = await paused(['--revision', next], () => {
+    mkdirSync(staging()); write(join(staging(), 'journal.json'), '{"owner":"other"}\n'); write(join(staging(), 'old/0'), 'backup\n'); before = treeHash();
+  });
+  expect(result.status, result.stdout).toBe(1); expect(result.stderr).toContain('.ruach-staging');
+  expect(treeHash()).toEqual(before);
+  expect(readFileSync(join(staging(), 'journal.json'), 'utf8')).toBe('{"owner":"other"}\n');
+});
+test('R2-I: metadata that becomes invalid under the lock is refused and owned staging is removed', async () => {
+  const next = revisions('Role one\n')[0], outside = join(base, 'outside-metadata');
+  for (const [damage, diagnostic] of [[() => write(join(target, 'ruach.json'), '{ not json'), /JSON Parse error/], [() => { rmSync(join(target, 'ruach.json')); write(outside, 'outside\n'); symlinkSync(outside, join(target, 'ruach.json')); }, /metadata must not be a symlink/]] as const) {
+    rmSync(target, { recursive: true, force: true }); write(join(target, 'roles.yaml'), 'consumer preference\n'); install(sha);
+    let before: string[] = [];
+    const result = await paused(['--revision', next, '--replace'], () => { damage(); before = treeHash(); });
+    refused(result, diagnostic);
+    expect(treeHash()).toEqual(before); expect(existsSync(staging())).toBe(false);
+    if (existsSync(outside)) expect(readFileSync(outside, 'utf8')).toBe('outside\n');
+  }
+});
+test('R2-I: an unsafe skill entry that appears under the lock is refused even with --replace', async () => {
+  install(); const next = incomingSkill(); let before: string[] = [];
+  const result = await paused(['--revision', next, '--replace'], () => {
+    mkdirSync(join(target, 'skills/ruach-new'), { recursive: true }); symlinkSync(join(base, 'elsewhere'), join(target, 'skills/ruach-new/link')); before = treeHash();
+  });
+  refused(result, /non-regular entry/); expect(treeHash()).toEqual(before); expect(existsSync(staging())).toBe(false);
+});
+test('R2-I: --replace plans a file deleted while waiting as a create from the current state', async () => {
+  install(); const next = revisions('Role one\n')[0];
+  const result = await paused(['--revision', next, '--replace'], () => unlinkSync(join(target, 'skills/ruach-example/tool.ts')));
+  expect(result.status, result.stderr).toBe(0);
+  expect(readFileSync(join(target, 'agents/implementer.md'), 'utf8')).toBe('Role one\n');
+  expect(statSync(join(target, 'skills/ruach-example/tool.ts')).mode & 0o111).not.toBe(0);
+  check(true, true); expect(existsSync(staging())).toBe(false);
+});
+test('R2-I: --replace overwrites drift that appears while waiting', async () => {
+  install(); const next = revisions('Role one\n')[0];
+  const result = await paused(['--revision', next, '--replace'], () => write(join(target, 'skills/ruach-example/SKILL.md'), 'local edit\n'));
+  expect(result.status, result.stderr).toBe(0);
+  expect(readFileSync(join(target, 'skills/ruach-example/SKILL.md'), 'utf8')).toBe('Shared skill\n');
+  check(true, true); expect(readFileSync(join(target, 'roles.yaml'), 'utf8')).toBe('consumer preference\n');
+});
+
+// The target root and its ancestors are checked before anything is created or locked.
+function unlocked(args: string[]) {
+  const barrier = mkdtempSync(join(base, 'barrier-')), result = spawnSync(process.execPath, ['--preload', preload, script, 'install', '--source', source, ...args, '--target', target], {
+    cwd: base, encoding: 'utf8', env: { ...process.env, RUACH_INSTALL_BARRIER_DIR: barrier, RUACH_INSTALL_BARRIER_MS: '300' },
+  });
+  // Reaching the staging mkdir would have written this marker, even for a refused install.
+  expect(existsSync(join(barrier, 'reached'))).toBe(false);
+  return result;
+}
+test('R2-I: a symlinked target ancestor is refused before anything is created through it', () => {
+  const real = join(base, 'real'); mkdirSync(real); symlinkSync(real, join(base, 'link'), 'dir');
+  target = join(base, 'link/consumer/.agents');
+  refused(unlocked(['--revision', sha]), /symlinks/);
+  expect(readdirSync(real)).toEqual([]);
+});
+test('R2-I: a symlinked target root is refused without a transient lock in the link destination', () => {
+  const real = join(base, 'real'); mkdirSync(real); rmSync(target, { recursive: true }); symlinkSync(real, target, 'dir');
+  refused(unlocked(['--revision', sha, '--replace']), /symlinks/);
+  expect(readdirSync(real)).toEqual([]);
 });
