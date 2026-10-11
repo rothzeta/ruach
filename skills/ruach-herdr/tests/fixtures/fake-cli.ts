@@ -18,10 +18,15 @@ if(exe==='herdr') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'worktree',args,cwd:process.cwd()})+'\n');
     if(data.linkedFailure)process.exit(1);
     if(data.linkedLaunching&&at('--workspace')===data.linkedLaunching){console.log(JSON.stringify({error:{code:'linked_worktree_source',message:'New and open worktree actions start from the repo parent workspace.'}}));process.exit(1);}
-    if(data.linkedPartial)Bun.spawnSync([data.git,'-C',data.repo,'branch',at('--branch'),at('--base')]);
-    else if(Bun.spawnSync([data.git,'-C',data.repo,'worktree','add','-b',at('--branch'),'--',at('--path'),at('--base')]).exitCode!==0)process.exit(1);
+    const base=data.linkedWrongHead??at('--base');
+    if(data.linkedPartial)Bun.spawnSync([data.git,'-C',data.repo,'branch',at('--branch'),base]);
+    else if(Bun.spawnSync([data.git,'-C',data.repo,'worktree','add','-b',at('--branch'),'--',at('--path'),base]).exitCode!==0)process.exit(1);
     if(data.linkedPartial)process.exit(1);
-    out({result:{workspace:{workspace_id:'w9'},...(data.linkedMalformed?{}:{root_pane:{pane_id:'w9:p1'}}),worktree:{branch:at('--branch'),path:at('--path'),is_linked_worktree:data.linkedUnlinked?false:true}}});
+    const ids=data.linkedIds??{workspace:'w9',pane:'w9:p1'};
+    const response={result:{workspace:{workspace_id:ids.workspace},...(data.linkedMalformed?{}:{root_pane:{pane_id:ids.pane}}),worktree:{branch:at('--branch'),path:data.linkedWrongPath?at('--path')+'-elsewhere':at('--path'),is_linked_worktree:data.linkedUnlinked?false:true}}};
+    // A receipt reported with a failing status, plus private output the worker must withhold.
+    if(data.linkedNonzero){console.error(data.leak??'private native stderr');out({...response,private:data.leak});process.exit(1);}
+    out(response);
   }
   else if(args.join(' ')==='workspace create --help')console.log('--cwd --label --no-focus --env');
   else if(args.join(' ')==='pane layout --current') {
