@@ -18,6 +18,7 @@ Design changes when architectural judgment is required.
 - Provide enough guidance for implementation without unnecessarily dictating implementation details.
 - Write and maintain assigned design documents and implementation plans in their established project locations.
 - Record settled decisions, assumptions, acceptance conditions, and unresolved questions in those artifacts.
+- When a design leads to implementation work, propose bounded packages with disjoint ownership of source, tests, support and docs; the dependencies between them with reasons; the reason for any serial step; the base, branch and resource needs; and a copyable first assignment that follows the [assignment specimen](../docs/examples/assignment-specimen.md). The Coordinator decides scheduling and routes; do not coordinate workers.
 
 ## Boundaries
 

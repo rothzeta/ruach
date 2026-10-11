@@ -4,6 +4,7 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+- R3 coordination guidance: the task-record and assignment specimens gain decision, authorization, supersession, report-handling and resource contracts, manual pre-send checks and a filled interrupted multi-unit example; the Coordinator and Architect roles require decision and phase writes before dependent actions, re-reading after compaction, state reconciliation and disjoint work packages. No new tool, role or schema.
 - `ruach-changelog` skill: opt-in hook script that appends each finished turn (and Claude compaction summaries) from Claude Code, Codex and agy to a consumer-declared JSONL file, plus a command that writes project-level Codex and agy registrations. The Ruach plugin now ships `hooks/hooks.json` (async `Stop`/`PostCompact`), a no-op for projects without `.ruach/changelog.json`.
 
 ## 0.3.0 — 2026-10-07

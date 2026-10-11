@@ -108,14 +108,16 @@ Current phase: implementation (WORK-02 running, WORK-03 v2 to author); not yet i
 | 10-10 16:00 | DEC-001 recorded before WORK-01 to WORK-03 assigned (Coordinator, `inputs/owner-request.md`). | Assign units. |
 | 10-11 08:20 | WORK-01 report handled; worker `csv-quote` ended, checkout released. | Include in WORK-04. |
 | 10-11 08:45 | DEC-003 written to this record, then WORK-03 stopped and v1 inline work marked superseded (owner, `inputs/owner-help-2.md`). | Observe ended `csv-help`, then v2. |
+| 10-11 09:05 | REPLY-001 "1 ok, 2 ok." received and kept unresolved between DEC-004 and DEC-005 (owner, `inputs/owner-ambiguous.md`). | Send the clarification question; adopt neither. |
 | 10-11 09:10 | WORK-03 partial report handled; branch and diff retained (`retained/CSV-142/manifest.md`). | Author v2 once execution is confirmed ended. |
+| 10-11 09:17 | `csv-screen` observed still working on tests (`observations/screen.txt`), newer than the 08:30 record update. | Keep WORK-02 running; do not replace it. |
 | 10-11 09:19 | Ownership moved to `coord-csv-resume` (owner, `inputs/owner-transfer.md`); no worker affected. | Resume per the trace below. |
 
 | Resource | Owner, state, last observation | Cleanup owner and condition |
 | --- | --- | --- |
 | WORK-01 branch `task/csv-142-quoting` at `fixture/export-r1` | Coordinator; retained. Worker and worktree released after the commit was confirmed reachable. | Coordinator; delete only after task acceptance per `GUIDANCE.md`. |
 | WORK-02 session `csv-screen`, workspace `w-csv-screen`, worktree `/work/csv-wt/screen`, branch `task/csv-142-screen`, task temp `/tmp/csv-142-screen-launch` | WORK-02 worker; active, working on tests at 09:17 (`observations/screen.txt`). | Coordinator, only after its report is handled and its commits are reachable. Never on idle time or the owner transfer. |
-| Dev host port 4173, profile `csv-fixture-profile`, save `csv-sample.db` | Consumer allocation to WORK-02; in use by that worker. | Release when WORK-02 ends. Free the port by stopping the recorded `csv-screen` host process only after confirming its identity; never kill by port number or the whole process tree. Keep a failing run's captured reproduction under `retained/CSV-142/` until the report is handled. |
+| Dev host port 4173, profile `csv-fixture-profile`, save `csv-sample.db` | Consumer allocation to WORK-02; in use by that worker. | Coordinator releases the allocation after the WORK-02 report is handled, its commits are reachable and any needed reproduction is captured under `retained/CSV-142/` (same condition as the session row). Free the port by stopping the recorded `csv-screen` host process only after confirming its identity; never kill by port number or the whole process tree. |
 | WORK-03 v1 worktree `/work/csv-wt/help-v1`, branch `task/csv-142-help`, `help.diff`, worker `csv-help` | Execution ended (09:10 observation); retained as superseded evidence. | Coordinator; remove only after task acceptance and the owner's retention allowance. |
 | WORK-03 v2 branch `task/csv-142-help-v2`, worktree `/work/csv-wt/help-v2` | Reserved; not created, checked unused at launch. | Coordinator after its report is handled and the commit is reachable. |
 | WORK-04 branch `task/csv-142-combined` | Reserved; not created. | Coordinator after delivery or acceptance. |
