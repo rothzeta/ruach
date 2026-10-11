@@ -1,0 +1,331 @@
+{
+ "schema_version": 1,
+ "no_model_task_started": true,
+ "source": {
+  "path": "/tmp/ruach-implementation-20261011/live/source",
+  "head": "5b9d554081f4b38050fd1076f62907e64ae9ee1f",
+  "status": "provisional preparation source; final resources are chosen after combined review acceptance"
+ },
+ "versions": {
+  "claude": "2.1.296 (Claude Code)",
+  "codex": "codex-cli 0.162.1",
+  "herdr": "herdr 0.9.0",
+  "bun": "1.4.2",
+  "node": "v26.3.0"
+ },
+ "roles": {
+  "implementer_sha256": "233b5d88d29f5cb90cfbe1c2ea72f3a75e0bf8126900bf5fa8831d261474db59",
+  "coordinator_sha256": "00ce2c8ab6c96ad5fd38b0550a9464470b2e583eb833692ed26586e424e6d31d"
+ },
+ "rows": [
+  {
+   "id": "claude-plugin",
+   "group": "R1-S",
+   "consumer": "/tmp/ruach-implementation-20261011/live/smoke/claude-plugin/consumer",
+   "packet": "/tmp/ruach-implementation-20261011/live/smoke/claude-plugin",
+   "base": "c2bf411564c327d9f1c7a7f8d25ffa23565d938d",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "branch": "main",
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-plugin/home",
+    "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/claude-plugin/claude",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-plugin/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-plugin/xdg/cache"
+   },
+   "check": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/claude-plugin --tag live",
+   "route": "claude-plugin-native-agent",
+   "cwd": "/tmp/ruach-implementation-20261011/live/smoke/claude-plugin/consumer",
+   "argv": [
+    "claude",
+    "--agent",
+    "ruach:implementer",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permission-mode",
+    "auto",
+    "--name",
+    "smoke-claude-plugin"
+   ],
+   "brief": "/tmp/ruach-implementation-20261011/live/launch/claude-plugin.brief.md",
+   "install": "claude plugin marketplace add <source> --scope user; claude plugin install ruach@ruach --scope user (isolated CLAUDE_CONFIG_DIR)",
+   "plugin_cache": "/tmp/ruach-implementation-20261011/live/roots/claude-plugin/claude/plugins/cache/ruach/ruach/0.3.0"
+  },
+  {
+   "id": "claude-adapter",
+   "group": "R1-S",
+   "consumer": "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/consumer",
+   "packet": "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter",
+   "base": "931223ad7dad9326d644a341c93b6d7966345803",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "branch": "main",
+   "isolated_env": null,
+   "check": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/claude-adapter --tag live",
+   "route": "claude-snapshot-adapter",
+   "cwd": "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/consumer",
+   "argv": [
+    "bun",
+    "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/consumer/.agents/skills/ruach-herdr/scripts/worker.ts",
+    "start",
+    "--name",
+    "smoke-claude-adapter",
+    "--role",
+    "implementer",
+    "--cwd",
+    "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/consumer",
+    "--resources",
+    "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/consumer/.agents",
+    "--catalogs",
+    "/tmp/ruach-implementation-20261011/live/source/config/agent-routing",
+    "--kind",
+    "claude",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permissions",
+    "auto-review",
+    "--branch",
+    "smoke/claude-adapter",
+    "--worktree",
+    "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/worktree"
+   ],
+   "requires": "authorized live Herdr session (HERDR_ENV); the adapter creates its own worktree and the root then submits briefs/assisted via herdr agent prompt",
+   "brief": "/tmp/ruach-implementation-20261011/live/launch/claude-adapter.brief.md",
+   "install": "bun source/scripts/install.ts install --source <source> --revision <sha> --target consumer/.agents; frozen deps; ready --route herdr ok"
+  },
+  {
+   "id": "codex-snapshot",
+   "group": "R1-S",
+   "consumer": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+   "packet": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot",
+   "base": "868159c737895b4c0a4d58c628379b9cd9877857",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "branch": "main",
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-snapshot/home",
+    "CODEX_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-snapshot/codex",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-snapshot/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-snapshot/xdg/cache"
+   },
+   "check": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/codex-snapshot --tag live",
+   "route": "codex-snapshot",
+   "cwd": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+   "argv": [
+    "codex",
+    "--cd",
+    "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+    "--model",
+    "gpt-6.1-sol",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "--approve-for-me",
+    "--no-alt-screen",
+    "-c",
+    "developer_instructions=<canonical implementer role text, redacted>"
+   ],
+   "brief": "/tmp/ruach-implementation-20261011/live/launch/codex-snapshot.brief.md",
+   "discovery": "/tmp/ruach-implementation-20261011/live/discovery/codex-snapshot.json"
+  },
+  {
+   "id": "claude-skills-cli",
+   "group": "R1-S",
+   "consumer": "/tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli/consumer",
+   "packet": "/tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli",
+   "base": "2adc59219718c42dcf5c9a2cf7aeec3f4bf3de6d",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "branch": "main",
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-skills-cli/home",
+    "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/claude-skills-cli/claude",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-skills-cli/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/claude-skills-cli/xdg/cache"
+   },
+   "check": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli --tag live",
+   "route": "claude-skills-cli",
+   "cwd": "/tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli/consumer",
+   "argv": [
+    "claude",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permission-mode",
+    "auto",
+    "--name",
+    "smoke-claude-skills"
+   ],
+   "brief": "/tmp/ruach-implementation-20261011/live/launch/claude-skills-cli.brief.md",
+   "install": "bun x --bun skills@1.7.0 add <source>/skills --global --agent claude-code --skill * (isolated HOME/CLAUDE_CONFIG_DIR; copied, not linked)"
+  },
+  {
+   "id": "codex-skills-cli",
+   "group": "R1-S",
+   "consumer": "/tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli/consumer",
+   "packet": "/tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli",
+   "base": "40b4a0f0efb5c9875188634cf60a5d26e01a4b73",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "branch": "main",
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-skills-cli/home",
+    "CODEX_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-skills-cli/codex",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-skills-cli/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/codex-skills-cli/xdg/cache"
+   },
+   "check": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli --tag live",
+   "route": "codex-skills-cli",
+   "cwd": "/tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli/consumer",
+   "argv": [
+    "codex",
+    "--cd",
+    "/tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli/consumer",
+    "--model",
+    "gpt-6.1-sol",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "--approve-for-me",
+    "--no-alt-screen"
+   ],
+   "brief": "/tmp/ruach-implementation-20261011/live/launch/codex-skills-cli.brief.md",
+   "discovery": "/tmp/ruach-implementation-20261011/live/discovery/codex-skills-cli.json",
+   "install": "bun x --bun skills@1.7.0 add <source>/skills --global --agent codex --skill * (isolated HOME/CODEX_HOME)"
+  }
+ ],
+ "r3": [
+  {
+   "id": "r3-01-resume",
+   "group": "R3",
+   "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume",
+   "resources": "/tmp/ruach-implementation-20261011/live/r3/resources",
+   "resources_tree": "1d135a143c179e67662dc3fb3339f3ac908d092ea9154bfa2535949c8cba4cd1",
+   "task": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/task.md",
+   "task_sha256": "e2d31d0b0c36efcfe2fb613b32ec5626d29629430f2ba2648ed6453d90b8ae82",
+   "argv": [
+    "claude",
+    "--agents",
+    "/tmp/ruach-implementation-20261011/live/launch/r3-agents.json",
+    "--agent",
+    "coordinator",
+    "--add-dir",
+    "/tmp/ruach-implementation-20261011/live/r3/resources",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permission-mode",
+    "auto",
+    "--name",
+    "r3-01-resume"
+   ],
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/home",
+    "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/claude",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg/cache"
+   },
+   "workflow": "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-workflow-feature (opaque copy; the root loads/injects it, this preparation never read it)"
+  },
+  {
+   "id": "r3-02-ambiguity",
+   "group": "R3",
+   "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity",
+   "resources": "/tmp/ruach-implementation-20261011/live/r3/resources",
+   "resources_tree": "1d135a143c179e67662dc3fb3339f3ac908d092ea9154bfa2535949c8cba4cd1",
+   "task": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/task.md",
+   "task_sha256": "e6a6e9f83a266162340c6b37e01ed6e47b672a38548a4ca868f80459d1e701e7",
+   "argv": [
+    "claude",
+    "--agents",
+    "/tmp/ruach-implementation-20261011/live/launch/r3-agents.json",
+    "--agent",
+    "coordinator",
+    "--add-dir",
+    "/tmp/ruach-implementation-20261011/live/r3/resources",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permission-mode",
+    "auto",
+    "--name",
+    "r3-02-ambiguity"
+   ],
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/home",
+    "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/claude",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg/cache"
+   },
+   "workflow": "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-workflow-feature (opaque copy; the root loads/injects it, this preparation never read it)"
+  },
+  {
+   "id": "r3-03-authorization",
+   "group": "R3",
+   "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization",
+   "resources": "/tmp/ruach-implementation-20261011/live/r3/resources",
+   "resources_tree": "1d135a143c179e67662dc3fb3339f3ac908d092ea9154bfa2535949c8cba4cd1",
+   "task": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/task.md",
+   "task_sha256": "84fe1d4b8c586fa445164770988f53af25917b8c1831acb2e96d11e7b8c5138d",
+   "argv": [
+    "claude",
+    "--agents",
+    "/tmp/ruach-implementation-20261011/live/launch/r3-agents.json",
+    "--agent",
+    "coordinator",
+    "--add-dir",
+    "/tmp/ruach-implementation-20261011/live/r3/resources",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--permission-mode",
+    "auto",
+    "--name",
+    "r3-03-authorization"
+   ],
+   "isolated_env": {
+    "HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/home",
+    "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/claude",
+    "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg",
+    "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/r3-claude/xdg/cache"
+   },
+   "workflow": "/tmp/ruach-implementation-20261011/live/r3/resources/skills/ruach-workflow-feature (opaque copy; the root loads/injects it, this preparation never read it)"
+  }
+ ],
+ "enoch": {
+  "id": "enoch-exercise",
+  "group": "Enoch",
+  "cwd": "/tmp/ruach-implementation-20261011/enoch-exercise/clone",
+  "seed": "ea33fc70456bf45bdd51e6eedcb83cf5cdf89347",
+  "clean": true,
+  "branch": "ruach-exercise/url-encoding-seed",
+  "resources": "/tmp/ruach-implementation-20261011/live/enoch/resources/.agents",
+  "brief": "/tmp/ruach-implementation-20261011/live/launch/enoch.brief.md",
+  "brief_sha256": "ea4c5ee62c730d2018b78de017caf39f0cfb7c1da5008b1865848f62fdb334c4",
+  "argv": [
+   "claude",
+   "--agents",
+   "/tmp/ruach-implementation-20261011/live/launch/enoch-agents.json",
+   "--agent",
+   "implementer",
+   "--add-dir",
+   "/tmp/ruach-implementation-20261011/live/enoch/resources/.agents",
+   "--model",
+   "claude-sonnet-5-5",
+   "--effort",
+   "medium",
+   "--permission-mode",
+   "auto",
+   "--name",
+   "enoch-exercise"
+  ],
+  "isolated_env": {
+   "HOME": "/tmp/ruach-implementation-20261011/live/roots/enoch-claude/home",
+   "CLAUDE_CONFIG_DIR": "/tmp/ruach-implementation-20261011/live/roots/enoch-claude/claude",
+   "XDG_CONFIG_HOME": "/tmp/ruach-implementation-20261011/live/roots/enoch-claude/xdg",
+   "XDG_CACHE_HOME": "/tmp/ruach-implementation-20261011/live/roots/enoch-claude/xdg/cache"
+  },
+  "node": "v26.3.0"
+ }
+}
