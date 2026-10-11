@@ -1,0 +1,10 @@
+# Synthetic consumer recipes for the permission fixture only; these are not shipped Ruach recipes.
+# The two recipes are deliberately distinct so that a whole-argument scoped permission rule for
+# `just test` must not cover `just test-focused`. Each emits its own unique marker.
+
+test:
+    @echo fixture-test-recipe-ran
+    @bun test
+
+test-focused:
+    @echo fixture-focused-recipe-7f3a

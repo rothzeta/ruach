@@ -1,0 +1,9 @@
+{
+  "observed_at": "2026-10-12T11:45:00Z",
+  "surface": "pane wait-output relay-verify --match relay-verify-complete-9f2c --source recent-unwrapped --timeout 60000",
+  "requested_marker": "relay-verify-complete-9f2c",
+  "matches": [
+    { "marker": "relay-verify-complete-9f2c", "origin": "echoed-input", "artifact": null, "exit": null, "observed_at": "2026-10-12T11:44:10Z" },
+    { "marker": "relay-verify-complete-9f2c", "origin": "completion", "artifact": "verifier/run-2.json", "exit": 23, "signal": null, "completed_at": "2026-10-12T11:44:50Z" }
+  ]
+}

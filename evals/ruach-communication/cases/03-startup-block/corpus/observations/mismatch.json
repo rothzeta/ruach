@@ -1,0 +1,1 @@
+{"observed_at": "2026-10-12T11:11:00Z", "assigned": {"name": "relay-parse", "kind": "codex", "pane": "w6:p2"}, "observed": {"name": "relay-shell", "kind": "shell", "pane": "w6:p2"}, "identity_match": false, "interactive_ready": false, "agent_status": "unknown", "launch_pending": false, "block": null, "inspection_error": "pane occupant does not match the assigned name/kind"}

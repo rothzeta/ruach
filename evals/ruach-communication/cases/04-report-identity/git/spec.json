@@ -1,0 +1,115 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-12T07:00:00Z",
+   "message": "Relay base",
+   "files": {
+    "README.md": { "text": "# relay\nMessage relay and queue service.\n" },
+    "src/relay.ts": { "text": "export const version = 1;\n" }
+   }
+  },
+  {
+   "name": "units-impl",
+   "branch": "task/relay-16-units",
+   "from": "base",
+   "date": "2026-10-12T09:40:00Z",
+   "message": "units: metric and imperial heights",
+   "files": {
+    "src/units.ts": { "text": "export const toFeet = (m: number) => m * 3.28084;\n" }
+   }
+  },
+  {
+   "name": "units-report",
+   "branch": "task/relay-16-units",
+   "from": "units-impl",
+   "date": "2026-10-12T10:05:00Z",
+   "message": "units: handoff report",
+   "files": {
+    "reports/RELAY-16/units.md": {
+     "text": "task: RELAY-16/units\nstatus: complete\noutcome: Height unit conversion added and tested.\ncandidate_revision: {{sha:units-impl}}\ntested_revision: {{sha:units-impl}}\nartifacts:\n  - src/units.ts\nverification:\n  - \"bun test: exit 0 at the candidate\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "datum-impl-1",
+   "branch": "task/relay-16-datum",
+   "from": "base",
+   "date": "2026-10-12T09:10:00Z",
+   "message": "datum: offset helper",
+   "files": {
+    "src/datum.ts": { "text": "export const offset = (h: number, datum: number) => h - datum;\n" }
+   }
+  },
+  {
+   "name": "datum-report-1",
+   "branch": "task/relay-16-datum",
+   "from": "datum-impl-1",
+   "date": "2026-10-12T09:20:00Z",
+   "message": "datum: handoff report",
+   "files": {
+    "reports/RELAY-16/datum.md": {
+     "text": "task: RELAY-16/datum\nstatus: complete\noutcome: Datum offsets added; rounding is exact.\ncandidate_revision: {{sha:datum-impl-1}}\ntested_revision: {{sha:datum-impl-1}}\nartifacts:\n  - src/datum.ts\nverification:\n  - \"bun test: exit 0 at the candidate\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "datum-impl-2",
+   "branch": "task/relay-16-datum",
+   "from": "datum-report-1",
+   "date": "2026-10-12T10:10:00Z",
+   "message": "datum: round offsets to centimetres",
+   "files": {
+    "src/datum.ts": { "text": "export const offset = (h: number, datum: number) => Math.round((h - datum) * 100) / 100;\n" }
+   }
+  },
+  {
+   "name": "datum-report-2",
+   "branch": "task/relay-16-datum",
+   "from": "datum-impl-2",
+   "date": "2026-10-12T10:20:00Z",
+   "message": "datum: revised handoff report",
+   "files": {
+    "reports/RELAY-16/datum.md": {
+     "text": "task: RELAY-16/datum\nstatus: blocked\noutcome: Rounding added at a new candidate; the offset test fails for negative heights.\ncandidate_revision: {{sha:datum-impl-2}}\ntested_revision: {{sha:datum-impl-2}}\nartifacts:\n  - src/datum.ts\nverification:\n  - \"bun test: exit 1 (negative-height offset case) at the new candidate\"\ndiscoveries: []\nblockers:\n  - \"Negative-height offset test fails; no passing run at this candidate\"\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "docs-impl",
+   "branch": "task/relay-16-docs",
+   "from": "base",
+   "date": "2026-10-12T08:30:00Z",
+   "message": "docs: unit and datum notes",
+   "files": {
+    "docs/fields.md": { "text": "# Fields\nHeights are metres unless a unit flag says otherwise.\n" }
+   }
+  },
+  {
+   "name": "docs-report",
+   "branch": "task/relay-16-docs",
+   "from": "docs-impl",
+   "date": "2026-10-12T08:40:00Z",
+   "message": "docs: handoff report",
+   "files": {
+    "reports/RELAY-16/docs.md": {
+     "text": "task: RELAY-16/docs\nstatus: complete\noutcome: Field notes documented.\ncandidate_revision: {{sha:docs-impl}}\ntested_revision: {{sha:docs-impl}}\nartifacts:\n  - docs/fields.md\nverification:\n  - \"link check: exit 0\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+    }
+   }
+  },
+  {
+   "name": "docs-evidence",
+   "branch": "task/relay-16-docs",
+   "from": "docs-report",
+   "date": "2026-10-12T10:35:00Z",
+   "message": "docs: evidence-only successor report",
+   "files": {
+    "reports/RELAY-16/docs-evidence.md": {
+     "text": "task: RELAY-16/docs\nstatus: complete\noutcome: Evidence-only successor recording the reviewed report identity; no implementation or check ran at this commit.\nevidence_revision: {{sha:docs-report}}\nartifacts:\n  - reports/RELAY-16/docs.md\nverification: not-run\ndiscoveries:\n  - \"Evidence-only successor; earlier checks belong to the tested candidate.\"\nblockers: []\nreview: not-run\n\n# Evidence successor\n\nThis commit adds only this report. It does not change the earlier tested revision.\n"
+    }
+   }
+  }
+ ]
+}

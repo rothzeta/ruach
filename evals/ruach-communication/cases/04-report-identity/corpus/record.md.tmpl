@@ -1,0 +1,23 @@
+# Task RELAY-16 record
+Saved 2026-10-12 10:20 UTC by the previous Coordinator (session ended after a wait). Local work only; nothing is pushed. Record location: this file.
+
+## Decisions and authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| DEC-001 | Owner, `inputs/owner-request.md`, 2026-10-12 08:00 UTC: "Read the actual reports before you wait again, and consume each new report delta once." | Accepted. |
+
+## Work
+| ID | Unit | State at 10:20 | Branch, assignment | Notes |
+| --- | --- | --- | --- | --- |
+| WORK-01 | Height units | running | `task/relay-16-units`, `assignments/units-v1.md` | Session `relay-units`. |
+| WORK-02 | Datum offsets | complete; accepted for integration | `task/relay-16-datum`, `assignments/datum-v1.md` | Report handled below; a later candidate may have revised it. |
+| WORK-03 | Field notes | complete; accepted for integration | `task/relay-16-docs`, `assignments/docs-v1.md` | Report handled below. |
+
+## Handled reports
+| Work | Report | Identity handled | Handled at | Disposition |
+| --- | --- | --- | --- | --- |
+| WORK-02 | `reports/RELAY-16/datum.md` | blob `{{blob:datum-report-1:reports/RELAY-16/datum.md}}` on `task/relay-16-datum` | 2026-10-12 09:25 UTC | Accepted for integration; tests passed at the reported candidate. |
+| WORK-03 | `reports/RELAY-16/docs.md` | blob `{{blob:docs-report:reports/RELAY-16/docs.md}}` on `task/relay-16-docs` | 2026-10-12 08:45 UTC | Accepted for integration. |
+
+## Next action
+Read every report committed before the wait, then decide the next bounded action per work item.
