@@ -1,0 +1,77 @@
+# R-OPENCODE-PREFLIGHT4 evidence (redacted, public)
+
+Reviewed revision: a5e3cec1c1b81b289c6700e3763af1642441865c
+Read-only verification of the corpus-v2 F1 binding correction for the three
+still-unspent coordination cases. Native debug agent only, opaque filtered
+permission/model output; no workflow bodies, model call or subject prompt.
+No Enoch regrade (clone discarded after GRADE-IE1 acceptance).
+
+Command:
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/preflight4.ts
+
+---- raw output ----
+
+== oc-resume ==
+  ok   oc-resume: v2 config digest matches map — 58522e171e752bd6
+  ok   oc-resume: prompt alias digest unchanged
+  ok   oc-resume: base a5e3cec1
+  ok   oc-resume: v1->v2 delta confined to agent.ruach-coordinator.permission.edit
+  ok   oc-resume: source->v2 delta confined to edit bindings (top-level + agent) — 12 entries
+  info oc-resume v1->v2 delta: agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/drafts/**, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/intents.jsonl, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus/drafts/**, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus/intents.jsonl
+  ok   oc-resume: no stale outer agent edit target
+  ok   oc-resume: agent mirror carries corpus absolute targets
+  ok   oc-resume: top-level and agent absolute bindings identical
+  ok   oc-resume: skills/model/enabled_providers unchanged vs source
+  ok   oc-resume: bash/read/skill/task/external unchanged vs source
+  ok   oc-resume: prompt still binds corpus cwd
+  ok   oc-resume: declared inputs still exist from corpus cwd
+  ok   oc-resume: Go Flash + canonical role
+  ok   oc-resume: effective relative output allowed — allow
+  ok   oc-resume: effective corpus absolute output allowed — allow
+  ok   oc-resume: stale outer absolute denied — deny
+  ok   oc-resume: other-case and protected denied — other=deny protected=deny
+  info oc-resume effective edit: rel=allow corpus-abs=allow outer-abs=deny other=deny protected=deny
+
+== oc-ambiguity ==
+  ok   oc-ambiguity: v2 config digest matches map — f3e5101a74ad7ee7
+  ok   oc-ambiguity: prompt alias digest unchanged
+  ok   oc-ambiguity: base a5e3cec1
+  ok   oc-ambiguity: v1->v2 delta confined to agent.ruach-coordinator.permission.edit
+  ok   oc-ambiguity: source->v2 delta confined to edit bindings (top-level + agent) — 8 entries
+  info oc-ambiguity v1->v2 delta: agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/drafts/**, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/corpus/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/corpus/drafts/**
+  ok   oc-ambiguity: no stale outer agent edit target
+  ok   oc-ambiguity: agent mirror carries corpus absolute targets
+  ok   oc-ambiguity: top-level and agent absolute bindings identical
+  ok   oc-ambiguity: skills/model/enabled_providers unchanged vs source
+  ok   oc-ambiguity: bash/read/skill/task/external unchanged vs source
+  ok   oc-ambiguity: prompt still binds corpus cwd
+  ok   oc-ambiguity: declared inputs still exist from corpus cwd
+  ok   oc-ambiguity: Go Flash + canonical role
+  ok   oc-ambiguity: effective relative output allowed — allow
+  ok   oc-ambiguity: effective corpus absolute output allowed — allow
+  ok   oc-ambiguity: stale outer absolute denied — deny
+  ok   oc-ambiguity: other-case and protected denied — other=deny protected=deny
+  info oc-ambiguity effective edit: rel=allow corpus-abs=allow outer-abs=deny other=deny protected=deny
+
+== oc-authorization ==
+  ok   oc-authorization: v2 config digest matches map — f73ba95c26392028
+  ok   oc-authorization: prompt alias digest unchanged
+  ok   oc-authorization: base a5e3cec1
+  ok   oc-authorization: v1->v2 delta confined to agent.ruach-coordinator.permission.edit
+  ok   oc-authorization: source->v2 delta confined to edit bindings (top-level + agent) — 8 entries
+  info oc-authorization v1->v2 delta: agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/drafts/**, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/corpus/record.md, agent.ruach-coordinator.permission.edit./tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/corpus/drafts/**
+  ok   oc-authorization: no stale outer agent edit target
+  ok   oc-authorization: agent mirror carries corpus absolute targets
+  ok   oc-authorization: top-level and agent absolute bindings identical
+  ok   oc-authorization: skills/model/enabled_providers unchanged vs source
+  ok   oc-authorization: bash/read/skill/task/external unchanged vs source
+  ok   oc-authorization: prompt still binds corpus cwd
+  ok   oc-authorization: declared inputs still exist from corpus cwd
+  ok   oc-authorization: Go Flash + canonical role
+  ok   oc-authorization: effective relative output allowed — allow
+  ok   oc-authorization: effective corpus absolute output allowed — allow
+  ok   oc-authorization: stale outer absolute denied — deny
+  ok   oc-authorization: other-case and protected denied — other=deny protected=deny
+  info oc-authorization effective edit: rel=allow corpus-abs=allow outer-abs=deny other=deny protected=deny
+
+RESULT: PASS (F1 binding correction verified)

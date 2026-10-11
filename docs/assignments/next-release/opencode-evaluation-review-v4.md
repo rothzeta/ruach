@@ -1,0 +1,7 @@
+# R-OPENCODE-PREFLIGHT4 — exact launch-data correction
+
+Same canonical Reviewer, Go DeepSeek V4.1 Flash only, existing restricted reviewer-v1, no paid probe/subject/config/source edits. PREFLIGHT3 dfba3f66 and GRADE-IE1 091ef1eb handled and public reports preserved. Enoch clone discarded after independent acceptance; do not regrade/reopen it.
+
+Root corrected your F1 in three private corpus-v2 configs: mirror the identical assigned corpus absolute edit bindings into agent.ruach-coordinator.permission.edit, removing stale outer-case bindings in that block. All other controls and three subject prompts unchanged. Exact map /tmp/ruach-implementation-20261011/opencode/results/coordination-launch-map.json names v2 plus previous v1. Check delta confined to this binding correction, effective absolute AND relative assigned outputs allowed, stale outer targets/other-case/expected/protected denied, cwd/inputs and Go Flash/custom role unchanged. Reuse bounded preflight3 helper if helpful, or small filtered native debug queries from actual corpus cwd; no workflow bodies, model call, subject prompt or large new framework.
+
+Own durable canonical handoff docs/reports/next-release/opencode-evaluation-review/coordination-launch-preflight4.md plus concise evidence. reviewed_revision a5e3cec1, exact config digests as metadata; no fake JSON revision. Validate own report, commit this unchanged assignment + report/evidence, return creating SHA. Aim2min. Then done; retained for three-case grading. No other assignments/config/fixtures/source/root records edited.
