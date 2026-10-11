@@ -1,0 +1,31 @@
+herdr --version: herdr 0.9.0
+client:
+  version: 0.9.0
+  channel: stable
+  protocol: 22
+  endpoint_protocol_generation: 1
+
+server:
+  status: running
+  version: 0.9.0
+  endpoint_compatible: yes
+  private_protocol: 22
+  private_protocol_compatible: yes
+
+Create and open a Git worktree
+Usage: herdr worktree create [OPTIONS]
+Options:
+      --workspace <ID>
+          
+      --cwd <PATH>
+          
+      --branch <NAME>
+          
+      --base <REF>
+          
+      --path <PATH>
+          
+      --label <TEXT>
+          
+      --focus
+          

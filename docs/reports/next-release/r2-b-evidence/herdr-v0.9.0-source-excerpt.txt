@@ -1,0 +1,53 @@
+source: github.com/herdrdev/herdr tag v0.9.0 (tag object cca4af8d, commit b99002ac99b09e00b4ca692436cb15a6b0d676f1), src/worktree.rs
+fn repository_git_command(repo_root: &Path, trust_repository: bool) -> std::process::Command {
+    let mut command = crate::noninteractive_process::command("git");
+    command.args(repository_git_args(repo_root, trust_repository));
+    command
+}
+
+fn repository_git_args(repo_root: &Path, trust_repository: bool) -> Vec<String> {
+    let mut args = Vec::new();
+    if trust_repository {
+        args.push("-c".to_string());
+        args.push(format!("safe.directory={}", repo_root.display()));
+    }
+    args.push("-C".to_string());
+    args.push(repo_root.display().to_string());
+    args
+}
+pub(crate) fn build_worktree_add_new_branch_command(
+    repo_root: &Path,
+    path: &Path,
+    branch: &str,
+    base: &str,
+    trust_repository: bool,
+) -> WorktreeCommand {
+    let mut args = repository_git_args(repo_root, trust_repository);
+    args.extend([
+        "worktree".to_string(),
+        "add".to_string(),
+        "-b".to_string(),
+        branch.to_string(),
+        path.display().to_string(),
+        base.to_string(),
+    ]);
+    WorktreeCommand {
+        program: "git".to_string(),
+        args,
+    }
+}
+--- src/noninteractive_process.rs ---
+use std::{ffi::OsStr, process::Command};
+
+/// Builds a subprocess whose stdio is controlled by the caller and which never opens a Windows console.
+pub(crate) fn command(program: impl AsRef<OsStr>) -> Command {
+    let mut command = Command::new(program);
+    crate::platform::configure_background_command(&mut command);
+    command
+}
+
+pub(crate) fn curl_command() -> Command {
+    command("curl")
+}
+
+grep replace-objects|GIT_NO_REPLACE|env_remove over src/worktree.rs, src/app/api/worktrees.rs, src/workspace/git/mod.rs, src/noninteractive_process.rs at v0.9.0: no matches
