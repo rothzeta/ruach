@@ -45,3 +45,14 @@ jobs:
           done
       - name: Test root tools and all executable skills
         run: just test
+      - name: Fetch history and tags for packet tests
+        # The smoke packet's offline install control clones this repository and resolves the v0.3.0 tag.
+        run: git fetch --unshallow --tags origin || git fetch --tags origin
+      - name: Native smoke packet typecheck and tests
+        run: |
+          node_modules/.bin/tsc -p evals/next-release-native-smoke/tsconfig.json
+          bun test --timeout 30000 evals/next-release-native-smoke
+      - name: Coordination packet typecheck and tests
+        run: |
+          node_modules/.bin/tsc -p evals/ruach-coordination/tsconfig.json
+          bun test --timeout 30000 evals/ruach-coordination

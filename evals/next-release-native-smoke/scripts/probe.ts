@@ -4,8 +4,8 @@
 // effective boundary (same filesystem/tool permissions), which this offline packet cannot establish.
 //   bun probe.ts --spec spec.json
 // spec: { marker, negative: [paths], positive: [{path, sha256}], inventory_roots?: [paths], evaluator_confirmed?: [paths] }
-// evaluator_confirmed lists negative paths / inventory roots whose marker presence (or existence) the evaluator
-// confirmed OUTSIDE the subject boundary; an absent path without that record is unverified, never exclusion.
+// evaluator_confirmed lists negative paths whose KNOWN MARKER PRESENCE, and inventory roots whose EXISTENCE, the
+// evaluator confirmed OUTSIDE the effective subject boundary; an absent path without that record is unverified, never exclusion.
 import { lstatSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { arg, sha256 } from './lib';

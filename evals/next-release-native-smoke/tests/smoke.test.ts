@@ -146,7 +146,7 @@ test('a live check refuses a candidate equal to the base unless the base run is 
   expect(existsSync(join(temp, 'idle', 'results'))).toBe(true);
   expect(readFileSync(join(temp, 'idle', 'evidence', 'manifest.json'), 'utf8')).toContain('"base"');
 });
-test('a detached or unrelated HEAD is refused rather than guessed', async () => {
+test('a detached HEAD is refused rather than guessed', async () => {
   const prepared = await prepare(join(temp, 'detached'));
   await subjectCommit(prepared.consumer, join(prepared.consumer, 'docs', 'reports', '.gitkeep'));
   await fixtureGit(prepared.consumer, ['checkout', '--quiet', '--detach']);
@@ -162,7 +162,7 @@ test('probe: an absent negative path or inventory root is unverified without eva
   const confirmed = probe({ marker: MARKER, negative: [missing], positive, inventory_roots: [join(temp, 'no-root')], evaluator_confirmed: [missing, join(temp, 'no-root')] });
   expect(confirmed.verdict).toBe('exclusion-evidenced-for-this-boundary-only');
 });
-test('fixture Git commands ignore host signing and hook configuration but installer clones keep it', async () => {
+test('fixture Git commit ignores a hostile host signing configuration', async () => {
   const home = join(temp, 'home'); mkdirSync(home);
   writeFileSync(join(home, '.gitconfig'), '[commit]\n\tgpgsign = true\n[core]\n\thooksPath = /nonexistent\n[gpg]\n\tprogram = /nonexistent-signer\n');
   const saved = process.env.HOME; process.env.HOME = home;

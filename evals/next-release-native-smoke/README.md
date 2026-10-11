@@ -37,7 +37,7 @@ node_modules/.bin/tsc -p evals/next-release-native-smoke/tsconfig.json
 
 ## Blind claims
 
-Probe paths that are absent count as unverified unless the evaluator records, outside the boundary, that the path or root exists (`evaluator_confirmed`); an ENOENT alone never evidences exclusion. Fixture repositories use isolated Git configuration (no host signing, hooks or global config); the installer and source clones keep the host's real Git behavior.
+Probe paths that are absent count as unverified unless the evaluator records, outside the effective boundary, the confirmation `evaluator_confirmed` names: for a negative path, that it holds the known marker (existence alone could be a wrong file); for an inventory root, that it exists. An ENOENT alone never evidences exclusion. Fixture repositories use isolated Git configuration (no host signing, hooks or global config); the installer and source clones keep the host's real Git behavior.
 
 A blind claim needs an evaluator-only visibility manifest and probe results obtained **inside the subject's actual effective boundary**: full inventory of the source clone, complete plugin cache, project and user skill roots, cwd/add-dir roots, alias/symlink paths, plans, prior reports and other run outputs; positive reads of the raw task and installed role/skill bytes (digests match the recorded bytes); negative reads of paths holding `RUACH_SMOKE_ANSWER_MARKER_7f3a1c` that are denied or unreachable. `scripts/probe.ts` supplies the schema and controls but run offline it proves nothing about a subject. If the equivalent route boundary is unavailable, the run is ordinary **non-blind smoke** and blind evaluation is unverified. Do not trim plugin cache, swap source views, change global settings or decide packaging (D1) to obtain a blind result.
 
@@ -48,3 +48,7 @@ A blind claim needs an evaluator-only visibility manifest and probe results obta
 ## Typecheck scope
 
 [tsconfig.json](tsconfig.json) extends the root compiler options and covers `scripts/`, `tests/`, the fixture source `fixture/consumer/src/` and the evaluator solution `evaluator/solved/src/`. The intentionally failing fixture tests stay stored as `*.fixture` and are not typechecked or discovered. This is a static check only, not behavior evidence. `just check` and the root `tsconfig.json` do not cover the packet; run the command above separately.
+
+## Resource revision for live rows
+
+A live row installs the accepted combined A+B+S resources as integrated on the release-candidate branch; the exact commit is resolved and recorded at execution, never named in this file. The offline controls here use an explicit revision and make no native or model-use claim.
