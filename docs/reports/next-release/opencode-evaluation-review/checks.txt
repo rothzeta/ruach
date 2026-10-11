@@ -1,0 +1,112 @@
+# R-OPENCODE-INSPECT1 evidence (redacted, public)
+
+Reviewed revision: 0fdc42bd4b3afb693c9a669eaf244264c2da62f0
+Prepared by: Reviewer (R-OPENCODE-INSPECT1)
+No subject was launched; no credential, auth, raw provider config or workflow body was read.
+
+## 1. Structural / permission / baseline probe
+
+Command:
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/verify-prep.ts
+
+Result: RESULT: PASS (0 failing checks). Groups and outcomes:
+
+configs (oc-smoke, oc-resume, oc-ambiguity, oc-authorization, oc-enoch)
+  ok  model + small_model pinned to opencode-go/deepseek-v4.1-flash
+  ok  enabled_providers restricted to ["opencode-go"]; no provider block
+  ok  top-level and agent "*" deny; edit/bash/external_directory "*" deny
+  ok  task/question/webfetch/websearch/doom_loop deny
+  ok  agent primary + model pinned; role prompt file exists
+  ok  every skills.path exists
+  ok  implementer skills.paths contains NO workflow (smoke, enoch)
+  ok  coordinator gets feature workflow only (resume, ambiguity, authorization)
+  info smoke/enoch: workflow read/skill deny rule present in config = false
+       (read="allow", skill="allow")
+
+cwds exist
+  ok  smoke     /tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer
+  ok  resume    /tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume
+  ok  ambiguity /tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity
+  ok  authorization /tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization
+  ok  enoch     /tmp/ruach-implementation-20261011/enoch-exercise/clone
+
+prepared_assets_sha256 (15 assets)
+  ok  all digests match the committed preparation files
+
+smoke protected baselines
+  ok  tests/range.test.ts, package.json, AGENTS.md, src/range.ts digests match
+  ok  consumer .agents/skills exposes: ruach-workflow-knowledge, ruach-workflow-feature,
+      ruach-testing, ruach-simplification, ruach-librarian, ruach-herdr,
+      ruach-harness-eval, ruach-handoff, ruach-changelog
+
+enoch protected baselines
+  ok  api.test.ts, App.test.ts, App.vue, package.json, package-lock.json, PROBLEMS.md
+  ok  api.ts still at seed digest
+  ok  clone has src/Enoch.Ui/node_modules
+
+r3 corpus (subject == protected, no edits yet)
+  ok  01-resume, 02-ambiguity, 03-authorization: added=0 changed=0 removed=0
+  ok  no rubric/expected/spec.json leak in any subject tree
+  ok  record.md and GUIDANCE.md present per case
+  ok  01-resume has recording stub app/workers.ts; repo/.git present for 01 and 03
+  ok  02-ambiguity has no repo (matches brief)
+  ok  evaluator/manifest.json exists (grader side, separate)
+
+referenced recipe targets: all exist (handoff validator, smoke check.ts, r3 rubric,
+implementer/coordinator roles, smoke evidence config/manifest/scope, coordinator
+herdr/feature skills).
+
+grading-tool location:
+  info verify-baselines.ts in prep worktree = true; in accepted live/source = false
+
+## 2. Grading-soundness reproduction (tools/verify-baselines.ts r3)
+
+Verbatim copy of the preparation tool run over a synthetic r3 layout where the
+subject tree is missing one protected file, inputs/b.txt:
+
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/probe/verify-baselines.ts --r3
+
+Output:
+
+  r3:
+    note c1 removed: inputs/b.txt (UNEXPECTED)
+
+  RESULT: PASS (baseline expectations met)
+
+The tool logs the removal as UNEXPECTED but still reports PASS and exits 0.
+
+## 3. Native observations (wrapper runtime; no subject config loaded)
+
+opencode --version
+  exit 0, 1.19.0
+
+opencode models opencode-go
+  exit 1, Error: Provider not found: opencode-go
+  (bare wrapper carries no task config; consistent with prep-evidence.md)
+
+opencode debug agent ruach-implementer
+  resolved the wrapper runtime agent. Its permission list contains an explicit
+    { "permission": "read", "pattern": "**/skills/ruach-workflow-*/**", "action": "deny" }
+  The subject implementer configs (oc-smoke.json, oc-enoch.json) do not contain
+  any equivalent workflow read/skill deny.
+
+/tmp/ruach-implementation-20261011/opencode/bin/opencode (read)
+  executes: exec env -i <fixed list> "$task_root/cli/node_modules/.bin/opencode" "$@"
+  The fixed list sets PATH/HOME/XDG_*/OPENCODE_CONFIG/OPENCODE_CONFIG_DIR/
+  OPENCODE_DISABLE_AUTOUPDATE/OPENCODE_DISABLE_CLAUDE_CODE/OPENCODE_DISABLE_LSP_DOWNLOAD/TERM
+  and forwards only proxy/cert vars. OPENCODE_DISABLE_EXTERNAL_SKILLS and
+  GIT_AUTHOR_*/GIT_COMMITTER_* are not forwarded.
+
+## 4. Fixture git states
+
+smoke consumer:  branch main, HEAD 868159c737895b4c0a4d58c628379b9cd9877857,
+                 git status --porcelain empty
+enoch clone:     branch ruach-exercise/url-encoding-seed,
+                 HEAD ea33fc70456bf45bdd51e6eedcb83cf5cdf89347,
+                 git status --porcelain empty
+
+## 5. Not run
+
+Any subject launch; Go entitlement probe; runtime allow/deny enforcement;
+effective subject-config debug agent/skill resolution (sandbox cannot set
+OPENCODE_CONFIG); workflow-body reads; product/full-root suites.
