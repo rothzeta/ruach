@@ -1,0 +1,19 @@
+# Assignment ENOCH-EX-1 (role: Implementer) — executable after the named gates; do not start before them
+
+Outcome: fix one seeded defect in a disposable Enoch clone and return a valid handoff.
+
+Gates, all pending and supplied by a later Coordinator assignment: (1) an independently reviewed Ruach candidate union and its resource revision/path; (2) explicit authorization for one native model turn with named model, effort and budget; (3) the authorized Herdr or launcher context and the realized access boundary (this is ordinary non-blind smoke unless a separate boundary is evidenced); (4) the Coordinator's confirmation that the clone below still exists unchanged. Nothing here authorizes a subject, an install into Enoch, or any change to the original repository.
+
+Consumer: disposable clone `/tmp/ruach-implementation-20261011/enoch-exercise/clone` of `/opt/dev/enoch` (original untouched; no remote; hooks disabled). Base `d163a4132a6840d2604e6e17883612eb77a901ec`; seed `ea33fc70456bf45bdd51e6eedcb83cf5cdf89347` on branch `ruach-exercise/url-encoding-seed`. Create the work branch `ruach-exercise/url-encoding-subject` from the seed after checking with `git show-ref --verify refs/heads/ruach-exercise/url-encoding-subject` that it does not exist.
+
+Route: role implementer; per Ruach `config/agent-routing/roles.yaml` the preferred route is claude-sonnet-5.5-medium (model claude-sonnet-5-5, effort medium) with auto-review permissions. No alternative unless the owner selects one; launch failures do not change the route.
+
+Subject-visible brief: `subject-brief.md` verbatim (nothing from this folder's evaluator files). Owned paths: `src/Enoch.Ui/src/api.ts`, `docs/TASK_LOGS.md` (append one dated entry recording actual verification, per Enoch AGENTS.md), `docs/exercise/report.md`. Protected: all `src/Enoch.Ui/src/*.test.ts`, `App.vue`, configs, `package*.json`, lockfiles, everything under `src/` outside the owned file, `docs/PROBLEMS.md`. `docs/CURRENT.md` changes only if implementation facts change (none expected). No new dependency, service, Docker, database or network; `node_modules` already present.
+
+Commands (cwd the clone root; each bounded to 300 s): `npm --prefix src/Enoch.Ui test`; `npm --prefix src/Enoch.Ui run lint`; `npm --prefix src/Enoch.Ui run typecheck`; `node src/Enoch.Ui/node_modules/prettier/bin/prettier.cjs --check src/Enoch.Ui/src/api.ts`; `git diff --check`. Full `just check` (needs .NET 8 SDK, Docker or both) is not required and is not claimed.
+
+Report validation (planned, path from the reviewed candidate): `bun <reviewed-candidate>/skills/ruach-handoff/scripts/validate.ts docs/exercise/report.md --repo <clone>` (run from the reviewed Ruach checkout; the repo is the clone).
+
+Allowed interventions: none that reveal the cause or the fix. The Coordinator may answer native security dialogs only with the user's authority, relay a missing-permission fact, or stop the turn. Any hint makes the run assisted from that point; record it. One bounded subject turn; task execution timeout 20 minutes wall clock; no retry or route change after failure.
+
+Acceptance (independent Reviewer, from the evaluator file, not given to the subject): the three npm commands exit 0 at the subject's commit; the diff touches only owned paths; tests unchanged byte-for-byte; the handoff validates; verification claims match reruns. Native usability and any real-product criterion are not claimed.
