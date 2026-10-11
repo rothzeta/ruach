@@ -1,0 +1,39 @@
+RUACH 0.3.1 PUBLICATION CONTENT SCAN (masked; matched values are never echoed)
+Scope: all 173 payload files: credential/private-identifier patterns.
+
+Result: no credentials, private keys, real identifiers or private absolute paths in the published set.
+
+Credential / secret patterns
+  AWS access key ids            0
+  private-key blocks            0
+  GitHub tokens                 0
+  OpenAI-style sk- keys         1 matched literal, benign:
+       skills/ruach-herdr/tests/spaces.test.ts:322  const secret='sk-private-native-output';
+       (synthetic string used to assert raw native output is withheld/redacted; portable fixture)
+  Slack tokens                  0
+  assigned password/secret/key  1 (same synthetic line above)
+  Bearer tokens                 0
+  JWTs                          0
+  SSH keys / OPENSSH blocks     0
+  UUIDs                         0
+
+Identity / path patterns
+  /home/<user>, /Users/<user>   0
+  any /opt/ path                0
+  any /tmp/ path                0 (inside published content)
+  /tmp/ruach-* paths            0
+  Windows C:\Users\             0
+  real emails                   0 (all matches are @example.test or @example.invalid)
+  session ids (ses_/sess_/...)  0
+  .worktrees/.agents/.codex paths in the payload manifest  0
+     (content mentions of .agents/.codex/node_modules are product names, install targets or prose)
+
+Publication exclusions (intentional)
+  baseline->reviewed delivery paths not published: 84
+  categories: docs/{assignments,reports}/next-release/**, docs/{assignments,reports}/r3/**,
+              next-release/{enoch-prep,native-prep,r2-b-evidence}/**
+  successor: docs/reports/releases/0.3.1/r2-b-boundary.md (sanitized public summary, no raw transcripts)
+
+Plan sanitization (candidate vs owner working tree)
+  substitutions only: absolute /opt|/tmp|/home paths -> <ruach>, <planning-scratch>, <local-bin>, <TMP>, <ABS>
+  no semantic edits; three design docs byte-identical including the owner RAMEC document (c2487a28...)

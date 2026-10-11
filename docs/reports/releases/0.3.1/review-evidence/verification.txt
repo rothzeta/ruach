@@ -1,0 +1,57 @@
+RUACH 0.3.1 INDEPENDENT REVIEW — VERIFICATION EVIDENCE
+Reviewed candidate:  dac18d3fc2de67ecd2ab92d445040b2aed768e9b (HEAD)
+Tested/source:       4cca79b9c628f80d4d20b897ac65dac7bcc85190
+Reviewed R1-R3:      94cdfa1a68e214a07d27fc5d413863dcbe3e7459
+Baseline:            d75039aa7b82b262e2f28af08630258fb7f77180
+Worktree:            /opt/dev/ruach/.worktrees/release-0.3.1-review
+
+Identity / working tree
+  git rev-parse HEAD                              -> dac18d3fc2de67ecd2ab92d445040b2aed768e9b
+  git status                                      -> clean except untracked docs/assignments/release-0.3.1/review.md
+  git diff --stat d75039a 4cca79b                 -> 174 files (release content)
+  git diff --stat 4cca79b dac18d3                 -> preparation.md + its assignment only
+
+Manifest / publication correspondence (helper verify.ts, verify2.ts)
+  manifest header count                           -> 173
+  parsed unique payload paths                     -> 173
+  payload missing at tested                       -> 0
+  working-tree blob != candidate blob             -> 0
+  baseline->tested diff name count                -> 174 (173 payload + publication-manifest.txt)
+  payload byte-identical to 94cdfa1a              -> 91
+  payload present in 94cdfa1a                     -> 98 (91 identical + 7 differing)
+  differing vs 94cdfa1a                           -> CHANGELOG.md, docs/operations.md, package.json,
+                                                     .claude-plugin/{plugin,marketplace}.json, README.md,
+                                                     docs/design/0.4-suggestions-from-ramec-orchestration.md
+  delivery-set inter payload                      -> 93 (91 identical, CHANGELOG.md + docs/operations.md differ)
+  product source/test blobs byte-identical        -> scripts/install.ts, tests/*, skills/ruach-herdr/*, agents/*,
+                                                     docs/examples/*, docs/coordination.md, ci.yml, docs/roadmap.md,
+                                                     docs/native-parity.md : YES (not in differing set)
+
+Sanctioned deviation
+  docs/operations.md 94cdfa1a->4cca79b            -> only the R2-B link retarget:
+     reports/next-release/r2-b.md  ->  reports/releases/0.3.1/r2-b-boundary.md
+
+Owner-original comparison (helper compare.ts, plan-diff.ts)
+  RAMEC doc sha256 equal to owner working tree    -> c2487a28...
+  docs/roadmap.md, docs/native-parity.md          -> equal to owner working tree
+  next-release-reliability-plan.md, next-roadmap-plans.md -> identical to owner
+  7 other next-*.md plans                         -> only absolute-path/placeholder sanitization; no semantic edits
+
+Checks (cwd release-0.3.1-review; deps via bun install --frozen-lockfile in root + skills/ruach-handoff,
+        ruach-herdr, ruach-harness-eval, ruach-changelog)
+  just check                                      -> exit 0 (check.ts + tsc, no diagnostics)
+  just release-check                              -> exit 0 ("Release v0.3.1: package, plugin, marketplace, agents and changelog verified")
+  bun run test                                    -> exit 0, 100 pass / 0 fail, 867 expect(), 10 files, 11.90s
+  skills/ruach-herdr: bun test --timeout 30000    -> exit 0, 162 pass / 0 fail, 1419 expect(), 116.15s (local Unix socket)
+  bun test --timeout 30000 evals/next-release-native-smoke -> exit 0, 14 pass / 0 fail
+  bun test --timeout 30000 evals/ruach-coordination        -> exit 0, 10 pass / 0 fail
+  bun x tsc -p evals/next-release-native-smoke/tsconfig.json -> exit 0
+  bun x tsc -p evals/ruach-coordination/tsconfig.json        -> exit 0
+  reused (unchanged, absent from payload): skills/ruach-handoff 28, ruach-harness-eval 71, ruach-changelog 35
+     from accepted review 0a1ca49/94cdfa1a
+
+Hygiene
+  git diff --check d75039a dac18d3                -> 2 "new blank line at EOF" (F4)
+  git diff --check (working tree)                 -> exit 0
+  validate.ts preparation.md --repo .             -> ok true; candidate_revision/tested_revision resolve to 4cca79b
+  link.ts (131 payload .md)                       -> all relative file targets resolve; 1 broken anchor (F3)
