@@ -27,7 +27,7 @@ review: not-run
 discoveries:
   - "F1 (low): preparation.md says '174 payload files' while the manifest header and its enumerated sections total 173; 174 is the baseline->tested changed-file count (173 payload + the manifest itself)."
   - "F2 (low): preparation.md's integrity line says '92 delivered files byte-identical to 94cdfa1a'; the diff supports 91 byte-identical, with docs/operations.md the one deviation and CHANGELOG.md differing by the release entry. The '92' appears to be the count of delivered files drawn from the reviewed revision, not the byte-identical count."
-  - "F3 (low): docs/design/next-coordination-plan.md:27 links [Unreleased](../../CHANGELOG.md#unreleased), but the same candidate renamed the CHANGELOG 'Unreleased' heading to '## 0.3.1 — 2026-10-11', so the anchor no longer resolves; just check/release-check verify only file targets."
+  - "F3 (low): docs/design/next-coordination-plan.md:27 links [Unreleased](../../../../CHANGELOG.md#unreleased), but the same candidate renamed the CHANGELOG 'Unreleased' heading to '## 0.3.1 — 2026-10-11', so the anchor no longer resolves; just check/release-check verify only file targets."
   - "F4 (nit): docs/reports/roadmap-planning/assignment-batch1-round2-coordination.md and -reliability.md carry a trailing blank line at EOF; the preparation report's 'git diff --check HEAD' checked only the empty uncommitted delta, not the candidate range."
   - "Real-behavior limits (unchanged from the candidate): only the historical task-local smoke, synthetic non-blind Enoch and authorization work were accepted; Enoch was accepted then discarded; resume failed on persisted-preservation/stale-record under runtime denial; ambiguity is unverified; no real-product, hosted-green, Claude/Codex or native-OpenCode-adapter result is claimed. No tag, merge or push was performed."
 blockers: []
@@ -55,7 +55,7 @@ No blocking findings. The reviewed product source and tests are byte-for-byte th
 - **Direction:** state 91 byte-identical, then the operations.md deviation and the CHANGELOG release bump.
 
 ### F3 — low — `docs/design/next-coordination-plan.md:27`
-- **Problem:** the published plan links `[Unreleased](../../CHANGELOG.md#unreleased)`, but this candidate renamed the CHANGELOG heading from `## Unreleased` to `## 0.3.1 — 2026-10-11`; the `#unreleased` anchor no longer resolves.
+- **Problem:** the published plan links `[Unreleased](../../../../CHANGELOG.md#unreleased)`, but this candidate renamed the CHANGELOG heading from `## Unreleased` to `## 0.3.1 — 2026-10-11`; the `#unreleased` anchor no longer resolves.
 - **Why it matters:** a published accepted plan carries a broken cross-reference introduced by this release; the repo checks verify only that the file target exists, not anchors.
 - **Evidence:** `CHANGELOG.md` has no `## Unreleased` heading after the 0.3.1 entry; an anchor check over all 131 payload Markdown files reports exactly this one unresolved anchor.
 - **Direction:** retarget the link to the 0.3.1 heading or drop the fragment.
