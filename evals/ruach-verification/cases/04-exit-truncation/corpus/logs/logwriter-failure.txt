@@ -1,0 +1,8 @@
+Verifier passed, but the log writer failed while writing the retained log.
+
+verifier exit:       0
+log writer:          failed (ENOSPC while flushing the retained log)
+retained log bytes:  incomplete; length unknown
+displayed:           partial
+
+Evidence is incomplete even though the verifier exited 0. This is not a verified pass.

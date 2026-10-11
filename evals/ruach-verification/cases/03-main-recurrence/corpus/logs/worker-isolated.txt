@@ -1,0 +1,14 @@
+Worker sandbox (no outbound network, constrained scheduler). Matches FLAKE-004 exactly.
+$ bun test tests/cache.test.ts
+(pass) wraps a value [0.20ms]
+(fail) deduplicates concurrent lookups [4.02ms]
+AssertionError: expected 1 call to fan-out, received 2
+1 pass, 1 fail
+exit=1
+
+# retry 1 of 1, worker sandbox, same candidate
+$ bun test tests/cache.test.ts
+(pass) wraps a value [0.19ms]
+(pass) deduplicates concurrent lookups [3.88ms]
+2 pass, 0 fail
+exit=0

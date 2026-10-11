@@ -1,0 +1,9 @@
+Verifier passed and the complete log was retained.
+
+verifier exit: 0
+viewer exit:   0
+log retained:  complete (digest recorded in record.md)
+signal:        none
+timeout:       no
+
+A genuine full pass. It is not underclaimed because an unrelated run was truncated.

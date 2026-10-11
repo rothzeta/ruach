@@ -1,0 +1,113 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-13T07:00:00Z",
+   "message": "ledgerly base",
+   "files": {
+    "README.md": { "text": "# ledgerly\nDouble-entry ledger.\n" },
+    "src/ledger.ts": { "text": "export const balance = (entries: number[]) => entries.reduce((a, b) => a + b, 0);\n" }
+   }
+  },
+  {
+   "name": "int-balance-0",
+   "branch": "task/ledger-balance",
+   "from": "base",
+   "date": "2026-10-13T07:20:00Z",
+   "message": "balance integration branch start",
+   "files": { "INTEGRATION-BALANCE.md": { "text": "balance integration target\n" } }
+  },
+  {
+   "name": "balance-impl",
+   "branch": "task/ledger-balance-combined",
+   "from": "int-balance-0",
+   "date": "2026-10-13T08:10:00Z",
+   "message": "balance: combined candidate",
+   "files": {
+    "src/balance.ts": { "text": "export const running = (entries: number[]) => entries.map((_, i) => entries.slice(0, i + 1).reduce((a, b) => a + b, 0));\n" }
+   }
+  },
+  {
+   "name": "balance-review",
+   "branch": "task/ledger-balance-combined",
+   "from": "balance-impl",
+   "date": "2026-10-13T08:25:00Z",
+   "message": "balance: independent combined review",
+   "files": {
+    "reports/LED-4/review-balance.md": {
+     "text": "task: LED-4/review-balance\nstatus: complete\noutcome: Independent review of the combined balance candidate found no blocking findings.\nreviewed_revision: {{sha:balance-impl}}\nartifacts:\n  - reports/LED-4/review-balance.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "int-ledger-0",
+   "branch": "task/ledger-ledger",
+   "from": "base",
+   "date": "2026-10-13T07:20:00Z",
+   "message": "ledger integration branch start",
+   "files": { "INTEGRATION-LEDGER.md": { "text": "ledger integration target\n" } }
+  },
+  {
+   "name": "ledger-impl",
+   "branch": "task/ledger-ledger-combined",
+   "from": "int-ledger-0",
+   "date": "2026-10-13T08:30:00Z",
+   "message": "ledger: combined candidate",
+   "files": {
+    "src/journal.ts": { "text": "export const journal = (rows: string[][]) => rows.map((r) => r.join('|')).join('\\n');\n" }
+   }
+  },
+  {
+   "name": "ledger-review",
+   "branch": "task/ledger-ledger-combined",
+   "from": "ledger-impl",
+   "date": "2026-10-13T08:45:00Z",
+   "message": "ledger: independent combined review",
+   "files": {
+    "reports/LED-4/review-ledger.md": {
+     "text": "task: LED-4/review-ledger\nstatus: complete\noutcome: Independent review of the combined journal candidate found no blocking findings.\nreviewed_revision: {{sha:ledger-impl}}\nartifacts:\n  - reports/LED-4/review-ledger.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "int-ledger-1",
+   "branch": "task/ledger-ledger",
+   "from": "int-ledger-0",
+   "date": "2026-10-13T09:30:00Z",
+   "message": "ledger integration: unrelated accepted merge",
+   "files": { "src/other.ts": { "text": "export const other = true;\n" } }
+  },
+  {
+   "name": "int-reconcile-0",
+   "branch": "task/ledger-reconcile",
+   "from": "base",
+   "date": "2026-10-13T07:20:00Z",
+   "message": "reconcile integration branch start",
+   "files": { "INTEGRATION-RECONCILE.md": { "text": "reconcile integration target\n" } }
+  },
+  {
+   "name": "reconcile-impl",
+   "branch": "task/ledger-reconcile-combined",
+   "from": "int-reconcile-0",
+   "date": "2026-10-13T08:50:00Z",
+   "message": "reconcile: combined candidate",
+   "files": {
+    "src/reconcile.ts": { "text": "export const reconcile = (a: number[], b: number[]) => a.map((x, i) => x - b[i]);\n" }
+   }
+  },
+  {
+   "name": "reconcile-review",
+   "branch": "task/ledger-reconcile-combined",
+   "from": "reconcile-impl",
+   "date": "2026-10-13T09:00:00Z",
+   "message": "reconcile: independent combined review",
+   "files": {
+    "reports/LED-4/review-reconcile.md": {
+     "text": "task: LED-4/review-reconcile\nstatus: complete\noutcome: Independent review of the combined reconcile candidate found no blocking findings.\nreviewed_revision: {{sha:reconcile-impl}}\nartifacts:\n  - reports/LED-4/review-reconcile.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  }
+ ]
+}

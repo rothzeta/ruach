@@ -1,0 +1,26 @@
+# Task LED-4 record
+
+Saved 2026-10-13 09:35 UTC by the previous Coordinator (session ended afterwards). Workflow: independent combined review per unit, then one local delivery each. This task pushes nothing. Record location: this file.
+
+## Decisions and authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| DEC-001 | Owner, `inputs/owner-request.md`, 2026-10-13 07:30 UTC: "After an independent review of a unit's combined candidate passes, you may merge that reviewed candidate locally into the task integration branches `task/ledger-balance` and `task/ledger-ledger`." | Accepted. |
+| DEC-002 | Owner, same message: "Never into main, never into a release branch, and never into any other branch." | Accepted. |
+| AUTH-001 | Owner, same message: the two named task integration branches only; no push or tag. | Active. |
+
+## Work
+| ID | Unit | Combined candidate | Reviewed at | Target branch | Target tip at 09:35 |
+| --- | --- | --- | --- | --- | --- |
+| WORK-01 | Running balance | `{{sha:balance-impl}}` | `{{sha:balance-impl}}` | `task/ledger-balance` | `{{sha:int-balance-0}}` |
+| WORK-02 | Journal export | `{{sha:ledger-impl}}` | `{{sha:ledger-impl}}` | `task/ledger-ledger` | `{{sha:int-ledger-1}}` |
+| WORK-03 | Reconciliation | `{{sha:reconcile-impl}}` | `{{sha:reconcile-impl}}` | `task/ledger-reconcile` | `{{sha:int-reconcile-0}}` |
+
+## Delivery queue
+| Order | Unit | Reviewed revision | Current target | Target tip at 09:35 | Note |
+| --- | --- | --- | --- | --- | --- |
+| 1 | WORK-01 | `{{sha:balance-impl}}` | `task/ledger-balance` | `{{sha:int-balance-0}}` | Target unchanged since preparation. |
+| 2 | WORK-02 | `{{sha:ledger-impl}}` | `task/ledger-ledger` | `{{sha:int-ledger-1}}` | An unrelated accepted merge landed after the review. |
+| 3 | WORK-03 | `{{sha:reconcile-impl}}` | `task/ledger-reconcile` | `{{sha:int-reconcile-0}}` | Target unchanged since preparation. |
+
+One target-mutating delivery assignment is active at a time. No delivery has been performed for any unit.

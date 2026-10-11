@@ -1,0 +1,4 @@
+# failure captured on an earlier candidate that duplicated a member
+AssertionError: expected [ 'c', 'a', 'a', 'b' ] to have length 3
+  the result contains a member more than once
+exit=1

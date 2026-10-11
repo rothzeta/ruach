@@ -1,0 +1,25 @@
+# Task PRB-7 record
+
+Saved 2026-10-14 09:10 UTC by the previous Reviewer (session ended afterwards). Scope: classify the capture of the transport verification and propose the bounded next action. Record location: this file.
+
+## Candidate
+| Field | Value |
+| --- | --- |
+| Unit | PRB-7 transport |
+| Candidate branch | `task/prb-7-transport` at `{{sha:cand-1}}` |
+| Command | `bun test tests/transport.test.ts` |
+| Capability need | one Unix socket under the assigned temp root and one localhost listener on an ephemeral port |
+
+## Captured runs
+| Capture | File | State at 09:10 |
+| --- | --- | --- |
+| setup denial | `logs/run-env.txt` | socket creation refused before any assertion |
+| candidate failure | `logs/run-defect.txt` | assertions executed, then a permission-looking failure in candidate code |
+| truncated capture | `logs/run-unknown.txt` | collector truncated the log; final status missing |
+
+## Authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| POLICY-001 | Consumer, `policy/capabilities.md`: capability denial before assertions is an environment gap; a permission-looking error after assertions under supported permissions is candidate behavior until established; an unestablished cause stays unclassified. | Accepted. |
+
+Disposition and any bounded next action are not recorded yet.

@@ -1,0 +1,16 @@
+Candidate revision for this run: {{sha:cand-1}} (unchanged)
+
+$ bun test tests/parse.test.ts
+(pass) round-trips a full record [0.21ms]
+(fail) rejects a truncated record [0.44ms]
+AssertionError: expected false to be true
+  at tests/parse.test.ts:7:34
+1 pass, 1 fail
+exit=1
+
+# retry run 1 of 1, same candidate {{sha:cand-1}}, same sandbox
+$ bun test tests/parse.test.ts
+(pass) round-trips a full record [0.20ms]
+(pass) rejects a truncated record [0.39ms]
+2 pass, 0 fail
+exit=0

@@ -1,0 +1,10 @@
+Verifier printed 130 lines; a viewer displayed the first 120; the verifier's exit was 23.
+
+verifier exit: 23
+viewer exit:   0
+displayed:     first 120 of 130 lines
+log retained:  complete (130 lines, digest recorded in record.md)
+signal:        none
+timeout:       no
+
+The nonzero verifier exit is the result. The viewer's 0 does not make this a pass.

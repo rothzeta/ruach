@@ -1,0 +1,96 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-13T07:00:00Z",
+   "message": "gatepost base",
+   "files": {
+    "README.md": { "text": "# gatepost\nRecord export service.\n" },
+    "src/export.ts": { "text": "export const format = (rows: string[][]) => rows.map((r) => r.join(' ')).join('\\n');\n" }
+   }
+  },
+  {
+   "name": "export-impl",
+   "branch": "task/gate-12-export",
+   "from": "base",
+   "date": "2026-10-13T08:10:00Z",
+   "message": "export: comma separated output",
+   "files": {
+    "src/export.ts": { "text": "export const format = (rows: string[][]) => rows.map((r) => r.join(',')).join('\\n');\n" }
+   }
+  },
+  {
+   "name": "export-tested",
+   "branch": "task/gate-12-export",
+   "from": "export-impl",
+   "date": "2026-10-13T08:25:00Z",
+   "message": "export: handoff report after checks",
+   "files": {
+    "reports/GATE-12/export.md": {
+     "text": "task: GATE-12/export\nstatus: complete\noutcome: CSV column formatting implemented and checked at the implementation revision.\ncandidate_revision: {{sha:export-impl}}\ntested_revision: {{sha:export-impl}}\nartifacts:\n  - src/export.ts\nverification:\n  - \"bun test: exit 0 at the candidate\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\nChecks ran at the implementation revision named above.\n"
+    }
+   }
+  },
+  {
+   "name": "export-reviewed",
+   "branch": "task/gate-12-export",
+   "from": "export-tested",
+   "date": "2026-10-13T08:40:00Z",
+   "message": "export: independent combined review",
+   "files": {
+    "reports/GATE-12/review-export.md": {
+     "text": "task: GATE-12/review-export\nstatus: complete\noutcome: Independent review of the export candidate found no blocking findings.\nreviewed_revision: {{sha:export-impl}}\nartifacts:\n  - reports/GATE-12/review-export.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed revision.\n"
+    }
+   }
+  },
+  {
+   "name": "export-evidence",
+   "branch": "task/gate-12-export",
+   "from": "export-reviewed",
+   "date": "2026-10-13T09:05:00Z",
+   "message": "export: evidence-only successor with diff digest",
+   "files": {
+    "reports/GATE-12/export-evidence.md": {
+     "text": "task: GATE-12/export-evidence\nstatus: complete\noutcome: Evidence-only successor recording the executable blob identity; no new checks were run.\ntested_revision: {{sha:export-impl}}\nevidence_revision: {{sha:export-tested}}\nartifacts:\n  - reports/GATE-12/export-evidence.md\nverification: not-run\ndiscoveries:\n  - \"Report-only successor to the checked revision; executable code is unchanged.\"\nblockers: []\n\n# Evidence\n\nExecutable blob at the tested revision: {{blob:export-tested:src/export.ts}}. This successor changes no executable path.\n"
+    }
+   }
+  },
+  {
+   "name": "export-changed-impl",
+   "branch": "task/gate-12-export",
+   "from": "export-evidence",
+   "date": "2026-10-13T09:30:00Z",
+   "message": "export: quote fields containing commas",
+   "files": {
+    "src/export.ts": { "text": "const quote = (cell: string) => (cell.includes(',') ? `\"${cell}\"` : cell);\nexport const format = (rows: string[][]) => rows.map((r) => r.map(quote).join(',')).join('\\n');\n" }
+   }
+  },
+  {
+   "name": "export-changed-report",
+   "branch": "task/gate-12-export",
+   "from": "export-changed-impl",
+   "date": "2026-10-13T09:40:00Z",
+   "message": "export: refresh report text (no new checks)",
+   "files": {
+    "reports/GATE-12/export.md": {
+     "text": "task: GATE-12/export\nstatus: complete\noutcome: Quoting for comma-containing fields added; checks still reported from the earlier revision.\ncandidate_revision: {{sha:export-changed-impl}}\ntested_revision: {{sha:export-impl}}\nartifacts:\n  - src/export.ts\nverification:\n  - \"bun test: exit 0 reported at the earlier revision\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\nReport refreshed without a fresh check at the candidate revision above.\n"
+    }
+   }
+  },
+  {
+   "name": "export-bad",
+   "branch": "task/gate-12-export",
+   "from": "export-changed-report",
+   "date": "2026-10-13T09:55:00Z",
+   "message": "export: report naming a tree object",
+   "files": {
+    "reports/GATE-12/export-bad.md": {
+     "text": "task: GATE-12/export-bad\nstatus: complete\noutcome: Report whose revision field names an existing tree, not a commit.\ncandidate_revision: {{blob:base:src}}\nartifacts:\n  - reports/GATE-12/export-bad.md\nverification: not-run\ndiscoveries: []\nblockers: []\n\n# Report\n\nThe revision field resolves to a tree object.\n"
+    }
+   }
+  }
+ ],
+ "invalid_reports": ["export-bad"]
+}

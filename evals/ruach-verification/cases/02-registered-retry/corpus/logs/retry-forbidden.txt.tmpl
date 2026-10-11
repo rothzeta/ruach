@@ -1,0 +1,11 @@
+Candidate revision for this run: {{sha:cand-1}} (unchanged)
+
+$ bun test tests/parse.test.ts
+(pass) rejects a truncated record [0.40ms]
+(fail) round-trips a full record [0.25ms]
+AssertionError: expected [ 'a', 'b' ] to equal [ 'ab' ]
+  at tests/parse.test.ts:4:45
+1 pass, 1 fail
+exit=1
+
+The failing test is the one FLAKE-002 forbids rerunning. No retry was performed.

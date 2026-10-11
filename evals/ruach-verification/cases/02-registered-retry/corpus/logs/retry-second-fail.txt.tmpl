@@ -1,0 +1,16 @@
+Candidate revision for this run: {{sha:cand-1}} (unchanged)
+
+$ bun test tests/parse.test.ts
+(fail) rejects a truncated record [0.44ms]
+AssertionError: expected false to be true
+1 pass, 1 fail
+exit=1
+
+# retry run 1 of 1, same candidate {{sha:cand-1}}, same sandbox
+$ bun test tests/parse.test.ts
+(fail) rejects a truncated record [0.42ms]
+AssertionError: expected false to be true
+1 pass, 1 fail
+exit=1
+
+The permitted retry also failed. Preserve both runs and return for diagnosis; no further retry.

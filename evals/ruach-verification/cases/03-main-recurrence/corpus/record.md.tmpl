@@ -1,0 +1,24 @@
+# Task PRB-7 cache record
+
+Saved 2026-10-14 09:30 UTC by the previous Reviewer (session ended afterwards). Scope: dispose of the recurring cache failure. Record location: this file.
+
+## Candidate
+| Field | Value |
+| --- | --- |
+| Unit | PRB-7 cache |
+| Branch | `task/prb-7-cache` at `{{sha:cand-1}}` |
+| Command | `bun test tests/cache.test.ts` |
+
+## Register scope
+| ID | Test | Covered environment | Not covered |
+| --- | --- | --- | --- |
+| FLAKE-004 | deduplicates concurrent lookups | worker sandbox only | the primary supported environment |
+
+## Captured runs
+| Capture | File | Environment |
+| --- | --- | --- |
+| recurrence 1 | `logs/main-recurrence-1.txt` | primary supported |
+| recurrence 2 | `logs/main-recurrence-2.txt` | primary supported (independent later run) |
+| worker event | `logs/worker-isolated.txt` | worker sandbox, matching FLAKE-004 |
+
+Dispositions are not recorded yet.

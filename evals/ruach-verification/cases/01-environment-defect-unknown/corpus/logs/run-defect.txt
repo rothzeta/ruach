@@ -1,0 +1,10 @@
+$ bun test tests/transport.test.ts
+(pass) frames a message [0.30ms]
+(pass) opens a fresh socket [0.42ms]
+(fail) rejects a duplicate listen [1.10ms]
+error: EPERM: Operation not permitted
+  at listen (src/transport.ts:9:14)
+  the candidate unlinks the existing path and immediately re-listens; under supported permissions the second listen is refused by the candidate's own guard
+1 pass, 1 pass, 1 fail
+exit=1
+note=assertions executed before the failure; the socket capability was available

@@ -1,0 +1,52 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-13T07:00:00Z",
+   "message": "dispatch base",
+   "files": {
+    "README.md": { "text": "# dispatch\nShipping label service.\n" },
+    "src/label.ts": { "text": "export const label = (id: string) => `SHIP-${id}`;\n" }
+   }
+  },
+  {
+   "name": "shipping-0",
+   "branch": "task/dsp-3-shipping",
+   "from": "base",
+   "date": "2026-10-13T07:30:00Z",
+   "message": "shipping integration target start",
+   "files": { "INTEGRATION.md": { "text": "shipping integration target\n" } }
+  },
+  {
+   "name": "shipping-cand",
+   "branch": "task/dsp-3-shipping",
+   "from": "shipping-0",
+   "date": "2026-10-13T08:30:00Z",
+   "message": "shipping: reviewed combined candidate",
+   "files": { "src/shipping.ts": { "text": "export const carrier = (id: string) => `CARRIER-${id}`;\n" } }
+  },
+  {
+   "name": "shipping-review",
+   "branch": "task/dsp-3-shipping",
+   "from": "shipping-cand",
+   "date": "2026-10-13T08:45:00Z",
+   "message": "shipping: independent combined review",
+   "files": {
+    "reports/DSP-3/review-shipping.md": {
+     "text": "task: DSP-3/review-shipping\nstatus: complete\noutcome: Independent review of the combined shipping candidate found no blocking findings.\nreviewed_revision: {{sha:shipping-cand}}\nartifacts:\n  - reports/DSP-3/review-shipping.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed combined revision.\n"
+    }
+   }
+  }
+ ],
+ "post": {
+  "checkout": "shipping-review",
+  "update_ref": [
+   { "ref": "refs/remotes/origin/task/dsp-3-shipping", "to": "base" }
+  ],
+  "remote_add": [
+   { "name": "origin", "url": "https://git.example.test/dispatch.git" }
+  ]
+ }
+}

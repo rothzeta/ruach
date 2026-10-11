@@ -1,0 +1,1 @@
+{"observed_at": "2026-10-13T09:05:00Z", "command": "git status --porcelain=v1", "entries": [{"status": " M", "path": "docs/notes.md"}, {"status": "??", "path": "src/preview.ts"}, {"status": "??", "path": "notes/queue.txt"}], "note": "one requested tracked diff and two untracked files; all deliberate"}

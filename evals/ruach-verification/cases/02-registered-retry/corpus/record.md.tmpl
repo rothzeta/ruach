@@ -1,0 +1,29 @@
+# Task PRB-7 parser record
+
+Saved 2026-10-14 09:20 UTC by the previous Reviewer (session ended afterwards). Scope: dispose of the captured parser runs against the consumer register. Record location: this file.
+
+## Candidate
+| Field | Value |
+| --- | --- |
+| Unit | PRB-7 parser |
+| Branch | `task/prb-7-parse` |
+| Registered candidate | `{{sha:cand-1}}` |
+| Later candidate | `{{sha:cand-2}}` |
+| Command | `bun test tests/parse.test.ts` |
+
+## Register
+| ID | Test | Symptom | Permitted disposition |
+| --- | --- | --- | --- |
+| FLAKE-001 | rejects a truncated record | AssertionError at the boundary | one same-state retry |
+| FLAKE-002 | round-trips a full record | any failure | no rerun |
+
+## Captured runs
+| Capture | File | Note |
+| --- | --- | --- |
+| matching retry | `logs/retry-match.txt` | failure then a permitted retry |
+| forbidden entry | `logs/retry-forbidden.txt` | failure of a no-retry entry |
+| mismatched symptom | `logs/retry-mismatch.txt` | different exception than registered |
+| changed candidate | `logs/retry-changed-candidate.txt` | registered symptom at a changed revision |
+| second failure | `logs/retry-second-fail.txt` | permitted retry also failed |
+
+Dispositions are not recorded yet.

@@ -1,0 +1,26 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-14T07:00:00Z",
+   "message": "probehub ordering base",
+   "files": {
+    "README.md": { "text": "# probehub ordering\n" },
+    "src/order.ts": { "text": "export const dedupe = (xs: string[]) => Array.from(new Set(xs));\nexport const seeded = (count: number, seed: number) => {\n  let x = seed;\n  return Array.from({ length: count }, (_, i) => ((x = (x * 1103515245 + 12345) & 0x7fffffff), `item-${(x + i) % count}`));\n};\n" },
+    "tests/order.test.ts": { "text": "import { expect, test } from 'bun:test';\nimport { dedupe, seeded } from '../src/order';\n\ntest('shuffled input matches the expected list', () => {\n  const shuffled = ['c', 'a', 'b'];\n  // end-to-end exact-list assertion of a shuffled set whose order is not contractual\n  expect(dedupe(shuffled)).toEqual(['c', 'a', 'b']);\n});\n\ntest('seeded order is reproducible', () => {\n  // an explicit contractual order: same seed must give the same exact sequence\n  expect(seeded(4, 7)).toEqual(seeded(4, 7));\n});\n" }
+   }
+  },
+  {
+   "name": "cand-1",
+   "branch": "task/prb-7-order",
+   "from": "base",
+   "date": "2026-10-14T08:10:00Z",
+   "message": "order: change the private dedupe implementation",
+   "files": {
+    "src/order.ts": { "text": "export const dedupe = (xs: string[]) => {\n  const seen = new Set<string>();\n  const out: string[] = [];\n  for (const x of xs) if (!seen.has(x)) { seen.add(x); out.push(x); }\n  return out;\n};\nexport const seeded = (count: number, seed: number) => {\n  let x = seed;\n  return Array.from({ length: count }, (_, i) => ((x = (x * 1103515245 + 12345) & 0x7fffffff), `item-${(x + i) % count}`));\n};\n" }
+   }
+  }
+ ]
+}

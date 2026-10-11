@@ -1,0 +1,11 @@
+Candidate revision for this run: {{sha:cand-1}} (unchanged)
+
+$ bun test tests/parse.test.ts
+(fail) rejects a truncated record [0.41ms]
+TypeError: cannot read properties of undefined (reading 'length')
+  at src/parse.ts:1:12
+1 fail
+exit=1
+
+The symptom is a TypeError, not the registered AssertionError for FLAKE-001.
+A retry is not permitted for a different symptom; preserve and return for diagnosis.

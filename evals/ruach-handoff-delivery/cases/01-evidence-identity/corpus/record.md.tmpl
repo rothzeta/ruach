@@ -1,0 +1,26 @@
+# Task GATE-12 record
+
+Saved 2026-10-13 10:05 UTC by the previous Coordinator (session ended afterwards). Workflow: one unit, one independent combined review, then a separate local delivery. This task pushes nothing. Record location: this file.
+
+## Decisions and authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| DEC-001 | Owner, `inputs/owner-request.md`, 2026-10-13 07:30 UTC: "A unit is deliverable only after an independent review of the exact combined revision has passed." | Accepted. |
+| DEC-002 | Owner, same message: "Keep every existing branch and any requested working-tree diff; do not clean the checkout." | Accepted. |
+| AUTH-001 | Owner, same message: local merge into `task/gate-12-export` only; "never main, never a release branch, and do not push or tag." | Active. |
+
+## Work
+| ID | Unit | State at 10:05 | Branch | Notes |
+| --- | --- | --- | --- | --- |
+| WORK-01 | Export formatting | reports committed; delivery not started | `task/gate-12-export` at `{{sha:export-bad}}` | Report history: `export-tested`, `export-reviewed`, `export-evidence`, then a later code change and a report refresh; see the repository log. |
+
+## Delivery queue
+| Order | Unit | Accepted input claimed | Current target | Target tip at 10:05 |
+| --- | --- | --- | --- | --- |
+| 1 | WORK-01 | the reviewed export candidate | `task/gate-12-export` | `{{sha:export-bad}}` |
+
+One target-mutating delivery assignment is active at a time. No delivery has been performed for WORK-01.
+
+## Notes
+- `repo/` contains every report commit; the raw report files are the evidence, not this summary.
+- No check output beyond what the committed reports state was retained for this unit.
