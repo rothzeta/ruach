@@ -22,7 +22,7 @@ verification:
   - "Not run: any native model task, claude/codex interactive start, herdr worker start or dry-run, Node 22 checks, just check in Enoch"
 review: not-run
 discoveries:
-  - "Claude 2.1.296 plugin install placed root dev dependencies (typescript, bun-types) in the plugin cache; no skill-level node_modules appeared. This differs from the 2.1.292 note that nothing is installed, so the "no root install" wording in docs/native-parity.md (including the sentence corrected during R-IN) should be rechecked by the integration owner against this version."
+  - "Claude 2.1.296 plugin install placed root dev dependencies (typescript, bun-types) in the plugin cache; no skill-level node_modules appeared. This differs from the 2.1.292 note that nothing is installed, so the no-root-install wording in docs/native-parity.md (including the sentence corrected during R-IN) should be rechecked by the integration owner against this version."
   - "The real Claude user settings enable ruach@ruach and the real ~/.agents/skills holds ruach-handoff, ruach-harness-eval and ruach-herdr, so any run that uses the real configuration is contaminated for distinctness between the plugin, adapter and Skills CLI rows."
   - "Codex warns that it refuses to create helper binaries under a /tmp CODEX_HOME; this affects only helper aliases."
   - "Skills-only routes (Skills CLI rows) install ruach-workflow-feature and ruach-workflow-knowledge too; the adapter hides workflows from workers, the Skills CLI rows do not. The workflow bodies were not read."
