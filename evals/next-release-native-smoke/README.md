@@ -26,6 +26,8 @@ bun evals/next-release-native-smoke/scripts/offline-install.ts --source <repo> -
 # Access probe (see below)
 bun evals/next-release-native-smoke/scripts/probe.ts --spec <spec.json>
 bun test --timeout 30000 evals/next-release-native-smoke
+# Packet-local typecheck (from the repository root, after `just install`)
+node_modules/.bin/tsc -p evals/next-release-native-smoke/tsconfig.json
 ```
 
 `prepare.ts` writes `config.json` (harness-eval acceptance: visible tests with a zero-pass guard, hidden cases, handoff validator), `scope.json`, `manifest.json` (base and candidate SHAs, subject file digests) and the assignment copy under `<dir>/evidence`, away from the candidate in `<dir>/consumer`. Child processes are bounded and their process groups killed on return. The checker is a pinned copy of `skills/ruach-harness-eval` at the source revision recorded by the future run; `model_use_verified` stays false.
@@ -37,3 +39,7 @@ A blind claim needs an evaluator-only visibility manifest and probe results obta
 ## Route matrix
 
 [matrix.json](matrix.json) lists the five rows (Claude plugin native agent, Claude snapshot adapter, Codex snapshot, Claude Skills CLI, Codex Skills CLI) and the separately named fallback. Live execution is a separate assignment after a reviewed combined source SHA, hosted green or an explicit waiver, a named budget and the readiness evidence listed in `supplied_at_execution`.
+
+## Typecheck scope
+
+[tsconfig.json](tsconfig.json) extends the root compiler options and covers `scripts/`, `tests/`, the fixture source `fixture/consumer/src/` and the evaluator solution `evaluator/solved/src/`. The intentionally failing fixture tests stay stored as `*.fixture` and are not typechecked or discovered. This is a static check only, not behavior evidence. `just check` and the root `tsconfig.json` do not cover the packet; run the command above separately.
