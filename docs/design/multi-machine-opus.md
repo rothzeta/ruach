@@ -235,7 +235,7 @@ Repository facts were checked in this worktree at `d75039a`. Environment facts w
 
 - F15. Local `herdr 0.9.0`: client and server protocol 22, server running on `~/.config/herdr/herdr.sock` (`herdr status`). Its usage lists `herdr --remote <ssh-target>` (TUI attach) and `herdr machine list|add|rename|remove|enable|disable`. `herdr --machine oholiab agent list` fails with `unknown option: --machine`.
 - F16. The installed Herdr skill at `~/.agents/skills/herdr/SKILL.md:91-103` documents `herdr --machine <label-or-id> …` API forwarding. That documentation is ahead of the installed binary. `herdr --skill` from the 0.9.0 binary instead says to run remote control commands on the intended host and rediscover IDs there. Both state that **IDs and live agent names are scoped to one server**. The installed skill also states that forwarding never installs, starts or falls back to Local, and does not forward local configuration.
-- F17. `herdr machine list --json` returns two enabled profiles: `oholiab` (id `69400a0f6ff332188a4262a1eb7b3490`, target `oholiab`, session `default`) and `tubal` (id `ef2f73192ee18b604361105f720963e9`, target `tubal`, session `default`).
+- F17. `herdr machine list --json` returns two enabled profiles: `oholiab` (id `<oholiab-profile-id>`, target `oholiab`, session `default`) and `tubal` (id `<tubal-profile-id>`, target `tubal`, session `default`).
 - F18. `herdr worktree create` supports `--workspace --cwd --branch --base --path --label --focus --no-focus --trust-repository`. The bundled `herdr api schema` contains no machine-related fields.
 - F19. Local repositories `ruach`, `ramec`, `enoch` and `eden` each have a GitHub `origin` (`git@github.com:rothzeta/<repo>.git`). Local `ramec` has Herdr worktrees under `~/.herdr/worktrees/ramec/`.
 - F20. *(coordinator)* `oholiab` and `tubal` run Debian 13 x86_64. `/opt/dev` there is writable by `metatron`, and each has an existing `ramec` checkout. Bun and .NET are installed under user directories, and Git, Just, Python and Docker are present. Herdr servers are running, and Codex and Claude are installed. Noninteractive SSH PATH omits user bins. Remote commands work over the saved SSH targets using the remote user-bin Herdr.
@@ -250,7 +250,7 @@ Supplied by the Coordinator and not re-verified here. A read-only local search d
 - F24. Bun 1.4.2, Node 22.23.3 and .NET SDKs 8.0.425, 10.0.110 and 10.0.401 are present on both hosts. An existing Bun 1.4.3 was preserved, so two Bun versions coexist and PATH order decides which one runs.
 - F25. A user-local dev-env sets PATH on the remotes.
 - F26. Git push authentication, data and secrets were **not** copied to the remotes. Dependency, build and test checks are still running, so no claims are made about them.
-- F27. Background Ruach development workspaces exist: `oholiab/w4:p1` and `tubal/w2:p1`. Under identical-looking local IDs these would collide, which illustrates §4.
+- F27. Background Ruach development workspaces exist: `oholiab/<oholiab-pane-id>` and `tubal/<tubal-pane-id>`. Under identical-looking local IDs these would collide, which illustrates §4.
 - F28. Local Bun in this worktree reported 1.4.2 (`bun install v1.4.2`, observed here).
 
 ## 2. Assumptions (not verified here)
@@ -306,9 +306,9 @@ The launcher needs per-machine facts that Herdr profiles do not hold: the remote
 # .agents/machines.yaml (or config/agent-routing/machines.yaml for Ruach itself)
 machines:
   oholiab:
-    herdr_machine: 69400a0f6ff332188a4262a1eb7b3490   # saved profile id (label also accepted)
+    herdr_machine: <oholiab-profile-id>   # saved profile id (label also accepted)
     checkout: /opt/dev/ramec                          # remote canonical checkout of this repository
-    path: [/home/metatron/.bun/bin, /home/metatron/.local/bin, /usr/local/bin, /usr/bin, /bin]
+    path: [<target-bun-bin>, <target-user-bin>, /usr/local/bin, /usr/bin, /bin]
     temp: /tmp                                        # optional remote temp root
     resources: /opt/dev/ramec/.agents                 # optional; default <checkout>/.agents (Ruach itself: its source checkout)
 ```
@@ -374,7 +374,7 @@ The remote launcher already probes native help and versions and Herdr kind suppo
 - Default branch for remote launches: **`ruach/<machine-label>/<worker-name>`**. Local launches keep `ruach/<name>`. Branches created on different machines therefore cannot collide when fetched into one integration repository, even if a name were reused. `ruach/oholiab/x` and `ruach/x` can coexist as ref names, because `ruach/oholiab` is not itself a branch.
 - In the integration checkout, fetched branches land in **`refs/remotes/<machine-label>/<branch>`** through an explicit refspec, without adding a configured remote unless the owner chooses to (§12, D4). Local `refs/heads` stay owned by the integration machine, so a remote can never move a local branch.
 - Bases delivered to a remote land in **`refs/ruach/incoming/<task>/<worker>`** on the remote. That namespace is outside `refs/heads`, so it never touches the remote's checked-out branch and cannot trip `receive.denyCurrentBranch`. It is removed during cleanup.
-- Linked mode on a remote requires a remote parent workspace ID for that repository. Background development workspaces now exist (F27, for example `oholiab/w4:p1` for Ruach), so linked mode is practical sooner than first assumed. Pass the remote parent explicitly as `--parent-workspace <id>`. The remote launcher sets `HERDR_WORKSPACE_ID` from it, and the existing `linkedParent` check verifies it against the remote repository (F2). An ID from another machine fails that check. Without a parent, Phase 2 keeps standalone remote workspaces.
+- Linked mode on a remote requires a remote parent workspace ID for that repository. Background development workspaces now exist (F27, for example `oholiab/<parent-workspace-id>` for Ruach), so linked mode is practical sooner than first assumed. Pass the remote parent explicitly as `--parent-workspace <id>`. The remote launcher sets `HERDR_WORKSPACE_ID` from it, and the existing `linkedParent` check verifies it against the remote repository (F2). An ID from another machine fails that check. Without a parent, Phase 2 keeps standalone remote workspaces.
 
 ## 7. Self-contained assignments and durable reports
 
@@ -453,7 +453,7 @@ Roles follow the existing contracts. The Coordinator does launch preparation and
 transfer_receipts:
   - direction: from-machine            # or to-machine
     method: ssh-fetch                  # ssh-push-incoming | ssh-fetch | bundle | origin
-    machine_id: 69400a0f6ff332188a4262a1eb7b3490
+    machine_id: <oholiab-profile-id>
     machine_label: oholiab
     source: oholiab:/opt/dev/ramec refs/heads/ruach/oholiab/feat-x
     destination: local:/opt/dev/ramec refs/remotes/oholiab/ruach/oholiab/feat-x

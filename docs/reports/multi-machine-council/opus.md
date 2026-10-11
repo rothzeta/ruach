@@ -158,7 +158,7 @@ The Coordinator's update did not change the boundary, for one reason: Herdr forw
 - **Monitoring.** Herdr `--machine` is now a practical monitoring and inspection transport, through an owner-declared 0.9.3+ client that is feature-detected (D12). The temporary `/tmp` client remains evidence only.
 - **Bundles.** The bundle seeding path is recorded as the new-machine bootstrap. Steady-state handoffs stay on direct SSH Git.
 - **PATH and Bun.** Preflight records resolved Bun paths, because 1.4.2 and 1.4.3 coexist. D11 settles declared PATH versus dev-env.
-- **Remote linked mode** uses an explicit `--parent-workspace` checked remotely, for example `oholiab/w4:p1`.
+- **Remote linked mode** uses an explicit `--parent-workspace` checked remotely, for example `oholiab/<parent-workspace-id>`.
 - **Credentials.** No push credentials on the remotes confirms that bases come from the integration machine.
 - **Several repositories.** Each repository gets its own receipt, with no cross-repository atomicity.
 
