@@ -131,7 +131,7 @@
    "message": "docs: handoff report",
    "files": {
     "reports/TIDE-77/docs.md": {
-     "text": "task: TIDE-77/docs\nstatus: complete\noutcome: Unit notes documented.\ncandidate_revision: {{sha:docs-impl}}\ntested_revision: {{sha:docs-impl}}\nartifacts:\n  - src/docs.ts\nverification:\n  - \"link check: exit 0\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
+     "text": "task: TIDE-77/docs\nstatus: complete\noutcome: Unit notes documented.\ncandidate_revision: {{sha:docs-impl}}\ntested_revision: {{sha:docs-impl}}\nartifacts:\n  - docs/units.md\nverification:\n  - \"link check: exit 0\"\ndiscoveries: []\nblockers: []\nreview: not-run\n\n# Report\n\n\n"
     }
    }
   }

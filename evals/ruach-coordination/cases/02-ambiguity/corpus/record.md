@@ -20,7 +20,7 @@ Saved 2026-10-12 09:55 UTC by the previous Coordinator; edited once more at 10:4
 | WORK-02 | Storage backend migration (`assignments/storage-v1.md`) | queued | DEC-001 |
 | WORK-03 | Packaging card | not assigned | needs answers to list P |
 | WORK-04 | Label sheet | not assigned | needs answers to list L |
-| WORK-05 | Export screen | not assigned | needs answers to list E |
+| WORK-05 | Export screen | not assigned | file format and columns need answers to list E |
 | WORK-06 | Scheduled backups | not assigned | needs answers to list K |
 
 ## Next action

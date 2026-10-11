@@ -117,3 +117,29 @@ test('02-ambiguity question lists use disjoint IDs and the reply sources exist',
   expect(ids.length).toBe(8);
   for (const f of ['owner-reply-1', 'owner-note-1', 'owner-reply-2', 'owner-continuation', 'owner-supersede', 'owner-soundsgood']) expect(existsSync(join(c, 'inputs', f + '.md'))).toBe(true);
 });
+
+test('every non-report artifact a committed handoff lists exists in that report commit', () => {
+  for (const name of ['01-resume', '03-authorization']) {
+    const repo = join(corpus(name), 'repo'), m = manifest.cases[name];
+    for (const report of m.reports) {
+      const body = git(repo, 'show', `${report.sha}:${report.path}`);
+      const artifacts = [...body.split('\nverification:')[0].matchAll(/^  - (\S+)$/gm)].map(x => x[1]);
+      expect(artifacts.length).toBeGreaterThan(0);
+      for (const artifact of artifacts) expect(() => git(repo, 'cat-file', '-e', `${report.sha}:${artifact}`), `${report.commit}: ${artifact}`).not.toThrow();
+    }
+  }
+});
+
+test('02-ambiguity keeps the unmapped reply unmapped: later owner messages cite only explicit IDs and no list K ID', () => {
+  const c = join(corpus('02-ambiguity'), 'inputs');
+  const reply2 = Date.parse(readFileSync(join(c, 'owner-reply-2.md'), 'utf8').match(/^Date: (.+) UTC$/m)![1].replace(' ', 'T') + ':00Z');
+  const ownerFiles = readdirSync(c).filter(f => /^From: owner/m.test(readFileSync(join(c, f), 'utf8')));
+  const later = ownerFiles.filter(f => Date.parse(readFileSync(join(c, f), 'utf8').match(/^Date: (.+) UTC$/m)![1].replace(' ', 'T') + ':00Z') > reply2);
+  expect(later.sort()).toEqual(['owner-continuation.md', 'owner-soundsgood.md', 'owner-supersede.md']);
+  const cited = later.flatMap(f => [...readFileSync(join(c, f), 'utf8').matchAll(/\b[A-Z]-\d\b/g)].map(m => m[0]));
+  expect(cited).toEqual(['E-2']);
+  // The "sounds good" message replies to the ordering message alone, which proposes a sequence only.
+  const subject = (f: string) => readFileSync(join(c, f), 'utf8').match(/^Subject: (.+)$/m)![1];
+  expect(subject('owner-soundsgood.md')).toBe('Re: ' + subject('ordering.md'));
+  expect(readFileSync(join(c, 'ordering.md'), 'utf8')).not.toMatch(/\b[A-Z]-\d\b/);
+});
