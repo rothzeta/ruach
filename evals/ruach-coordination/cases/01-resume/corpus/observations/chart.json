@@ -1,0 +1,1 @@
+{"observed_at": "2026-10-12T10:44:10Z", "session": "tide-chart", "instance": "inst-9f2", "branch": "task/tide-77-chart", "worktree": "/work/tide-wt/chart", "execution": "active", "activity": "running chart tests", "started_at": "2026-10-12T09:07:00Z", "holds": {"port": 5810, "profile": "tide-profile", "save": "tide.sqlite"}}
