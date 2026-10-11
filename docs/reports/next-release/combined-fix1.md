@@ -51,3 +51,11 @@ Source revisions: base `5b9d554`, findings `0a469dc3`, Enoch preparation `e10156
 Hosted CI, native or model behavior, blind boundaries, Node 22 and consumer installation. The CI simulation is a local approximation.
 
 ## Validation
+
+I ran these on the final report text before committing it, from the repository root:
+
+- `bun skills/ruach-handoff/scripts/validate.ts docs/reports/next-release/combined-fix1.md --repo .`: exit 0, `ok` true, 0 diagnostics; `baseline_revision`, `candidate_revision` and `tested_revision` resolved to `5b9d554`, `ac187d4` and `ac187d4`.
+- `git diff --check` on the staged report-only change: exit 0, no output.
+- Whitespace on the owned candidate diff (`git diff --check 5b9d554..ac187d4`): clean, including the byte-identical imports.
+
+`candidate_revision` and `tested_revision` stay `ac187d4`. This section was empty in the first report commit `89a619d`. This correction changes only this report and reran no technical suite.
