@@ -1,25 +1,56 @@
-task: multi-machine-council-sol-round-1
+task: multi-machine-council-sol-round-2
 status: complete
-outcome: Independent architecture proposal completed; implementation remains subject to owner decisions
+outcome: Second-round design reconciled against actual peer artifacts and new setup evidence; bounded wrapper and durable recorder recommended
 artifacts:
   - docs/design/multi-machine-sol.md
   - docs/reports/multi-machine-council/sol.md
 verification:
-  - "just check: exit 0 after frozen skill dependency installation; resource/link checks and TypeScript typecheck passed"
+  - "just check: exit 0 on revised artifacts; resource/link checks and TypeScript typecheck passed"
   - "bun run release-check: exit 0; synchronized release metadata passed"
   - "git diff --cached --check: exit 0 for the two assigned artifacts"
   - "Canonical ruach-handoff validator with --repo: exit 0; structure and source_baseline resolved"
+  - "bun /tmp/ruach-sol-git-examples.ts: exit 0; disposable Git 2.47.3 named refs, fetches, bundles and push dry-run/lease examples passed"
 review: not-run
 discoveries:
   - "Current launcher is local and preserves partial state; it has no machine selector, transport layer or durable idempotent launch record"
-  - "Supplied local Herdr 0.9.0 protocol 22 rejects documented --machine; use explicitly selected SSH execution pending capability evidence"
+  - "Owner verified Herdr 0.9.3 protocol 22 on both remotes and workspace forwarding with an explicitly selected temporary client; transport adoption remains undecided"
+  - "Private control-to-remote incoming-ref transfer requires existing SSH access, not remote hosted push credentials; bundles are proven bootstrap/fallback"
   - "README route prose differs from executable development catalogs; proposal treats catalogs as policy and edits neither"
 blockers: []
 source_baseline: d75039aa7b82b262e2f28af08630258fb7f77180
+prior_round_revision: e4f2dc207e4324c9719e0d179e3725f42882b639
 role: architect
-council_round: 1
+council_round: 2
 member: Sol 6.1
 implementation_authorized: false
+
+## Second-round handoff: current position
+
+The [design's second-round section](../../design/multi-machine-sol.md#round-2-evidence-peer-comparison-and-revised-recommendation) supersedes tentative first-round sequencing while preserving the independent reasoning below and at `prior_round_revision`. Read the actual Opus and Sonnet designs and handoff reports from their absolute worktree paths; their observed checkout commits and content hashes are recorded in the design. Peers were read only. No Coordinator workflow body was loaded.
+
+All three agree on target-local preparation/launch, machine-scoped IDs, independent host resources/worktrees, Git source commits, separate assets/secrets, single task/integration authority and conservative recovery. Revised choices are:
+
+- Prefer a sibling machine entrypoint within `ruach-herdr`, preserving its local execution core. Expose preflight/start/launch-recovery inspection; consumer wrappers forward selection. Defer mandatory machine catalogs and generic monitoring.
+- Narrow my full journal proposal to an essential exclusive request claim, durable dispatch intent and atomic result, with a bounded recorder that survives control-link loss. Matching repeats inspect/return state; uncertain requests never resubmit. Full phase journaling and automatic reuse are later work. This is stronger than Sonnet's observation-only initial proposal and combines Opus's result/detachment proposal with request ownership.
+- Accept the peers' direct SSH private incoming refs as the steady-state recommendation through control, with bundles for proven bootstrap/fallback. No remote-to-local authentication or hosted push credentials are assumed. Do not bypass push hooks. Central feature storage remains possible through an authorized control-side relay.
+- Retain exact per-receipt export/receiving refs and distinguish candidate/tested commits from the later report commit. Fetch the named export ref over control-to-remote SSH, verify its full returned SHA, then validate the report and assignment at that commit. Worker branch progress does not invalidate a retained earlier receipt. Avoid forced/pruned inventory refs as receipt stores.
+- Preserve explicitly requested dirty exceptions and distinguish WIP/private ref storage from delivery to deployment-polled/protected refs. Declare one integration authority per task rather than always requiring the control machine to integrate.
+
+The latest owner-supplied evidence is incorporated: both remotes Herdr 0.9.3 protocol 22; successful temporary-client workspace forwarding without restarts; ten independent repositories bundled from exact commits, clean ramec fast-forward and separate Eden children; verified Bun 1.4.2/Node 22.23.3/.NET SDKs 8.0.425, 10.0.110, 10.0.401 with existing Bun 1.4.3 preserved; target dev-env PATH; no push authentication/data/secrets copied; background `(oholiab, w4:p1)` and `(tubal, w2:p1)`. Build/dependency/test checks remain underway. I did not independently probe these machines. The temporary client is evidence, not an accepted transport or durable installation.
+
+Herdr API forwarding can carry separately verified terminal operations. It cannot perform target filesystem reads, private native settings materialization or effective-config inspection. Machine-local preparation through SSH remains the first launch recommendation; a capability-checked compatible client can be evaluated now for communication rather than deferred solely because the default client lacks `--machine`.
+
+The smallest deliverable is the bounded machine wrapper plus request/result recorder and recovery inspection, with a runbook and one application round-trip demonstration. Essential checks cover target-only configuration, exact policy/resources/base, duplicate/conflicting requests, lost responses/recorder death, native blocked state, stale handles, retained commit/ref equality and safe resource preservation. No scheduler, global config rewrite, credential copy, remote mirror update or launch resumption engine is needed.
+
+Remaining disagreement is explicit: include durable request/result protection in the first reliable start (earlier than Sonnet), avoid a mandatory catalog and blanket `env -i` (narrower than Opus), allow declared integration location/dirty exceptions and authorized feature storage (less restrictive than peers). The design limits consequential owner choices to five: endpoint policy, ref destinations/side effects, acceptance location, preservation policy and implementation scope/priority. These are future policy decisions, not requests to reapprove council or setup work.
+
+## Second-round verification
+
+Ran the disposable TypeScript/Bun Git example script outside the repository. It passed retained export creation and exclusive conflict checks, named exact-SHA fetch, ancestry, moving/rewritten branch versus anchored receipt, incremental prerequisite rejection, full bundle import and expected-absent push lease syntax/rejection using **dry-run only**. An initial fixture assumed an unforced custom-namespace divergent fetch would succeed; Git 2.47.3 rejected it. The corrected fixture verifies that rejection and compares a forced inventory update with the unchanged receipt ref. No operational push, SSH, merge or live launch occurred. Scratch repositories were removed.
+
+Repeated the applicable repository documentation/type/release checks, report validation and both staged/unstaged whitespace checks. The leading verification fields describe those results. No application/runtime tests, root/skill behavior suites or paid/native smoke tests were run. The initial first-round verification history below remains historical. Independent advice and mechanically valid reports do not establish acceptance or implementation authority. Return the new creating commit in the terminal; do not cite it inside its own report.
+
+---
 
 # Independent first-round handoff
 

@@ -1,9 +1,9 @@
 # Application development across Herdr machines: Sol independent proposal
 
-Round: 1, independent. Date: 2026-10-11. Author: Sol 6.1, Architect.
+Round: 2, following independent round 1. Date: 2026-10-11. Author: Sol 6.1, Architect.
 Status: advice for owner decision; no implementation or remote-operation authority.
 Inspected source baseline: `d75039aa7b82b262e2f28af08630258fb7f77180`.
-Peer answers were not inspected before this proposal. The roadmap and other workers' artifacts were not edited.
+The independent first-round reasoning below is preserved from commit `e4f2dc207e4324c9719e0d179e3725f42882b639`. Peer answers were not inspected before that commit. The current recommendation and explicit changes are in the second-round section at the end; it supersedes first-round sequencing where identified. The roadmap and other workers' artifacts were not edited.
 
 ## Recommendation
 
@@ -159,3 +159,114 @@ No implementation is authorized by this report. The following decisions should p
 5. Decide which environment checks are required for acceptance, especially desktop/audio/game targets. Installed toolchains alone are insufficient evidence.
 
 The design is ready for a bounded implementation assignment after those endpoint and policy decisions. Actual saved-profile export syntax, remote session authorization and compatible helper/Herdr contracts need phase-0 confirmation. These are specific prerequisites, not reasons to build a scheduler or to stop existing servers. A second council round can revise this independent position after the Coordinator supplies peer summaries.
+
+## Round 2: evidence, peer comparison and revised recommendation
+
+This section is the current recommendation. The preceding first-round body is retained to make changes and their reasons reviewable. Advice remains separate from implementation authority.
+
+### New verified preparation evidence supplied by the owner
+
+Both remotes run Herdr 0.9.3 protocol 22 with compatible running servers. A copy of that installed client in a local `/tmp` path successfully forwarded `workspace list` and `workspace create` through `--machine`, while the default local client remains 0.9.0. No server restart was needed. Ten independent repositories were seeded through bundles from exact committed source; Eden children remain separate, and clean existing ramec was fast-forwarded. Bun 1.4.2, Node 22.23.3 and .NET SDKs 8.0.425, 10.0.110 and 10.0.401 were verified on both machines. Existing Bun 1.4.3 was preserved. A user-local dev-env sets PATH. Git push authentication, data and secrets were not copied. Dependency/build/test checks remain underway. Background Ruach development handles are `(oholiab, w4:p1)` and `(tubal, w2:p1)`; these are observed resources, not launch ownership or cleanup authorization for this Architect.
+
+These facts were supplied, not independently probed here. They establish a viable forwarding client and successful bundle bootstrap, not complete native launch or application readiness. The temporary client's use is evidence, not an accepted Ruach transport decision or durable dependency. Record the actual selected executable and version; do not assume the default client changed. Coexisting Bun versions require explicit target executable selection. Existing workspaces make a remote parent possible, but do not prove linked-worktree creation or native preparation there.
+
+### Actual peer inputs and common position
+
+Read both designs and their structured handoff reports using their absolute paths under `/opt/dev/ruach/.worktrees/council-machines-opus` and `/opt/dev/ruach/.worktrees/council-machines-sonnet`. Opus inputs were observed at checkout commit `c79d6650feb0bd0bc4617e29dac8ffe44c544d4e`; Sonnet at `511c329c111c618e087dce72a0fc8af02ebf08d5`. The consumed files are `docs/design/multi-machine-{opus,sonnet}.md` and `docs/reports/multi-machine-council/{opus,sonnet}.md`. Their observed SHA-256 values, in design/report order, are:
+
+- Opus: `51d55cb495a895ad67cb28b10e19fc423d93c26ed5f200b413e4510970c7dedc`, `4dd7e45714b349cef9e8ad41f59abf2054a4372a8c189c27ff2967a282bde87b`.
+- Sonnet: `3a85a1584f87148b2eb4a6fdf7d4ca995f8abc408923e771b8cb27ee9aae0f41`, `83fdf649411937c0df1e818a3b13cc9a800eb53f7c89f69647d0aa7fa3d62035`.
+
+These identify the consumed artifacts, not later peer revisions. Opus's design incorporates the preparation update, while its report still includes older unknown-version language; Sonnet's consumed artifacts predate that update. Neither stale passage overrides the owner's newer facts. Peer report validation claims are attributed to their authors; this Architect did not rerun their technical validation.
+
+All three agree on target-side launcher execution, machine-scoped opaque IDs, host-owned native config/resources/worktrees, Git commits for source, separate non-Git payloads/secrets, one task Coordinator and integration authority, and inspect-before-retry recovery. This agreement supports a small machine wrapper rather than remoteizing every filesystem/subprocess operation.
+
+| Difference | Sol second-round judgment |
+| --- | --- |
+| Sonnet's sibling `scripts/machine.ts` versus Opus's `worker.ts --machine` and my dispatcher | Prefer a sibling machine entrypoint **inside the same skill**, with optional thin `--machine` forwarding from consumer wrappers. Keep `worker.ts` machine-local. Do not refactor `run()`, adapters or filesystem helpers for SSH. Initially expose preflight, start and launch-recovery inspection; machine listing can reuse Herdr. A general observe/monitor command remains outside launch scope. |
+| Opus's `env -i` versus Sonnet's declared PATH and my target-local environment preservation | Use a target-derived allowlist, preserving that target's declared HOME, native config roots and required XDG/session values. No local environment forwarding, agent forwarding or global changes. Blind `env -i` can discard custom remote config/socket settings; a plain remote shell can import unrelated settings. Pin the known target dev-env/bootstrap path or equivalent normalized values and verify actual executable paths. The exact encoding is an implementation choice, not an owner vote on shell syntax. |
+| Opus's durable result file/detached launcher, Sonnet's observation-first optional detachment, my full phase journal | Durable request identity, exclusive claim, recorded dispatch intent and atomic result are essential initially. The bounded remote recorder should survive SSH hangup with stdin/output detached, and expose its result/exit status on reconnect. Observation alone cannot exclude a still-running launcher that has not created resources yet. A full phase journal, automatic partial-launch reuse and phase resumption can wait. |
+| My bundle-first outbound proposal versus peers' direct SSH incoming refs | Accept direct control-to-remote SSH Git transfer as the steady-state default when the consumer permits its private incoming namespace and receive hooks. It uses existing SSH access, not remote-to-local or hosted push authentication. Bundles remain the proven bootstrap, offline/archive option and fallback. No operational push is performed in this council. |
+| Sonnet's always-control integration and peers' broad WIP restrictions versus my declared integration machine | Keep one integration authority per task/repository; declare its location, defaulting to control. An assigned integration worktree on a remote may be appropriate for Linux verification. WIP commits may be transferred or stored in private/ordinary authorized feature refs; delivery to a polled deployment/protected ref is separate. Do not require the owner to reconsider already authorized local/ref operations. |
+
+Three specific corrections matter. Opus's `git push --no-verify` example should not be adopted: transfer does not justify bypassing existing push hooks, and receiver hooks/pollers must also be considered. Sonnet's wildcard forced/pruned tracking fetch is useful for a moving inventory, but cannot serve as an immutable receipt store. Both tip-equals-receipt recipes conflate a tested candidate with its later evidence commit and reject otherwise valid branch progress: retrieve the retained evidence commit named by the receipt, then resolve the earlier candidate/tested commits. Finally, `git rev-parse H:path` returns a Git object ID, not the assignment's raw-byte SHA-256; compare the original file's hash against the bytes from `git show H:path` using the same algorithm, or compare Git blob IDs to Git blob IDs.
+
+Online `start --dry-run` can initialize Codex native runtime files, as the inspected adapter reference says. A read-only inventory preflight and write-free `resolve --offline` are distinct from this authorized native preparation. Fingerprints should summarize their underlying fields and evidence scope; a fingerprint alone is not proof of capability or of account access. A server restart or absent named agent does not prove all prior launch processes ended; reconnect must establish that before replacement.
+
+### Concrete smallest reliable deliverable
+
+Implement a machine-local execution wrapper and runbook for one bounded application handoff, with these essentials:
+
+1. Resolve an enabled saved profile by ID/unique label, include its session in every handle, and accept explicit target repo/resource/executable mappings through the consumer wrapper. Use existing saved profiles as the connection authority. A mandatory `machines.yaml`, capacity model and automatic mirror fast-forward are unnecessary. Peer observations establish that current `machine list --json` exposes target/session fields; implementation still validates its installed response contract.
+2. Resolve the allowed model/effort/permissions through existing local policy and send a bounded request with its provenance and expected resource/role hashes. Validate the target's pinned launcher, resources and requested selection. Direct-mode target invocation must carry exactly that authorized selection; it must not silently discard routing restrictions. Probe target Git/Herdr/native capabilities and application prerequisites using target config and explicit paths. No capability mismatch installs or upgrades anything.
+3. Run the existing launch core on the target, initially using SSH for the whole preparation/start sequence. Preserve local behavior and the existing partial-state/awaiting-input contract. The machine wrapper returns a versioned endpoint envelope with the unchanged core result, resource identities and recovery instructions. Require explicit authorized remote endpoint context; setting `HERDR_ENV` alone remains insufficient. This is a narrow contract extension, not permission to use arbitrary focused panes.
+4. Before mutation, create an exclusive request record containing launch ID, request digest, machine/session, expected branch/path/name, resource provenance and dispatch state. A matching repeat returns recorded/current state; a conflicting digest fails. Keep an active/uncertain claim across disconnect or recorder failure. An atomic private result file records core JSON and exit status. No automatic stale-claim expiry, alternate name launch or resubmission. Recovery inspects both recorder and Herdr/Git identities; partial resources are preserved and reported. Whole-phase journaling and automated reuse are later work.
+5. Document one outbound input transfer and inbound return with exact retained refs, self-contained assignment/hash, durable report, per-machine verification limits and receiver acknowledgement. The Coordinator assigns Git transfer/verification/integration to the authorized worker roles. Initial helper code need not automate Git. Include the existing clean/dirty exceptions rather than imposing a blanket cross-machine dirty-output ban.
+
+Capability-checked Herdr forwarding can be evaluated immediately for separate Coordinator read/prompt/wait operations with an owner-selected client path. `workspace list/create` success does not establish forwarded `agent start/prompt/wait`, worktree support or remote preparation. The wrapper must still execute role/skill reads, Claude materialization and Codex effective-config inspection on the target. Avoid a hybrid launch that unnecessarily alternates transports within those phases. No upgrade/restart or copying another client is part of the first deliverable.
+
+### Exact returned commits and illustrative transfer recipes
+
+Let `B` be input base, `C` the candidate and `H` the later evidence/report commit. The worker's report names already-existing `C` and any tested/reviewed commits; its terminal handoff returns existing `H`. After `H` exists, an authorized worker creates an exclusive retained export ref for this receipt and keeps it until receiver acknowledgement. Subsequent worker-branch movement must not change that ref. If receipt metadata would change, issue a new receipt/ref rather than overwrite the old one.
+
+The commands below are runbook illustrations, not authorization to execute them here. Values are full commit IDs and validated unique names. On the producer machine, freeze the return:
+
+```sh
+git --no-replace-objects -C "$producer_repo" update-ref "$export_ref" "$H" ''
+```
+
+Use, for example, `export_ref=refs/ruach/export/task-42/receipt-7`. The empty expected-old value requires the ref not to exist. If it already exists, compare its exact commit and treat a mismatch as a conflict. The ref is retained and immutable by consumer contract, not because Git enforces an immutable namespace.
+
+The control-side transfer worker retrieves it using **local-to-remote** authentication:
+
+```sh
+git --no-replace-objects -C "$control_repo" fetch --no-tags --no-write-fetch-head --no-recurse-submodules \
+  oholiab:/opt/dev/ramec "$export_ref:$staging_ref"
+git --no-replace-objects -C "$control_repo" rev-parse --verify "$staging_ref^{commit}"
+git --no-replace-objects -C "$control_repo" cat-file -e "$H^{commit}"
+git --no-replace-objects -C "$control_repo" merge-base --is-ancestor "$B" "$H"
+git --no-replace-objects -C "$control_repo" update-ref "$received_ref" "$H" ''
+```
+
+Compare the resolved staging commit to the receipt's exact `H` **before** publishing `received_ref`; a new transfer attempt uses a fresh staging ref. Example receiving ref: `refs/ruach/received/oholiab/receipt-7`. Validate the report and assignment bytes at `H`, resolve `C`/tested revisions, and check the graph relation required by the assignment. These checks do not assume `H` was tested or that the current worker branch still equals `H`. Do not prune/force-update retained receipt refs. Asking a server for an unadvertised raw SHA is not a dependable substitute for a retained named ref. If it is missing, ask the producer to restore that exact ref from retained objects or supply a named-ref bundle; never silently take the latest branch tip.
+
+If the controller relays a source/base to another machine, direct outbound transfer may use:
+
+```sh
+git --no-replace-objects -C "$control_repo" push --porcelain \
+  --force-with-lease="$incoming_ref:" tubal:/opt/dev/ramec "$H:$incoming_ref"
+```
+
+Example incoming ref: `refs/ruach/incoming/task-42/transfer-8`. The expected-absent lease guards unique creation; it is not permission to replace an existing ref. On a repeat, verify existing equality or allocate a new transfer ID. Preserve local and receiver hooks, check that this private namespace has no deployment consumers, and verify exact `H` remotely before launch. No remote-origin credentials, remote-to-control SSH or remote-to-remote access are needed. This does not update a checked-out branch. It is nevertheless a ref mutation, distinct from a fetch, and must fit the consumer's transfer authority.
+
+The verified bundle alternative exports a **named retained ref**, with optional prerequisite base:
+
+```sh
+git --no-replace-objects -C "$producer_repo" bundle create "$bundle_path" "$export_ref" "^$B"
+git --no-replace-objects -C "$receiver_repo" bundle verify "$bundle_path"
+git --no-replace-objects -C "$receiver_repo" fetch --no-tags "$bundle_path" "$export_ref:$staging_ref"
+```
+
+Copy the file over the established control-to-machine path, record/compare its SHA-256, and perform the same exact-`H` checks. The incremental receiver must already contain `B`; omit `"^$B"` for a self-contained bundle. Do not use `known..A` where `A` is just a detached raw SHA: use a named export ref so the bundle has an advertised tip. A bundle's content hash and prerequisite verification do not replace expected-commit checks. Git LFS/submodule/non-Git payload obligations remain separate.
+
+Disposable Git 2.47.3 fixtures checked exclusive export refs, exact named fetch, expected ancestry, branch movement while receipt refs stayed anchored, incremental prerequisite rejection, full named-ref bundle import, and expected-absent incoming-push syntax/lease rejection using **dry-run only**. The unforced divergent fetch was rejected in this fixture; a forced tracking fetch moved the inventory ref while the receipt ref stayed intact. This supports fresh per-receipt refs rather than relying on a moving tracking namespace. No SSH, operational push, merge, live launch or application test was run.
+
+### Authority, WIP and remaining disagreements
+
+Local WIP commits, private ref exchange and ordinary feature-branch storage are not deployment. Consumer policy may already authorize them; no new approval should be inferred solely because an operation spells `git push`. Conversely, a branch polled by a deployment/build system can trigger effects even when it is called a feature branch. The receipt names the destination remote/ref and known consumers. Integration/delivery to the named protected or deployment target uses existing review and authorization rules. Central feature storage remains a valid option without requiring push credentials on every worker: the control machine can relay commits with its own authorized access.
+
+I retain explicitly requested dirty handoffs as an exception with base, tracked binary diff, staged/unstaged/untracked inventory, allowlisted payload hashes and omissions. Scoped WIP commits are the simpler default. Peer proposals to reject every dirty remote result are stricter than the current role contract and unnecessary for an explicit rescue/review assignment. Never auto-stage unrelated work. Assigned integrators decide whether source scope requires squash/rebase; they reverify/review changed candidates under consumer policy.
+
+My remaining disagreement with Sonnet is timing of durable request/result protection: include it before advertising reliable remote start, not after a first lost response. My remaining disagreement with Opus is requiring a machine catalog and blanket environment clearing initially: explicit wrapper mappings and target-derived config are enough. All agree that a full journal/resume engine, generic scheduler, cross-machine shared checkout and credential copying are unnecessary. Default integration on control is useful; making it universal would restrict tasks needing a different verification environment without improving authority.
+
+### At most five consequential owner decisions
+
+1. **Endpoint policy:** choose the accepted execution/communication transports and durable client/bootstrap locations. Recommendation: SSH target-side launch; an explicitly selected compatible Herdr client for separately verified forwarding. Temporary-client evidence does not settle this choice.
+2. **Ref destinations and side effects:** identify allowed incoming/export/receiving namespaces and hosted feature/deployment targets. Recommendation: direct private-ref transfer through control with hooks preserved; bundles fallback. Existing authorized local transfers remain authorized; this decision concerns future reusable policy.
+3. **Acceptance location:** choose the first bounded application task, integration authority and required platform checks. Recommendation: one ramec handoff, control as default integrator, explicit remote verification where needed; dependency/build/test checks are still pending.
+4. **Preservation policy:** define checkpoint/receipt retention and intentional dirty/non-Git outcomes. Recommendation: scoped commits and retained exact export/received refs until acknowledgement, hashed exception manifests, rebuildable caches and machine-local secrets.
+5. **Implementation scope/priority:** authorize the bounded wrapper plus durable recorder/inspection and one handoff demonstration, or keep the runbook only. Recommendation: that small deliverable before optional catalogs, full phase journal, automated reuse or linked worktrees. Council advice and setup authority do not themselves authorize implementation.
+
+CLI spelling, branch alias convention, receipt hashing algorithm and placement of a helper inside the skill are routine implementation choices within that assignment; no separate owner votes are needed. These decisions are proposals for the owner, not a request to approve already authorized council work.
+
+Future checks for the first implementation are narrowed to endpoint/selector identity, argument encoding, target-only config and executable pins, exact route/resource provenance, capability mismatch without fallback, duplicate/conflicting request claims, disconnect before/after dispatch and recorder death, atomic result recovery, native blocked startup, stale-session handles and owned-resource retention. Git fixtures cover retained-receipt equality, moved worker tips, missing bundle prerequisites, lease conflicts, assignment-byte hashes and cited revisions after import. Run the required repository/affected-skill suites and separately authorized live smoke when implementing; this council supplies documentation and disposable Git evidence only.
