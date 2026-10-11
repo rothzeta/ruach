@@ -1,6 +1,8 @@
 task: WAVE2-R4-P-R5-P
 status: complete
 outcome: Offline R4 permission and R5 communication evaluation packets are implemented and statically verified in evals/ruach-permissions and evals/ruach-communication. No native model, sandbox, approval, submission or wait behavior was observed.
+candidate_revision: aac679ed95606841119575769894b80f9a3b7b9a
+tested_revision: aac679ed95606841119575769894b80f9a3b7b9a
 artifacts:
   - evals/ruach-permissions/README.md
   - evals/ruach-permissions/prepare.ts
@@ -22,16 +24,17 @@ artifacts:
   - docs/assignments/wave2/r45-recovery.md
   - docs/assignments/wave2/r45-recovery2.md
   - docs/reports/r45/preparation.md
+  - docs/assignments/wave2/r45-handoff-fix.md
 verification:
-  - "bun test --timeout 30000 evals/ruach-permissions: 7 pass, 0 fail, 70 expect() calls"
-  - "bun test --timeout 30000 evals/ruach-communication: 10 pass, 0 fail, 299 expect() calls"
-  - "bun x tsc -p evals/ruach-permissions/tsconfig.json: exit 0"
-  - "bun x tsc -p evals/ruach-communication/tsconfig.json: exit 0"
-  - "just check: resource identities/eval placement/links passed; tsc -p tsconfig.json exit 0"
-  - "bun run test: 100 pass, 0 fail across 10 root test files"
-  - "just release-check: Release v0.3.1 verified"
+  - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun test --timeout 30000 evals/ruach-permissions: 7 pass, 0 fail, 70 expect() calls"
+  - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun test --timeout 30000 evals/ruach-communication: 10 pass, 0 fail, 299 expect() calls"
+  - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun x tsc -p evals/ruach-permissions/tsconfig.json: exit 0"
+  - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun x tsc -p evals/ruach-communication/tsconfig.json: exit 0"
+  - "Previously run on the pre-commit working-tree content now committed unchanged at aac679ed95606841119575769894b80f9a3b7b9a (not relabelled as a rerun): just check passed (resource identities/eval placement/links; tsc -p tsconfig.json exit 0)"
+  - "Previously run on the pre-commit working-tree content now committed unchanged at aac679ed95606841119575769894b80f9a3b7b9a: bun run test 100 pass, 0 fail across 10 root test files"
+  - "Previously run on the pre-commit working-tree content now committed unchanged at aac679ed95606841119575769894b80f9a3b7b9a: just release-check verified Release v0.3.1"
+  - "Previously run on the pre-commit working-tree content now committed unchanged at aac679ed95606841119575769894b80f9a3b7b9a: task-local scratch helper ran the packet CLI main blocks; permissions prepare exit 0; probe temp/unix/tcp exit 0 (tcp bound 127.0.0.1:0, port 44435); prepare reuse exit 2; communication prepare exit 0 with 5 cases and 5 committed reports validated, 0 invalid; prepare reuse exit 2"
   - "git diff --check: no whitespace errors"
-  - "task-local scratch helper ran the packet CLI main blocks: permissions prepare exit 0; probe temp/unix/tcp exit 0 (tcp bound 127.0.0.1:0, port 44435); prepare reuse exit 2; communication prepare exit 0 with 5 cases and 5 committed reports validated, 0 invalid; prepare reuse exit 2"
   - "bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/r45/preparation.md --repo /opt/dev/ruach/.worktrees/r45-packets: ok true, exit 0"
 discoveries:
   - "The default-deny tool config does not permit direct 'bun evals/<packet>/prepare.ts' or 'probe.ts' invocations; those CLI entrypoints were exercised through an allowed task-local scratch helper instead. No runner restriction was relaxed."
@@ -50,6 +53,13 @@ was present and complete; the R5 communication packet had only `prepare.ts` and 
 were finished within the owned scope; nothing outside `evals/ruach-permissions/**`,
 `evals/ruach-communication/**`, `docs/reports/r45/preparation.md` and the three unchanged assignments was
 edited.
+
+Handoff provenance correction: candidate and tested revision are the single existing commit
+`aac679ed95606841119575769894b80f9a3b7b9a`. This correction changes only this report and adds the
+unchanged `docs/assignments/wave2/r45-handoff-fix.md`; no product, source or test byte moved. The two
+packet suites and both packet typechecks were re-run on that exact committed candidate. The root
+`just check`, `bun run test`, `just release-check` and packet CLI control evidence were run earlier on the
+identical pre-commit content and are reused as-is, explicitly not relabelled as full-suite reruns.
 
 ## R4 permission packet
 
