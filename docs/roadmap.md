@@ -1,44 +1,63 @@
 # Ruach roadmap
 
-Backlog reconciled **2026-10-11** against the 0.3.0 release, current source and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
+Backlog reconciled **2026-10-11** against the published 0.3.1 release, completed OpenCode evaluations, wave-2 independent preparation review and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
 
-Current state: **0.3.0 released locally**, with `ruach-changelog` integrated under **Unreleased**. Most original 0.3 work is complete. Release confidence still needs green hosted CI and consumer/native smoke evidence. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
+Current state: **0.3.1 published** to origin main and annotated `v0.3.1` / `ruach--v0.3.1` tags; see the [publication receipt](reports/releases/0.3.1/publication.md). R1's test correction, R2's reliability fixes, R3's coordination guidance and `ruach-changelog` shipped in this release. Wave 2 (R4–R7) has three committed preparation units and a completed independent review; corrections and remaining implementation precede integration. Five capped OpenCode evaluations finished: smoke, synthetic Enoch and authorization accepted; resume and ambiguity failed under runtime write restrictions. Hosted green CI, original Claude/Codex compatibility, resume/ambiguity proof and a real consumer-task report remain open. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
 
 ## Priorities and sequencing
 
 | Order | Packages | Outcome |
 | --- | --- | --- |
-| Next | R1, R2, R3 | Close evidence gaps, fix documented reliability gaps, preserve decisions and running work |
-| Follow-up, suitable for 0.3.x | R4–R7 | Improve permissions, communication, handoffs and verification within existing resources |
+| Current wave | R4–R7 | Correct reviewed preparation, finish guides/tests/specimens, then integrate and independently review the combined batch |
+| Evidence follow-ups | R1, R3; R2 live boundary | Record hosted green and missing behavioral/consumer evidence; preserve the documented replacement-ref limitation |
 | 0.4 capability sequence | C1 → C3 → C4 → C5 | Council, known-bug correction, runtime QA, then defect discovery |
 | Conditional 0.4 companion | C2 | Gemini advisors when needed; council can use supported harnesses first |
 | Measurement | M1 | Establish whether the workflow earns its overhead; prepare cases early, run after R1 |
 | Decisions / later | D1–D3 and parked proposals | Resolve packaging choices separately; expand from demonstrated need |
 
-R1/R2/R3 can proceed independently. R4/R5 use R3's resource record; R6/R7 can proceed independently with coordinated edits to shared files. Council uses R3's decision/assignment record and R5's waiting guidance. Runtime QA uses the bugfix path; hunt follows once findings can be reproduced and corrected. Every 0.3.x improvement need not ship before any 0.4 work starts.
+R1–R3's source changes are released; their remaining evidence gaps stay separate from wave-2 preparation. R4/R5 use R3's resource record; R6/R7 can proceed independently with coordinated edits to shared files. Council uses R3's decision/assignment record and R5's waiting guidance. Runtime QA uses the bugfix path; hunt follows once findings can be reproduced and corrected. Every 0.3.x improvement need not ship before any 0.4 work starts.
+
+## Current docket — R4–R7
+
+Independent preparation review is committed at `40a591b5e1cfccfd9005ef1eb8622496397aa147` on retained branch `ruach/wave2-review-guidance`, report `docs/reports/wave2-review/preparation.md`. Its results supersede the operational record's earlier “review active” state. These units remain on retained branches; they have not been integrated into main.
+
+| Unit | Reviewed revision | Review result / next action |
+| --- | --- | --- |
+| R6-G/R7-G handoff and verification guidance | `c874310b` | Pass with a minor report correction: distinguish the paid engineering turn from unrun evaluation subjects. |
+| R4-P/R5-P permissions and communication packets | `818ed627` | Changes required: R5 references a missing retained verifier log; communication tests reproduce 9 pass / 1 fail. Fix the artifact without weakening coverage, rerun both packet suites and correct the earlier 10-pass verification claim. R4's seven tests pass. |
+| R6-P/R7-P delivery and verification packets | `afcd17ce` | Pass within preparation scope: 8 delivery and 11 verification tests pass. Final refresh to accepted guidance/specimens remains pending. |
+
+Next steps, from the accepted [permissions/communication](design/next-permissions-communication-plan.md) and [handoff/verification](design/next-handoff-verification-plan.md) plans:
+
+1. Correct the R5 packet and its evidence report, correct the guidance report wording, and independently review the exact corrections.
+2. Finish R45-D worker permission/communication guides, R5-L launcher startup contract tests and R6-S assignment/delivery specimens, respecting their source dependencies and ownership.
+3. Refresh R6/R7 packets against accepted guidance/specimens; assemble and independently review the R6/R7 subcandidate (HV-IN).
+4. Assemble R4–R7 through B2-IN, the sole final shared-doc/changelog writer; run the full affected union checks, independently review the exact combined revision, then perform separately assigned delivery under valid target authority.
+
+R4/R5 native behavioral smoke and other live evidence remain separate gates. The earlier five-subject budget is exhausted; wave-2 engineering preparation does not authorize additional evaluation subjects. The [accepted plan index](design/next-roadmap-plans.md) records the four completed planning batches; C1–C5 and M1 implementation remains queued.
 
 ## Active backlog
 
 ### R1 — Close release and native-use evidence gaps
 
-**Next action:** investigate the failing CI test step and record a green run on the resulting revision. Latest observed [run 37986084683](https://github.com/rothzeta/ruach/actions/runs/37986084683), at `d75039a`, passed installation, resource/type checks, release metadata and audit, then failed “Test root tools and all executable skills.” Earlier [run 37661762155](https://github.com/rothzeta/ruach/actions/runs/37661762155) also failed. The old “CI has not run” note is superseded.
+**Next action:** inspect CI on the published revision and record a linked green run, or diagnose any remaining failure. The previously observed [run 37986084683](https://github.com/rothzeta/ruach/actions/runs/37986084683), at `d75039a`, passed installation, resource/type checks, release metadata and audit, then failed “Test root tools and all executable skills.” Earlier [run 37661762155](https://github.com/rothzeta/ruach/actions/runs/37661762155) also failed. Those historical failures were diagnosed; no resulting hosted green run is recorded in the retained evidence.
 
 Then complete the [native smoke checklist](native-parity.md#clean-install-smoke-checklist) and one real consumer task. Preserve role/skill discovery, scope, handoff and tool-version evidence; compare Claude native `--agent` and adapter composition on the same task. Include isolated-home Codex discovery and explicit skill-path fallback. Keep paid runs pending their required authorization. Harness-eval's unassisted brief must not hint at routes/skills; label hinted runs assisted.
 
-**Local status (2026-10-11):** the hosted failure was diagnosed as an order-dependent `readdir` assertion at `skills/ruach-herdr/tests/worker.test.ts` and corrected locally (R1-F, exact local gate and unit review). The failing run URLs above are unchanged history; there is no resulting hosted green run, no native route result and no real consumer-task report yet. An offline smoke packet (independently re-reviewed, local only) exists for later authorized rows; every route gap below stays open. The owner chose to add a fake task to Enoch and discard it afterwards: that is a temporary synthetic consumer exercise and does not close the real consumer-task criterion below.
+**Status (2026-10-11):** the order-dependent `readdir` assertion at `skills/ruach-herdr/tests/worker.test.ts` was corrected with local checks and independent review, then shipped in 0.3.1. The prepared smoke packet was exercised through the restricted OpenCode Go / DeepSeek Flash runner: smoke and the temporary synthetic Enoch task were independently accepted. Enoch's task checkout and solution were discarded as requested; minimum grading provenance was preserved. This evidence does not establish the original Claude/Codex install-route matrix or a real consumer task. Five evaluations consumed one subject turn each, with no retries: smoke/Enoch/authorization accepted, resume failed critical record/preservation invariants under write denial, ambiguity failed/unverified under write denial. Final independent grades are retained at `091ef1eb` and `268954f5`; original compatibility, hosted green and real-consumer criteria remain open.
 
 **Done when:** a linked green GitHub run and consumer-task report exist, with results or explicit remaining gaps for every install route. Local tests alone do not close live-use evidence. Sources: former Tracks B/E, 0.3 exit notes, 0.3.x discovery/harness-eval.
 
 ### R2 — Fix documented install and linked-launch recovery gaps
 
-**Next action:** reproduce the open cases in [operations limitations](operations.md#known-limitations-in-03), then split into bounded fixes:
+**Next action:** retain accurate [operations limitations](operations.md#known-limitations-in-03) and recovery guidance; verify the installed-live replacement-ref boundary when assigned. The source/recovery work shipped in 0.3.1:
 
-- Revalidate installer state under the staging lock so concurrent plans cannot act on stale state.
-- Report the Herdr workspace when identity verification fails after linked-worktree creation.
-- Preflight a requested subdirectory against the base commit before creating a checkout.
-- Establish the replacement-ref boundary of Herdr-owned `git worktree add`; retain fail-closed identity checks and document remaining limitations.
+- Installer state is revalidated under the staging lock so concurrent plans cannot act on stale state.
+- Linked-worktree identity failures report valid Herdr workspace/pane recovery hints.
+- Requested subdirectories are preflighted against the base commit before creating a checkout.
+- The replacement-ref boundary of Herdr-owned `git worktree add` is established and documented; linked creation remains unprotected, with fail-closed identity checks retained.
 
-**Local status (2026-10-11):** installer revalidation under the staging lock (with the symlinked-target preflight) and the linked-launch receipt and `--cwd` preflight are fixed locally with failing-before regressions and independent unit review; see [operations](operations.md#known-limitations-in-03) and the [regression inventory](regression-cases.md). The replacement-ref boundary is established but not fixed: public Herdr v0.9.0 source and a fake probe show linked creation is unprotected, live behavior is unverified, and the limitation stays documented. No hosted or live claim.
+**Status (2026-10-11):** source/recovery work is complete and published in 0.3.1 with failing-before regressions and independent unit review; see [operations](operations.md#known-limitations-in-03) and the [regression inventory](regression-cases.md). The replacement-ref boundary is established but not fixed: public Herdr v0.9.0 source and a fake probe show linked creation is unprotected, live behavior is unverified, and the limitation stays documented. No hosted or live claim.
 
 **Done when:** resolved cases have failing-before public-boundary regressions and accurate recovery instructions; unresolved cases remain listed. Keep the accepted harness-eval Git-configuration trust boundary; do not restore the superseded content-hashing design. Sources: shipped 0.3 limitations, A1/A7 follow-ups.
 
@@ -50,7 +69,9 @@ The record retains owner decision words, date, stable IDs, authority and superse
 
 Assignments name the role, binding decisions, current base, unused branch, owned source/tests/support/docs, verification permissions and report path. Architect emits disjoint packages and dependencies; Coordinator explains serial steps. Workers follow their role rather than inherited orchestrator instructions. Record route overrides and ownership of ports/profiles/saves; consumers allocate them. Check stale resources before relaunch while preserving active workers and partial work.
 
-**Local status (2026-10-11):** the task-record and assignment specimens and the Coordinator/Architect guidance are updated and independently reviewed statically. Static review and the prepared, independently reviewed offline packet (`evals/ruach-coordination`) are not behavioral evidence: the held-out behavioral evaluation (R3-E) stays pending its native budget, access and source gates.
+**Status (2026-10-11):** the task-record and assignment specimens, Coordinator/Architect guidance and offline packet (`evals/ruach-coordination`) were independently reviewed and shipped in 0.3.1. Three actual restricted OpenCode coordination subjects were independently graded at `268954f5`: authorization accepted; resume failed critical stale-record and preservation requirements under runtime write denial; ambiguity failed/unverified with no persisted outputs. R3's resume/ambiguity behavioral proof remains unmet. The approved five-subject budget is exhausted, with no retry or original Claude/Codex compatibility result inferred.
+
+**Next action:** preserve the failed-case evidence and runtime diagnosis; any further behavioral evaluation needs a separately authorized, concretely prepared execution packet.
 
 **Done when:** an interrupted multi-unit task resumes without losing decisions or repeating handled work, and assignments avoid predictable ownership questions. Preserve still-valid user authorization. Sources: Track F5/F6; 0.3.x decomposition/ledgers/route overrides; RAMEC §§3.2/3.3/3.7/4, F1–F3/F8/F12.
 
@@ -58,11 +79,15 @@ Assignments name the role, binding decisions, current base, unused branch, owned
 
 Prove permission mapping lets authorized workers stage/commit in linked worktrees and run allowed verification recipes, including sockets/temp paths. Request required escalation once on a gitdir `index.lock` permission failure and report the result. Assignments name allowed requests; readiness identifies recipes needing execution outside the sandbox. Document whole-argument prefix matching (`just test` does not cover `just test-focused`).
 
+**Status / next action (2026-10-11):** R4-P's offline fixture passed independent preparation review and seven tests; temp/Unix/TCP probes passed in the review environment. The shared R4-P/R5-P unit awaits the R5 correction. Finish the permission guide (R45-D); native staging/commit and allowed verification proof (R4-S) remains unrun. Offline probes do not establish native sandbox permissions.
+
 **Done when:** an isolated launch smoke proves staging/commit and permitted verification; missing permissions produce actionable diagnostics without loops. No global settings writes or approvals on workers' behalf. Sources: Track F1; RAMEC F6/§3.5.
 
 ### R5 — Reliable assignment submission and completion waits
 
 Use native Herdr primitives for submission, startup readiness, pending-input inspection and blocking waits. Verify submission and detect a self-update leaving a shell. Wait for an unhandled terminal/decision report using last handled state, including reports written before the wait starts; retain that state in R3. Run verification to completion with a bound; report last worker activity at check-ins. Avoid tight status loops and repeated approval relays.
+
+**Status / next action (2026-10-11):** R5-P independent review reproduced 9 pass / 1 fail: the timeout-verifier case references missing `verifier/run-2.log`. Add a consistent retained artifact, preserve the assertion, rerun both R4/R5 suites and correct the preparation report's unreproducible 10-pass claim. Then finish R5-L startup contract tests and R45-D communication guidance. Native behavioral cases (R5-S) remain unrun.
 
 **Done when:** isolated cases cover unsubmitted input, exited harness, pre-existing completion and timeout without duplicate work. Check existing Herdr capabilities before proposing commands: launch preparation stays in `ruach-herdr`, terminal primitives in Herdr; no Ruach scheduler. Sources: 0.3.x waiting guidance; RAMEC F4/F5/F7, §§3.5–3.6.
 
@@ -72,11 +97,15 @@ Verify revision objects; distinguish candidate/tested/reviewed/delivered revisio
 
 Refresh the base before integration and reverify changed code. Delivery still targets the exact reviewed combined revision and checks the destination has not moved. Record authorization, tag/push state and retained/released resources. Extend existing assignments for a serialized multi-unit merge queue when needed; keep cleanup with Coordinator and branches under retention policy. No new Merger role, automatic push, blanket clean-tree requirement or disposal of requested diffs.
 
+**Status / next action (2026-10-11):** R6-G guidance and R6-P offline preparation passed independent review; the delivery packet's eight tests pass. Correct the guidance report's engineering-versus-evaluation wording, finish R6-S specimens, and refresh the packet against accepted guidance/specimens before HV-IN/B2-IN integration. Native/behavioral delivery proof and final batch acceptance remain open; the reviewed branch changes are not yet on main.
+
 **Done when:** receipts are checkable against Git and a moved target stops delivery; uncommitted-diff and retained-checkout outcomes remain valid. Justify/test any schema change separately. Sources: Track F3/F4; RAMEC §3.4 and steward proposal, reconciled with current role contracts.
 
 ### R7 — Verification failures and proportionate test guidance
 
 Consolidate environment classification, known-flake disposition and wording in `ruach-testing`, `ruach-simplification` and Reviewer guidance. Socket/tmp/disk failures are “not verified: environment”; record command/exit code and preserve verifier status in truncation pipelines. Consumer flake records name symptom, environment and allowed rerun; repeated main-environment failures become defects. Preserve invariants and justify splits through public contracts.
+
+**Status / next action (2026-10-11):** R7-G guidance and R7-P offline preparation passed independent review; the verification packet's eleven tests pass. Preserve the shared guidance report correction and refresh the packet against accepted inputs, then include it in HV-IN/B2-IN combined verification and review. Offline transport/fixture results do not establish native behavioral proof; these branch changes remain unintegrated.
 
 **Done when:** isolated packets distinguish environment blocks, registered flakes and regressions without weakening tests or claiming unrun checks. Public-contract and before/after examples already shipped; extend missing guidance only. Sources: Track F2; 0.3.x wording; RAMEC F9/§3.9.
 
@@ -143,9 +172,9 @@ Strengthen Librarian packets for query without writes, standalone lint, repeated
 
 After 0.4, pause catalog expansion and prioritize recurring friction recorded on real projects.
 
-## Completed baseline — 0.3 and integrated follow-ups
+## Completed baseline — 0.3 and 0.3.1
 
-Historical track/finding IDs remain for evidence references. Details are in the [0.3 changelog](../CHANGELOG.md#030--2026-10-07), [release report](reports/0.3/ship.md) and [regression inventory](regression-cases.md). Implementation completion does not close R1's live-use gaps.
+Historical track/finding IDs remain for evidence references. Details are in the [0.3 changelog](../CHANGELOG.md#030--2026-10-07), [release report](reports/0.3/ship.md), [0.3.1 changelog](../CHANGELOG.md#031--2026-10-11), [publication receipt](reports/releases/0.3.1/publication.md) and [regression inventory](regression-cases.md). Implementation completion does not close R1's live-use gaps.
 
 ### Track A: Integrity and security
 
@@ -174,11 +203,13 @@ Consumer/assignment/task specimens, direct/compact/full use, scope/review wordin
 
 ### Track E: Native packaging and parity checks
 
-Offline evidence and export evaluation shipped in [native-parity.md](native-parity.md). Paid/native checks remain R1; export remains D2.
+Offline evidence and export evaluation shipped in [native-parity.md](native-parity.md). Restricted OpenCode smoke evidence is recorded under R1; original Claude/Codex route checks remain open. Export remains D2.
 
-### Integrated after 0.3, unreleased
+### Published in 0.3.1
 
-`ruach-changelog` logs finished turns and supported compaction summaries to consumer JSONL, with project registration and an opt-in plugin hook. [Implementation/review evidence](reports/0.4/changelog-review.md) exists. This is implemented, not future work, and does not replace the decision/work record.
+R1's directory-order test correction, R2's installer/linked-launch recovery fixes and R3's durable coordination guidance shipped with offline smoke/coordination packets and accepted roadmap plans; their evidence limits remain in the package statuses above.
+
+`ruach-changelog` also shipped in 0.3.1. It logs finished turns and supported compaction summaries to consumer JSONL, with project registration and an opt-in plugin hook. [Implementation/review evidence](reports/0.4/changelog-review.md) exists. This is implemented, not future work, and does not replace the decision/work record.
 
 ## Boundaries and source reconciliation
 

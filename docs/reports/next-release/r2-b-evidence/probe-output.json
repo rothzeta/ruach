@@ -1,0 +1,18 @@
+{
+  "git": "git version 2.47.3",
+  "base": "61c059b9718eef1d19559ab47c17fed151f72335",
+  "forged": "26040c6df56d45813fa5fcdc2f216a8c96e3f0d5",
+  "refsReplace": "refs/replace/61c059b9718eef1d19559ab47c17fed151f72335",
+  "defaultRevParseBase": "61c059b9718eef1d19559ab47c17fed151f72335",
+  "linkedReceipt": {
+    "workspace": "w9",
+    "pane": "w9:p1"
+  },
+  "linkedError": null,
+  "linkedBytes": "FORGED\n",
+  "linkedHeadNoReplace": "61c059b9718eef1d19559ab47c17fed151f72335",
+  "standaloneError": null,
+  "standaloneBytes": "ORIGINAL\n",
+  "standaloneHeadNoReplace": "61c059b9718eef1d19559ab47c17fed151f72335",
+  "linkedWithClientEnvBytes": "ORIGINAL\n"
+}

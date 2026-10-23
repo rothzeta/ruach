@@ -1,0 +1,24 @@
+# coordination-evidence manifest (actual subject output vs protected baseline)
+
+## 01-resume
+protected baseline files: 19
+added: 1  changed: 0
+
+- intents.jsonl actual sha256=616568e9f825ca51e74f7b0adf5fbc0bff0bc317bf2a74ee83d60a5350cac3e9 (new file)
+
+## 02-ambiguity
+protected baseline files: 17
+added: 0  changed: 0
+
+- (no persisted output; all writes blocked at run time)
+
+## 03-authorization
+protected baseline files: 8
+added: 5  changed: 1
+
+- record.md actual sha256=0e6299d72ab80dd389f2d9887f018644c96a0395cad0cb1f922a50ff628ef3db baseline sha256=ca1a06ee8e7fac3fbabe6004d495a0484e34a5345eca23d40acff6e2af0b11a8
+- drafts/assignments/WORK-01-queue-delivery.md actual sha256=5068e310a346155c302c415c1acdb3945a5144bc81c30b9bf5e8a521d28dbca7 (new file)
+- drafts/assignments/WORK-04-preview-delivery.md actual sha256=19f02e65379c1d6f24ad74c17c004ac0316a0d05897e879da77c6ca6f8513157 (new file)
+- drafts/assignments/WORK-05-frames-refresh.md actual sha256=a0eca083a8f1528305c92bab817c173606afc9824182f674274a1a5dca43b0a5 (new file)
+- drafts/questions/owner-fonts-target.md actual sha256=c53be49fe708350f35fe97c346bc1e8c25f7aa52813cb2c97375926f13d4324e (new file)
+- drafts/summary.md actual sha256=bf9eb2741123da85608948eb4846e11f6d4790597fa572c17d43f079f62b5ff7 (new file)

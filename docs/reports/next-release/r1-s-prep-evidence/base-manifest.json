@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "base": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "candidate": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "control": false,
+  "branch_refs": {
+    "candidate": "refs/heads/candidate"
+  },
+  "subject_files": {
+    "AGENTS.md": "73ab1a9507ee521c85da02f368fc4c9064bda816b5826235a6499d7dc0fe2b7d",
+    "docs/reports/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package.json": "8ab77dc40b35141272118c15dea12de7b4d445a82822cafd6981059db56869b8",
+    "src/range.ts": "1dce2d2fa126098372718142e4ced1ff2bec64c308809719d2ab4bc1531a5676",
+    "tests/range.test.ts.fixture": "cba19ec815bb12fe63169a8ce6cfc32fa6510a8e586b615f157541cc6df3abc2"
+  },
+  "brief_digests": {
+    "assisted": "04697aa27d0921b76b8526f754f790e9b084f510b31ed8ccc1f8e0cad2f352ae",
+    "unassisted": "1a7f520c2db7154cf7321348a942e4938c1811ed720373ca5a09837547e818a3"
+  },
+  "limits": [
+    "No model subject was run; the control candidate is the evaluator solution applied by script."
+  ]
+}

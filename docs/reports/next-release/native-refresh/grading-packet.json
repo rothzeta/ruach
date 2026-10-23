@@ -1,0 +1,134 @@
+{
+ "source": {
+  "path": "/tmp/ruach-implementation-20261011/live/source",
+  "head": "94cdfa1a68e214a07d27fc5d413863dcbe3e7459",
+  "status": "accepted candidate 94cdfa1a68e214a07d27fc5d413863dcbe3e7459 (source ac187d4), independently accepted by review 0a1ca49d9a1939de8130415eb639637779bc0c63"
+ },
+ "roles": {
+  "implementer_sha256": "233b5d88d29f5cb90cfbe1c2ea72f3a75e0bf8126900bf5fa8831d261474db59",
+  "coordinator_sha256": "00ce2c8ab6c96ad5fd38b0550a9464470b2e583eb833692ed26586e424e6d31d"
+ },
+ "classification": "ordinary non-blind smoke; blind unverified; all R1-S rows assisted",
+ "resource_tree_digests": {
+  "source_skills_agents": "1afde30f6c2a1b7f0423361a396ca86021cc6ced1788b73f926116f08734b515 / 9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "plugin_cache_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "claude_skills_cli_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "codex_skills_cli_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "claude_adapter_snapshot_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "codex_snapshot_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "enoch_resources_skills": "9385a3a19112bc101d05a4cf25d51e9a8420e65fd8e1c93302e2cad068aea27f",
+  "r3_resources": "1d135a143c179e67662dc3fb3339f3ac908d092ea9154bfa2535949c8cba4cd1"
+ },
+ "subjects": [
+  {
+   "id": "claude-plugin",
+   "herdr_name": "smoke-claude-plugin",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": "c2bf411564c327d9f1c7a7f8d25ffa23565d938d",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "observe": "herdr agent read smoke-claude-plugin --source recent-unwrapped",
+   "checker": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/claude-plugin --tag live",
+   "report": "/tmp/ruach-implementation-20261011/live/smoke/claude-plugin/consumer/docs/reports/smoke.md"
+  },
+  {
+   "id": "claude-adapter",
+   "herdr_name": "smoke-claude-adapter",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": "931223ad7dad9326d644a341c93b6d7966345803",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "observe": "herdr agent read smoke-claude-adapter --source recent-unwrapped",
+   "checker": "bash /tmp/ruach-implementation-20261011/live/verify-adapter.sh smoke/claude-adapter live",
+   "report": "/tmp/ruach-implementation-20261011/live/smoke/claude-adapter/worktree/docs/reports/smoke.md"
+  },
+  {
+   "id": "codex-snapshot",
+   "herdr_name": "smoke-codex-snapshot",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "base": "868159c737895b4c0a4d58c628379b9cd9877857",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "observe": "herdr agent read smoke-codex-snapshot --source recent-unwrapped",
+   "checker": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/codex-snapshot --tag live",
+   "report": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/docs/reports/smoke.md"
+  },
+  {
+   "id": "claude-skills-cli",
+   "herdr_name": "smoke-claude-skills",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": "2adc59219718c42dcf5c9a2cf7aeec3f4bf3de6d",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "observe": "herdr agent read smoke-claude-skills --source recent-unwrapped",
+   "checker": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli --tag live",
+   "report": "/tmp/ruach-implementation-20261011/live/smoke/claude-skills-cli/consumer/docs/reports/smoke.md"
+  },
+  {
+   "id": "codex-skills-cli",
+   "herdr_name": "smoke-codex-skills",
+   "model": "gpt-6.1-sol",
+   "effort": "high",
+   "base": "40b4a0f0efb5c9875188634cf60a5d26e01a4b73",
+   "tree": "30731a668b8b99336b0207ab32c0f1d5cd68ebcf",
+   "observe": "herdr agent read smoke-codex-skills --source recent-unwrapped",
+   "checker": "bun /tmp/ruach-implementation-20261011/live/source/evals/next-release-native-smoke/scripts/check.ts --packet /tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli --tag live",
+   "report": "/tmp/ruach-implementation-20261011/live/smoke/codex-skills-cli/consumer/docs/reports/smoke.md"
+  },
+  {
+   "id": "r3-01-resume",
+   "herdr_name": "r3-resume",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": null,
+   "tree": null,
+   "observe": "herdr agent read r3-resume --source recent-unwrapped",
+   "checker": null,
+   "report": "the subject writes into its task cwd; records are validated by the handoff validator"
+  },
+  {
+   "id": "r3-02-ambiguity",
+   "herdr_name": "r3-ambiguity",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": null,
+   "tree": null,
+   "observe": "herdr agent read r3-ambiguity --source recent-unwrapped",
+   "checker": null,
+   "report": "the subject writes into its task cwd; records are validated by the handoff validator"
+  },
+  {
+   "id": "r3-03-authorization",
+   "herdr_name": "r3-authorization",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": null,
+   "tree": null,
+   "observe": "herdr agent read r3-authorization --source recent-unwrapped",
+   "checker": null,
+   "report": "the subject writes into its task cwd; records are validated by the handoff validator"
+  },
+  {
+   "id": "enoch-exercise",
+   "herdr_name": "enoch-exercise",
+   "model": "claude-sonnet-5-5",
+   "effort": "medium",
+   "base": "ea33fc70456bf45bdd51e6eedcb83cf5cdf89347",
+   "tree": null,
+   "observe": "herdr agent read enoch-exercise --source recent-unwrapped",
+   "checker": [
+    "npm --prefix src/Enoch.Ui test",
+    "npm --prefix src/Enoch.Ui run lint",
+    "npm --prefix src/Enoch.Ui run typecheck",
+    "node src/Enoch.Ui/node_modules/prettier/bin/prettier.cjs --check src/Enoch.Ui/src/api.ts",
+    "git diff --check"
+   ],
+   "report": "/tmp/ruach-implementation-20261011/enoch-exercise/clone/docs/exercise/report.md"
+  }
+ ],
+ "notes": [
+  "five smoke trees are identical but their base commit SHAs differ with commit dates; no identical-SHA claim",
+  "no solution applied to any subject input",
+  "native paid availability is first-turn evidence"
+ ]
+}

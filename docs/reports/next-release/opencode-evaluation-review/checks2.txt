@@ -1,0 +1,143 @@
+# R-OPENCODE-INSPECT2 evidence (redacted, public)
+
+Reviewed revision: a5e3cec1c1b81b289c6700e3763af1642441865c
+Correction handoff: 3fe6867d2fd76baacefb582680230956c4bb1668
+Reviewed by: Reviewer (R-OPENCODE-INSPECT2). Retains INSPECT1 unchanged.
+No subject launched, no model called, no credential/raw provider config read,
+no workflow body printed or interpreted (native skill output was parsed in code
+and only names/locations/A permission entries were captured).
+
+Command:
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/inspect2.ts
+
+The helper (a) runs a verbatim copy of the corrected
+tools/verify-baselines.ts over synthetic r3/enoch layouts and the real
+fixtures, and (b) drives the enriched runner with the exact subject
+config/cwd for config-only debug agent/skill/paths/models queries.
+
+---- raw output ----
+
+== B1 r3 fail-closed reproduction ==
+  ok   corrected tool copied verbatim
+  ok   r3 pristine -> PASS — exit=0
+  ok   r3 legit outputs -> PASS — exit=0
+  ok   r3 protected removal -> FAIL — exit=1
+  ok   r3 protected change -> FAIL — exit=1
+  ok   r3 protected addition -> FAIL — exit=1
+  ok   r3 boundary name record.md.evil -> FAIL — exit=1
+
+== B1 real-fixture happy path (smoke + enoch + r3) ==
+  ok   real smoke+enoch+r3 -> PASS — exit=0
+
+== B1 enoch full-scope + append-only reproduction (synthetic repo) ==
+  ok   enoch legit mutable -> PASS — exit=0
+  ok   enoch out-of-scope add docs/OTHER.md -> FAIL — exit=1
+  ok   enoch TASK_LOGS non-append (prepend) -> FAIL — exit=1
+  ok   enoch mutable boundary docs/TASK_LOGS.md.evil -> FAIL — exit=1
+  ok   enoch protected test change -> FAIL — exit=1
+
+== B2 native skill/permission reproduction via enriched runner ==
+  ok   committed runner mode 755
+  ok   scratch runner byte-identical to committed
+  -- oc-smoke (implementer) skills: customize-opencode, ruach-handoff, ruach-testing
+  ok   oc-smoke: no workflow skill discovered — none
+  ok   oc-smoke: handoff+testing present
+  -- oc-smoke agent model opencode-go/deepseek-v4.1-flash; skill-allow=ruach-handoff,ruach-testing
+  ok   oc-smoke: read workflow deny
+  ok   oc-smoke: skill default deny
+  ok   oc-smoke: task+external deny
+  ok   oc-smoke: model is Go Flash — opencode-go/deepseek-v4.1-flash
+  ok   oc-smoke: skill allowlist handoff+testing only
+  -- oc-resume (coordinator) skills: customize-opencode, ruach-handoff, ruach-testing, ruach-herdr, ruach-workflow-feature
+  ok   oc-resume: only feature workflow — ruach-workflow-feature
+  ok   oc-resume: handoff+herdr present
+  -- oc-resume agent model opencode-go/deepseek-v4.1-flash; skill-allow=ruach-handoff,ruach-herdr,ruach-workflow-feature
+  ok   oc-resume: read workflow deny
+  ok   oc-resume: skill default deny
+  ok   oc-resume: task+external deny
+  ok   oc-resume: model is Go Flash — opencode-go/deepseek-v4.1-flash
+  ok   oc-resume: skill allowlist handoff+herdr+feature
+  -- oc-ambiguity (coordinator) skills: customize-opencode, ruach-handoff, ruach-testing, ruach-herdr, ruach-workflow-feature
+  ok   oc-ambiguity: only feature workflow — ruach-workflow-feature
+  ok   oc-ambiguity: handoff+herdr present
+  -- oc-ambiguity agent model opencode-go/deepseek-v4.1-flash; skill-allow=ruach-handoff,ruach-herdr,ruach-workflow-feature
+  ok   oc-ambiguity: read workflow deny
+  ok   oc-ambiguity: skill default deny
+  ok   oc-ambiguity: task+external deny
+  ok   oc-ambiguity: model is Go Flash — opencode-go/deepseek-v4.1-flash
+  ok   oc-ambiguity: skill allowlist handoff+herdr+feature
+  -- oc-authorization (coordinator) skills: customize-opencode, ruach-handoff, ruach-testing, ruach-herdr, ruach-workflow-feature
+  ok   oc-authorization: only feature workflow — ruach-workflow-feature
+  ok   oc-authorization: handoff+herdr present
+  -- oc-authorization agent model opencode-go/deepseek-v4.1-flash; skill-allow=ruach-handoff,ruach-herdr,ruach-workflow-feature
+  ok   oc-authorization: read workflow deny
+  ok   oc-authorization: skill default deny
+  ok   oc-authorization: task+external deny
+  ok   oc-authorization: model is Go Flash — opencode-go/deepseek-v4.1-flash
+  ok   oc-authorization: skill allowlist handoff+herdr+feature
+  -- oc-enoch (implementer) skills: customize-opencode, ruach-testing, ruach-handoff
+  ok   oc-enoch: no workflow skill discovered — none
+  ok   oc-enoch: handoff+testing present
+  -- oc-enoch agent model opencode-go/deepseek-v4.1-flash; skill-allow=ruach-handoff,ruach-testing
+  ok   oc-enoch: read workflow deny
+  ok   oc-enoch: skill default deny
+  ok   oc-enoch: task+external deny
+  ok   oc-enoch: model is Go Flash — opencode-go/deepseek-v4.1-flash
+  ok   oc-enoch: skill allowlist handoff+testing only
+  -- suppression comparison (oc-smoke)
+  ok   suppression on: no workflow, handoff+testing stay — on=[customize-opencode,ruach-testing,ruach-handoff]
+  ok   suppression off: project workflows reappear — off=[customize-opencode,ruach-changelog,ruach-harness-eval,ruach-librarian,ruach-handoff,ruach-simplification,ruach-herdr,ruach-testing,ruach-workflow-feature,ruach-workflow-knowledge]
+  ok   coordinator feature workflow survives suppression — [customize-opencode,ruach-testing,ruach-handoff,ruach-herdr,ruach-workflow-feature]
+  ok   models opencode-go resolves with config and lists Go Flash — exit=0
+
+== launcher / config / corpus coherence ==
+  ok   opencode run accepts --dir — --dir          directory to run in, path on remote server if attaching                [string]
+  ok   runner uses private task-private env — home       /tmp/ruach-implementation-20261011/opencode/home data       /tmp/ruach-implementation-20261011/opencode/data/opencode bin        /tmp/ruach-implementation-20261011/opencode/cache/opencode/b
+  ok   nested call with RUN_CONFIG keeps Go Flash — {"providerID":"opencode-go","modelID":"deepseek-v4.1-flash"}
+  ok   bare child without RUN_CONFIG falls back to historical default (risk documented) — {"providerID":"opencode","modelID":"deepseek-v4-flash"}
+  ok   oc-smoke: external_directory allow roots exist
+  ok   oc-smoke: absolute edit targets resolve
+  ok   oc-smoke: no protected/expected/evals allow
+  ok   oc-resume: external_directory allow roots exist
+  ok   oc-resume: absolute edit targets resolve
+  ok   oc-resume: no protected/expected/evals allow
+  ok   oc-ambiguity: external_directory allow roots exist
+  ok   oc-ambiguity: absolute edit targets resolve
+  ok   oc-ambiguity: no protected/expected/evals allow
+  ok   oc-authorization: external_directory allow roots exist
+  ok   oc-authorization: absolute edit targets resolve
+  ok   oc-authorization: no protected/expected/evals allow
+  ok   oc-enoch: external_directory allow roots exist
+  ok   oc-enoch: absolute edit targets resolve
+  ok   oc-enoch: no protected/expected/evals allow
+  ok   oc-smoke: implementer external excludes r3/expected/evals
+  ok   oc-enoch: implementer external excludes r3/expected/evals
+  info enoch cwd docs/exercise pre-exists: false (oc-enoch must create docs/exercise/report.md; native write tool must make the parent)
+  ok   recipe target exists: tools/verify-baselines.ts
+  ok   recipe target exists: runners/opencode
+  ok   recipe target exists: scripts/check.ts
+  ok   recipe target exists: expected/rubric.md
+  ok   recipe target exists: scripts/validate.ts
+  ok   recipe target exists: evidence/config.json
+  ok   recipe target exists: evaluator/manifest.json
+  ok   recipe target exists: Enoch.Ui/node_modules
+  ok   root-launch-packet.md: /tmp recipe paths resolve
+  ok   reviewer-grading-packet.md: /tmp recipe paths resolve
+  ok   prepared_asset README.md
+  ok   prepared_asset prep-evidence.md
+  ok   prepared_asset root-launch-packet.md
+  ok   prepared_asset reviewer-grading-packet.md
+  ok   prepared_asset runners/opencode
+  ok   prepared_asset tools/verify-baselines.ts
+  ok   prepared_asset configs/oc-smoke.json
+  ok   prepared_asset configs/oc-resume.json
+  ok   prepared_asset configs/oc-ambiguity.json
+  ok   prepared_asset configs/oc-authorization.json
+  ok   prepared_asset configs/oc-enoch.json
+  ok   prepared_asset briefs/oc-smoke.md
+  ok   prepared_asset briefs/oc-resume.md
+  ok   prepared_asset briefs/oc-ambiguity.md
+  ok   prepared_asset briefs/oc-authorization.md
+  ok   prepared_asset briefs/oc-enoch.md
+
+RESULT: PASS (all independent INSPECT2 checks met)

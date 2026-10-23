@@ -1,0 +1,93 @@
+# R-OPENCODE-RUNTIME-PATH evidence (redacted, public)
+
+Reviewed revision: a5e3cec1c1b81b289c6700e3763af1642441865c
+Read-only binary inspection of the task-local OpenCode 1.19 CLI
+(opencode-linux-x64/bin/opencode, the target of the .bin/opencode symlink) via a
+bounded Bun helper. No model/subject/probe run; no credential, raw config or
+workflow body read; no config/source/fixture edit.
+
+---- key excerpts (cleaned ASCII from the binary) ----
+
+## 1. edit tool asks with the worktree-relative path (@96857187)
+
+Hr=j("edit", ... execute:(i,n)=>...{
+  if(!i.filePath) throw Error("filePath is required");
+  ...
+  let y=yield*J.context,
+      u = qo.isAbsolute(i.filePath) ? i.filePath : qo.join(y.directory,i.filePath);
+  yield*M(n,u);
+  ...
+  yield*n.ask({permission:"edit", patterns:[qo.relative(y.worktree,u)], always:["*"],
+               metadata:{filepath:u, diff:m}});
+  ...
+})
+
+## 2. write tool is identical (@96896513)
+
+u = isAbsolute(i.filePath) ? i.filePath : Ko.join(y.directory,i.filePath);
+yield*n.ask({permission:"edit", patterns:[Ko.relative(y.worktree,u)], always:["*"],
+             metadata:{filepath:u, diff:h}});
+
+## 3. matcher: last matching rule over the request pattern (@99144658)
+
+function c(j,J,...K){
+  return K.flat().findLast((z)=> g.match(j,z.permission) && g.match(J,z.pattern))
+         ?? {action:"ask", permission:j, pattern:"*"}
+}
+// Permission.ask: for each requested pattern Y: W=c(permission,Y,ruleset,approved);
+//   if W.action==="deny" -> DeniedError; if "allow" -> continue; else ask.
+
+## 4. non-git cwd has worktree "/" (@97050729)
+
+P=Project.fromDirectory = function*(H){
+  let K = yield* E.resolve(B.make(H)),
+      M = (K.id === $.ID.make("global") && !K.vcs) ? "/" : K.directory,
+      ...
+      L = { id:X, worktree:M, ... }
+  ...
+  return { project:O, sandbox: K.vcs ? K.directory : M }   // Instance.worktree = sandbox
+}
+
+## 5. corpus cwd is not a git repository
+
+$ git rev-parse --show-toplevel        # in .../subject/01-resume/corpus
+fatal: not a git repository (or any parent up to mount point /)
+$ git rev-parse --show-toplevel        # in .../live/r3/packet
+fatal: not a git repository (or any parent up to mount point /)
+
+## 6. accepted working configs use worktree-relative forms for out-of-worktree targets
+
+preparer-v4.json / reviewer-v1.json edit allow (excerpt):
+  "../../../../../tmp/ruach-implementation-20261011/opencode/results/**": "allow",
+  "../../../tmp/ruach-implementation-20261011/opencode/results/**": "allow"
+
+---- derived request pattern ----
+
+For a non-git cwd, worktree = "/", so
+  path.relative("/", "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus/record.md")
+  = "tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus/record.md"
+which matches neither "record.md" nor "/tmp/.../corpus/record.md"; the last
+matching rule is the agent-level "*": "deny".
+
+---- oc-authorization corpus-v3 candidate qualification (bun preflight5.ts) ----
+
+  ok   config digest matches map — 1b13702f3bb19cf1
+  ok   base a5e3cec1
+  ok   v2->v3 delta confined to permission.edit + agent.ruach-coordinator.permission.edit — 4 entries
+  info v2->v3 delta: permission.edit.tmp/…/subject/03-authorization/corpus/record.md,
+       permission.edit.tmp/…/subject/03-authorization/corpus/drafts/**,
+       agent.ruach-coordinator.permission.edit.tmp/…/corpus/record.md,
+       agent.ruach-coordinator.permission.edit.tmp/…/corpus/drafts/**
+  ok   both edit blocks identical
+  ok   no-leading-slash corpus record.md + drafts/** present in both blocks
+  ok   unchanged controls vs v2 (skills/read/skill/bash/external/model)
+  ok   resolved role/model unchanged
+  info matcher request corpus/record.md = "tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/corpus/record.md"
+  ok   effective corpus/record.md = allow — allow
+  ok   effective corpus/drafts/** = allow — allow
+  ok   outer-case record.md = deny — deny
+  ok   other-case corpus record = deny — deny
+  ok   protected corpus record = deny — deny
+
+RESULT: PASS (oc-authorization corpus-v3 qualified)
+

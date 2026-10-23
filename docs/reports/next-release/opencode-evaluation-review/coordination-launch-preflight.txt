@@ -1,0 +1,66 @@
+# R-OPENCODE-PREFLIGHT3 evidence (redacted, public)
+
+Reviewed revision: a5e3cec1c1b81b289c6700e3763af1642441865c
+Read-only qualification of the coordination corpus launch mapping for the three
+still-unspent cases. Native debug agent only, with opaque filtered
+permission/model output; no workflow bodies printed or interpreted.
+Prompt digests were checked against the readable aliases under
+/tmp/ruach-implementation-20261011/opencode/results/coordinator-inputs/.
+
+Command:
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/preflight3.ts
+
+---- raw output ----
+
+== oc-resume ==
+  ok   oc-resume: config digest matches map — 7c002304dec901c5
+  ok   oc-resume: reviewer_brief alias digest matches prompt_sha256 — 1ed12d6742c52912
+  ok   oc-resume: base assets commit a5e3cec1
+  ok   oc-resume: prompt binds corpus cwd
+  ok   oc-resume: delta vs a5e3cec1 limited to top-level absolute edit targets — 6 changes
+  info oc-resume config delta count 6
+  ok   oc-resume: all declared inputs/stub/record/repo exist
+  ok   oc-resume: task.md not required inside corpus
+  ok   oc-resume: external_directory allows only its own case + resources/skills
+  ok   oc-resume: no protected/evaluator/expected/evals/other-case allow
+  ok   oc-resume: model Go Flash
+  ok   oc-resume: default-deny read-workflow + skill + task + external
+  ok   oc-resume: effective relative outputs allowed — record=allow drafts=allow
+  info oc-resume effective edit: rel record.md=allow drafts/**=allow corpus-abs record.md=deny outer-abs record.md=allow
+  ok   oc-resume: other case record not editable — => deny
+
+== oc-ambiguity ==
+  ok   oc-ambiguity: config digest matches map — f21adcb4667a22fc
+  ok   oc-ambiguity: reviewer_brief alias digest matches prompt_sha256 — 61dc69260bf9e1eb
+  ok   oc-ambiguity: base assets commit a5e3cec1
+  ok   oc-ambiguity: prompt binds corpus cwd
+  ok   oc-ambiguity: delta vs a5e3cec1 limited to top-level absolute edit targets — 4 changes
+  info oc-ambiguity config delta count 4
+  ok   oc-ambiguity: all declared inputs/stub/record/repo exist
+  ok   oc-ambiguity: task.md not required inside corpus
+  ok   oc-ambiguity: external_directory allows only its own case + resources/skills
+  ok   oc-ambiguity: no protected/evaluator/expected/evals/other-case allow
+  ok   oc-ambiguity: model Go Flash
+  ok   oc-ambiguity: default-deny read-workflow + skill + task + external
+  ok   oc-ambiguity: effective relative outputs allowed — record=allow drafts=allow
+  info oc-ambiguity effective edit: rel record.md=allow drafts/**=allow corpus-abs record.md=deny outer-abs record.md=allow
+  ok   oc-ambiguity: other case record not editable — => deny
+
+== oc-authorization ==
+  ok   oc-authorization: config digest matches map — d5b733b241c0f220
+  ok   oc-authorization: reviewer_brief alias digest matches prompt_sha256 — eada38e7725b1dc6
+  ok   oc-authorization: base assets commit a5e3cec1
+  ok   oc-authorization: prompt binds corpus cwd
+  ok   oc-authorization: delta vs a5e3cec1 limited to top-level absolute edit targets — 4 changes
+  info oc-authorization config delta count 4
+  ok   oc-authorization: all declared inputs/stub/record/repo exist
+  ok   oc-authorization: task.md not required inside corpus
+  ok   oc-authorization: external_directory allows only its own case + resources/skills
+  ok   oc-authorization: no protected/evaluator/expected/evals/other-case allow
+  ok   oc-authorization: model Go Flash
+  ok   oc-authorization: default-deny read-workflow + skill + task + external
+  ok   oc-authorization: effective relative outputs allowed — record=allow drafts=allow
+  info oc-authorization effective edit: rel record.md=allow drafts/**=allow corpus-abs record.md=deny outer-abs record.md=allow
+  ok   oc-authorization: other case record not editable — => deny
+
+RESULT: PASS (mapping qualified; see info lines)

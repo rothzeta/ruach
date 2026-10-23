@@ -1,0 +1,38 @@
+[
+  {
+    "name": "oc-resume",
+    "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus",
+    "config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-resume-corpus-v2.json",
+    "config_sha256": "58522e171e752bd64b362e8c2908ef14a0e4eadaa463744e9ab71680b6ac2be9",
+    "base_assets_commit": "a5e3cec1c1b81b289c6700e3763af1642441865c",
+    "brief": "/opt/dev/ruach/docs/assignments/next-release/opencode-subject-resume.md",
+    "prompt_sha256": "1ed12d6742c529129b2b48aa928ea26b3993be3bdda2eb3d16d6fb5ccf7cd56f",
+    "changes": "cwd to corpus; identical assigned absolute output bindings in both top-level and ruach-coordinator edit blocks; all other configuration unchanged",
+    "reviewer_brief": "/tmp/ruach-implementation-20261011/opencode/results/coordinator-inputs/opencode-subject-resume.md",
+    "previous_config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-resume-corpus-v1.json"
+  },
+  {
+    "name": "oc-ambiguity",
+    "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/02-ambiguity/corpus",
+    "config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-ambiguity-corpus-v2.json",
+    "config_sha256": "f3e5101a74ad7ee7a15cb6105625887cc632019655c8fcc119127969560efe5b",
+    "base_assets_commit": "a5e3cec1c1b81b289c6700e3763af1642441865c",
+    "brief": "/opt/dev/ruach/docs/assignments/next-release/opencode-subject-ambiguity.md",
+    "prompt_sha256": "61dc69260bf9e1eb7dd7d48f2206f221d59b2159a2d51dfadd5eb2bbe51e330d",
+    "changes": "cwd to corpus; identical assigned absolute output bindings in both top-level and ruach-coordinator edit blocks; all other configuration unchanged",
+    "reviewer_brief": "/tmp/ruach-implementation-20261011/opencode/results/coordinator-inputs/opencode-subject-ambiguity.md",
+    "previous_config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-ambiguity-corpus-v1.json"
+  },
+  {
+    "name": "oc-authorization",
+    "cwd": "/tmp/ruach-implementation-20261011/live/r3/packet/subject/03-authorization/corpus",
+    "config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-authorization-corpus-v3.json",
+    "config_sha256": "1b13702f3bb19cf10891a7382ee569d7dc30510a15e8bcf1046d45d81055b5bf",
+    "base_assets_commit": "a5e3cec1c1b81b289c6700e3763af1642441865c",
+    "brief": "/opt/dev/ruach/docs/assignments/next-release/opencode-subject-authorization.md",
+    "prompt_sha256": "eada38e7725b1dc6a1f4a0767baa740432412705f775b6fe344d1a6bf943a53b",
+    "changes": "v2 plus identical authorization corpus outputs relative to native non-Git worktree / in both edit blocks; no other scope/control change",
+    "reviewer_brief": "/tmp/ruach-implementation-20261011/opencode/results/coordinator-inputs/opencode-subject-authorization.md",
+    "previous_config": "/tmp/ruach-implementation-20261011/opencode/configs/oc-authorization-corpus-v2.json"
+  }
+]

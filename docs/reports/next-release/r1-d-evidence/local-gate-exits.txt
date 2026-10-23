@@ -1,0 +1,7 @@
+install exit 0
+check exit 0
+release-check exit 0
+audit-root exit 0
+audit-handoff exit 0
+audit-herdr exit 0
+test exit 0

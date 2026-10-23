@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "checks": [
+    {
+      "id": "visible-tests",
+      "fingerprint": "9e6fe8e012596d6e1122f9f04d3d37a23da5a65e3b3fcd5c43d4ae297251e27e",
+      "status": "passed",
+      "argv": [
+        "/home/metatron/.local/bin/bun",
+        "test",
+        "--timeout",
+        "30000"
+      ],
+      "cwd": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+      "timeout_ms": 120000,
+      "expected": {
+        "exit": 0,
+        "stderr_not_contains": "\n 0 pass\n"
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "bun test v1.4.2 (744846f84)\n",
+      "stderr": "\n 4 pass\n 0 fail\n 6 expect() calls\nRan 4 tests across 1 file. [13.00ms]\n",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    },
+    {
+      "id": "hidden-cases",
+      "fingerprint": "e33571292cd58b9c91e5c6b775deb12c524a84565c2fa598943989f592e8a46d",
+      "status": "passed",
+      "argv": [
+        "/home/metatron/.local/bin/bun",
+        "-e",
+        "import {inclusiveRange as r, rangeSize as s} from './src/range.ts';\nconst eq=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);\nif(!eq(r(-2,2),[-2,-1,0,1,2])||!eq(r(7,7),[7])||!eq(r(3,1),[])||s(-2,2)!==5||s(3,1)!==0)process.exit(1);\nconsole.log('ok');"
+      ],
+      "cwd": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0,
+        "stdout": "ok\n"
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "ok\n",
+      "stderr": "",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    },
+    {
+      "id": "handoff-valid",
+      "fingerprint": "07a8a53f2216ad1df1795cc0d4ef21e99210a75bef8baa19be5e5d846f8fcd3c",
+      "status": "passed",
+      "argv": [
+        "/home/metatron/.local/bin/bun",
+        "/tmp/ruach-implementation-20261011/live/source/skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/smoke.md",
+        "--repo",
+        "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer"
+      ],
+      "cwd": "/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer",
+      "timeout_ms": 60000,
+      "expected": {
+        "exit": 0
+      },
+      "exit": 0,
+      "signal": null,
+      "timed_out": false,
+      "stdout": "{\"schema_version\":1,\"ok\":true,\"report\":\"/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer/docs/reports/smoke.md\",\"repo\":\"/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/consumer\",\"revisions\":[{\"path\":\"/tested_revision\",\"resolved\":\"e47359bc846993a175272ed37b40aa100fbddf8b\"}],\"diagnostics\":[]}\n",
+      "stderr": "",
+      "launch_error": false,
+      "output_truncated": false,
+      "orphaned_output": false,
+      "diagnostics": []
+    }
+  ],
+  "diagnostics": [],
+  "task": "native-smoke-range",
+  "run": "base",
+  "declared_route": {
+    "kind": "control",
+    "model": "none-no-model-subject",
+    "effort": null,
+    "model_use_verified": false,
+    "evidence": []
+  },
+  "assignment_sha256": "04697aa27d0921b76b8526f754f790e9b084f510b31ed8ccc1f8e0cad2f352ae",
+  "acceptance_sha256": "bf16b69874bf2fc98ab421df6ffe7b5b0fd68ffeeb4f301a7035c539b763091f",
+  "candidate_revision": "10fc990f6e2a352c3fb8aa26180a336a6003ba5a",
+  "head_before": "10fc990f6e2a352c3fb8aa26180a336a6003ba5a",
+  "tested_revision": "10fc990f6e2a352c3fb8aa26180a336a6003ba5a",
+  "dirty_before": [],
+  "fixture_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "head_after": "10fc990f6e2a352c3fb8aa26180a336a6003ba5a",
+  "dirty_after": [],
+  "candidate_after": "10fc990f6e2a352c3fb8aa26180a336a6003ba5a"
+}

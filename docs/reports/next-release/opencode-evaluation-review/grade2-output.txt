@@ -1,0 +1,88 @@
+# R-OPENCODE-GRADE-IE1 evidence (redacted, public)
+
+Reviewed by: Reviewer (R-OPENCODE-GRADE-IE1). Source baseline: 94cdfa1a68e214a07d27fc5d413863dcbe3e7459.
+Independent grading of the two completed subjects only (smoke, Enoch). Read-only
+except the documented smoke checker writes under the packet results tag paths.
+No model probe, no workflow bodies, no credentials, no subject re-run. No Enoch
+solution/source or TASK_LOGS/full report content is included here.
+
+Command:
+  bun /tmp/ruach-implementation-20261011/opencode/results/reviewer/grade2.ts
+
+---- raw output ----
+
+== oc-smoke ==
+  info HEAD=10fc990f6e2a352c3fb8aa26180a336a6003ba5a branch=main status=clean
+  ok   smoke: on branch main
+  ok   smoke: report creating commit is HEAD — 10fc990f6e2a352c3fb8aa26180a336a6003ba5a
+  ok   smoke: tested source is an ancestor
+  ok   smoke: tree clean
+  info diff base..HEAD:
+        A	docs/reports/smoke.md
+        M	src/range.ts
+  ok   smoke: only src/** and docs/reports/smoke.md changed — docs/reports/smoke.md,src/range.ts
+  ok   smoke: protected tests/AGENTS/package unchanged
+  ok   smoke: subject handoff docs/reports/smoke.md exists
+  ok   smoke: subject handoff validates — exit=0
+  info check.ts exit=0 {"run":"base","base":"868159c737895b4c0a4d58c628379b9cd9877857","candidate":"10fc990f6e2a352c3fb8aa26180a336a6003ba5a","candidate_ref":"refs/heads/main","acceptance_exit":0,"scope_exit":0,"acceptance_output":"/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/results/base-opencode1-acceptance.json","scope_output":"/tmp/ruach-implementation-20261011/live/smoke/codex-snapshot/results/base-opencode1-scope.json"}
+  ok   smoke: check.ts exit 0 (acceptance+scope)
+  ok   smoke: checker candidate is the subject report commit — 10fc990f6e2a352c3fb8aa26180a336a6003ba5a
+  ok   smoke: acceptance and scope both exit 0 — acc=0 scope=0
+  ok   smoke: checker wrote results outside candidate
+  ok   smoke: pinned candidate matches subject commit
+  ok   smoke: verify-baselines --smoke exit 0 — smoke:
+  ok   protected tests/range.test.ts
+  ok   protected package.json
+  ok   protected AGENTS.md
+  ok   smoke scope: only src/** and docs/reports/smoke.md touched (2 paths)
+
+RESULT: PASS (baseline expectations met)
+
+
+== oc-enoch ==
+  info HEAD=6bdb38186949f27f80cba29e8ad016273844d311 branch=ruach-exercise/url-encoding-subject status=clean
+  ok   enoch: on subject branch — ruach-exercise/url-encoding-subject
+  ok   enoch: report creating commit is HEAD — 6bdb38186949f27f80cba29e8ad016273844d311
+  ok   enoch: tested source is an ancestor
+  ok   enoch: tree clean
+  info diff seed..HEAD: docs/TASK_LOGS.md, docs/exercise/report.md, src/Enoch.Ui/src/api.ts
+  ok   enoch: only api.ts, docs/TASK_LOGS.md, docs/exercise/report.md changed — docs/TASK_LOGS.md,docs/exercise/report.md,src/Enoch.Ui/src/api.ts
+  ok   enoch: no protected test/config changed
+  ok   enoch: subject handoff docs/exercise/report.md exists
+  ok   enoch: subject handoff validates — exit=0
+  ok   enoch: pinned Node22 in PATH — v22.23.3
+  ok   enoch: npm test exit 0 —
+> enoch-ui@0.1.0 test
+> vitest run
+
+ RUN  v5.0.0 /tmp/ruach-implementation-20261011/enoch-exercise/clone/src/Enoch.Ui
+
+ Test Files  2 passed (2)
+      Tests  18 passed (18)
+   Start at  12:26:32
+   Duration  2.12s (environment 43%, tests 40%, transform 10%, import 6%, worker 1%)
+
+  ok   enoch: npm run lint exit 0 —
+> enoch-ui@0.1.0 lint
+> eslint . --max-warnings 0
+
+  ok   enoch: npm run typecheck exit 0 —
+> enoch-ui@0.1.0 typecheck
+> vue-tsc --noEmit
+
+  ok   enoch: prettier --check exit 0 — Checking formatting...
+All matched files use Prettier code style!
+
+  ok   enoch: git diff --check clean
+  ok   enoch: verify-baselines --enoch exit 0 — …ed src/Enoch.Ui/package-lock.json
+  ok   protected docs/PROBLEMS.md
+  ok   enoch scope: only src/Enoch.Ui/src/api.ts, docs/TASK_LOGS.md, docs/exercise/report.md touched (3 paths)
+  ok   enoch TASK_LOGS.md is append-only
+  ok   enoch api.ts changed (mutable)
+
+RESULT: PASS (baseline expectations met)
+
+  info /opt/dev/enoch HEAD=d163a4132a6840d2604e6e17883612eb77a901ec status=clean (exit head=0 status=0)
+  ok   enoch: original /opt/dev/enoch is a clean git checkout
+
+RESULT: PASS (grading checks met)

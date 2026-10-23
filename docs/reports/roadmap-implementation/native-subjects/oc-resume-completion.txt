@@ -1,0 +1,68 @@
+     Changed in the record:
+     - Header: noted the resume and that the 09:30 snapshot was stale (work continued to at least 10:44 UTC).                    Resume TIDE-77 coordinator record
+     - WORK-01 feed: 09:30 said "running"; the raw fact is ended 09:58 (host restart) with no handoff, partial work retained.    update
+      Reflected; resume assignment drafted.
+     - WORK-02 chart: 09:30 said "ended 09:05; replacement WORK-02b queued"; the raw fact is the session is ACTIVE at 10:44,     Context
+     holding the exclusive preview resources. WORK-02b is dropped.                                                               84,155 tokens
+     - WORK-03 units: 09:30 said "running, no report"; a complete report (blob `acfbd0e`, candidate `8050d34`) was committed     8% used
+     10:25. Consumed and recorded in Handled reports.                                                                            $0.04 spent
+     - WORK-04 datum: 09:30 said "complete; accepted for integration" (blob `2c25d3d`); the branch advanced to a revised
+     report (blob `5628b2d`, 10:20) that is BLOCKED at `aa18c81` (negative-height test fails). Acceptance withdrawn; revised     LSP
+     report consumed; fix drafted.                                                                                               LSPs are disabled
+     - WORK-05 docs: unchanged (blob `213385c`).
+     - WORK-06: unchanged; still gated on WORK-01 and WORK-04.
+     - Resources: corrected the preview port/profile/save holder from "ended" to the live `tide-chart` session.
+     - Authority: DEC-001 kept; AUTH-001 kept, chart-only and explicitly not a datum authorization.
+     - Next action: rewritten.
+
+     Not changed, and why:
+     - DEC-001 and AUTH-001 wording/state: still supported by the raw owner inputs. AUTH-001 remains valid but unused (no
+     chart launch pending).
+     - WORK-05 acceptance and its report identity: still current.
+     - No merge/delivery: DEC-001 forbids merging; I implemented, reviewed, merged and delivered nothing (the task told me
+     not to).
+     - Retained branches, the feed partial diff, and the feed worktree: preserved under DEC-001.
+
+     Drafted assignments (not launched as real workers):
+     - `drafts/assignments/feed-v2.md` — WORK-01b, feed resume, preferred route.
+     - `drafts/assignments/datum-v2.md` — WORK-04b, datum fix, preferred route; escalation note.
+
+     Requested host actions recorded in `intents.jsonl`: launch WORK-01b, launch WORK-04b. No chart launch requested (
+     session live).
+
+     Blocker: the host denies the `write`/`edit` tools for `record.md` and `drafts/**`; only the allowlisted `bun app/
+     workers.ts` and read-only `git` commands execute. The record and drafts could not be persisted; their intended contents
+     are delivered in the session response and the requested worker actions are recorded in `intents.jsonl`.
+
+     ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+     Summary of the reconciliation
+
+     - WORK-01 (feed) — record said running; reality: ended 09:58 on host restart, no handoff, partial work retained (
+       retained/TIDE-77/feed.diff, worktree /work/tide-wt/feed). → drafted resume assignment WORK-01b.
+     - WORK-02 (chart) — record said ended 09:05, WORK-02b queued; reality: the tide-chart session is live (inst-9f2,
+       started 09:07) and holds the exclusive preview resources. → WORK-02b dropped; recorded that no second chart worker
+       may be launched.
+     - WORK-03 (units) — record said running, no report; reality: complete report (blob acfbd0e, candidate 8050d34). →
+       consumed and recorded in Handled reports.
+     - WORK-04 (datum) — record said complete, accepted; reality: the branch advanced to a revised, blocked report (blob
+       5628b2d, candidate aa18c81, negative-height test failing). → acceptance withdrawn, report consumed, fix assignment
+       drafted WORK-04b, with escalation note (no Architect; AUTH-001 is chart-only).
+     - WORK-05 (docs) — unchanged, still current.
+     - WORK-06 — unchanged, still gated.
+     - Resources — preview resource holder corrected from "ended" to the live chart session.
+     - Authority — DEC-001 and AUTH-001 retained unchanged; AUTH-001 explicitly not extended to datum.
+     - I did not implement, review, merge or deliver anything, and I preserved all branches and partial work.
+
+     Action needed from you: the two drafted assignments and the reconciled record could not be written to disk because
+     write/edit are denied for record.md and drafts/**. Either grant a write path for those files, or apply the content
+     above verbatim.
+
+     ▣  Ruach-Coordinator · DeepSeek V4.1 Flash · 4m 44s
+
+  ┃
+  ┃                                                                                                                              /tmp/ruach-implementation-20261011/
+  ┃                                                                                                                              live/r3/packet/subject/01-resume/
+  ┃  Ruach-Coordinator · DeepSeek V4.1 Flash OpenCode Go                                                                         corpus
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   /tmp/ruach-implementation-20261011/live/r3/packet/subject/01-resume/corpus             84.2K (8%) · $0.04  ctrl+p commands    • OpenCode 1.19.0

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "diagnostics": [],
+  "review_checks": {},
+  "canonical_hashes": {},
+  "tree_checks": {},
+  "evidence_checks": {},
+  "task": null,
+  "run": null,
+  "baseline_revision": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "candidate_revision": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "worktree_head": "7a704cd9b5a5a1a300d9658f5af8cc626dc6dd9d",
+  "branch": "main",
+  "changes": [],
+  "dirty": [],
+  "clean": true,
+  "changed_paths": [],
+  "assessed_paths": [],
+  "unexpected_paths": [],
+  "protected_changes": []
+}
