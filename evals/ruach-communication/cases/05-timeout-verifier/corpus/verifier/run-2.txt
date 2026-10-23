@@ -1,0 +1,4 @@
+Synthetic verifier fixture; this is not a live execution log.
+2026-10-12T11:44:20Z command: bun test
+2026-10-12T11:44:50Z verifier exited with status 23
+relay-verify-complete-9f2c exit=23 timeout=false

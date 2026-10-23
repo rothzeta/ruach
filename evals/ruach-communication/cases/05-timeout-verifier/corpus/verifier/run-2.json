@@ -8,5 +8,5 @@
   "exit": 23,
   "signal": null,
   "timeout": false,
-  "full_log": "verifier/run-2.log"
+  "full_log": "verifier/run-2.txt"
 }

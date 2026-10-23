@@ -27,7 +27,7 @@ artifacts:
   - docs/assignments/wave2/r45-handoff-fix.md
 verification:
   - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun test --timeout 30000 evals/ruach-permissions: 7 pass, 0 fail, 70 expect() calls"
-  - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun test --timeout 30000 evals/ruach-communication: 10 pass, 0 fail, 299 expect() calls"
+  - "Correction during consolidation: the earlier claim of 10 passing communication tests at aac679ed95606841119575769894b80f9a3b7b9a was not reproducible. Independent review observed 9 pass / 1 fail because the verifier JSON referenced an absent log. The consolidation adds a tracked synthetic run-2.txt fixture and updates full_log without weakening the test. Results for the corrected combined revision are recorded in docs/reports/consolidation-2026-10-23.md."
   - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun x tsc -p evals/ruach-permissions/tsconfig.json: exit 0"
   - "Run on the committed candidate aac679ed95606841119575769894b80f9a3b7b9a: bun x tsc -p evals/ruach-communication/tsconfig.json: exit 0"
   - "Previously run on the pre-commit working-tree content now committed unchanged at aac679ed95606841119575769894b80f9a3b7b9a (not relabelled as a rerun): just check passed (resource identities/eval placement/links; tsc -p tsconfig.json exit 0)"

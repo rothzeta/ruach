@@ -22,7 +22,7 @@ verification:
   - "git diff --check: exit 0 (no whitespace errors)"
 review: not-run
 discoveries:
-  - "No native subject, paid turn, benchmark or behavioral proof ran; independent review was not performed, so no acceptance is claimed."
+  - "A paid engineering implementation turn produced this guidance. No native evaluation subject, benchmark or behavioral proof ran; independent review was not performed at this handoff, so no acceptance is claimed."
   - "No schema, validator, CLI, parser, runtime, launcher, routing, changelog, roadmap or root-test file was changed; the neutral starting template and existing public-boundary tests are intact."
   - "Prior R3 report-handling/resource fields and consumer authority are referenced, not redefined."
   - "The delivery examples use synthetic fixture refs; a real report must use resolved existing object IDs, and the shipped examples were checked in a fixture repository that actually creates those refs."

@@ -1,0 +1,22 @@
+{
+ "claude_version": "2.1.296",
+ "installed_plugins_entry": {
+  "plugin": "ruach@ruach",
+  "version": "0.3.0",
+  "gitCommitSha": "5b9d554081f4b38050fd1076f62907e64ae9ee1f",
+  "installedAt": "2026-10-11T08:30:39.630Z"
+ },
+ "cache_root_node_modules_created": "2026-10-11T08:30 (same minute as the install)",
+ "cache_node_modules_versions": {
+  "typescript": "7.0.2",
+  "bun-types": "1.4.2",
+  "@types/bun": "1.4.2",
+  "@types/node": "26.6.4",
+  "undici-types": "8.9.0"
+ },
+ "skill_level_node_modules": "absent in the plugin cache until bun install --frozen-lockfile was run by this task",
+ "cache_package_json_sha256": "c1159f404adf1bcdaf3baca5d20131fbbe20377b547598b31f333818de334364",
+ "cache_bun_lock_sha256": "8149ff8c552a1825c1dfe3d04d42c216ffa32ce5eb90f8005d9e472104449400",
+ "historical_observation": "2.1.292 test recorded in docs/native-parity.md found no node_modules; preserved, not contradicted for that version",
+ "packaging_decision": "none made"
+}
