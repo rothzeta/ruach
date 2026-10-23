@@ -4,6 +4,11 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+## 0.4.0 — 2026-10-23
+
+- OpenCode 2.1.4+ (v2) launch preparation: private standalone servers inspect native config, models, agents and skills without restarting the shared service. Worker startup preserves native prompts and settings, adds canonical role instructions and technical skills, and denies known workflow names/aliases for non-Coordinators. Models use provider/model IDs; explicit effort must match an offered native variant. Native permissions are inherited; auto-review remains unsupported because OpenCode auto mode performs unconditional approval.
+- Preparation verifies the composed native role/model/workflow settings before worktree or launch-space mutation, preserves inline JSONC and selected OpenCode/XDG configuration roots, and terminates owned readers after inspection.
+
 - Consolidated R6/R7 handoff and verification guidance, four offline wave-2 preparation packets, and the multi-machine preparation/council reports onto main. Remaining wave-2 guides, specimens and native/combined acceptance stay open.
 - Repaired the communication packet's missing synthetic verifier artifact without weakening its regression assertion; corrected historical verification and engineering/evaluation wording. OpenCode launch support remains gated.
 

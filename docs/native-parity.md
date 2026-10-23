@@ -105,3 +105,9 @@ Before each run, `ready` must report the route as `ok` (offline, results above f
 
 1. `skills add <checkout>/skills --global --agent codex --agent claude-code --skill '*'` into a temporary `HOME`. Offline-verified layout (no dependencies installed; run `bun install --frozen-lockfile` in `ruach-handoff` before validating a report).
 2. PENDING: in each harness invoke the skills for the small task. There are no roles on this route, so the expected role evidence is the assignment text alone (skills only; no native role enforcement).
+
+## OpenCode v2 launch evidence (2026-10-23)
+
+Ruach 0.4.0 adds OpenCode 2.1.4+ preparation; see the [adapter contract](../skills/ruach-herdr/references/adapters.md#opencode-v2) and [reproducible native transport smoke](../evals/ruach-opencode/README.md). The real native smoke ran with an isolated HOME/XDG/config root and an ephemeral loopback model, with provider policy excluding all other providers. Both Implementer and Coordinator sent the full canonical role plus ambient instructions and completed successfully. Native technical-skill discovery and role-dependent workflow permissions were checked. Four local fixture requests, zero paid requests. Native model-catalog preflight also passed against the machine's configured provider.
+
+These observations establish native transport/config composition. They do not close the earlier R1/R3 real-consumer, Claude/Codex parity or resume/ambiguity behavioral evidence gaps. No shared OpenCode session was restarted or reconfigured.

@@ -1,6 +1,6 @@
 # Ruach
 
-Current release: **0.3.1**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
+Current release: **0.4.0**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -32,7 +32,7 @@ To see how the roles are used on a real task, read the [worked consumer example]
 
 Ruach does not ship model policy. A consumer declares it in three files under `.agents/` of its repository (the default; `--catalogs DIR` selects another directory). The schema and validation rules are in the [routing reference](skills/ruach-herdr/references/routing.md); Ruach's own [development catalogs](config/agent-routing/) are a working example.
 
-- `models.yaml`: each model ID maps to a `harness` (`claude` or `codex`; other harnesses can be declared but are unsupported and fail at preparation) and a `native_model`.
+- `models.yaml`: each model ID maps to a `harness` (`claude`, `codex` or `opencode`; other harnesses can be declared but are unsupported and fail at preparation) and a `native_model`.
 - `routing.yaml`: each route ID names a model and an `effort`.
 - `roles.yaml`: each role names a `preferred` route and an optional list of `alternatives`.
 
@@ -65,7 +65,7 @@ Ruach follows the [Agent Skills specification](https://agentskills.io/specificat
 Install the released skills globally for Codex and Claude Code:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.3.1 --global --agent codex --agent claude-code --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.4.0 --global --agent codex --agent claude-code --skill '*'
 ```
 
 Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
@@ -73,7 +73,7 @@ Omit `--global` for a project installation. From a checkout of the desired relea
 For Claude Code, install the native plugin to expose all eight skills and six named agents together:
 
 ```sh
-claude plugin marketplace add rothzeta/ruach#v0.3.1 --scope user
+claude plugin marketplace add rothzeta/ruach#v0.4.0 --scope user
 claude plugin install ruach@ruach --scope user
 claude --agent ruach:coordinator
 ```
@@ -87,12 +87,12 @@ Executable skills require Bun and their own frozen dependency install. A copied 
 For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
 
 ```sh
-bun scripts/install.ts install --source . --version 0.3.1 --target /path/to/project/.agents
+bun scripts/install.ts install --source . --version 0.4.0 --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
 ```
 
-`--version 0.3.1` selects exactly the `v0.3.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+`--version 0.4.0` selects exactly the `v0.4.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
 
@@ -111,6 +111,8 @@ just architect ruach-designer
 just coordinator ruach-lead --dry-run
 just agent-routing start implementer ruach-builder
 just agent-routing start architect ruach-designer --route gpt-6.1-sol-high
+# Direct OpenCode v2 selection from this source checkout:
+bun skills/ruach-herdr/scripts/worker.ts start --name ruach-open --role implementer --cwd . --resources . --kind opencode --model provider/model --effort auto --permissions inherit
 # Explicitly use a sibling pane instead of a new worktree workspace:
 just architect ruach-designer --placement pane
 ```
@@ -132,7 +134,7 @@ A native trust or onboarding dialog returns `action: awaiting-input` with `ready
 
 Use `BUN_BIN` to override Bun, otherwise Just uses `~/.bun/bin/bun` when present, then `bun` on PATH. `bun run agent-routing -- resolve coordinator` is also available. `--root DIR` selects another Ruach worktree's routing catalogs and working directory while retaining the launcher and canonical resources from this checkout.
 
-Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude and supplies their source location to Codex. Launch commands do not perform a global installation.
+Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude/OpenCode and supplies their source location to Codex. Launch commands do not perform a global installation. OpenCode requires v2.1.4+ within major 2; use `--permissions inherit` and a model from its native catalog. Explicit effort selects an offered model variant; `auto` uses its default. See the [OpenCode adapter contract](skills/ruach-herdr/references/adapters.md#opencode-v2).
 
 ## Verify
 
@@ -145,7 +147,7 @@ bun install --frozen-lockfile
 bun test --timeout 30000   # Herdr suite only: real processes need more than the 5 s default
 ```
 
-Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex preparation is supported subject to runtime gates; Pi, OpenCode, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.
+Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex/OpenCode preparation is supported subject to runtime gates; Pi, DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.
 
 ## Releases
 

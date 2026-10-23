@@ -337,7 +337,7 @@ function ready(argv: string[]): { report: any; code: number } {
     const state = packageState(directory);
     packages.push({ skill: skill.name, path: skill.path, state, ...(state === 'missing' || state === 'mismatched' ? { remediation: `(cd ${shellWord(directory)} && bun install --frozen-lockfile)` } : {}) });
   }
-  const prerequisites = [probe('bun', true), probe('git', true), probe('herdr', true), probe('claude', false), probe('codex', false), ...(scope === 'source' ? [probe('just', false)] : [])]
+  const prerequisites = [probe('bun', true), probe('git', true), probe('herdr', true), probe('claude', false), probe('codex', false), probe('opencode', false), ...(scope === 'source' ? [probe('just', false)] : [])]
     .map(item => ({ ...item, ...(item.name === 'herdr' ? { session: Boolean(process.env.HERDR_ENV) } : {}) }));
   const found = (name: string) => prerequisites.find(item => item.name === name)?.found;
   const duplicates = new Map<string, string[]>();
@@ -369,7 +369,7 @@ function ready(argv: string[]): { report: any; code: number } {
   if (active.integrity) lines.push(`  ${active.integrity === 'ok' ? 'ok' : 'missing'} integrity: ${active.integrity}`);
   lines.push('Locations:', ...locations.map(l => `  ok ${l.kind} (${l.scope}) ${l.path}: ${l.items.map(i => i.name).join(', ')}`));
   lines.push('Nested packages:', ...packages.map(p => `  ${p.state === 'ready' || p.state === 'no-dependencies' ? 'ok' : 'missing'} ${p.skill} ${p.path}: ${p.state}${p.remediation ? ' -> ' + p.remediation : ''}`));
-  lines.push('Prerequisites:', ...prerequisites.map(p => `  ${p.found ? 'ok' : ['claude', 'codex', 'just'].includes(p.name) ? 'warn' : 'missing'} ${p.name}${p.version ? ' ' + p.version : ''}${p.path ? ' ' + p.path : ''}`));
+  lines.push('Prerequisites:', ...prerequisites.map(p => `  ${p.found ? 'ok' : ['claude', 'codex', 'opencode', 'just'].includes(p.name) ? 'warn' : 'missing'} ${p.name}${p.version ? ' ' + p.version : ''}${p.path ? ' ' + p.path : ''}`));
   lines.push('Routes:');
   for (const [name, check] of Object.entries(routes)) lines.push(`  ${check.ready ? 'ok' : 'missing'} ${name}`, ...check.missing.map(m => `    missing ${m}`), ...check.warnings.map(w => `    warn ${w}`));
   return { report: lines.join('\n'), code };

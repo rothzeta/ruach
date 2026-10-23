@@ -1,6 +1,7 @@
 // Test executable: record the public argv/cwd and simulate native read boundaries.
 import { basename, join } from 'node:path';
 import { appendFileSync, readFileSync, existsSync } from 'node:fs';
+import { parse as parseJSONC } from 'jsonc-parser';
 const exe=basename(process.argv[1]),args=process.argv.slice(2);
 const root=process.env.FIXTURE_ROOT!;
 appendFileSync(join(root,'calls.jsonl'),JSON.stringify({exe,args,cwd:process.cwd()})+'\n');
@@ -37,11 +38,15 @@ if(exe==='herdr') {
   else if(args.slice(0,2).join(' ')==='workspace create') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'workspace',args,cwd:process.cwd()})+'\n');
     if(data.workspaceFailure)process.exit(1);
+    const env=Object.fromEntries(args.flatMap((value,i)=>value==='--env'?[args[i+1].split(/=(.*)/s).slice(0,2)]:[]));
+    appendFileSync(join(root,'pane-environment.jsonl'),JSON.stringify(env)+'\n');
     out({result:{workspace:{workspace_id:'w2'},...(data.workspaceMalformed?{}:{root_pane:{pane_id:'w2:p1'}})}});
   }
   else if(args.slice(0,2).join(' ')==='pane split') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'split',args,cwd:process.cwd()})+'\n');
     if(data.splitFailure)process.exit(1);
+    const env=Object.fromEntries(args.flatMap((value,i)=>value==='--env'?[args[i+1].split(/=(.*)/s).slice(0,2)]:[]));
+    appendFileSync(join(root,'pane-environment.jsonl'),JSON.stringify(env)+'\n');
     out({result:{pane:{pane_id:args[2]&&!args[2].startsWith('--')?args[2].split(':')[0]+':p2':'w1:p2'}}});
   } else if(args.slice(0,2).join(' ')==='agent start') {
     appendFileSync(join(root,'mutations.jsonl'),JSON.stringify({action:'start',args,cwd:process.cwd()})+'\n');
@@ -54,14 +59,41 @@ if(exe==='herdr') {
       appendFileSync(join(root,'observed.jsonl'),JSON.stringify({settings:JSON.parse(readFileSync(path,'utf8')),settingsPath:path})+'\n');
     }
     // Execute only fake harnesses, which record actual native arguments.
-    const proc=Bun.spawnSync([join(root,'bin',args[args.indexOf('--kind')+1]),...native],{cwd:process.cwd(),env:process.env});
+    const envFile=join(root,'pane-environment.jsonl');
+    const paneEnv=existsSync(envFile)?JSON.parse(readFileSync(envFile,'utf8').trim().split('\n').at(-1)!):{};
+    const proc=Bun.spawnSync([join(root,'bin',args[args.indexOf('--kind')+1]),...native],{cwd:process.cwd(),env:{...process.env,...paneEnv}});
     if(proc.exitCode!==0)process.exit(1);
     if(data.startBlocked){console.error(JSON.stringify({error:{code:'agent_not_ready',message:'Native input required'}}));process.exit(1);}
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
 } else if(args.includes('--help')) {
-  console.log('--model --config --cd --effort --settings --add-dir --no-alt-screen --sandbox --ask-for-approval --verbose'+(data.noAutoReview?'':' --permission-mode --approve-for-me'));
-} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':'1.0.0');
+  console.log('--model --config --cd --effort --settings --add-dir --no-alt-screen --sandbox --ask-for-approval --verbose'+(data.noAutoReview?'':' --permission-mode --approve-for-me')+(exe==='opencode'&&!data.opencodeNoStandalone?' --standalone':''));
+} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':exe==='opencode'?(data.opencodeVersion??'2.1.4'):'1.0.0');
+else if(exe==='opencode'&&args[0]==='serve') {
+  appendFileSync(join(root,'opencode-readers.jsonl'),JSON.stringify({pid:process.pid,cwd:process.cwd()})+'\n');
+  if(data.opencodeNoReady){setInterval(()=>{},1000);await new Promise(()=>{});}
+  const inline=parseJSONC(process.env.OPENCODE_CONFIG_CONTENT??'{}');
+  const base={instructions:['existing-instructions.md'],agents:{build:{system:'Existing native OpenCode system '+(data.leak??''),permissions:[{action:'*',resource:'*',effect:'allow'},{action:'skill',resource:'technical',effect:'deny'},{action:'edit',resource:'*',effect:'ask'}]}}};
+  let active=false;
+  const server=Bun.serve({hostname:'127.0.0.1',port:0,fetch(request){
+    if(request.headers.get('authorization')!==`Basic ${Buffer.from(`opencode:${process.env.OPENCODE_PASSWORD}`).toString('base64')}`)return new Response('unauthorized',{status:401});
+    const url=new URL(request.url),resource=url.pathname.split('/').at(-1)!;
+    appendFileSync(join(root,'opencode-requests.jsonl'),JSON.stringify({pid:process.pid,method:request.method,resource,cwd:url.searchParams.get('location[directory]')})+'\n');
+    if(data.opencodeMalformed)return new Response('private invalid output '+(data.leak??''));
+    const location={directory:data.opencodeWrongLocation?'wrong cwd':process.cwd()};
+    const model=inline.agents?.build?.model??inline.model;
+    const agent={id:'build',name:'Build',mode:'primary',hidden:false,system:base.agents.build.system,permissions:[...base.agents.build.permissions,...inline.permissions??[],...inline.agents?.build?.permissions??[]],...(model?{model:typeof model==='string'?{providerID:model.split('/')[0],id:model.slice(model.indexOf('/')+1)}:{providerID:model.providerID,id:model.model,...(model.variant?{variant:model.variant}:{})}}:{})};
+    if(data.opencodeManagedModel&&model)agent.model={providerID:'managed',id:'other'};
+    if(resource==='model'){active=true;return Response.json({location,data:[{providerID:'native',id:'test-model',enabled:!data.opencodeDisabledModel,variants:(data.opencodeVariants??['low','high']).map((id:string)=>({id}))}]});}
+    if(resource==='config')return Response.json([{type:'document',path:join(root,'native-config.json'),info:base},...(process.env.OPENCODE_CONFIG_CONTENT?[{type:'document',info:inline}]:[])]);
+    if(resource==='agent')return Response.json({location,data:active?[agent]:[]});
+    if(resource==='skill')return Response.json({location,data:active?[{id:'workflow',name:'ruach-workflow-feature',path:join(process.cwd(),'.agents/skills/workflow/SKILL.md')},{id:'private-alias',name:'ruach-workflow-user',path:join(root,'home/.claude/skills/alias/SKILL.md')},{id:'technical',name:'ruach-technical',path:join(process.cwd(),'.agents/skills/technical/SKILL.md')}]:[]});
+    return new Response('unexpected request',{status:404});
+  }});
+  console.log(JSON.stringify({url:`http://127.0.0.1:${server.port}`}));
+  process.stdin.resume();process.stdin.on('end',()=>{server.stop(true);process.exit(0);});
+  await new Promise(()=>{});
+}
 else if(args.join(' ')==='app-server daemon version') {
   if(data.daemonMissing)process.exit(1);
   out({status:'running',socketPath:join(root,'native.sock'),cliVersion:'0.160.0',appServerVersion:data.daemonMismatch?'0.159.0':'0.160.0'});
@@ -95,5 +127,5 @@ else if(args.join(' ')==='app-server daemon version') {
   if(data.stdioStayAlive)await new Promise(r=>setTimeout(r,40000));
 } else {
   if(exe==='claude'&&data.managedRoot)appendFileSync(join(root,'customizations.jsonl'),JSON.stringify({managedSourcesPresent:['managed-settings.json','managed-settings.d/policy.json','.claude/skills/workflow/SKILL.md'].every(p=>existsSync(join(data.managedRoot,p)))})+'\n');
-  appendFileSync(join(root,'native-launches.jsonl'),JSON.stringify({exe,args,cwd:process.cwd()})+'\n');
+  appendFileSync(join(root,'native-launches.jsonl'),JSON.stringify({exe,args,cwd:process.cwd(),...(exe==='opencode'?{config:JSON.parse(process.env.OPENCODE_CONFIG_CONTENT??'{}'),configDir:process.env.OPENCODE_CONFIG_DIR}: {})})+'\n');
 }

@@ -122,9 +122,9 @@ test('duplicate launcher options are rejected before any mutation',async()=>{
   const r=await launch('start',['--role','coordinator','--temp-dir',temporary]);
   expect(r.exit).toBe(2);await noMutation();
 });
-async function asRole(role:string,command='start',extra:string[]=[]) {
+async function asRole(role:string,command='start',extra:string[]=[],env:Record<string,string>={}) {
   await save();
-  const p=Bun.spawn([process.execPath,worker,command,'--name','routed-worker','--role',role,'--cwd',repo,'--repo',repo,'--placement','pane','--temp-dir',temporary,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,FIXTURE_ROOT:root,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1'},stdout:'pipe',stderr:'pipe'});
+  const p=Bun.spawn([process.execPath,worker,command,'--name','routed-worker','--role',role,'--cwd',repo,'--repo',repo,'--placement','pane','--temp-dir',temporary,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,FIXTURE_ROOT:root,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1',...env},stdout:'pipe',stderr:'pipe'});
   const [stdout,stderr,exit]=await Promise.all([new Response(p.stdout).text(),new Response(p.stderr).text(),p.exited]);return {exit,stdout,stderr,result:JSON.parse(stdout)};
 }
 test('routed start and route override launch the data-selected native profile',async()=>{
@@ -216,7 +216,7 @@ for(const [route,effort] of [['work.medium','off'],['review.low','none']] as con
   await portableRouting();const file=join(repo,'.agents','routing.yaml');await writeFile(file,(await readFile(file,'utf8')).replace(route==='work.medium'?'effort: medium':'effort: low',`effort: ${effort}`));
   const r=await asRole('builder','start',['--route',route]);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('unsupported_effort');await noMutation();
 });
-for(const kind of ['pi','opencode','dsh','omp','agy'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
+for(const kind of ['pi','dsh','omp','agy'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
   const file=join(repo,'.agents','models.yaml');await writeFile(file,(await readFile(file,'utf8')).replace('harness: codex',`harness: ${kind}`));
   await cp(join(bin,'codex'),join(bin,kind));const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe(kind==='dsh'?'unsupported_herdr_kind':'unsupported_adapter');await noMutation();
 });
@@ -359,4 +359,104 @@ for(const defect of ['no-frontmatter','no-name','bad-name'])test(`Ruach-owned sk
   const dir=join(repo,'.agents','skills','owned');await mkdir(dir,{recursive:true});
   await writeFile(join(dir,'SKILL.md'),defect==='no-frontmatter'?'# Owned\n':defect==='no-name'?'---\ndescription: x\n---\nBody\n':'---\nname: Not Valid\n---\nBody\n');
   const r=await asRole('architect','start',['--dry-run']);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('invalid_skill');await noMutation();
+});
+
+async function openCodeFixture() {
+  await cp(join(bin,'codex'),join(bin,'opencode'));
+  behavior.leak='private OpenCode customization $() `literal`';
+}
+const openCodeSelection=['--kind','opencode','--model','native/test-model'];
+async function openCodeReadersStopped() {
+  const readers=await lines('opencode-readers.jsonl');expect(readers.length).toBeGreaterThan(0);
+  for(const {pid} of readers)expect(()=>process.kill(pid,0)).toThrow();
+  const requests=await lines('opencode-requests.jsonl');
+  for(const {pid} of readers) {
+    const own=requests.filter(r=>r.pid===pid);
+    if(own.length)expect(own[0].resource).toBe('model');
+    expect(own.every(r=>r.method==='GET'&&r.cwd===repo)).toBe(true);
+  }
+}
+for(const role of ['implementer','coordinator'])test(`OpenCode ${role} preserves native config and role-specific workflow access`,async()=>{
+  await openCodeFixture();
+  const configDir=join(root,'custom opencode config');await mkdir(configDir);
+  const original='{"instructions":["extra instructions.md"],"skills":["extra-skills"],"agents":{"build":{"request":{"headers":{"x-native":"'+secret+'"}},"permissions":[{"action":"shell","resource":"*","effect":"ask"}]}},"share":"disabled", /* preserve JSONC */}';
+  const env={OPENCODE_CONFIG_CONTENT:original,OPENCODE_CONFIG_DIR:configDir};
+  const r=await asRole(role,'start',[...openCodeSelection,'--effort','high'],env);
+  expect(r.exit,r.stderr).toBe(0);expect(r.result.coverage).toBe('live-capable');
+  expect(r.result.hidden_workflows.includes('ruach-workflow-user')).toBe(role!=='coordinator');
+  expect(r.stdout+r.stderr).not.toContain(secret);expect(r.stdout+r.stderr).not.toContain(behavior.leak);
+  const native=(await lines('native-launches.jsonl'))[0];
+  expect(native.args).toEqual(['--standalone']);expect(native.configDir).toBe(configDir);
+  expect(native.config.instructions).toContain('extra instructions.md');
+  expect(native.config.instructions).toContain(join(repo,'.agents/agents',role+'.md'));
+  expect(native.config.agents.build.request.headers['x-native']).toBe(secret);
+  expect(native.config.agents.build.model).toEqual({providerID:'native',model:'test-model',variant:'high'});
+  expect(native.config.agents.build.permissions).toContainEqual({action:'shell',resource:'*',effect:'ask'});
+  expect(native.config.agents.build.permissions.some((r:any)=>r.action==='skill'&&r.resource==='private-alias'&&r.effect==='deny')).toBe(role!=='coordinator');
+  expect(native.config.skills).toContain('extra-skills');expect(native.config.share).toBe('disabled');
+  const material=r.result.temporary_directory;
+  expect((await stat(material)).mode&0o777).toBe(0o700);
+  expect((await stat(join(material,'context.md'))).mode&0o777).toBe(0o600);
+  expect(await stat(join(material,'skills/ruach-technical'))).toBeDefined();
+  expect(await stat(join(material,'skills/ruach-workflow-feature')).then(()=>true,()=>false)).toBe(role==='coordinator');
+  expect(await readFile(join(home,'.codex-sentinel'),'utf8')).toBe('unchanged configuration');
+  await openCodeReadersStopped();
+});
+for(const command of ['resolve','start'])test(`OpenCode ${command} preparation is config-only and creates no launch material`,async()=>{
+  await openCodeFixture();
+  const r=await launch(command,[...openCodeSelection,'--effort','auto','--temp-dir',temporary,...(command==='start'?['--dry-run']:[])]);
+  expect(r.exit,r.stderr).toBe(0);expect(r.result.argv).toEqual(['--standalone']);
+  expect(r.stdout+r.stderr).not.toContain(behavior.leak);await noMutation();await openCodeReadersStopped();
+});
+test('OpenCode routed provider/model and offered effort reach the same native selection',async()=>{
+  await openCodeFixture();
+  await writeFile(join(repo,'.agents/models.yaml'),'models:\n  native: {harness: opencode, native_model: native/test-model}\n');
+  await writeFile(join(repo,'.agents/routing.yaml'),'routes:\n  selected: {model: native, effort: low}\n');
+  await writeFile(join(repo,'.agents/roles.yaml'),'roles:\n  implementer: {preferred: selected}\n');
+  const r=await launch('start',['--temp-dir',temporary]);expect(r.exit,r.stderr).toBe(0);
+  expect(r.result.selection.kind).toBe('opencode');
+  expect((await lines('native-launches.jsonl'))[0].config.agents.build.model).toEqual({providerID:'native',model:'test-model',variant:'low'});
+  await openCodeReadersStopped();
+});
+for(const [selection,code] of [
+  [['--model','unqualified'],'invalid_model'],
+  [['--model','native/test-model#low','--effort','high'],'conflicting_effort'],
+  [['--model','native/test-model','--effort','max'],'unsupported_effort'],
+  [['--model','native/missing'],'model_unavailable'],
+] as const)test(`OpenCode rejects ${code} without creating resources or choosing another model`,async()=>{
+  await openCodeFixture();
+  const r=await launch('start',['--kind','opencode',...selection,'--temp-dir',temporary]);
+  expect(r.exit).toBe(code==='model_unavailable'?3:2);expect(r.result.diagnostics[0].code).toBe(code);await noMutation();
+  for(const {pid} of await lines('opencode-readers.jsonl'))expect(()=>process.kill(pid,0)).toThrow();
+});
+for(const cause of ['opencodeDisabledModel','opencodeManagedModel','opencodeMalformed','opencodeWrongLocation'])test(`OpenCode ${cause} fails closed with private output withheld`,async()=>{
+  await openCodeFixture();behavior[cause]=true;
+  const r=await launch('start',[...openCodeSelection,'--temp-dir',temporary]);
+  expect(r.exit).toBe(3);expect(r.stdout+r.stderr).not.toContain(behavior.leak);expect(r.stdout+r.stderr).not.toContain('private invalid output');
+  await noMutation();for(const {pid} of await lines('opencode-readers.jsonl'))expect(()=>process.kill(pid,0)).toThrow();
+});
+for(const config of ['not JSON','[]','{"instructions":"bad"}','{"skills":[23]}','{"agents":[]}'])test(`OpenCode invalid inline configuration is rejected before native inspection`,async()=>{
+  await openCodeFixture();const r=await launch('start',[...openCodeSelection,'--temp-dir',temporary],{OPENCODE_CONFIG_CONTENT:config});
+  expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('invalid_settings');
+  expect(await lines('opencode-readers.jsonl')).toEqual([]);await noMutation();
+});
+for(const version of ['1.19.0','2.0.0','2.1.3','3.0.0'])test(`OpenCode ${version} cannot bypass the verified major/minimum version`,async()=>{
+  await openCodeFixture();behavior.opencodeVersion=version;
+  const r=await launch('start',[...openCodeSelection,'--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('unsupported_cli');
+  expect(await lines('opencode-readers.jsonl')).toEqual([]);await noMutation();
+});
+test('OpenCode reader deadline terminates its private process without creating launch resources',async()=>{
+  await openCodeFixture();behavior.opencodeNoReady=true;
+  const start=Date.now();const r=await launch('start',[...openCodeSelection,'--temp-dir',temporary]);
+  expect(Date.now()-start).toBeGreaterThanOrEqual(14000);expect(Date.now()-start).toBeLessThan(19000);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('opencode_config_unavailable');
+  await noMutation();await openCodeReadersStopped();
+},25000);
+
+test('OpenCode cannot bypass adapter-owned startup through native flags',async()=>{
+  await openCodeFixture();
+  for(const args of [['--auto'],['--server','http://localhost:1'],['--prompt','do work'],['--session','existing'],['--model','another/model'],['--standalone']]) {
+    const r=await launch('start',[...openCodeSelection,'--temp-dir',temporary,'--',...args]);
+    expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('conflicting_native_argument');
+    expect(await lines('opencode-readers.jsonl')).toEqual([]);await noMutation();
+  }
 });

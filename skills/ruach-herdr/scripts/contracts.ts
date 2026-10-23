@@ -49,5 +49,6 @@ export interface Plan {
   argv: string[]; redactedArgv: string[]; coverage: 'live-capable' | 'fixture/failure-only';
   version: string; hiddenWorkflows: string[]; operations: string[];
   configReader?: 'daemon' | 'stdio';
+  environment?: Record<string,string>;
   materialize?: (temp: string) => Promise<string[]>;
 }

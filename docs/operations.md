@@ -173,7 +173,7 @@ Recorded toolchain for the 0.3 line (update with each release that changes it; t
 | TypeScript | 7.0.2 | root `package.json` and `bun.lock` |
 | `@types/bun`, `@types/ws` | 1.4.2, see lock | root `package.json` and `bun.lock` |
 | Git | 2.47.3 (observed; no pin) | not pinned |
-| Herdr CLI | 0.9.0 (observed) | not pinned; native harness CLIs (`claude`, `codex`) are likewise consumer-provided |
+| Herdr CLI | 0.9.0 (observed) | not pinned; native harness CLIs (`claude`, `codex`, OpenCode v2.1.4+) are likewise consumer-provided |
 
 CI action references use version tags, not commit SHAs.
 
