@@ -1,0 +1,117 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-13T07:00:00Z",
+   "message": "pressroom base",
+   "files": {
+    "README.md": { "text": "# pressroom\nArticle rendering pipeline.\n" },
+    "docs/notes.md": { "text": "# Notes\nRenderer decisions.\n" },
+    "src/queue.ts": { "text": "export const queue: string[] = [];\n" }
+   }
+  },
+  {
+   "name": "unit-a-impl",
+   "branch": "task/prs-9-captions",
+   "from": "base",
+   "date": "2026-10-13T08:00:00Z",
+   "message": "captions: unit implementation",
+   "files": { "src/captions.ts": { "text": "export const captions = (rows: string[]) => rows.map((r) => r.toUpperCase());\n" } }
+  },
+  {
+   "name": "unit-a-review",
+   "branch": "task/prs-9-captions",
+   "from": "unit-a-impl",
+   "date": "2026-10-13T08:15:00Z",
+   "message": "captions: unit review",
+   "files": {
+    "reports/PRS-9/review-captions.md": {
+     "text": "task: PRS-9/review-captions\nstatus: complete\noutcome: Independent review of the captions unit alone found no blocking findings.\nreviewed_revision: {{sha:unit-a-impl}}\nartifacts:\n  - reports/PRS-9/review-captions.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nThis review covers the captions unit only, not a combined candidate.\n"
+    }
+   }
+  },
+  {
+   "name": "unit-b-impl",
+   "branch": "task/prs-9-colors",
+   "from": "base",
+   "date": "2026-10-13T08:05:00Z",
+   "message": "colors: unit implementation",
+   "files": { "src/colors.ts": { "text": "export const colors = ['red', 'green', 'blue'];\n" } }
+  },
+  {
+   "name": "unit-b-review",
+   "branch": "task/prs-9-colors",
+   "from": "unit-b-impl",
+   "date": "2026-10-13T08:20:00Z",
+   "message": "colors: unit review",
+   "files": {
+    "reports/PRS-9/review-colors.md": {
+     "text": "task: PRS-9/review-colors\nstatus: complete\noutcome: Independent review of the colors unit alone found no blocking findings.\nreviewed_revision: {{sha:unit-b-impl}}\nartifacts:\n  - reports/PRS-9/review-colors.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nThis review covers the colors unit only, not a combined candidate.\n"
+    }
+   }
+  },
+  {
+   "name": "int-0",
+   "branch": "task/prs-9-integration",
+   "from": "base",
+   "date": "2026-10-13T07:30:00Z",
+   "message": "pressroom integration target start",
+   "files": { "INTEGRATION.md": { "text": "integration target\n" } }
+  },
+  {
+   "name": "combined-1",
+   "branch": "task/prs-9-combined",
+   "from": "int-0",
+   "date": "2026-10-13T09:10:00Z",
+   "message": "captions + colors: combined candidate",
+   "files": {
+    "src/captions.ts": { "text": "export const captions = (rows: string[]) => rows.map((r) => r.trim());\n" },
+    "src/colors.ts": { "text": "export const colors = ['red', 'green', 'blue', 'black'];\n" }
+   }
+  },
+  {
+   "name": "combined-review-1",
+   "branch": "task/prs-9-combined",
+   "from": "combined-1",
+   "date": "2026-10-13T09:35:00Z",
+   "message": "captions + colors: combined review",
+   "files": {
+    "reports/PRS-9/review-combined.md": {
+     "text": "task: PRS-9/review-combined\nstatus: complete\noutcome: Independent review of the exact combined captions+colors candidate found no blocking findings.\nreviewed_revision: {{sha:combined-1}}\nartifacts:\n  - reports/PRS-9/review-combined.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed combined revision.\n"
+    }
+   }
+  },
+  {
+   "name": "combined-2",
+   "branch": "task/prs-9-combined-preview",
+   "from": "int-0",
+   "date": "2026-10-13T09:40:00Z",
+   "message": "preview: combined candidate",
+   "files": { "src/preview.ts": { "text": "export const preview = (s: string) => s.slice(0, 40);\n" } }
+  },
+  {
+   "name": "combined-review-2",
+   "branch": "task/prs-9-combined-preview",
+   "from": "combined-2",
+   "date": "2026-10-13T09:50:00Z",
+   "message": "preview: combined review",
+   "files": {
+    "reports/PRS-9/review-preview.md": {
+     "text": "task: PRS-9/review-preview\nstatus: complete\noutcome: Independent review of the combined preview candidate found no blocking findings.\nreviewed_revision: {{sha:combined-2}}\nartifacts:\n  - reports/PRS-9/review-preview.md\nverification:\n  - \"bun test: exit 0 at the reviewed revision\"\ndiscoveries: []\nblockers: []\n\n# Review\nNo blocking findings at the reviewed combined revision.\n"
+    }
+   }
+  }
+ ],
+ "post": {
+  "checkout": "int-0",
+  "dirty": [
+   { "path": "docs/notes.md", "text": "# Notes\nRenderer decisions.\n\nRequested uncommitted change: keep the caption casing note here until review closes.\n" }
+  ],
+  "untracked": [
+   { "path": "src/preview.ts", "text": "// uncommitted preview draft held by the author; not part of any review\nexport const draft = true;\n" },
+   { "path": "notes/queue.txt", "text": "nonconflicting scratch note; unrelated to any delivery path\n" }
+  ]
+ }
+}

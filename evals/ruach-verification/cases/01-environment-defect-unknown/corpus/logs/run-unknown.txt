@@ -1,0 +1,5 @@
+$ bun test tests/transport.test.ts
+(pass) frames a message
+[log capture truncated by the collector at 4 KiB; the final status line is missing]
+exit=?
+note=cannot tell whether the failure happened before or after assertions, or how the run ended

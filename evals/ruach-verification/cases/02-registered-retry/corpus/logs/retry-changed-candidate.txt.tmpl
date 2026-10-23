@@ -1,0 +1,13 @@
+The registered symptom occurred, but the candidate changed since it was registered.
+
+registered candidate: {{sha:cand-1}}
+run candidate:        {{sha:cand-2}}
+
+$ bun test tests/parse.test.ts
+(fail) rejects a truncated record [0.43ms]
+AssertionError: expected false to be true
+1 pass, 1 fail
+exit=1
+
+The register names cand-1 only. A changed candidate is not a retry of the registered
+state; the new revision needs its own verification.

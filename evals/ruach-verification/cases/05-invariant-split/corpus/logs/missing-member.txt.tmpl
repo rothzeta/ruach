@@ -1,0 +1,11 @@
+Candidate: {{sha:cand-1}}
+$ bun test tests/order.test.ts
+(pass) shuffled input matches the expected list [0.22ms]
+(pass) seeded order is reproducible [0.19ms]
+2 pass, 0 fail
+exit=0
+
+# failure captured on an earlier candidate that dropped a member
+AssertionError: expected [ 'c', 'b' ] to contain 'a'
+  the result is missing a distinct input member
+exit=1

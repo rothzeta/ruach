@@ -1,0 +1,26 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-14T07:00:00Z",
+   "message": "probehub cache base",
+   "files": {
+    "README.md": { "text": "# probehub cache\n" },
+    "src/cache.ts": { "text": "export const wrap = (v: string) => ({ v });\n" },
+    "tests/cache.test.ts": { "text": "import { expect, test } from 'bun:test';\nimport { wrap } from '../src/cache';\n\ntest('wraps a value', () => { expect(wrap('x')).toEqual({ v: 'x' }); });\n\ntest('deduplicates concurrent lookups', () => {\n  // placeholder concurrency assertion; see the register for the observed symptom\n  expect(true).toBe(true);\n});\n" }
+   }
+  },
+  {
+   "name": "cand-1",
+   "branch": "task/prb-7-cache",
+   "from": "base",
+   "date": "2026-10-14T08:10:00Z",
+   "message": "cache: candidate concurrency change",
+   "files": {
+    "src/cache.ts": { "text": "export const wrap = (v: string) => ({ v });\nexport const lookup = async (k: string, f: () => Promise<string>) => f();\n" }
+   }
+  }
+ ]
+}

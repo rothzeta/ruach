@@ -1,0 +1,27 @@
+# Task PRB-7 ordering record
+
+Saved 2026-10-14 09:50 UTC by the previous Reviewer (session ended afterwards). Scope: review the ordering test against the contract and propose a bounded split. Record location: this file.
+
+## Candidate
+| Field | Value |
+| --- | --- |
+| Unit | PRB-7 ordering |
+| Branch | `task/prb-7-order` at `{{sha:cand-1}}` |
+| Baseline | `main` at `{{sha:base}}` |
+| Current test | `tests/order.test.ts` in `repo/` |
+| Command | `bun test tests/order.test.ts` |
+
+## Contract scope
+| Surface | Order | What is contractual |
+| --- | --- | --- |
+| shuffled `dedupe` | unspecified | membership, multiplicity, nonmutation |
+| `seeded(count, seed)` | explicit | the exact sequence for a given seed |
+
+## Captured runs
+| Capture | File | Note |
+| --- | --- | --- |
+| missing member | `logs/missing-member.txt` | dropped a distinct member |
+| duplicate member | `logs/duplicate-member.txt` | repeated a member |
+| changed implementation | `logs/impl-change.txt` | private change passes the public behavior |
+
+Proposal not recorded yet.

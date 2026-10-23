@@ -1,0 +1,5 @@
+$ bun test tests/transport.test.ts
+error: Failed to listen at /tmp/prb-7-4f2c/ipc.sock: EPERM: Operation not permitted
+0 tests executed; the process started and aborted during setup
+exit=1
+reason=the sandbox denied Unix socket creation before any test body ran

@@ -1,0 +1,26 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-14T07:00:00Z",
+   "message": "probehub base",
+   "files": {
+    "README.md": { "text": "# probehub\nLocal transport probe.\n" },
+    "src/transport.ts": { "text": "export const PIPE = '/tmp/probehub.sock';\nexport const frame = (s: string) => Buffer.from(s + '\\n');\n" },
+    "tests/transport.test.ts": { "text": "import { expect, test } from 'bun:test';\nimport { frame } from '../src/transport';\n\ntest('frames a message', () => { expect(frame('x')).toEqual(Buffer.from('x\\n')); });\n\ntest('opens a fresh socket', () => {\n  // placeholder: the listener path is provided by the harness\n  expect(true).toBe(true);\n});\n" }
+   }
+  },
+  {
+   "name": "cand-1",
+   "branch": "task/prb-7-transport",
+   "from": "base",
+   "date": "2026-10-14T08:10:00Z",
+   "message": "transport: candidate listener change",
+   "files": {
+     "src/transport.ts": { "text": "import { createServer } from 'node:net';\nimport { unlinkSync } from 'node:fs';\nexport const PIPE = '/tmp/probehub.sock';\nexport const frame = (s: string) => Buffer.from(s + '\\n');\nexport const listen = (path = PIPE) => {\n  try { unlinkSync(path); } catch {}\n  const server = createServer();\n  server.listen(path);\n  return server;\n};\n" }
+   }
+  }
+ ]
+}

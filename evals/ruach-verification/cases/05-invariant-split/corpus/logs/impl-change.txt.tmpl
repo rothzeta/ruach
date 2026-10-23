@@ -1,0 +1,10 @@
+Candidate: {{sha:cand-1}} (private implementation changed; public behavior preserved)
+
+$ bun test tests/order.test.ts
+(pass) shuffled input matches the expected list [0.21ms]
+(pass) seeded order is reproducible [0.20ms]
+2 pass, 0 fail
+exit=0
+
+The changed private implementation passes the membership/multiplicity behavior and the
+seeded-order contract. No assertion is removed to make it pass.

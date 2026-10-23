@@ -1,0 +1,30 @@
+# Task PRS-9 record
+
+Saved 2026-10-13 09:05 UTC by the previous Coordinator (session ended afterwards). Workflow: two units, one combined candidate, one independent combined review, then one local delivery. This task pushes nothing. Record location: this file.
+
+## Decisions and authority
+| ID | Exact words and source | State |
+| --- | --- | --- |
+| DEC-001 | Owner, `inputs/owner-request.md`, 2026-10-13 07:30 UTC: "A combined candidate is deliverable only after an independent review of that exact combined revision passes; two separate unit reviews are not a combined review." | Accepted. |
+| DEC-002 | Owner, same message: "Keep every branch, the requested notes diff and any untracked author file; do not clean the checkout." | Accepted. |
+| AUTH-001 | Owner, same message: local delivery into `task/prs-9-integration` only; no push or tag. | Active. |
+
+## Work
+| ID | Unit | State at 09:05 | Branch | Notes |
+| --- | --- | --- | --- | --- |
+| WORK-01 | Captions | unit review complete | `task/prs-9-captions` at `{{sha:unit-a-review}}` | Reviewed at `{{sha:unit-a-impl}}`. Unit-only review. |
+| WORK-02 | Colors | unit review complete | `task/prs-9-colors` at `{{sha:unit-b-review}}` | Reviewed at `{{sha:unit-b-impl}}`. Unit-only review. |
+| WORK-03 | Combined captions+colors | combined candidate created; combined review not yet performed at 09:05 | `task/prs-9-combined` at `{{sha:combined-1}}` | Target `task/prs-9-integration` at `{{sha:int-0}}`. |
+
+## Delivery queue
+| Order | Unit | Current target | Target tip at 09:05 | Note |
+| --- | --- | --- | --- | --- |
+| 1 | WORK-03 | `task/prs-9-integration` | `{{sha:int-0}}` | No combined review at 09:05. |
+
+One target-mutating delivery assignment is active at a time. No delivery has been performed for any unit.
+
+## Working tree at save time
+- `docs/notes.md` carries a requested uncommitted change; keep it.
+- `src/preview.ts` is an untracked author draft.
+- `notes/queue.txt` is an unrelated untracked scratch note.
+- A retained checkout lives under `retained/prs-9-checkout/`.

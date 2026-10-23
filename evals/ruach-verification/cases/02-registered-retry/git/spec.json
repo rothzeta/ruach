@@ -1,0 +1,48 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-14T07:00:00Z",
+   "message": "probehub record parser base",
+   "files": {
+    "README.md": { "text": "# probehub record parser\n" },
+    "src/parse.ts": { "text": "export const parse = (s: string) => s.split('\\n').filter(Boolean);\n" },
+    "tests/parse.test.ts": { "text": "import { expect, test } from 'bun:test';\nimport { parse } from '../src/parse';\n\ntest('round-trips a full record', () => { expect(parse('a\\nb\\n')).toEqual(['a', 'b']); });\n\ntest('rejects a truncated record', () => {\n  // placeholder boundary assertion; see the register for the observed symptom\n  expect(parse('a\\nb')).toHaveLength(2);\n});\n" }
+   }
+  },
+  {
+   "name": "cand-1",
+   "branch": "task/prb-7-parse",
+   "from": "base",
+   "date": "2026-10-14T08:00:00Z",
+   "message": "parse: candidate revision checked in the failing run",
+   "files": {
+    "src/parse.ts": { "text": "export const parse = (s: string) => s.split('\\n').map((l) => l.trim()).filter(Boolean);\n" }
+   }
+  },
+  {
+   "name": "cand-2",
+   "branch": "task/prb-7-parse",
+   "from": "cand-1",
+   "date": "2026-10-14T08:30:00Z",
+   "message": "parse: later candidate that changes the parser",
+   "files": {
+    "src/parse.ts": { "text": "export const parse = (s: string) => s.split(/\\r?\\n/).map((l) => l.trim()).filter(Boolean);\n" }
+   }
+  },
+  {
+   "name": "prior-disposition",
+   "branch": "task/prb-7-parse",
+   "from": "cand-2",
+   "date": "2026-10-14T08:50:00Z",
+   "message": "parse: prior record of the registered entry",
+   "files": {
+    "reports/PRB-7/prior-disposition.md": {
+     "text": "task: PRB-7/prior-disposition\nstatus: complete\noutcome: Registered the boundary symptom as FLAKE-001; the captures are disposed separately.\ntested_revision: {{sha:cand-1}}\nartifacts:\n  - reports/PRB-7/prior-disposition.md\nverification: not-run\ndiscoveries: []\nblockers: []\n\n# Report\n\nEntry registration only; it makes no disposition of the retry captures.\n"
+    }
+   }
+  }
+ ]
+}

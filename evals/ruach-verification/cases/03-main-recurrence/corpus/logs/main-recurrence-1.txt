@@ -1,0 +1,7 @@
+Primary supported environment (network available).
+$ bun test tests/cache.test.ts
+(pass) wraps a value [0.19ms]
+(fail) deduplicates concurrent lookups [3.10ms]
+AssertionError: expected 1 call to fan-out, received 2
+1 pass, 1 fail
+exit=1

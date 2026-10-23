@@ -1,0 +1,8 @@
+$ git -C repo switch task/dsp-3-shipping
+$ git -C repo merge --ff-only {{sha:shipping-cand}}
+Updating {{sha:shipping-0}}..{{sha:shipping-cand}}
+Fast-forward
+ src/shipping.ts | 1 +
+ 1 file changed, 1 insertion(+)
+$ printf 'exit=%s\n' $?
+exit=0
