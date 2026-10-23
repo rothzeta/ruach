@@ -38,4 +38,4 @@ Remaining wave-2 guides, specimens, startup-contract tests and native behavioral
 
 ## Distribution
 
-Final main publication, remote side-branch removal and documentation synchronization are pending the final delivery check.
+The atomic origin push succeeded: main advanced from cf52c78151b5ac80413bb1ef8fae1a5bf1ff812e to 7ce94a40e8f7380f2bbb7ffac108a4c5e6c0d0fc and the sole remote side branch, ruach/ruach-architect, was deleted with its observed revision as a lease. A fresh ls-remote --heads returned only refs/heads/main. This receipt is a documentation-only successor; its creating revision and the final three-checkout synchronization are reported externally after verification. Main remains the sole branch; no release tag was created or moved.
