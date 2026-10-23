@@ -4,6 +4,9 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+- Consolidated R6/R7 handoff and verification guidance, four offline wave-2 preparation packets, and the multi-machine preparation/council reports onto main. Remaining wave-2 guides, specimens and native/combined acceptance stay open.
+- Repaired the communication packet's missing synthetic verifier artifact without weakening its regression assertion; corrected historical verification and engineering/evaluation wording. OpenCode launch support remains gated.
+
 ## 0.3.1 — 2026-10-11
 
 Scope follows the [roadmap](docs/roadmap.md); the preparation and evidence summary is in the release preparation report `docs/reports/releases/0.3.1/preparation.md`.

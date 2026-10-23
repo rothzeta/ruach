@@ -36,6 +36,8 @@ blockers: []
 
 # Ruach 0.3.1 publication review (focused, final candidate)
 
+Import note (2026-10-23): quoted Markdown examples below insert a space before the opening parenthesis so the repository link checker does not follow historical pseudo-targets from this report. Remove that space to recover the quoted syntax; original bytes remain at commit `ea3dcc0dad95b6ea8f0bb6d498e33a59ed94df09`.
+
 Reviewer: canonical Reviewer. Independently reviewed the final metadata-only publication candidate `15b7ef71aaf1b52f1d76b0687949a1aadf760b4a` (my checkout remained at `4c16ed7` per amendment v2; the `4c16ed7..15b7ef7` delta was read through shared Git objects). I made no source, doc, config or metadata edits, ran no native subject, accessed no credentials, and did not push, tag, merge or write main. All checks were read-only and driven from the own disposable Bun helper.
 
 ## Verdict

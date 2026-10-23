@@ -1,14 +1,14 @@
 # Ruach roadmap
 
-Backlog reconciled **2026-10-11** against the published 0.3.1 release, completed OpenCode evaluations, wave-2 independent preparation review and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
+Backlog reconciled **2026-10-23** after branch consolidation, against the published 0.3.1 release, completed OpenCode evaluations, wave-2 independent preparation review and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
 
-Current state: **0.3.1 published** to origin main and annotated `v0.3.1` / `ruach--v0.3.1` tags; see the [publication receipt](reports/releases/0.3.1/publication.md). R1's test correction, R2's reliability fixes, R3's coordination guidance and `ruach-changelog` shipped in this release. Wave 2 (R4–R7) has three committed preparation units and a completed independent review; corrections and remaining implementation precede integration. Five capped OpenCode evaluations finished: smoke, synthetic Enoch and authorization accepted; resume and ambiguity failed under runtime write restrictions. Hosted green CI, original Claude/Codex compatibility, resume/ambiguity proof and a real consumer-task report remain open. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
+Current state: **0.3.1 published** to origin main and annotated `v0.3.1` / `ruach--v0.3.1` tags; see the [publication receipt](reports/releases/0.3.1/publication.md). R1's test correction, R2's reliability fixes, R3's coordination guidance and `ruach-changelog` shipped in this release. Wave 2 (R4–R7) preparation and the multi-machine council are consolidated on main. The missing R5 synthetic verifier artifact and report wording are corrected; all four wave-2 packet suites pass (36 tests). Remaining guides, startup-contract tests, specimens, packet refresh and independent combined acceptance are still open. See the [consolidation record](reports/consolidation-2026-10-23.md). Five capped OpenCode evaluations finished: smoke, synthetic Enoch and authorization accepted; resume and ambiguity failed under runtime write restrictions. Hosted green CI, original Claude/Codex compatibility, resume/ambiguity proof and a real consumer-task report remain open. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
 
 ## Priorities and sequencing
 
 | Order | Packages | Outcome |
 | --- | --- | --- |
-| Current wave | R4–R7 | Correct reviewed preparation, finish guides/tests/specimens, then integrate and independently review the combined batch |
+| Current wave | R4–R7 | Finish guides/tests/specimens, refresh packets, then independently review the complete combined batch |
 | Evidence follow-ups | R1, R3; R2 live boundary | Record hosted green and missing behavioral/consumer evidence; preserve the documented replacement-ref limitation |
 | 0.4 capability sequence | C1 → C3 → C4 → C5 | Council, known-bug correction, runtime QA, then defect discovery |
 | Conditional 0.4 companion | C2 | Gemini advisors when needed; council can use supported harnesses first |
@@ -19,17 +19,17 @@ R1–R3's source changes are released; their remaining evidence gaps stay separa
 
 ## Current docket — R4–R7
 
-Independent preparation review is committed at `40a591b5e1cfccfd9005ef1eb8622496397aa147` on retained branch `ruach/wave2-review-guidance`, report `docs/reports/wave2-review/preparation.md`. Its results supersede the operational record's earlier “review active” state. These units remain on retained branches; they have not been integrated into main.
+Independent preparation review at `40a591b5e1cfccfd9005ef1eb8622496397aa147` is retained in main history, report `docs/reports/wave2-review/preparation.md`. Its results supersede the operational record's earlier “review active” state. All three preparation units are now merged into main under the owner's consolidation request. Historical review applies to the pinned revisions below; it is not independent acceptance of the later combined revision.
 
 | Unit | Reviewed revision | Review result / next action |
 | --- | --- | --- |
-| R6-G/R7-G handoff and verification guidance | `c874310b` | Pass with a minor report correction: distinguish the paid engineering turn from unrun evaluation subjects. |
-| R4-P/R5-P permissions and communication packets | `818ed627` | Changes required: R5 references a missing retained verifier log; communication tests reproduce 9 pass / 1 fail. Fix the artifact without weakening coverage, rerun both packet suites and correct the earlier 10-pass verification claim. R4's seven tests pass. |
+| R6-G/R7-G handoff and verification guidance | `c874310b` | Passed preparation review; report now distinguishes the paid engineering turn from unrun evaluation subjects. Merged into main. |
+| R4-P/R5-P permissions and communication packets | `818ed627` | Original review found 9 pass / 1 fail. Consolidation adds the tracked synthetic verifier artifact, corrects the claim and preserves the assertion. R4 now passes 7 tests and R5 passes 10; merged into main. Independent correction review remains open. |
 | R6-P/R7-P delivery and verification packets | `afcd17ce` | Pass within preparation scope: 8 delivery and 11 verification tests pass. Final refresh to accepted guidance/specimens remains pending. |
 
 Next steps, from the accepted [permissions/communication](design/next-permissions-communication-plan.md) and [handoff/verification](design/next-handoff-verification-plan.md) plans:
 
-1. Correct the R5 packet and its evidence report, correct the guidance report wording, and independently review the exact corrections.
+1. Independently review the R5 artifact/report and guidance wording corrections now on main.
 2. Finish R45-D worker permission/communication guides, R5-L launcher startup contract tests and R6-S assignment/delivery specimens, respecting their source dependencies and ownership.
 3. Refresh R6/R7 packets against accepted guidance/specimens; assemble and independently review the R6/R7 subcandidate (HV-IN).
 4. Assemble R4–R7 through B2-IN, the sole final shared-doc/changelog writer; run the full affected union checks, independently review the exact combined revision, then perform separately assigned delivery under valid target authority.
@@ -79,7 +79,7 @@ Assignments name the role, binding decisions, current base, unused branch, owned
 
 Prove permission mapping lets authorized workers stage/commit in linked worktrees and run allowed verification recipes, including sockets/temp paths. Request required escalation once on a gitdir `index.lock` permission failure and report the result. Assignments name allowed requests; readiness identifies recipes needing execution outside the sandbox. Document whole-argument prefix matching (`just test` does not cover `just test-focused`).
 
-**Status / next action (2026-10-11):** R4-P's offline fixture passed independent preparation review and seven tests; temp/Unix/TCP probes passed in the review environment. The shared R4-P/R5-P unit awaits the R5 correction. Finish the permission guide (R45-D); native staging/commit and allowed verification proof (R4-S) remains unrun. Offline probes do not establish native sandbox permissions.
+**Status / next action (2026-10-23):** R4-P's offline fixture passed independent preparation review and seven tests; temp/Unix/TCP probes passed in the review environment. The shared R4-P/R5-P preparation is merged into main with the R5 artifact correction. Finish the permission guide (R45-D); native staging/commit and allowed verification proof (R4-S) remains unrun. Offline probes do not establish native sandbox permissions.
 
 **Done when:** an isolated launch smoke proves staging/commit and permitted verification; missing permissions produce actionable diagnostics without loops. No global settings writes or approvals on workers' behalf. Sources: Track F1; RAMEC F6/§3.5.
 
@@ -87,7 +87,7 @@ Prove permission mapping lets authorized workers stage/commit in linked worktree
 
 Use native Herdr primitives for submission, startup readiness, pending-input inspection and blocking waits. Verify submission and detect a self-update leaving a shell. Wait for an unhandled terminal/decision report using last handled state, including reports written before the wait starts; retain that state in R3. Run verification to completion with a bound; report last worker activity at check-ins. Avoid tight status loops and repeated approval relays.
 
-**Status / next action (2026-10-11):** R5-P independent review reproduced 9 pass / 1 fail: the timeout-verifier case references missing `verifier/run-2.log`. Add a consistent retained artifact, preserve the assertion, rerun both R4/R5 suites and correct the preparation report's unreproducible 10-pass claim. Then finish R5-L startup contract tests and R45-D communication guidance. Native behavioral cases (R5-S) remain unrun.
+**Status / next action (2026-10-23):** R5-P is merged into main. The timeout-verifier JSON now references tracked synthetic `verifier/run-2.txt`; the existing assertion is preserved, the inaccurate historical claim is corrected, and R4/R5 suites pass 7/10 tests. Independently review the correction, then finish R5-L startup contract tests and R45-D communication guidance. Native behavioral cases (R5-S) remain unrun.
 
 **Done when:** isolated cases cover unsubmitted input, exited harness, pre-existing completion and timeout without duplicate work. Check existing Herdr capabilities before proposing commands: launch preparation stays in `ruach-herdr`, terminal primitives in Herdr; no Ruach scheduler. Sources: 0.3.x waiting guidance; RAMEC F4/F5/F7, §§3.5–3.6.
 
@@ -97,7 +97,7 @@ Verify revision objects; distinguish candidate/tested/reviewed/delivered revisio
 
 Refresh the base before integration and reverify changed code. Delivery still targets the exact reviewed combined revision and checks the destination has not moved. Record authorization, tag/push state and retained/released resources. Extend existing assignments for a serialized multi-unit merge queue when needed; keep cleanup with Coordinator and branches under retention policy. No new Merger role, automatic push, blanket clean-tree requirement or disposal of requested diffs.
 
-**Status / next action (2026-10-11):** R6-G guidance and R6-P offline preparation passed independent review; the delivery packet's eight tests pass. Correct the guidance report's engineering-versus-evaluation wording, finish R6-S specimens, and refresh the packet against accepted guidance/specimens before HV-IN/B2-IN integration. Native/behavioral delivery proof and final batch acceptance remain open; the reviewed branch changes are not yet on main.
+**Status / next action (2026-10-23):** R6-G guidance and R6-P offline preparation passed independent review and are merged into main; the delivery packet's eight tests pass. The guidance wording is corrected. Finish R6-S specimens and refresh the packet against accepted guidance/specimens before complete HV-IN/B2-IN acceptance. Native/behavioral delivery proof and independent final batch acceptance remain open.
 
 **Done when:** receipts are checkable against Git and a moved target stops delivery; uncommitted-diff and retained-checkout outcomes remain valid. Justify/test any schema change separately. Sources: Track F3/F4; RAMEC §3.4 and steward proposal, reconciled with current role contracts.
 
@@ -105,7 +105,7 @@ Refresh the base before integration and reverify changed code. Delivery still ta
 
 Consolidate environment classification, known-flake disposition and wording in `ruach-testing`, `ruach-simplification` and Reviewer guidance. Socket/tmp/disk failures are “not verified: environment”; record command/exit code and preserve verifier status in truncation pipelines. Consumer flake records name symptom, environment and allowed rerun; repeated main-environment failures become defects. Preserve invariants and justify splits through public contracts.
 
-**Status / next action (2026-10-11):** R7-G guidance and R7-P offline preparation passed independent review; the verification packet's eleven tests pass. Preserve the shared guidance report correction and refresh the packet against accepted inputs, then include it in HV-IN/B2-IN combined verification and review. Offline transport/fixture results do not establish native behavioral proof; these branch changes remain unintegrated.
+**Status / next action (2026-10-23):** R7-G guidance and R7-P offline preparation passed independent review and are merged into main; the verification packet's eleven tests pass. Refresh the packet against accepted inputs, then include it in complete HV-IN/B2-IN verification and independent review. Offline transport/fixture results do not establish native behavioral proof.
 
 **Done when:** isolated packets distinguish environment blocks, registered flakes and regressions without weakening tests or claiming unrun checks. Public-contract and before/after examples already shipped; extend missing guidance only. Sources: Track F2; 0.3.x wording; RAMEC F9/§3.9.
 
