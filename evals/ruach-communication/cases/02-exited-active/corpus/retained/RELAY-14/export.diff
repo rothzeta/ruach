@@ -1,0 +1,10 @@
+diff --git a/src/export.ts b/src/export.ts
+--- a/src/export.ts
++++ b/src/export.ts
+@@ -1,4 +1,5 @@
+ export function dump(queue: string[]) {
+   // partial: only the first row is serialised so far
+-  return queue[0];
++  const first = queue[0];
++  return first;
+ }

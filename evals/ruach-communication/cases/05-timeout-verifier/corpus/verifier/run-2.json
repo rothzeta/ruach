@@ -1,0 +1,12 @@
+{
+  "nonce": "relay-verify-complete-9f2c",
+  "cwd": "/work/relay-wt/verify",
+  "revision": "task/relay-17-verify",
+  "command": "bun test",
+  "started_at": "2026-10-12T11:44:20Z",
+  "finished_at": "2026-10-12T11:44:50Z",
+  "exit": 23,
+  "signal": null,
+  "timeout": false,
+  "full_log": "verifier/run-2.log"
+}

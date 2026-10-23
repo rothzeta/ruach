@@ -1,0 +1,1 @@
+{"observed_at": "2026-10-12T11:40:00Z", "session": "relay-verify", "call": "agent prompt relay-verify <brief> --wait --timeout 60000", "result": "timeout", "elapsed_ms": 60000, "agent_status_at_timeout": "working", "last_activity": "2026-10-12T11:39:30Z", "report_seen": false}

@@ -1,0 +1,1 @@
+{"observed_at": "2026-10-12T11:42:00Z", "session": "relay-idle", "call": "agent prompt relay-idle <brief> --wait --timeout 60000", "result": "settled", "agent_status": "idle", "report_seen": false, "report_identity": null}

@@ -1,0 +1,12 @@
+{
+  "observed_at": "2026-10-12T11:06:00Z",
+  "session": "relay-normalize",
+  "kind": "claude",
+  "pane": "w5:p3",
+  "agent_status": "unknown",
+  "interactive_ready": null,
+  "native_exited": null,
+  "exit_reason": null,
+  "foreground": { "processes": [], "shell_pid": null },
+  "inspection_error": "pane process-info unavailable: current pane occupant identity not observed"
+}

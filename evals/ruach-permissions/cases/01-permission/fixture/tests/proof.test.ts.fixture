@@ -1,0 +1,10 @@
+// Protected consumer test for the permission fixture. It must keep passing both before and after the
+// subject's single allowed edit to src/proof.txt, so it asserts only that the proof file stays present
+// and non-empty rather than a fixed body.
+import { expect, test } from 'bun:test';
+import { readFileSync } from 'node:fs';
+
+test('proof file is present and non-empty', () => {
+  const body = readFileSync(new URL('../src/proof.txt', import.meta.url), 'utf8');
+  expect(body.trim().length).toBeGreaterThan(0);
+});

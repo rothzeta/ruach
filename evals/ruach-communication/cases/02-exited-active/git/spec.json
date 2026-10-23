@@ -1,0 +1,35 @@
+{
+ "commits": [
+  {
+   "name": "base",
+   "branch": "main",
+   "from": null,
+   "date": "2026-10-12T07:00:00Z",
+   "message": "Relay base",
+   "files": {
+    "README.md": { "text": "# relay\nMessage relay and queue service.\n" },
+    "src/relay.ts": { "text": "export const version = 1;\n" }
+   }
+  },
+  {
+   "name": "export-partial",
+   "branch": "task/relay-14-export",
+   "from": "base",
+   "date": "2026-10-12T09:20:00Z",
+   "message": "export: partial queue dump",
+   "files": {
+    "src/export.ts": { "text": "export function dump(queue: string[]) {\n  // partial: only the first row is serialised so far\n  return queue[0];\n}\n" }
+   }
+  },
+  {
+   "name": "import-partial",
+   "branch": "task/relay-14-import",
+   "from": "base",
+   "date": "2026-10-12T09:25:00Z",
+   "message": "import: partial queue load",
+   "files": {
+    "src/import.ts": { "text": "export function load(line: string) {\n  return line.split(',');\n}\n" }
+   }
+  }
+ ]
+}
