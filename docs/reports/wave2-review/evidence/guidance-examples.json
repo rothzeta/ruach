@@ -1,0 +1,19 @@
+{
+  "blocks": 3,
+  "results": [
+    { "example": 1, "exit": 0, "ok": true, "diagnostics": [] },
+    { "example": 2, "exit": 0, "ok": true, "diagnostics": [] },
+    { "example": 3, "exit": 0, "ok": true, "diagnostics": [] }
+  ],
+  "negative_control": {
+    "exit": 1,
+    "diagnostics": [
+      {
+        "code": "REVISION_MISSING",
+        "path": "/candidate_revision",
+        "message": "Revision does not resolve to an existing commit in the selected repository."
+      }
+    ]
+  },
+  "notes": "Helper: /tmp/ruach-release-wave2-20261011/opencode/workers/wave2-prep-review/verify-guidance-examples.ts. Extracts the three ```yaml blocks from skills/ruach-handoff/references/delivery.md, builds real temp Git refs fixture/before, fixture/reviewed, fixture/target, fixture/report, and runs the canonical /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts with --repo. Negative control replaces candidate_revision fixture/reviewed with fixture/absent and gets exit 1 REVISION_MISSING."
+}

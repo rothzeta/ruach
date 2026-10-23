@@ -1,0 +1,16 @@
+[
+  {
+    "name": "r45-permissions",
+    "fresh_exit": 0,
+    "fresh_ok": true,
+    "reuse_exit": 2,
+    "probes": {
+      "temp": { "exit": 0, "ok": true, "timedOut": false, "port": null },
+      "unix": { "exit": 0, "ok": true, "timedOut": false, "port": null },
+      "tcp": { "exit": 0, "ok": true, "timedOut": false, "port": 42659 }
+    }
+  },
+  { "name": "r45-communication", "fresh_exit": 0, "fresh_ok": true, "reuse_exit": 2 },
+  { "name": "r67-handoff-delivery", "fresh_exit": 0, "fresh_ok": true, "reuse_exit": 2 },
+  { "name": "r67-verification", "fresh_exit": 0, "fresh_ok": true, "reuse_exit": 2 }
+]

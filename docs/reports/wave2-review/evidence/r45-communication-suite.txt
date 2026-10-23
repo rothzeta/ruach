@@ -1,0 +1,28 @@
+R45 communication packet public boundary test — independent reproduction
+
+Command (cwd = retained r45 review worktree at reviewed revision 818ed627):
+  bun test --timeout 30000 evals/ruach-communication
+
+Run 1 (concurrently with other suites): 9 pass / 1 fail
+Run 2 (isolated, no concurrent suites): 9 pass / 1 fail   <- reproducible, not a contention flake
+
+Failing test: 05-timeout-verifier realizes timeout, idle, echoed-marker and failed-exit facts
+Location: evals/ruach-communication/tests/packet.test.ts:182
+  expect(existsSync(join(c, artifact.full_log))).toBe(true)
+Result: Expected true, Received false
+
+Cause:
+- corpus/verifier/run-2.json declares  "full_log": "verifier/run-2.log"
+- corpus/verifier/marker-run.json points the completion match at artifact "verifier/run-2.json"
+- The test then requires corpus/verifier/run-2.log to exist and contain the requested marker.
+- git ls-files evals/ruach-communication/cases/05-timeout-verifier lists no run-2.log;
+  the file does not exist in the worktree and is not ignored/untracked. The referenced
+  retained log was never committed, so the assertion cannot pass anywhere.
+
+Impact on the handoff:
+- docs/reports/r45/preparation.md claims
+  "bun test --timeout 30000 evals/ruach-communication: 10 pass, 0 fail, 299 expect() calls"
+  at the same product/tested commit aac679ed. The claim is not reproducible at either
+  aac679ed or the reviewed successor 818ed627 (which changes only the report and assignment).
+- The packet CLI prepare itself still exits 0 (fresh_ok true); the defect is the missing
+  committed log fixture versus the test expectation, not the builder's report validation.

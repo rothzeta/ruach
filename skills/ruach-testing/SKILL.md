@@ -16,6 +16,7 @@ Protect required behavior through observable boundaries. Apply this skill within
 - Assert exact values, ordering, formatting, or snapshots only when the contract requires them for controlled inputs. Determinism alone does not make current output contractual.
 - Test configurable behavior with explicit inputs; do not freeze provisional defaults or fixture coincidences.
 - For nondeterministic behavior, test guaranteed properties. Require identical results only when reproducibility is contractual.
+- Distinguish an environment limitation, a registered flake, a regression and an unclassified result by evidence before choosing an action, and keep the original failure and full output.
 - Preserve useful regression coverage. Change obsolete or incidental assertions only when the assignment permits it, without weakening real invariants.
 
 ## Test design
@@ -45,6 +46,7 @@ Protect required behavior through observable boundaries. Apply this skill within
 
 - Run the assigned checks and record exact commands and results.
 - Identify failures, limitations, and checks not run; never report unexecuted checks as passing.
+- Classify each check and preserve the verifier's own exit and full log when you shorten output; conditional classification, consumer flake fields and log examples are in [verification dispositions](references/verification.md).
 - Include relevant evidence and test or artifact references in the required handoff.
 
 Use the project's established test runner and conventions. Add framework-specific guidance only for concrete needs, keeping shared testing principles here.
