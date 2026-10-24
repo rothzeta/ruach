@@ -67,8 +67,14 @@ if(exe==='herdr') {
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
 } else if(args.includes('--help')) {
+  if(exe==='pi'){console.log(data.piMissingFlag?'--model':'--provider --model --thinking --extension --skill --offline --list-models');process.exit(0);}
+  if(exe==='goose'){console.log(args[0]==='session'?(data.gooseMissingFlag?'--model':'--system --provider --model'):'session');process.exit(0);}
   console.log('--model --config --cd --effort --settings --add-dir --no-alt-screen --sandbox --ask-for-approval --verbose'+(data.noAutoReview?'':' --permission-mode --approve-for-me')+(exe==='opencode'&&!data.opencodeNoStandalone?' --standalone':''));
-} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':exe==='opencode'?(data.opencodeVersion??'2.1.4'):'1.0.0');
+} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':exe==='pi'?(data.piVersion??'1.4.0'):exe==='goose'?(data.gooseVersion??'1.56.0'):exe==='opencode'?(data.opencodeVersion??'2.1.4'):'1.0.0');
+else if(exe==='pi'&&args.includes('--list-models')) {
+  console.log('provider model context max-out thinking images');
+  if(!data.piMissingModel)console.log('native test-model 200K 16K yes yes');
+}
 else if(exe==='opencode'&&args[0]==='serve') {
   appendFileSync(join(root,'opencode-readers.jsonl'),JSON.stringify({pid:process.pid,cwd:process.cwd()})+'\n');
   if(data.opencodeNoReady){setInterval(()=>{},1000);await new Promise(()=>{});}
@@ -126,6 +132,13 @@ else if(args.join(' ')==='app-server daemon version') {
   appendFileSync(join(root,'stdio-closed.jsonl'),JSON.stringify({pid:process.pid})+'\n');
   if(data.stdioStayAlive)await new Promise(r=>setTimeout(r,40000));
 } else {
+  if(exe==='pi') {
+    const extension=args[args.indexOf('--extension')+1];
+    const hooks=new Map<string,Function>();
+    (await import(extension)).default({on:(name:string,handler:Function)=>hooks.set(name,handler)});
+    const prompt=await hooks.get('before_agent_start')!({systemPrompt:'Native system, APPEND_SYSTEM.md and ambient context.'});
+    appendFileSync(join(root,'pi-prompts.jsonl'),JSON.stringify(prompt)+'\n');
+  }
   if(exe==='claude'&&data.managedRoot)appendFileSync(join(root,'customizations.jsonl'),JSON.stringify({managedSourcesPresent:['managed-settings.json','managed-settings.d/policy.json','.claude/skills/workflow/SKILL.md'].every(p=>existsSync(join(data.managedRoot,p)))})+'\n');
   appendFileSync(join(root,'native-launches.jsonl'),JSON.stringify({exe,args,cwd:process.cwd(),...(exe==='opencode'?{config:JSON.parse(process.env.OPENCODE_CONFIG_CONTENT??'{}'),configDir:process.env.OPENCODE_CONFIG_DIR}: {})})+'\n');
 }

@@ -101,6 +101,14 @@ test('a missing prerequisite fails only the routes that need it', () => {
   expect(noBun.data.routes.skill.missing.join('\n')).toContain('bun');
   expect(json([], { env: { HERDR_ENV: '' } }).data.routes.herdr.warnings).toContain('live launch needs a Herdr session');
 });
+test('Pi and Goose readiness checks report optional executables without requiring them', () => {
+  const present = json([], { tools: ['bun', 'git', 'herdr', 'pi', 'goose'] });
+  expect(present.status).toBe(0);
+  for (const name of ['pi', 'goose']) expect(present.data.prerequisites.find((p: any) => p.name === name)).toMatchObject({ name, found: true, path: join(bin, name) });
+  const absent = json(['--route', 'herdr'], { tools: ['bun', 'git', 'herdr'] });
+  expect(absent.status).toBe(0);
+  for (const name of ['pi', 'goose']) expect(absent.data.prerequisites.find((p: any) => p.name === name)).toMatchObject({ name, found: false });
+});
 test('a Ruach skill duplicated across locations warns without changing the exit code', () => {
   cpSync(join(target, 'skills/ruach-example'), join(home, '.claude/skills/ruach-example'), { recursive: true });
   const result = json(['--route', 'skill']);

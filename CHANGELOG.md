@@ -4,6 +4,12 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+## 0.5.0 — 2026-10-24
+
+- Enabled Pi v1.4+ within major 1: exact native provider/model catalog checks, native thinking levels, additive canonical role instructions through a private extension, and canonical skills loaded on demand. Existing `APPEND_SYSTEM.md`, project context, extensions and native skill discovery remain active.
+- Added Goose v1.56+ within major 1: explicit provider/model selection and additive `session --system` instructions containing the canonical role and an on-demand skill index. Effort uses the native default (`auto` in routed profiles). The installed Herdr does not advertise `goose`, so live preparation and startup remain gated before mutation until upstream Herdr supports the kind.
+- Added optional Pi/Goose executable detection to readiness, configuration-root forwarding, routing and failure coverage, and documented inherited permissions and ambient workflow visibility limits. Neither adapter maps auto-review or accepts native pass-through flags.
+
 ## 0.4.0 — 2026-10-23
 
 - OpenCode 2.1.4+ (v2) launch preparation: private standalone servers inspect native config, models, agents and skills without restarting the shared service. Worker startup preserves native prompts and settings, adds canonical role instructions and technical skills, and denies known workflow names/aliases for non-Coordinators. Models use provider/model IDs; explicit effort must match an offered native variant. Native permissions are inherited; auto-review remains unsupported because OpenCode auto mode performs unconditional approval.

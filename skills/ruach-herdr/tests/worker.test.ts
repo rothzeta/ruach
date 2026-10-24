@@ -216,7 +216,7 @@ for(const [route,effort] of [['work.medium','off'],['review.low','none']] as con
   await portableRouting();const file=join(repo,'.agents','routing.yaml');await writeFile(file,(await readFile(file,'utf8')).replace(route==='work.medium'?'effort: medium':'effort: low',`effort: ${effort}`));
   const r=await asRole('builder','start',['--route',route]);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('unsupported_effort');await noMutation();
 });
-for(const kind of ['pi','dsh','omp','agy'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
+for(const kind of ['dsh','omp','agy'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
   const file=join(repo,'.agents','models.yaml');await writeFile(file,(await readFile(file,'utf8')).replace('harness: codex',`harness: ${kind}`));
   await cp(join(bin,'codex'),join(bin,kind));const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe(kind==='dsh'?'unsupported_herdr_kind':'unsupported_adapter');await noMutation();
 });
@@ -459,4 +459,78 @@ test('OpenCode cannot bypass adapter-owned startup through native flags',async()
     expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('conflicting_native_argument');
     expect(await lines('opencode-readers.jsonl')).toEqual([]);await noMutation();
   }
+});
+
+async function additionalHarness(kind:'pi'|'goose') {
+  await cp(join(bin,'codex'),join(bin,kind));
+  behavior.kinds='claude, codex, pi, goose, opencode, omp, agy';
+}
+for(const kind of ['pi','goose'] as const)for(const role of ['implementer','coordinator'])test(`${kind} ${role} launches with canonical role, explicit model and on-demand skills`,async()=>{
+  await additionalHarness(kind);
+  const resources=join(root,'source resources ü $()');
+  await mkdir(join(resources,'agents'),{recursive:true});
+  const canonicalRole=`Canonical ${role} role, literal $() and backticks. No workflow body.`;
+  await writeFile(join(resources,'agents',role+'.md'),canonicalRole);
+  await skill(join(resources,'skills','technical'),'ruach-technical-source');
+  await skill(join(resources,'skills','workflow'),'ruach-workflow-source');
+  const r=await asRole(role,'start',['--kind',kind,'--model','native/test-model','--resources',resources,...(kind==='pi'?['--effort','high']:['--effort','auto'])]);
+  expect(r.exit,r.stderr).toBe(0);expect(r.result.action).toBe('started');
+  const native=(await lines('native-launches.jsonl'))[0];
+  expect(native.args.slice(native.args.indexOf('--provider'),native.args.indexOf('--provider')+4)).toEqual(['--provider','native','--model','test-model']);
+  if(kind==='pi') {
+    const prompt=(await lines('pi-prompts.jsonl'))[0].systemPrompt;
+    expect(prompt).toStartWith('Native system, APPEND_SYSTEM.md and ambient context.');expect(prompt).toContain(canonicalRole);
+    expect(native.args).toContain(join(resources,'skills','technical'));
+    expect(native.args.includes(join(resources,'skills','workflow'))).toBe(role==='coordinator');
+    expect(native.args).toContain('--thinking');
+    expect((await stat(join(r.result.temporary_directory,'role.ts'))).mode&0o777).toBe(0o600);
+  } else {
+    expect(native.args[0]).toBe('session');
+    const prompt=native.args[native.args.indexOf('--system')+1];
+    expect(prompt).toContain(canonicalRole);expect(prompt).toContain('ruach-technical-source');
+    expect(prompt.includes('ruach-workflow-source')).toBe(role==='coordinator');
+    expect(r.stdout).not.toContain(canonicalRole);expect(r.result.temporary_directory).toBeNull();
+  }
+  expect(native.args).not.toContain('--no-skills');expect(native.args).not.toContain('--no-profile');
+  expect(native.args).not.toContain('--resume');expect(native.args).not.toContain('--print');
+});
+for(const kind of ['pi','goose'] as const)test(`${kind} supports routed, offline and dry-run selection without launch material`,async()=>{
+  await additionalHarness(kind);
+  const models=join(repo,'.agents','models.yaml'),routes=join(repo,'.agents','routing.yaml');
+  await writeFile(models,(await readFile(models,'utf8')).replace('harness: codex',`harness: ${kind}`).replace('native_model: fixture-codex','native_model: native/test-model'));
+  if(kind==='goose')await writeFile(routes,(await readFile(routes,'utf8')).replaceAll('effort: high','effort: auto'));
+  for(const [command,extra] of [['resolve',['--offline']],['resolve',[]],['start',['--dry-run']]] as const) {
+    const r=await launch(command,[...extra,'--temp-dir',temporary]);expect(r.exit,r.stderr).toBe(0);
+    expect(r.result.selection.kind).toBe(kind);await noMutation();
+  }
+});
+for(const kind of ['pi','goose'] as const)test(`${kind} rejects unsupported permissions, effort, model syntax and native overrides before mutation`,async()=>{
+  await additionalHarness(kind);
+  for(const [extra,exit,code] of [
+    [['--permissions','auto-review'],3,'unsupported_permissions'],
+    [['--effort',kind==='pi'?'none':'high'],2,'unsupported_effort'],
+    [['--','--resume'],2,'conflicting_native_argument'],
+    [['--','--system','override'],2,'conflicting_native_argument'],
+  ] as const) {
+    const r=await launch('start',['--kind',kind,'--model','native/test-model','--temp-dir',temporary,...extra]);
+    expect(r.exit,r.stderr).toBe(exit);expect(r.result.diagnostics[0].code).toBe(code);await noMutation();
+  }
+  const r=await launch('start',['--kind',kind,'--model','unqualified','--temp-dir',temporary]);
+  expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('invalid_model');await noMutation();
+});
+for(const [key,value] of [['piVersion','0.83.0'],['piVersion','2.0.0'],['piMissingFlag',true],['piMissingModel',true],['gooseVersion','1.55.0'],['gooseVersion','2.0.0'],['gooseMissingFlag',true]] as const)test(`${key}=${value} fails before launch mutation`,async()=>{
+  const kind=key.startsWith('pi')?'pi':'goose';await additionalHarness(kind);behavior[key]=value;
+  const r=await launch('start',['--kind',kind,'--model','native/test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();
+});
+test('Goose is registered offline but fails before mutation when Herdr omits its kind',async()=>{
+  await additionalHarness('goose');behavior.kinds='claude, codex, pi';
+  const r=await launch('start',['--kind','goose','--model','native/test-model','--temp-dir',temporary]);
+  expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('unsupported_herdr_kind');await noMutation();
+});
+for(const kind of ['pi','goose'] as const)test(`${kind} forwards native configuration roots and permission mode`,async()=>{
+  await additionalHarness(kind);
+  const env:Record<string,string>=kind==='pi'?{PI_CODING_AGENT_DIR:join(home,'pi space'),PI_CODING_AGENT_SESSION_DIR:join(home,'sessions')}:{GOOSE_PATH_ROOT:join(home,'goose space'),GOOSE_MODE:'approve',XDG_CONFIG_HOME:join(home,'config')};
+  const r=await launch('start',['--kind',kind,'--model','native/test-model','--temp-dir',temporary],env);
+  expect(r.exit,r.stderr).toBe(0);const forwarded=(await lines('pane-environment.jsonl'))[0];
+  for(const [key,value] of Object.entries(env))expect(forwarded[key]).toBe(value);
 });

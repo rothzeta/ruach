@@ -3,11 +3,12 @@ import { run, executable } from '../process';
 import * as claude from './claude';
 import * as codex from './codex';
 import * as pi from './pi';
+import * as goose from './goose';
 import * as opencode from './opencode';
 import * as dsh from './dsh';
 import * as omp from './omp';
 import * as agy from './agy';
-const adapters={claude,codex,pi,opencode,dsh,omp,agy};
+const adapters={claude,codex,pi,goose,opencode,dsh,omp,agy};
 export function validateKind(value:unknown,field:string):Kind {
   const kind=string(value,field);
   if(!Object.hasOwn(adapters,kind))fail(2,'invalid_kind','Unknown adapter kind',field);

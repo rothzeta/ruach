@@ -1,6 +1,6 @@
 import { stat, open } from 'node:fs/promises';
 import { constants } from 'node:fs';
-export const kinds = ['claude', 'codex', 'pi', 'opencode', 'dsh', 'omp', 'agy'] as const;
+export const kinds = ['claude', 'codex', 'pi', 'goose', 'opencode', 'dsh', 'omp', 'agy'] as const;
 export type Kind = typeof kinds[number];
 export const efforts = ['off','none','minimal','low','medium','high','xhigh','max','auto'] as const;
 export class Failure extends Error {

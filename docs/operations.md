@@ -9,7 +9,17 @@ just install-plugins
 
 `install` prepares pinned executable-skill dependencies. `install-plugins` registers this checkout as a user-level Claude marketplace and installs `ruach@ruach`. The equivalent spellings `just install-plugin` and `just install-plugin ruach` work too. The marketplace receives the absolute checkout path; bare `.` is not a supported source for the installed Claude CLI. Repeating installation is supported. This local plugin loads in place, so source edits take effect in a new Claude session or after `/reload-plugins`.
 
+To refresh an existing local Claude plugin after a release bump, run `claude plugin update ruach@ruach --scope user`, then restart Claude or reload its plugins. For shared skill discovery without adding a second Claude installation, use `bun x --bun skills@1.7.0 add ./skills --global --agent codex --agent pi --agent goose --skill '*' --yes` from the release checkout, and install the copied executable skills' frozen dependencies.
+
 `just install-global` installs skills through the Skills CLI for Codex and Claude. It does not install role definitions or consumer launch shortcuts. Choose the native plugin for Claude when you want its named agents and skills together. See the [README](../README.md#standard-installation) for versioned remote installation. Remote version tags must be published before those commands can fetch them.
+
+### Pi and Goose harnesses
+
+Ruach 0.5.0 enables Pi v1.4+ within major 1 and adds Goose v1.56+ within major 1 preparation. Both select models as `provider/model` and require `--permissions inherit`. Pi checks the exact ID against `pi --offline --list-models` and maps explicit effort to native thinking levels. Goose keeps native effort; use `auto` in routing profiles.
+
+Pi adds the role through a private native extension and adds canonical skills individually. Goose adds the role and an on-demand canonical skill index through `session --system`. Native context, settings and skill discovery remain active. Worker additions omit workflow bodies; only Coordinators may load them. Goose system instructions are redacted in launcher results but visible in process arguments.
+
+The selected harness kind must also appear in `herdr agent start --help`. The Herdr version inspected for this release supports Pi and omits Goose, so Goose live resolve, dry-run and start return `unsupported_herdr_kind` (exit 3) before creating resources. Offline Goose routing works. Use an upstream Herdr release that advertises Goose before attempting startup; the launcher never substitutes another kind. See [adapter evidence](../skills/ruach-herdr/references/adapters.md#pi-and-goose) and the [direct source examples](../README.md#develop-ruach-itself).
 
 ## Snapshot installation failures and recovery
 
