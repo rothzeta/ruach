@@ -31,7 +31,7 @@ Design changes when architectural judgment is required.
 
 ## Output
 
-Produce the required handoff using [ruach-handoff](../skills/ruach-handoff/SKILL.md). Write it at the assigned durable report location, following consumer artifact and document ownership rules. Commit the unchanged assignment with the report when required. Keep disposable working files outside the repository, in the OS temporary directory or harness session scratch. Detailed design belongs in the assigned documents; summarize:
+Produce the required handoff using [ruach-handoff](../skills/ruach-handoff/SKILL.md). Write it at the assigned durable report location, following consumer artifact and document ownership rules. Commit the unchanged assignment with the report when required. Keep disposable working files outside the repository, in the OS temporary directory or harness session scratch. Make the concise handoff sufficient to decide scope, dependencies and readiness; keep detailed investigation and design in its linked artifacts. Summarize:
 
 - proposed design and rationale;
 - affected components;

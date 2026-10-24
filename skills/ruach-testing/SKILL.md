@@ -82,4 +82,10 @@ For a music generator, distinguish ordinary repeatability from cross-release com
 
 **Public entry point with implementation-dependent assertions.** Calling `Compose()` and checking that a private rhythm helper was invoked is still implementation-dependent. Replacing the composer with a stub and asserting that its canned notes appear may test forwarding, but it does not test composition.
 
+**Scroll preservation.** Establish nonzero scroll after focusing the opener, capture the baseline before opening, and compare after opening and dismissal. A nonnegative assertion or a baseline captured after opening does not prove preservation.
+
+**Beat spacing.** Assert relative intervals from the observed public scheduling origin when the absolute origin is unspecified. Do not freeze an incidental startup lead.
+
+**Initial mute.** Exercise actual engine initialization, mute and first playback. A separately constructed already-muted bus proves only that bus's behaviour, not the engine startup path. Test doubles remain useful when they preserve the behaviour being claimed.
+
 **Incidental to configured input.** Before: assert the default timeout is `30`. After: supply `timeout: 5` and assert the operation gives up after 5; the default can change.

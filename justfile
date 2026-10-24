@@ -54,6 +54,10 @@ test:
 agent-routing *args:
     @"{{bun}}" scripts/agent-routing.ts "$@"
 
+# Run or check the canonical external watcher under operator supervision.
+agent-waiting *args:
+    @"{{bun}}" scripts/agent-waiting.ts "$@"
+
 # Launch the Coordinator in a background worktree workspace.
 coordinator *args:
     @"{{bun}}" scripts/agent-routing.ts start coordinator "$@"

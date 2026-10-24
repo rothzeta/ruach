@@ -13,6 +13,8 @@ At every phase, follow the Coordinator's [external waiting and parking rules](..
 
 ## 1. Understand
 
+Apply the Coordinator's [context and role boundary](../../agents/coordinator.md#context) at intake and on wakes. Delegate technical investigation; metadata checks needed for assignment and cleanup remain permitted.
+
 Establish:
 
 - desired outcome;
@@ -121,9 +123,17 @@ The delivery record lists what the Coordinator closed and removed and any except
 
 ## Escalation
 
-Separate two kinds of failure. A **launch failure** follows the launcher's recovery contract: report it and never switch routes automatically. A **work-quality failure** is a worker that is blocked, repeated failed verification, or a review fix loop that is not converging.
+A **launch failure** follows the launcher's recovery contract: report it and never switch routes automatically.
 
-After a small declared number of failed fix/review cycles (default 2; the consumer overrides it in the assignment or consumer guidance), stop looping and escalate:
+A failed correction cycle is a completed, handed-off attempt to resolve a specified blocking outcome whose required verification or subsequent independent review still fails. Count completed correction cycles, not individual commands, assertions or test runs. The default limit is two failed correction cycles unless the consumer specifies otherwise in the assignment or consumer guidance.
+
+Expected red tests, ordinary build/test iterations during initial implementation, and supported environment remediation do not consume this budget. They do not establish success either.
+
+Track the correction outcome until it is closed. Regressions introduced by its correction stay within that outcome; renaming a finding, assignment, branch or worker does not reset the budget.
+
+Escalate earlier when the worker lacks a viable in-scope next step, repeated investigation makes no progress, or resolution needs a design or authority decision. Preserve the evidence and partial work.
+
+At the limit or an earlier blocker, stop looping and escalate:
 
 1. Preserve partial work and evidence in durable reports.
 2. A blocker the Implementer cannot resolve goes to the Architect, when the project declares one, before any stronger-model retry.

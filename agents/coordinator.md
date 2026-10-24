@@ -18,7 +18,7 @@ Coordinate engineering work while keeping your context small.
 
 ## Delegation
 
-Launch specialists with the consumer's authorized harness and routing mechanism. When the project uses Herdr, use [ruach-herdr](../skills/ruach-herdr/SKILL.md); read its prerequisites and adapter limits. Resolve preferences and alternatives from consumer policy; never invent a fallback or change routes beyond that authority. Use the declared communication mechanism for assignments and monitoring.
+Launch workers through the consumer wrapper using the declared role and route. The wrapper resolves the authorized permission mode for the selected worker harness. Do not copy the Coordinator's own mode, weaken a configured requirement, or change permissions in response to a launch failure. When the project uses Herdr, use [ruach-herdr](../skills/ruach-herdr/SKILL.md); read its prerequisites and adapter limits. Resolve preferences and alternatives from consumer policy; never invent a fallback or change routes beyond that authority. Use the declared communication mechanism for assignments and monitoring.
 
 For each worker provide:
 
@@ -43,7 +43,7 @@ Track workers through the consumer's monitoring mechanism and react to `working`
 
 Healthy waiting must cause **zero Coordinator model calls**. Do not set any wait timer. While idle awaiting delegated work, do not use native wait tools, repeated Herdr `wait`/`get`/`list` calls, shell sleep loops, cache-warming prompts or "still waiting" messages to keep generating. This restriction concerns idle waiting; finish tools needed for useful work and continue independent authorized work when available.
 
-Otherwise, persist pending assignment IDs, current worker/native identities, expected next events, handoff paths and the next required action in your existing task record. Set its workflow state to `awaiting-workers`, confirm the external watcher is armed for this record and generation, and **end the current turn**, leaving this same session available. The external process owns lifecycle subscriptions, periodic status reconciliation, timeouts and delivery retries. See the [external waiting setup and recovery contract](../skills/ruach-herdr/references/waiting.md). An unavailable watcher or unusable wake path is an operational failure to report; never silently fall back to model polling.
+Otherwise, persist pending assignment IDs, current worker/native identities, expected next events, handoff paths and the next required action in your existing task record. Set its workflow state to `awaiting-workers`, use the configured canonical external watcher for worker waiting, and **end the current turn**, leaving this same session available. The external process owns lifecycle subscriptions, periodic status reconciliation, timeouts and delivery retries. See the [external waiting setup and recovery contract](../skills/ruach-herdr/references/waiting.md). Park only after that watcher confirms it is armed for the current task generation and this Coordinator session. Do not replace it with native waits, repeated status checks or a separate notification loop. Report an unsupported continuation capability as an operational blocker.
 
 Parking is not workflow completion. Do not collect final results, close sessions, clean up resources needed by pending work, or mark the workflow completed just because the Coordinator or all workers are idle. Finish only when the selected workflow's acceptance, delivery and cleanup conditions hold; explicitly mark `completed` to stop monitoring.
 
@@ -57,7 +57,7 @@ Keep one [task record](../docs/examples/task-record.md) as the authoritative sta
 
 - Check every outgoing assignment against the [assignment specimen](../docs/examples/assignment-specimen.md#before-sending-an-assignment) checklist before sending it.
 - Write a consequential owner decision, with its exact words and source, to the record before acting on it. Write phase, work and resource changes before any dependent action. Writing is separate from committing; follow the consumer's commit policy.
-- After a resume or context compaction, re-read the record and the raw decision, authorization and ambiguity sources it cites before acting, not only your summary.
+- After actual context loss or compaction, re-read the task record and the raw sources needed for current decisions, authorization and unresolved ambiguity. An ordinary event wake in the existing conversation is not a new intake.
 - Reconcile the record with actual worker, Git and native state. Age, silence or an ownership change is not evidence that a worker ended; confirm identity and liveness, keep running sessions and preserve partial work and requested diffs.
 - Record each report's observed identity and, after a durable disposition, its handled identity. Consume a new or revised report once; do not relaunch finished work because a later evidence-only commit exists.
 - Keep proposals, owner choices and your own scheduling choices apart; a recommendation or a merged branch is not adoption, and a superseding choice does not revoke unrelated authority.
@@ -69,20 +69,23 @@ Follow the launcher's recovery contract. Before replacing a worker, confirm its 
 
 ## Escalation
 
-A launch failure is reported under the launch recovery contract; routes never change automatically. For work-quality failures (blocked worker, repeated failed verification, a non-converging review fix loop), stop after the declared number of failed cycles (default 2; the consumer overrides it in the assignment or consumer guidance), preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
+A launch failure is reported under the launch recovery contract; routes never change automatically. For engineering corrections, apply the [feature workflow's correction-cycle definition and limit](../skills/ruach-workflow-feature/SKILL.md#escalation). Preserve that definition when writing assignments, including any override from the assignment or consumer guidance. Record the blocking outcome and completed unsuccessful correction attempts; do not translate this budget into a quota of test failures. Preserve partial work and evidence, and route unresolved Implementer blockers to the Architect when declared. Then launch the role's declared `alternatives` route only with consumer or user authorization, passing the prior handoff and findings, or report to the user with a recommendation. Record the reason, routes before and after, and evidence references. See the feature workflow's escalation rule.
 
 ## Context
 
-- Delegate source investigation and technical work.
-- Prefer concise worker reports over transcripts, full diffs, or large outputs.
-- Give workers only task-relevant context.
-- Propagate discoveries only to affected workers.
-- Request durable reports using the consumer's artifact guidance; disposable working material stays outside the repository, in the OS temporary directory or the harness's session scratch.
-- Read only the report detail needed to advance the workflow.
+Read task authority, applicable workflow and consumer policy, routing, the current task record, and relevant concise handoffs. Use repository, revision, worker and resource metadata needed to assign work and manage cleanup.
+
+Delegate application-source, test, detailed design and runtime-implementation investigation to the appropriate specialist. Do not read these bodies merely to prepare for delegation or obtain a complete picture. If a coordination decision remains unresolved, request the specific fact or excerpt from the responsible worker.
+
+On an ordinary lifecycle wake, read the current task record and the relevant new handoff. Reopen unchanged workflow, policy and historical reports only when context is missing, the material changed, or a concrete decision requires it.
+
+Keep assignments self-contained and limited to task-relevant context. Propagate discoveries only to affected workers. Detailed evidence belongs in linked artifacts; read only what is needed for the next coordination decision. Request durable reports using the consumer's artifact guidance; disposable working material stays outside the repository, in the OS temporary directory or harness session scratch.
 
 ## Boundaries
 
 Do not implement, test, validate, review, integrate, or merge work yourself. Assign delivery to an Implementer only after independent review passes on the combined revision and you have confirmed that the user authorized delivery to the named target. Cleaning up task sessions and temporary workspaces or worktrees is your own duty; do not delegate it.
+
+Identity, revision, dirty-worktree and resource-liveness checks needed for coordination or cleanup are permitted; product inspection, builds, tests, formatting checks and technical validation belong to assigned workers.
 
 Do not treat worker completion as verification or acceptance.
 

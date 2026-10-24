@@ -1,6 +1,6 @@
 # Ruach
 
-Current release: **0.6.0**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
+Current release: **0.6.1**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -62,7 +62,7 @@ roles:
 
 Alternatives are explicit-only: the launcher uses the preferred route unless you pass `--route ID` naming the preference or one of that role's alternatives. It rejects other routes, and a launch failure never switches route or model. A selected model still needs native account access. Skip the catalogs entirely with direct selection (`--kind`, `--model`, `--effort`).
 
-**Escalation.** If an Implementer's fix and review cycles keep failing (twice by default; set a different number in the assignment or consumer guidance), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
+**Escalation.** If two completed, handed-off correction attempts for the same blocking outcome still fail required verification or independent review (set an override in the assignment or consumer guidance), the Coordinator stops looping, preserves the evidence and either reports to you with a recommendation or, if you or your policy authorize it, launches the role's declared alternative with the prior handoff and findings. Declaring a stronger model as an `alternatives` entry is what makes that step possible; without one, the Coordinator reports to you. See the [escalation rule](skills/ruach-workflow-feature/SKILL.md#escalation).
 
 ## Standard installation
 
@@ -71,7 +71,7 @@ Ruach follows the [Agent Skills specification](https://agentskills.io/specificat
 Install the released skills globally for Codex and Claude Code:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.0 --global --agent codex --agent claude-code --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --global --agent codex --agent claude-code --skill '*'
 ```
 
 Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
@@ -79,7 +79,7 @@ Omit `--global` for a project installation. From a checkout of the desired relea
 For Pi and Goose skill discovery, select their agent IDs through the same CLI:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.0 --global --agent pi --agent goose --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --global --agent pi --agent goose --skill '*'
 ```
 
 Skill discovery works independently of Herdr launch support. See the [Pi and Goose launch prerequisites](docs/operations.md#pi-and-goose-harnesses).
@@ -87,7 +87,7 @@ Skill discovery works independently of Herdr launch support. See the [Pi and Goo
 For Claude Code, install the native plugin to expose all Ruach skills and six named agents together:
 
 ```sh
-claude plugin marketplace add rothzeta/ruach#v0.6.0 --scope user
+claude plugin marketplace add rothzeta/ruach#v0.6.1 --scope user
 claude plugin install ruach@ruach --scope user
 claude --agent ruach:coordinator
 ```
@@ -101,12 +101,12 @@ Executable skills require Bun and their own frozen dependency install. A copied 
 For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
 
 ```sh
-bun scripts/install.ts install --source . --version 0.6.0 --target /path/to/project/.agents
+bun scripts/install.ts install --source . --version 0.6.1 --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
 ```
 
-`--version 0.6.0` selects exactly the `v0.6.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+`--version 0.6.1` selects exactly the `v0.6.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
 
@@ -135,7 +135,7 @@ bun skills/ruach-herdr/scripts/worker.ts start --name ruach-goose --role impleme
 just architect ruach-designer --placement pane
 ```
 
-The Coordinator and Architect prefer Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The launcher defaults to automatic approval review; `--permissions inherit` preserves native permission settings. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. When launched from a Herdr workspace of the same repository, the worktree is registered as a Herdr linked worktree of that workspace; otherwise it gets a standalone workspace. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
+The Coordinator and Architect prefer Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The wrapper resolves permission policy by selected harness: Claude and Codex require `auto-review`, OpenCode requires `inherit`; conflicting requests fail before launch. Other harnesses require an explicit development policy decision. Preflight stderr identifies the effective mode and policy source; the portable launcher still defaults to `inherit`. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. When launched from a Herdr workspace of the same repository, the worktree is registered as a Herdr linked worktree of that workspace; otherwise it gets a standalone workspace. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
 
 For `just architect`, the default worker name is `ruach-architect`, checkout `/path/to/ruach-worktrees/ruach-architect` next to this repo, branch `ruach/ruach-architect`, and base committed HEAD. Choose a fresh worker name for each launch; existing branches and paths are rejected. Uncommitted source edits are not copied. Use `--worktree DIR`, `--branch NAME` and `--base REF` to customize the checkout. Native settings are read again from the actual worker checkout before startup. `--placement pane` explicitly uses the supplied source cwd and requires a caller pane ID.
 
@@ -169,7 +169,7 @@ Bun is required for executable skill suites. Herdr tests require local socket bi
 
 ## External Coordinator waiting
 
-The Coordinator parks with no wait timer or idle model calls when only delegated work remains. Run the [external watcher](skills/ruach-herdr/references/waiting.md) as a separate supervised process; it queues actionable worker events into the same named Codex session and waits for durable task-record dispositions. Worker launching is unchanged. The setup guide names the tested continuation path and recovery requirements.
+The Coordinator parks with no wait timer or idle model calls when only delegated work remains. Run `just agent-waiting watch --record TASK.md --journal PRIVATE/events.json` as a separate supervised process, and use `just agent-waiting status` with the same paths before parking ([setup and recovery](skills/ruach-herdr/references/waiting.md)); it queues actionable worker events into the same named Codex session and waits for durable task-record dispositions. Worker launching is unchanged. The setup guide names the tested continuation path and recovery requirements.
 
 ## Releases
 

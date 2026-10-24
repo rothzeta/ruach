@@ -40,6 +40,8 @@ Do not edit a submitted assignment invisibly: keep the original, issue a version
 
 ## Conditional fields
 
+When a correction budget applies, state the blocking outcome, the feature workflow's completed correction-cycle definition, completed unsuccessful attempts and remaining budget. Preserve its exclusions for initial implementation iterations and supported remediation, and its continuity across renamed assignments and correction regressions; do not count test failures. Include the applicable consumer override, if any, in the self-contained assignment.
+
 Add only when they apply: dependencies and reasons; binding decision IDs; base and branch checks; port, profile or save allocation; route override authority; expected input revisions; retained-diff path; assignment version and what it supersedes.
 
 ## Multi-unit example

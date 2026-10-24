@@ -27,7 +27,7 @@ Synthetic example (illustrative, not a real entry):
 - Authority: consumer policy permits one rerun for this symptom in this environment
 - Disposition: on an identical second failure, stop and report; do not raise limits or widen the entry
 
-The Coordinator's existing default of two failed quality cycles, or the consumer's override, governs escalation separately from a per-command flake retry allowance. Do not create or edit a foreign flake record to make a run green.
+Engineering escalation follows the [feature workflow's correction-cycle definition and limit](../../ruach-workflow-feature/SKILL.md#escalation), separately from command-retry and registered-flake rules. Never retry a forbidden command or relabel a failure to evade a limit. Do not create or edit a foreign flake record to make a run green.
 
 ## Complete verification before shortening its display
 
@@ -52,14 +52,15 @@ If a full-consuming `tee` pipeline is used, copy Bash's entire `PIPESTATUS` arra
 
 ## Invariant-preserving public-contract splits
 
-A test may be split when the split keeps every invariant it protected and names the observable boundary and permitted variations for each part. Replacing one end-to-end assertion of a shuffled exact list is valid only when order is unspecified: assert membership and multiplicity, assert the input is not mutated, and keep a separate exact seeded-order test when reproducibility is actually contractual.
+A test may be split when the split keeps every invariant it protected and names the observable boundary and permitted variations for each part. Replacing one end-to-end assertion of a shuffled exact list is valid only when order is unspecified: assert membership and multiplicity, assert the input is not mutated, and keep an exact seeded-output fixture only when a stable seed-to-output mapping is a documented compatibility contract. Verify ordinary repeatability by comparing independent fresh runs with identical inputs and seed.
 
 ```ts
 // Before: one test freezes order and membership together.
 expect(shuffle([1, 2, 3, 4], seed(7))).toEqual([3, 1, 4, 2]);
 
 // After: membership/multiplicity plus nonmutation protect the contract;
-// a seeded-order test remains only if reproducibility from a seed is required.
+// exact seeded output requires a documented stable seed-to-output contract.
+// Ordinary repeatability compares independent fresh runs with identical inputs and seed.
 const input = [1, 2, 3, 4];
 const out = shuffle(input);
 expect([...out].sort((a, b) => a - b)).toEqual([1, 2, 3, 4]);

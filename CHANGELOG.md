@@ -4,6 +4,15 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+## 0.6.1 — 2026-10-24
+
+- Ruach's development waiting entry point delegates to the canonical watcher with an injected native continuation adapter. The existing Codex queue path remains supported; arming now pins the Coordinator session as well as the task generation. Consumer integrations must reuse the journal, delivery, retries and acknowledgement logic. Sandalphon's separate consumer bridge was inspected but is unchanged by user scope.
+- Development launch permissions resolve from the selected worker harness before launch: Claude/Codex require auto-review, OpenCode requires inherit. Conflicts and undeclared harness policies fail before resource creation; portable launcher defaults and capability checks remain intact.
+- Coordinator intake delegates technical investigation, ordinary wakes read the current record/new handoff, and actual context loss recovers relevant authority. Cleanup metadata remains permitted; Architect handoffs carry concise scheduling decisions.
+- The feature workflow defines completed unsuccessful correction cycles per blocking outcome, with a default limit of two. Initial implementation iterations and supported remediation are excluded; renamed assignments and correction regressions retain the outcome's budget.
+- Implementer, Reviewer, simplification and testing guidance require readable touched code and independent oracles, with focused scroll, scheduling-origin, engine-startup and seed-compatibility examples.
+- Consumer-entry regression tests and native Codex continuation evidence, the bounded independent guidance evaluation and verification limits are recorded in docs/reports/releases/0.6.1/verification.md.
+
 ## 0.6.0 — 2026-10-24
 
 - Coordinator and both workflows park in `awaiting-workers`, with no wait timer, native idle waits, model polling or still-waiting messages. Parking retains the session and pending resources; only explicit completion stops monitoring.

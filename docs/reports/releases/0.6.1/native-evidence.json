@@ -1,0 +1,31 @@
+{
+  "supportedHarness": "codex",
+  "sourceEntry": "scripts/agent-waiting.ts",
+  "arming": "armed",
+  "quietNewTurns": 0,
+  "quietDeliveries": 0,
+  "sameNativeSession": true,
+  "sameName": true,
+  "markerRetained": true,
+  "events": 1,
+  "attempts": 1,
+  "submitted": true,
+  "actualTurnCorrelated": true,
+  "handled": 1,
+  "recordState": "completed",
+  "watcherState": "completed",
+  "watcherExit": 0,
+  "cleanup": [
+    {
+      "closed": true
+    },
+    {
+      "closed": true
+    }
+  ],
+  "versions": {
+    "codex": "0.164.0",
+    "herdr": "0.9.0/protocol22",
+    "bun": "1.4.2"
+  }
+}
