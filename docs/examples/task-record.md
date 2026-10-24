@@ -16,10 +16,16 @@ Destination: main (local merge only). Retained checkout: /work/app.
 | Blockers | none |
 | Open resources | worker proj-142-review (workspace w-12); worktree /work/app-worktrees/proj-142-review |
 | Released | proj-142-impl session and worktree (commits reachable from task/proj-142-impl) |
-| Next action | Wait for review-1 report; on blocking findings, assign a bounded fix to a new Implementer on the same branch |
+| Next action | External watcher armed; end the turn awaiting review-1 report; on blocking findings, assign a bounded fix to a new Implementer on the same branch |
 ```
 
 To resume, a new Coordinator reads this record, the linked handoffs, and the actual state of the listed workers and worktrees. It confirms a worker's execution has ended before replacing it, preserves partial work, and corrects the record where reality differs. It validates any earlier authorization against its recorded source, action, target and limits (see [authority and decisions](#authority-and-decisions)): an unchanged, still-valid one is reused without asking again, and an interruption alone never revokes it.
+
+## Parking and wake dispositions
+
+While only delegated work remains, record `awaiting-workers`, pending assignment/current worker identities, expected next events, handoff paths and the next action. Confirm the external watcher is armed, then end the turn without a wait timer. Keep the same session available; parking does not mean final collection, workflow completion or releasing still-needed resources. Use the [external waiting record and commands](../../skills/ruach-herdr/references/waiting.md) for the optional machine-readable section in this same record. The watcher owns its own journal; only the Coordinator writes handled dispositions here.
+
+On wake, reconcile event, assignment and native worker identity before consuming the handoff. Persist its handled disposition and the next assignment/acceptance/delivery identity before the dependent action, and reconcile an interrupted action before repeating it. Mark `completed` only after the selected workflow's completion obligations hold; that explicitly stops monitoring.
 
 ## Recording an escalation
 

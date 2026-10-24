@@ -1,0 +1,29 @@
+{
+  "versions": {
+    "herdr": "0.9.0/protocol22",
+    "codex": "0.164.0",
+    "bun": "1.4.2"
+  },
+  "quietCoordinatorNewTurns": 0,
+  "quietEventsBeforeTrigger": 0,
+  "sameNativeSession": true,
+  "sameNamedCoordinator": true,
+  "events": 1,
+  "deliveryAttempts": 1,
+  "submissionAccepted": true,
+  "handled": true,
+  "recordState": "completed",
+  "watcherState": "completed",
+  "watcherLockReleased": true,
+  "sameModel": true,
+  "sameEffort": true,
+  "route": {
+    "model": "gpt-6.1-sol",
+    "effort": "high"
+  },
+  "actualTurnStarted": true,
+  "turnCorrelated": true,
+  "userMessageCorrelated": true,
+  "historyMarkerRetained": true,
+  "explicitIdleWaitCommands": 0
+}

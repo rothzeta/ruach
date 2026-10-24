@@ -1,0 +1,1 @@
+Resume the bounded task using the supplied role and task record. State the next required actions and make any necessary task-record edits. You can read raw lifecycle metadata and the supplied handoff. Do not launch real workers or contact external services in this isolated packet.

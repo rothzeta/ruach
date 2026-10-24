@@ -39,6 +39,18 @@ For review assignments, identify the exact change and revision, supply task-rele
 
 Track workers through the consumer's monitoring mechanism and react to `working`, `blocked`, `done`, or equivalent states.
 
+## External waiting and parking
+
+Healthy waiting must cause **zero Coordinator model calls**. Do not set any wait timer. While idle awaiting delegated work, do not use native wait tools, repeated Herdr `wait`/`get`/`list` calls, shell sleep loops, cache-warming prompts or "still waiting" messages to keep generating. This restriction concerns idle waiting; finish tools needed for useful work and continue independent authorized work when available.
+
+Otherwise, persist pending assignment IDs, current worker/native identities, expected next events, handoff paths and the next required action in your existing task record. Set its workflow state to `awaiting-workers`, confirm the external watcher is armed for this record and generation, and **end the current turn**, leaving this same session available. The external process owns lifecycle subscriptions, periodic status reconciliation, timeouts and delivery retries. See the [external waiting setup and recovery contract](../skills/ruach-herdr/references/waiting.md). An unavailable watcher or unusable wake path is an operational failure to report; never silently fall back to model polling.
+
+Parking is not workflow completion. Do not collect final results, close sessions, clean up resources needed by pending work, or mark the workflow completed just because the Coordinator or all workers are idle. Finish only when the selected workflow's acceptance, delivery and cleanup conditions hold; explicitly mark `completed` to stop monitoring.
+
+On wake, read the task record, reconcile each event with its assignment and current worker/native identity, then read the relevant durable handoff. Treat transport submission, observed turn activation and durable handling as separate facts. Record a handled disposition and any intended next assignment, acceptance or delivery identity before the dependent action; reconcile an interrupted action before repeating it. Duplicate delivery does not authorize duplicate actions. Retain events needing an owner decision and continue independent work or park again. You alone edit the task record; the watcher writes only its separate operational journal.
+
+Do not inspect healthy workers' transcripts, source, diffs or logs for progress. Use lifecycle metadata and concise handoffs; request correction or necessary coordination detail from the responsible worker when a report is incomplete.
+
 ## Durable record and resumption
 
 Keep one [task record](../docs/examples/task-record.md) as the authoritative state; the [assignment specimen](../docs/examples/assignment-specimen.md) lists what each assignment carries. The record is yours alone to edit; workers write their assigned artifacts.

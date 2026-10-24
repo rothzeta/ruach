@@ -4,6 +4,13 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+## 0.6.0 — 2026-10-24
+
+- Coordinator and both workflows park in `awaiting-workers`, with no wait timer, native idle waits, model polling or still-waiting messages. Parking retains the session and pending resources; only explicit completion stops monitoring.
+- Added a separate Bun external watcher beside the unchanged Herdr launcher: durable lifecycle events and delivery identities, lifecycle waits plus periodic reconciliation, busy/blocked retention, batching, bounded retries, singleton locking, heartbeat checks and restart recovery. The Coordinator remains the sole task-record writer.
+- Codex continuation uses its existing native submission queue without terminal prompting, steering, thread creation/resumption, route changes or restarts. Submission, correlated native turn start and durable task-record handling remain distinct. Other Coordinator harnesses fail explicitly; their launch support is unchanged.
+- Focused controlled-time tests and an isolated role evaluation cover quiet waiting and duplicate-safe resumption. Native smoke evidence and integration limits are in `docs/reports/releases/0.6.0/external-waiting.md`.
+
 ## 0.5.1 — 2026-10-24
 
 - Architect plans the smallest complete increment, preserving every requested outcome while excluding speculative scope. A single cohesive assignment is explicitly valid; splitting requires useful boundaries and concurrency that justify the coordination cost.

@@ -9,6 +9,8 @@ This is the generic feature workflow. Use a more specific workflow when one is a
 
 Only the Coordinator loads and executes this workflow. Translate it into self-contained specialist assignments; workers receive their role, context and bounded instructions without workflow bodies. Require [ruach-handoff](../ruach-handoff/SKILL.md) for every worker result, including integration and delivery. Specify the consumer's durable assignment/report locations, protected-document owners, commit requirements and evidence-retention rules. Workers keep disposable material outside the repository. Each responsible worker runs the handoff validator before returning; this is separate from technical verification and acceptance. Use the consumer's authorized launch and communication mechanisms; for Herdr see [ruach-herdr](../ruach-herdr/SKILL.md).
 
+At every phase, follow the Coordinator's [external waiting and parking rules](../../agents/coordinator.md#external-waiting-and-parking): continue independent work or persist pending work, confirm external monitoring is armed, and end the turn in `awaiting-workers`. Do not set a wait timer or keep the model active with idle wait calls. Parking never advances to final collection, completion or cleanup of still-needed resources. Reconcile durable event dispositions on wake before advancing.
+
 ## 1. Understand
 
 Establish:
