@@ -10,12 +10,14 @@ Protect required behavior through observable boundaries. Apply this skill within
 ## Principles
 
 - Every assertion must protect an identifiable contract invariant.
+- Derive expected behavior independently from the contract. Do not calculate the expected answer using the production implementation under test or a copied version of the same algorithm.
+- A test must exercise the behavior it claims to cover. A public entry point does not make assertions about private helpers or internal state black-box. Mocks must not remove the behavior whose correctness is claimed.
 - Prefer public inputs, outputs, errors, and state transitions over private fields, helper calls, or internal call sequences.
 - Choose the smallest public boundary that exposes the requirement; black-box testing does not require every test to be end-to-end.
 - Valid implementation changes and permitted outcome variations should still pass; violations of the protected requirement should fail.
 - Assert exact values, ordering, formatting, or snapshots only when the contract requires them for controlled inputs. Determinism alone does not make current output contractual.
 - Test configurable behavior with explicit inputs; do not freeze provisional defaults or fixture coincidences.
-- For nondeterministic behavior, test guaranteed properties. Require identical results only when reproducibility is contractual.
+- Fixed seeds may make generated inputs and failures reproducible. Test the promised properties of randomized behavior. If repeatability is promised, compare independent runs with fresh state and the same seed. Assert a hard-coded seeded result only when the seed-to-output mapping is itself a documented compatibility contract.
 - Distinguish an environment limitation, a registered flake, a regression and an unclassified result by evidence before choosing an action, and keep the original failure and full output.
 - Preserve useful regression coverage. Change obsolete or incidental assertions only when the assignment permits it, without weakening real invariants.
 
@@ -53,7 +55,7 @@ Use the project's established test runner and conventions. Add framework-specifi
 
 ## Before and after
 
-**Fixed-seed snapshot to property assertions.** A shuffle helper is documented to return every input exactly once in an unspecified order. A test seeds the random generator and compares against a stored list. That freezes one implementation's output; any valid change fails it.
+**Fixed-seed snapshot to property assertions.** A shuffle helper is documented to return every input exactly once in an unspecified order without mutating the input. A test seeds the random generator and compares against a stored list. That freezes one implementation's output; any valid change fails it.
 
 ```ts
 // Before: asserts a coincidence of seed and algorithm
@@ -66,8 +68,18 @@ expect([...out].sort((a, b) => a - b)).toEqual([1, 2, 3, 4]); // same members, o
 expect(input).toEqual([1, 2, 3, 4]);           // input not mutated
 ```
 
-Keep a fixed-seed exact-output test only if reproducibility from a seed is itself the contract.
+These assertions protect membership, multiplicity, and input immutability only; input immutability must also be promised by the contract. If the contract additionally promises randomization, use appropriate evidence across controlled inputs and seeds that distinguishes an implementation that always returns the original order. A single unchanged order can be valid, so do not require every run to reorder the input. Switching from snapshots to properties alone does not guarantee adequate coverage.
+
+For a music generator, distinguish ordinary repeatability from cross-release compatibility:
+
+| Promised behavior | Appropriate check |
+| --- | --- |
+| Notes respect the requested scale, range, and phrase length | Check those properties independently |
+| The same inputs and seed reproduce a result | Compare fresh runs with identical inputs and seed |
+| Saved seeds reproduce the same composition across supported releases | Preserve exact expected output for that documented compatibility contract |
 
 **Private call to public outcome.** Before: `expect(cache.evict).toHaveBeenCalledWith('a')` after adding a third item to a two-item cache. After: add three items, then assert that the oldest key is absent and the two newest are present. The first fails on a correct refactor; the second fails only when eviction is wrong.
+
+**Public entry point with implementation-dependent assertions.** Calling `Compose()` and checking that a private rhythm helper was invoked is still implementation-dependent. Replacing the composer with a stub and asserting that its canned notes appear may test forwarding, but it does not test composition.
 
 **Incidental to configured input.** Before: assert the default timeout is `30`. After: supply `timeout: 5` and assert the operation gives up after 5; the default can change.

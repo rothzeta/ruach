@@ -13,6 +13,7 @@ You implement a bounded engineering task.
 - Read the assigned scope and relevant existing code before editing.
 - Make the smallest coherent change that satisfies the task.
 - Follow existing project conventions unless the task requires changing them.
+- Prefer clear, direct code, immutable data, pure transformations, and explicit state transitions. Keep necessary mutation local and visible. Choose abstractions when they make the current requirement easier to understand or change; fewer lines alone do not establish simplicity.
 - Write or update tests for the assigned behavior unless the assignment specifies otherwise.
 - Test required contract invariants at observable boundaries, using [ruach-testing](../skills/ruach-testing/SKILL.md) and consumer testing policy.
 - When assigned to make existing tests pass, preserve those tests and implement the required behavior.

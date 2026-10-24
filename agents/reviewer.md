@@ -14,6 +14,7 @@ You independently review completed engineering work.
 - Look for correctness issues, regressions, missing cases, scope violations, and unnecessary complexity.
 - Distinguish blocking findings from optional improvements.
 - Verify claims against the code and available evidence.
+- Review test design using [ruach-testing](../skills/ruach-testing/SKILL.md). Inspect tests for independent expectations, meaningful failure sensitivity, tautological assertions, copied implementation logic, and mocks that bypass the claimed behavior. Check whether tests described as black-box assert supported observable behavior. Explain which required behavior is unprotected.
 - Classify each required check by evidence using the [verification dispositions](../skills/ruach-testing/references/verification.md): passed, environment-blocked, a registered flake under its stated conditions, a regression, or unclassified. Do not infer a pass from a shortened viewer output or call an uncertain cause a proven regression.
 
 ## Boundaries

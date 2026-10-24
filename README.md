@@ -1,6 +1,6 @@
 # Ruach
 
-Current release: **0.5.0**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
+Current release: **0.5.1**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -27,6 +27,12 @@ Pick the route that matches what you want to do. Each route installs different t
 The snapshot route is for projects that want an auditable, committed installation. Start with the smallest route that covers the job; you can add another later. Avoid installing the same skills twice into one harness. The [lifecycle guide](docs/operations.md#lifecycle-inspect-upgrade-and-remove) covers inspecting, upgrading and removing an installation. To check, read-only, whether a copy can serve a route, run `just ready --route skill|native|herdr` from a checkout or `bun .agents/ruach-install.ts ready --route native` from a snapshot ([readiness](docs/operations.md#check-readiness)). If a snapshot install is interrupted or fails, see [failures and recovery](docs/operations.md#snapshot-installation-failures-and-recovery).
 
 To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
+
+## Design and testing expectations
+
+The [Architect](agents/architect.md) plans the smallest complete increment that delivers every requested outcome; one cohesive implementation assignment is valid. Splitting work needs useful boundaries and concurrency that justify its coordination cost. Architect and [Implementer](agents/implementer.md) prefer clear, direct code, immutable data, pure transformations and explicit state transitions, keeping necessary mutation local and visible.
+
+[Testing guidance](skills/ruach-testing/SKILL.md) protects supported observable behavior with independently derived expectations. Tests must exercise what they claim to cover; private-helper assertions and mocks that bypass that behavior do not establish black-box coverage. Fixed seeds make failures reproducible, but exact seeded results become requirements only under a documented seed-to-output compatibility contract. The [Reviewer](agents/reviewer.md) checks test meaning and identifies required behavior left unprotected.
 
 ## Choose your models
 
@@ -65,7 +71,7 @@ Ruach follows the [Agent Skills specification](https://agentskills.io/specificat
 Install the released skills globally for Codex and Claude Code:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.5.0 --global --agent codex --agent claude-code --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.5.1 --global --agent codex --agent claude-code --skill '*'
 ```
 
 Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
@@ -73,7 +79,7 @@ Omit `--global` for a project installation. From a checkout of the desired relea
 For Pi and Goose skill discovery, select their agent IDs through the same CLI:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.5.0 --global --agent pi --agent goose --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.5.1 --global --agent pi --agent goose --skill '*'
 ```
 
 Skill discovery works independently of Herdr launch support. See the [Pi and Goose launch prerequisites](docs/operations.md#pi-and-goose-harnesses).
@@ -81,7 +87,7 @@ Skill discovery works independently of Herdr launch support. See the [Pi and Goo
 For Claude Code, install the native plugin to expose all Ruach skills and six named agents together:
 
 ```sh
-claude plugin marketplace add rothzeta/ruach#v0.5.0 --scope user
+claude plugin marketplace add rothzeta/ruach#v0.5.1 --scope user
 claude plugin install ruach@ruach --scope user
 claude --agent ruach:coordinator
 ```
@@ -95,12 +101,12 @@ Executable skills require Bun and their own frozen dependency install. A copied 
 For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
 
 ```sh
-bun scripts/install.ts install --source . --version 0.5.0 --target /path/to/project/.agents
+bun scripts/install.ts install --source . --version 0.5.1 --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
 ```
 
-`--version 0.5.0` selects exactly the `v0.5.0` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+`--version 0.5.1` selects exactly the `v0.5.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
 

@@ -4,6 +4,15 @@ Repository releases use Semantic Versioning and annotated `vMAJOR.MINOR.PATCH` G
 
 ## Unreleased
 
+## 0.5.1 — 2026-10-24
+
+- Architect plans the smallest complete increment, preserving every requested outcome while excluding speculative scope. A single cohesive assignment is explicitly valid; splitting requires useful boundaries and concurrency that justify the coordination cost.
+- Architect and Implementer prefer clear, direct code, immutable data, pure transformations and explicit state transitions, with necessary mutation kept local and visible. Abstractions serve current requirements rather than line-count reduction.
+- Shared testing guidance requires independent contract-derived expectations and tests that exercise their claimed behavior. Public entry points do not make private-helper assertions black-box, and mocks must not bypass the behavior under test.
+- Fixed seeds support reproducible failures; ordinary repeatability compares fresh runs, while exact seeded snapshots require a documented seed-to-output compatibility contract. Examples distinguish these promises and explain why membership properties alone do not establish randomization.
+- Reviewer links directly to the testing skill and inspects independent expectations, failure sensitivity, tautologies, copied implementation logic, bypassing mocks and unprotected requirements.
+- Verification scope: resource/link checks, typechecking and automated repository/skill suites validate packaging and regressions, not agent adherence to the revised instructions. No new agent-behavior evaluation accompanies this patch.
+
 ## 0.5.0 — 2026-10-24
 
 - Enabled Pi v1.4+ within major 1: exact native provider/model catalog checks, native thinking levels, additive canonical role instructions through a private extension, and canonical skills loaded on demand. Existing `APPEND_SYSTEM.md`, project context, extensions and native skill discovery remain active.
