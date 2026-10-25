@@ -1,0 +1,76 @@
+bun test v1.4.2 (744846f84)
+
+tests/launch-transport.test.ts:
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=false [193.62ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=true [197.16ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=false [260.21ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=true [271.09ms]
+
+tests/worker.test.ts:
+PTY transport observation: {
+  observed: true,
+  canonical: true,
+  submittedBytes: 7,
+  continuation: false,
+}
+(pass) long literal native argv crosses the canonical PTY and preserves role, config, permissions and native PATH [2043.13ms]
+(pass) normal argv still starts through a canonical PTY without private bootstrap material [1016.69ms]
+LR-01 public observation: {
+  ready: true,
+  actualArgc: 13,
+  startup: "customization-retained",
+}
+(pass) LR-01: public worker preserves prepared role and permissions after ordinary shell startup prepends PATH [1850.47ms]
+(pass) large startup retains private argv material on splitFailure without resubmission [1021.78ms]
+(pass) large startup retains private argv material on startFailure without resubmission [1435.24ms]
+(pass) large startup retains private argv material on startBlocked without resubmission [1909.65ms]
+(pass) missing Bun execve support fails before launch-space mutation [728.42ms]
+(pass) LR-01: startup cannot redirect the prepared launch to a different native executable [2200.40ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: bypassBinding [1733.58ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: removeReceipt [1856.43ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: forgeReceipt [2068.33ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: wrongForeground [1940.88ms]
+(pass) private binding failure retains material and submits no native start: bootstrapSetupFailure [1192.82ms]
+(pass) private binding failure retains material and submits no native start: bootstrapWaitFailure [1727.55ms]
+(pass) large startup supports a temp directory containing the PATH delimiter without PATH dispatch [2366.87ms]
+
+tests/agy.test.ts:
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/ruach-agy-VRIsHL/bin/agy",
+  actualVersion: "1.4.7",
+  argc: 4,
+  startup: undefined,
+}
+(pass) C2-AR-01: short Agy executes the exact preflight executable; startup=false [1550.15ms]
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/ruach-agy-MsdKvN/bin/agy",
+  actualVersion: "1.4.7",
+  argc: 4,
+  startup: "customization-retained",
+}
+(pass) C2-AR-01: short Agy executes the exact preflight executable; startup=true [1655.25ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: bypassBinding, blocked=false [1115.19ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: bypassBinding, blocked=true [1054.52ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: removeReceipt, blocked=false [1082.59ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: removeReceipt, blocked=true [1113.38ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: forgeReceipt, blocked=false [1127.44ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: forgeReceipt, blocked=true [1174.00ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: wrongForeground, blocked=false [1074.87ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: wrongForeground, blocked=true [1056.71ms]
+(pass) short Agy binding failure retains material without native submission: bootstrapSetupFailure [735.68ms]
+(pass) short Agy binding failure retains material without native submission: bootstrapWaitFailure [824.60ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapPrimitive [387.51ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapWaitOutput [465.96ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapProcessInfo [648.11ms]
+(pass) short Agy requires execve before mutation [530.04ms]
+(pass) late Agy binding capability failure retains only the created checkout [755.15ms]
+
+ 36 pass
+ 185 filtered out
+ 0 fail
+ 288 expect() calls
+Ran 36 tests across 3 files. [42.50s]

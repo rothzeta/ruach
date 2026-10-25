@@ -1,0 +1,171 @@
+{
+  "task": "C2-AR01-FIX-01",
+  "outcome": "C2-AR-01",
+  "source_baseline": "1a2b3748cec0477a5dfff7f1bccd0895ad38f5b0",
+  "candidate_revision": "4c5defcd13691f9b6754fd0c9bc3fde311e45061",
+  "tested_revision": "4c5defcd13691f9b6754fd0c9bc3fde311e45061",
+  "prior_review_revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+  "correction_budget": {
+    "completed_failed_before": 1,
+    "default_limit": 2,
+    "remaining_before": 1,
+    "corrected_attempt_independent_review": "pending",
+    "next_required_failure": "Stop normal correction loop at two and escalate; no reset from commands or renamed findings"
+  },
+  "before": {
+    "command": "timeout 120s bun test --timeout 30000 tests/agy.test.ts --test-name-pattern 'C2-AR-01:'",
+    "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+    "exit": 1,
+    "clean_pass": 1,
+    "customized_fail": 1,
+    "claimed_version": "1.4.7",
+    "customized_actual_version": "1.4.6",
+    "arguments_preserved": 4,
+    "unchanged_production_diff_exit": 0,
+    "log_sha256": "5438e36d89ae5fcc95d97d7c8c1a3314d362e456d22e82032d2291fb86520aeb"
+  },
+  "verification": [
+    {
+      "name": "check",
+      "command": "timeout 300s just check",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "check.log",
+      "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "name": "root-test",
+      "command": "timeout 300s bun run test",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "root-test.log",
+      "sha256": "b71b4e4ef1f37dade1d7580eac3fd165894fd559100a76eb63754e865aa74fd0",
+      "pass": 110,
+      "fail": 0
+    },
+    {
+      "name": "release-check",
+      "command": "timeout 300s bun run release-check",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "release-check.log",
+      "sha256": "5d17481483b37c5e81e978b6de9dde0e8ac61ae9130a5b9fb8d3b79582aec102"
+    },
+    {
+      "name": "herdr-test",
+      "command": "timeout 600s bun test --timeout 30000",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+      "exit": 0,
+      "log": "herdr-test.log",
+      "sha256": "924584b3010d3588216c3bc744b147218ae3d1324743d3a4131f8ab20b9ce4b9",
+      "pass": 285,
+      "fail": 0
+    },
+    {
+      "name": "focused",
+      "command": "timeout 300s bun test --timeout 30000 tests/agy.test.ts tests/launch-transport.test.ts tests/worker.test.ts --test-name-pattern 'C2-AR-01:|LR-01:|normal argv|long literal|private argv crosses|large startup|short Agy|late Agy|missing Bun|private binding failure'",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+      "exit": 0,
+      "log": "focused.log",
+      "sha256": "7af43b8395f839140d03b12071f8ffb6ff987f582cf830961cd1ad64f599343d",
+      "pass": 36,
+      "fail": 0
+    },
+    {
+      "name": "original-customized",
+      "command": "timeout 120s bun /tmp/ruach-c2-ar01-YVZ9wPlA/run-startup.ts corrected-customized",
+      "cwd": "/tmp/ruach-c2-ar01-YVZ9wPlA",
+      "exit": 0,
+      "log": "original-customized.log",
+      "sha256": "24e395275bd013e4ccf134f51bca6dea4c59e84bfb1f430d1f052fda1051d8c6"
+    },
+    {
+      "name": "original-clean",
+      "command": "timeout 120s bun /tmp/ruach-c2-ar01-YVZ9wPlA/run-startup.ts clean",
+      "cwd": "/tmp/ruach-c2-ar01-YVZ9wPlA",
+      "exit": 0,
+      "log": "original-clean.log",
+      "sha256": "c0f42ce533f208d5f4d4192032c44057b758e49c6dabb7018e2af03ee06b0f1f"
+    }
+  ],
+  "original_controls": [
+    {
+      "name": "clean",
+      "exit": 0,
+      "ready": true,
+      "claimedVersion": "1.4.7",
+      "actualVersion": "1.4.7",
+      "intendedExecutable": true,
+      "argumentCount": 4,
+      "literalArgsMatch": true,
+      "inheritedPermissions": true,
+      "decoyUsed": false,
+      "startupSentinelRetained": false
+    },
+    {
+      "name": "corrected-customized",
+      "exit": 0,
+      "ready": true,
+      "claimedVersion": "1.4.7",
+      "actualVersion": "1.4.7",
+      "intendedExecutable": true,
+      "argumentCount": 4,
+      "literalArgsMatch": true,
+      "inheritedPermissions": true,
+      "decoyUsed": false,
+      "startupSentinelRetained": true
+    }
+  ],
+  "original_helpers": [
+    {
+      "name": "startup-probe.ts",
+      "sha256": "38df292337bd71760b2d5fe508dbf52f9c094ce3d3fe8199f9d03058524a616d",
+      "unchanged": true
+    },
+    {
+      "name": "common.ts",
+      "sha256": "c618c7a10d74246761e227ad779d8d5984509811c0ea5081a145c99afda855fc",
+      "unchanged": true
+    },
+    {
+      "name": "run-startup.ts",
+      "sha256": "ec20a4e3f2d5de5dc3944707cdf2d5d8bd6d1765a979c7ab734ff447ba5907fc",
+      "unchanged": true
+    }
+  ],
+  "changed_paths": [
+    "docs/roadmap.md",
+    "skills/ruach-herdr/SKILL.md",
+    "skills/ruach-herdr/references/agy.md",
+    "skills/ruach-herdr/scripts/launch-transport.ts",
+    "skills/ruach-herdr/tests/agy.test.ts",
+    "skills/ruach-herdr/tests/fixtures/fake-cli.ts"
+  ],
+  "accepted_transport_paths_preserved": [
+    "skills/ruach-herdr/scripts/worker.ts",
+    "skills/ruach-herdr/scripts/native-launch.ts",
+    "skills/ruach-herdr/tests/launch-transport.test.ts",
+    "skills/ruach-herdr/tests/fixtures/terminal-start.ts",
+    "skills/ruach-herdr/tests/fixtures/terminal-host.ts",
+    "skills/ruach-herdr/tests/fixtures/terminal-client.ts"
+  ],
+  "worker_test_unchanged_from_baseline": true,
+  "accepted_long_worker_regression_block_preserved": true,
+  "artifacts": [
+    {
+      "path": "before-pty.txt",
+      "sha256": "5438e36d89ae5fcc95d97d7c8c1a3314d362e456d22e82032d2291fb86520aeb"
+    },
+    {
+      "path": "after-focused.txt",
+      "sha256": "7af43b8395f839140d03b12071f8ffb6ff987f582cf830961cd1ad64f599343d"
+    }
+  ],
+  "limits": [
+    "No actual native/model/trust/account operation",
+    "Independent exact corrected-source review required before real Agy launch",
+    "Native role/identity/aggregate budget/ambient visibility/brief/skill/advisory gates remain",
+    "No Agy watcher/continuation or other-harness short-path fix claimed",
+    "Final union/CI/delivery remain separate"
+  ]
+}

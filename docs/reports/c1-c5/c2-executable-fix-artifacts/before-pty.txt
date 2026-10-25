@@ -1,0 +1,40 @@
+bun test v1.4.2 (744846f84)
+
+tests/agy.test.ts:
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/ruach-agy-PoPGOI/bin/agy",
+  actualVersion: "1.4.7",
+  argc: 4,
+  startup: undefined,
+}
+(pass) C2-AR-01: short Agy executes the exact preflight executable; startup=false [773.05ms]
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/ruach-agy-PWVGDj/startup-bin/agy",
+  actualVersion: "1.4.6",
+  argc: 4,
+  startup: "customization-retained",
+}
+165 |       ready: result.result.ready, claimedVersion: result.result.cli_version,
+166 |       executable: native.executable, actualVersion: native.version, argc: native.args.length,
+167 |       startup: native.startupSentinel,
+168 |     });
+169 |     expect(native.args).toEqual(['--model', model, '--add-dir', result.result.temporary_directory]);
+170 |     expect(native.executable).toBe(join(bin, 'agy'));
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: "/tmp/ruach-agy-PWVGDj/bin/agy"
+Received: "/tmp/ruach-agy-PWVGDj/startup-bin/agy"
+
+      at <anonymous> (/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr/tests/agy.test.ts:170:31)
+(fail) C2-AR-01: short Agy executes the exact preflight executable; startup=true [615.10ms]
+
+ 1 pass
+ 27 filtered out
+ 1 fail
+ 23 expect() calls
+Ran 2 tests across 1 file. [1444.00ms]
