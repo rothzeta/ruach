@@ -4,6 +4,7 @@ import { delimiter, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { WebSocketServer } from 'ws';
 import { createServer, type Server } from 'node:http';
+import { closeTerminal } from './fixtures/terminal-client';
 // Fail once at module setup, before per-test fixtures, when the sandbox denies IPC.
 const socketProbeRoot=await mkdtemp(join(tmpdir(),'ruach-herdr-socket-'));
 try {
@@ -28,7 +29,27 @@ async function skill(dir:string,name:string){await mkdir(dir,{recursive:true});a
 async function launch(command='start',extra:string[]=[],env:Record<string,string>={}) {
   await save();
   const placement=extra.includes('--placement')?[]:['--placement','pane'];
-  const proc=Bun.spawn([process.execPath,worker,command,'--name','example-worker','--role','implementer','--cwd',repo,'--repo',repo,...placement,...extra],{cwd:root,env:{...process.env,HOME:home,CODEX_HOME:join(home,'.codex'),CLAUDE_CONFIG_DIR:join(home,'.claude'),PATH:bin,HERDR_ENV:'1',HERDR_PANE_ID:'w1:p1',FIXTURE_ROOT:root,...env},stdout:'pipe',stderr:'pipe'});
+  const runtime = env.FIXTURE_BUN_PRELOAD ? ['--preload', env.FIXTURE_BUN_PRELOAD] : [];
+  const proc = Bun.spawn([
+    process.execPath, ...runtime, worker, command,
+    '--name', 'example-worker', '--role', 'implementer',
+    '--cwd', repo, '--repo', repo, ...placement, ...extra,
+  ], {
+    cwd: root,
+    env: {
+      ...process.env,
+      HOME: home,
+      CODEX_HOME: join(home, '.codex'),
+      CLAUDE_CONFIG_DIR: join(home, '.claude'),
+      PATH: bin,
+      HERDR_ENV: '1',
+      HERDR_PANE_ID: 'w1:p1',
+      FIXTURE_ROOT: root,
+      ...env,
+    },
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
   const [stdout,stderr,exit]=await Promise.all([new Response(proc.stdout).text(),new Response(proc.stderr).text(),proc.exited]);
   return {exit,stdout,stderr,result:JSON.parse(stdout)};
 }
@@ -67,7 +88,13 @@ beforeEach(async()=>{
   }));
   await new Promise<void>(r=>server.listen(join(root,'native.sock'),r));
 });
-afterEach(async()=>{for(const client of wss.clients)client.terminate();await new Promise<void>(r=>wss.close(()=>r()));await new Promise<void>(r=>server.close(()=>r()));await rm(root,{recursive:true,force:true});});
+afterEach(async () => {
+  await closeTerminal(root);
+  for (const client of wss.clients) client.terminate();
+  await new Promise<void>(resolve => wss.close(() => resolve()));
+  await new Promise<void>(resolve => server.close(() => resolve()));
+  await rm(root, { recursive: true, force: true });
+});
 test('explicit resolve and dry-run preserve config, hide all discovered workflows, and write no launch material',async()=>{
   for(const command of ['resolve','start']) {
     const r=await launch(command,[...explicit,'--temp-dir',temporary,...(command==='start'?['--dry-run']:[])]);
@@ -163,6 +190,25 @@ test('normal argv still starts through a canonical PTY without private bootstrap
   expect(r.result.temporary_directory).toBeNull();
   expect((await lines('terminal-start.jsonl'))[0].continuation).toBe(false);
 });
+test('LR-01: public worker preserves prepared role and permissions after ordinary shell startup prepends PATH', async () => {
+  behavior.terminalStart = true;
+  behavior.startupPathPrepend = true;
+  const role = "Assigned canonical role ü ' `literal` $(literal).\n".repeat(220);
+  await writeFile(join(repo, '.agents/agents/implementer.md'), role);
+  const literal = join(root, "space ü ' `touch SHOULD_NOT_RUN` $(touch SHOULD_NOT_RUN)");
+  const r = await launch('start', [...explicit, '--permissions', 'auto-review', '--temp-dir', temporary, '--', '--add-dir', literal]);
+  expect(r.exit, r.stderr).toBe(0);
+  const native = (await lines('native-launches.jsonl'))[0];
+  console.info('LR-01 public observation:', { ready: r.result.ready, actualArgc: native.args.length, startup: native.startupSentinel });
+  expect(native.args).toContain('--approve-for-me');
+  const developer = native.args.find((arg: string) => arg.startsWith('developer_instructions='));
+  expect((Bun.TOML.parse as (text: string) => any)(developer).developer_instructions).toBe(secret + '\n\n' + role);
+  expect(native.args.slice(-2)).toEqual(['--add-dir', literal]);
+  expect(native.path).toBe(bin);
+  expect(native.startupSentinel).toBe('customization-retained');
+  expect(native.executable).toBe(join(bin, 'codex'));
+  expect(await Bun.file(join(repo, 'SHOULD_NOT_RUN')).exists()).toBe(false);
+}, 15000);
 for (const failure of ['splitFailure', 'startFailure', 'startBlocked']) {
   test(`large startup retains private argv material on ${failure} without resubmission`, async () => {
     behavior[failure] = true;
@@ -176,15 +222,70 @@ for (const failure of ['splitFailure', 'startFailure', 'startBlocked']) {
     expect((await lines('mutations.jsonl')).filter((entry) => entry.action === 'start')).toHaveLength(failure === 'splitFailure' ? 0 : 1);
   });
 }
-test('an unrepresentable bootstrap PATH directory fails before launch-space mutation', async () => {
-  const incompatible = join(root, 'temporary' + delimiter + 'part');
-  await mkdir(incompatible);
+test('missing post-initialization launch capability fails before launch-space mutation', async () => {
+  behavior.noBootstrapPrimitive = true;
   await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
-  const r = await launch('start', [...explicit, '--temp-dir', incompatible]);
-  expect(r.exit).toBe(2);
-  expect(r.result.diagnostics[0].code).toBe('invalid_transport_directory');
+  const r = await launch('start', [...explicit, '--temp-dir', temporary]);
+  expect(r.exit).toBe(3);
+  expect(r.result.diagnostics[0].code).toBe('unsupported_herdr_transport');
   await noMutation();
-  expect(await readdir(incompatible)).toEqual([]);
+});
+test('missing Bun execve support fails before launch-space mutation', async () => {
+  const preload = join(root, 'unsupported-runtime.ts');
+  await writeFile(preload, "Object.defineProperty(process, 'execve', { value: undefined });\n");
+  await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+  const r = await launch('start', [...explicit, '--temp-dir', temporary], { FIXTURE_BUN_PRELOAD: preload });
+  expect(r.exit).toBe(3);
+  expect(r.result.diagnostics[0].code).toBe('unsupported_runtime');
+  await noMutation();
+});
+test('LR-01: startup cannot redirect the prepared launch to a different native executable', async () => {
+  const decoyBin = join(root, 'startup-bin');
+  await mkdir(decoyBin);
+  await writeFile(join(decoyBin, 'codex'), `#!${process.execPath}\nprocess.env.DECOY_USED='yes';\nimport ${JSON.stringify(join(fixture, 'fake-cli.ts'))};\n`, { mode: 0o700 });
+  behavior.startupPathPrepend = true;
+  behavior.startupBin = decoyBin;
+  await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+  const r = await launch('start', [...explicit, '--permissions', 'auto-review', '--temp-dir', temporary]);
+  expect(r.exit, r.stderr).toBe(0);
+  const native = (await lines('native-launches.jsonl'))[0];
+  expect(native.executable).toBe(join(bin, 'codex'));
+  expect(native.args).toContain('--approve-for-me');
+  expect(native.decoyUsed).not.toBe('yes');
+});
+for (const fault of ['bypassBinding', 'removeReceipt', 'forgeReceipt', 'wrongForeground']) {
+  test(`large startup fails closed when ready belongs to an unconfirmed launch: ${fault}`, async () => {
+    behavior[fault] = true;
+    behavior.startupPathPrepend = true;
+    await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+    const r = await launch('start', [...explicit, '--permissions', 'auto-review', '--temp-dir', temporary]);
+    expect(r.exit).toBe(4);
+    expect(r.result.diagnostics[0].code).toBe('bootstrap_unconfirmed');
+    expect(r.result.ready).not.toBe(true);
+    expect(r.result.submission_state).toBe('unknown');
+    expect(await Bun.file(join(r.result.temporary_directory, 'bootstrap/argv.json')).exists()).toBe(true);
+    expect((await lines('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(1);
+  });
+}
+for (const fault of ['bootstrapSetupFailure', 'bootstrapWaitFailure']) {
+  test(`private binding failure retains material and submits no native start: ${fault}`, async () => {
+    behavior[fault] = true;
+    await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+    const r = await launch('start', [...explicit, '--temp-dir', temporary]);
+    expect(r.exit).toBe(4);
+    expect(r.result.diagnostics[0].code).toBe('bootstrap_uncertain');
+    expect(await Bun.file(join(r.result.temporary_directory, 'bootstrap/argv.json')).exists()).toBe(true);
+    expect((await lines('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(0);
+  });
+}
+test('large startup supports a temp directory containing the PATH delimiter without PATH dispatch', async () => {
+  const directory = join(root, 'temporary' + delimiter + 'part');
+  await mkdir(directory);
+  behavior.startupPathPrepend = true;
+  await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+  const r = await launch('start', [...explicit, '--temp-dir', directory]);
+  expect(r.exit, r.stderr).toBe(0);
+  expect((await lines('native-launches.jsonl'))[0].path).toBe(bin);
 });
 test('duplicate launcher options are rejected before any mutation',async()=>{
   const r=await launch('start',['--role','coordinator','--temp-dir',temporary]);

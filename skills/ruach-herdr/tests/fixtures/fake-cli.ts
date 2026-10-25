@@ -1,7 +1,8 @@
 // Test executable: record the public argv/cwd and simulate native read boundaries.
 import { basename, join } from 'node:path';
-import { appendFileSync, readFileSync, existsSync } from 'node:fs';
+import { appendFileSync, readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { parse as parseJSONC } from 'jsonc-parser';
+import { terminalRequest } from './terminal-client';
 const exe=basename(process.argv[1]),args=process.argv.slice(2);
 const root=process.env.FIXTURE_ROOT!;
 appendFileSync(join(root,'calls.jsonl'),JSON.stringify({exe,args,cwd:process.cwd()})+'\n');
@@ -9,6 +10,26 @@ const data=JSON.parse(readFileSync(join(root,'behavior.json'),'utf8'));
 function out(v:any){console.log(JSON.stringify(v));}
 if(exe==='herdr') {
   if(args.join(' ')==='agent start --help')console.log(`--kind --pane [possible values: ${data.kinds??'claude, codex, pi, opencode, omp, agy'}]`);
+  else if (args.join(' ') === 'pane run --help') console.log(data.noBootstrapPrimitive ? '' : '<PANE_ID> <COMMAND>');
+  else if (args.join(' ') === 'pane wait-output --help') console.log('--match --timeout');
+  else if (args.join(' ') === 'pane process-info --help') console.log('--pane');
+  else if (args.slice(0, 2).join(' ') === 'pane run') {
+    appendFileSync(join(root, 'mutations.jsonl'), JSON.stringify({ action: 'bootstrap', args }) + '\n');
+    if (data.bootstrapSetupFailure) process.exit(1);
+    await fixtureTerminal({ operation: 'run', command: args[3] });
+    out({ result: { pane_id: args[2] } });
+  }
+  else if (args.slice(0, 2).join(' ') === 'pane wait-output') {
+    if (data.bootstrapWaitFailure) process.exit(1);
+    await fixtureTerminal({ operation: 'wait', marker: args[args.indexOf('--match') + 1] });
+    out({ result: { pane_id: args[2], matched_line: args[args.indexOf('--match') + 1] } });
+  }
+  else if (args.slice(0, 2).join(' ') === 'pane process-info') {
+    const pane = args[args.indexOf('--pane') + 1];
+    const info = await fixtureTerminal({ operation: 'process-info', pane });
+    if (data.wrongForeground) info.foreground_process_group_id += 1;
+    out({ result: { process_info: info } });
+  }
   else if(args.join(' ')==='pane split --help')console.log('--current --direction --cwd --no-focus --env');
   else if(args.join(' ')==='worktree create --help')console.log(data.noLinked?'--cwd':'--workspace --cwd --branch --base --path --label --focus --no-focus');
   else if(args.slice(0,2).join(' ')==='worktree list') {
@@ -53,18 +74,19 @@ if(exe==='herdr') {
     if(data.startTimeout)await new Promise(r=>setTimeout(r,40000));
     if(data.startFailure){console.error(data.leak??'timeout');process.exit(1);}
     const native=args.slice(args.indexOf('--')+1);
-    const settings=native.indexOf('--settings');
-    if(settings>=0) {
-      const path=native[settings+1];
-      appendFileSync(join(root,'observed.jsonl'),JSON.stringify({settings:JSON.parse(readFileSync(path,'utf8')),settingsPath:path})+'\n');
-    }
     // Execute only fake harnesses, which record actual native arguments.
     const envFile=join(root,'pane-environment.jsonl');
     const paneEnv=existsSync(envFile)?JSON.parse(readFileSync(envFile,'utf8').trim().split('\n').at(-1)!):{};
     const launchEnv={...process.env,...paneEnv};
-    if(data.terminalStart) {
-      const {terminalStart}=await import('./terminal-start');
-      const result=await terminalStart([args[args.indexOf('--kind')+1],...native],process.cwd(),launchEnv,join(root,'native-launches.jsonl'));
+    if (data.bypassBinding && existsSync(join(root, 'terminal-host.json'))) {
+      await fixtureTerminal({ operation: 'run', command: 'unset -f ' + args[args.indexOf('--kind') + 1] });
+    }
+    if(data.terminalStart || existsSync(join(root, 'terminal-host.json'))) {
+      const result = await fixtureTerminal({
+        operation: 'start',
+        argv: [args[args.indexOf('--kind') + 1], ...native],
+        observedFile: join(root, 'native-launches.jsonl'),
+      });
       appendFileSync(join(root,'terminal-start.jsonl'),JSON.stringify(result)+'\n');
       if(!result.observed)process.exit(1);
     } else {
@@ -72,6 +94,12 @@ if(exe==='herdr') {
       if(!nativeExe)process.exit(1);
       const proc=Bun.spawnSync([nativeExe,...native],{cwd:process.cwd(),env:launchEnv});
       if(proc.exitCode!==0)process.exit(1);
+    }
+    if (data.removeReceipt || data.forgeReceipt) {
+      const setup = readFileSync(join(root, 'mutations.jsonl'), 'utf8').trim().split('\n').map(line => JSON.parse(line)).find(item => item.action === 'bootstrap');
+      const directory = setup.args[3].slice(3, -1).replaceAll("'\\''", "'").replace(/setup\.sh$/, '');
+      if (data.removeReceipt) (await import('node:fs')).unlinkSync(join(directory, 'executed.json'));
+      else writeFileSync(join(directory, 'executed.json'), JSON.stringify({ nonce: 'foreign', payloadHash: 'foreign', pid: 1 }));
     }
     if(data.startBlocked){console.error(JSON.stringify({error:{code:'agent_not_ready',message:'Native input required'}}));process.exit(1);}
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
@@ -142,6 +170,11 @@ else if(args.join(' ')==='app-server daemon version') {
   appendFileSync(join(root,'stdio-closed.jsonl'),JSON.stringify({pid:process.pid})+'\n');
   if(data.stdioStayAlive)await new Promise(r=>setTimeout(r,40000));
 } else {
+  const settings = args.indexOf('--settings');
+  if (settings >= 0) {
+    const path = args[settings + 1];
+    appendFileSync(join(root, 'observed.jsonl'), JSON.stringify({ settings: JSON.parse(readFileSync(path, 'utf8')), settingsPath: path }) + '\n');
+  }
   if(exe==='pi') {
     const extension=args[args.indexOf('--extension')+1];
     const hooks=new Map<string,Function>();
@@ -152,9 +185,13 @@ else if(args.join(' ')==='app-server daemon version') {
   if(exe==='claude'&&data.managedRoot)appendFileSync(join(root,'customizations.jsonl'),JSON.stringify({managedSourcesPresent:['managed-settings.json','managed-settings.d/policy.json','.claude/skills/workflow/SKILL.md'].every(p=>existsSync(join(data.managedRoot,p)))})+'\n');
   appendFileSync(join(root, 'native-launches.jsonl'), JSON.stringify({
     exe,
+    executable: process.argv[1],
+    decoyUsed: process.env.DECOY_USED,
     args,
     cwd: process.cwd(),
     path: process.env.PATH,
+    pid: process.pid,
+    startupSentinel: process.env.STARTUP_SENTINEL,
     configHomes: {
       home: process.env.HOME,
       codex: process.env.CODEX_HOME,
@@ -165,4 +202,15 @@ else if(args.join(' ')==='app-server daemon version') {
       configDir: process.env.OPENCODE_CONFIG_DIR,
     } : {}),
   }) + '\n');
+  if (process.env.FIXTURE_NATIVE_HOLD === '1') await new Promise(() => { setInterval(() => {}, 1000); });
+}
+
+async function fixtureTerminal(operation: Record<string, unknown>) {
+  const envFile = join(root, 'pane-environment.jsonl');
+  const paneEnv = existsSync(envFile) ? JSON.parse(readFileSync(envFile, 'utf8').trim().split('\n').at(-1)!) : {};
+  const rcfile = data.startupPathPrepend ? join(root, 'isolated.bashrc') : undefined;
+  if (rcfile && !existsSync(rcfile)) {
+    writeFileSync(rcfile, `export PATH=${JSON.stringify(data.startupBin ?? join(root, 'bin'))}:"$PATH"\nexport STARTUP_SENTINEL=customization-retained\nPS1='RUACH_TERMINAL_READY> '\n`);
+  }
+  return await terminalRequest(root, { cwd: process.cwd(), env: { ...process.env, ...paneEnv }, rcfile, ...operation });
 }

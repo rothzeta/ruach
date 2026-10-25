@@ -6,7 +6,7 @@ import { contents, directory, fail, Failure, identifier, kinds, efforts, string,
 import { environment, executable, json, run } from './process';
 import { routed } from './routing';
 import { prepare } from './adapters';
-import { materializeBootstrap, needsBootstrap, verifyBootstrapRuntime } from './launch-transport';
+import { bindBootstrap, confirmBootstrap, materializeBootstrap, needsBootstrap, verifyBootstrapCapabilities, verifyBootstrapRuntime, type Bootstrap } from './launch-transport';
 import { worktreePlan, createWorktree, createLinkedWorktree, linkedParent, type Worktree } from './spaces';
 const usage='bun scripts/worker.ts resolve|start --name NAME --role ROLE --cwd DIR [--repo DIR] [--resources DIR] [--catalogs DIR] [--route ID | --kind KIND --model MODEL [--effort LEVEL]] [--placement worktree|pane] [--worktree DIR] [--branch NAME] [--base REF] [--dry-run | --offline] [--temp-dir DIR] [--permissions inherit|auto-review] [-- NATIVE_FLAGS]';
 function options(args:string[]) {
@@ -98,6 +98,7 @@ try {
   if(agents.some((a:any)=>a.name===v.name))fail(2,'duplicate_name','Agent name is already in use','name');
   let plan=await prepare(selected,o.pass);
   verifyBootstrapRuntime(selected.kind, plan.argv, tempRoot);
+  if (needsBootstrap(selected.kind, plan.argv)) await verifyBootstrapCapabilities(herdr, cwd);
   if(placement==='worktree')worktree=await worktreePlan(cwd,v.name,v);
   let bootstrapped = false;
   const output = () => ({
@@ -150,38 +151,38 @@ try {
       phase='prepare';temp=await mkdtemp(join(tempRoot,'ruach-herdr-'));await chmod(temp,0o700);
       argv=await plan.materialize(temp);
     }
-    let bootstrapEnvironment: Record<string, string> = {};
-    if (needsBootstrap(selected.kind, argv)) {
-      phase = 'prepare';
-      verifyBootstrapRuntime(selected.kind, argv, tempRoot);
-      if (!temp) {
-        temp = await mkdtemp(join(tempRoot, 'ruach-herdr-'));
-        await chmod(temp, 0o700);
-      }
-      bootstrapEnvironment = {
-        PATH: await materializeBootstrap(
-          temp,
-          nativeExecutable,
-          selected.kind,
-          argv,
-          plan.environment?.PATH ?? environment().PATH,
-        ),
-      };
-      argv = [];
-      bootstrapped = true;
-    }
-    if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
-    phase=placement==='pane'||linkedMode?'split':'workspace';state='unknown';
-    const rootPane=linkedMode?pane:undefined;if(linkedMode)pane=undefined;
-    const paneEnvironment = Object.entries({
+    const nativeEnvironment = {
       ...Object.fromEntries(
         ['PATH', 'HOME', 'CODEX_HOME', 'CLAUDE_CONFIG_DIR']
           .filter(key => process.env[key] !== undefined)
           .map(key => [key, (environment() as Record<string, string>)[key]]),
       ),
       ...plan.environment,
-      ...bootstrapEnvironment,
-    }).flatMap(([key, value]) => ['--env', `${key}=${value}`]);
+    };
+    let bootstrap: Bootstrap | undefined;
+    if (needsBootstrap(selected.kind, argv)) {
+      phase = 'prepare';
+      verifyBootstrapRuntime(selected.kind, argv, tempRoot);
+      await verifyBootstrapCapabilities(herdr, selected.cwd);
+      if (!temp) {
+        temp = await mkdtemp(join(tempRoot, 'ruach-herdr-'));
+        await chmod(temp, 0o700);
+      }
+      bootstrap = await materializeBootstrap(
+        temp,
+        nativeExecutable,
+        selected.kind,
+        argv,
+        plan.environment?.PATH ?? environment().PATH,
+        nativeEnvironment,
+      );
+      argv = [];
+      bootstrapped = true;
+    }
+    if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
+    phase=placement==='pane'||linkedMode?'split':'workspace';state='unknown';
+    const rootPane=linkedMode?pane:undefined;if(linkedMode)pane=undefined;
+    const paneEnvironment = Object.entries(nativeEnvironment).flatMap(([key, value]) => ['--env', `${key}=${value}`]);
     // Herdr's worktree create takes no environment, so the worker pane is split from the linked
     // workspace's root pane to carry the caller's PATH and configuration homes.
     const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:linkedMode?[herdr,'pane','split',rootPane!,'--direction','right']:[herdr,'workspace','create','--label',v.name];
@@ -194,6 +195,10 @@ try {
       if(!linkedMode)workspace=placement==='worktree'?result?.workspace?.workspace_id:undefined;
     }catch{}
     if(typeof pane!=='string'||!pane||placement==='worktree'&&(typeof workspace!=='string'||!workspace))fail(4,code,'Launch space response lacks its IDs; inspect state','herdr');
+    if (bootstrap) {
+      phase = 'bootstrap';
+      await bindBootstrap(herdr, pane, selected.cwd, bootstrap);
+    }
     // Exactly one submission. Inspect readiness failures without retrying.
     phase='start';
     const start=await run([herdr,'agent','start',v.name,'--kind',selected.kind,'--pane',pane,'--',...argv],selected.cwd,35000);
@@ -205,6 +210,7 @@ try {
       const observed=await run([herdr,'agent','get',v.name],selected.cwd);
       let agent:any;try{agent=JSON.parse(observed.stdout).result?.agent;}catch{}
       if(observed.exit===0&&!observed.timedOut&&agent?.name===v.name&&agent?.pane_id===pane&&agent?.agent===selected.kind&&agent?.agent_status==='blocked') {
+        if (bootstrap) await confirmBootstrap(herdr, pane, selected.cwd, bootstrap);
         state='awaiting-input';
         const next=workspace?`Open the existing workspace: herdr workspace focus ${workspace}.`:`Inspect the existing pane ${pane}.`;
         console.error(`${v.name} launched and is waiting for native input. ${next} Read the dialog and approve it yourself or explicitly authorize an assistant to answer it. Do not launch another worker to resolve this prompt.`);
@@ -215,6 +221,7 @@ try {
     }
     let started;try{started=JSON.parse(start.stdout);}catch{}
     if(started?.result?.agent?.name!==v.name||started?.result?.agent?.pane_id!==pane||started.error)fail(4,'start_uncertain','Agent startup response does not confirm the expected agent and pane; inspect state','herdr');
+    if (bootstrap) await confirmBootstrap(herdr, pane, selected.cwd, bootstrap);
     state='started';
     console.log(JSON.stringify({...output(),...space,action:'started',ready:true,awaiting_user_input:false,submission_state:state}));
   }

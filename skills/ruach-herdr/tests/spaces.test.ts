@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { symlink, realpath, chmod, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { delimiter, isAbsolute, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
+import { closeTerminal } from './fixtures/terminal-client';
 
 const worker=resolve(import.meta.dir,'../scripts/worker.ts');
 const fake=resolve(import.meta.dir,'fixtures/fake-cli.ts');
@@ -57,7 +58,10 @@ process.exit(result.status??1);
   await chmod(join(bin,'git'),0o700);
   behavior={daemonMissing:true,git,repo};cwdOverride=undefined;verb='start';
 });
-afterEach(async()=>{await rm(root,{recursive:true,force:true});});
+afterEach(async () => {
+  await closeTerminal(root);
+  await rm(root, { recursive: true, force: true });
+});
 
 test('default launch creates a real isolated worktree and background workspace without caller pane or split',async()=>{
   const base=command(['rev-parse','HEAD']);
