@@ -1,0 +1,794 @@
+{
+  "reviewed_revision": "7b53c336f435a0c740e7ab61f71d4ce801562c69",
+  "evidence_revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+  "product_source": {
+    "canonical_source_commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+    "canonical_source_tree": "91daf580664322620eb9dddf0a0bfaf827c3657e",
+    "archive_sha256": "1c42adc97769db6636468cce40e208507d0b0848f21c41fd441fa39113eb406f",
+    "original_file_count": 1067,
+    "patch_sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc",
+    "files": [
+      {
+        "path": "src/client/src/performance/state.ts",
+        "before_sha256": "6146e16b7eb37b040cea8270192fdf29b76dc25f0de0f56bc083628c56c2cc5e",
+        "after_sha256": "9b91f4adb499abc5e9ba1fcb50502183904079b1a9808e3a31bf0361b89a5c23"
+      },
+      {
+        "path": "src/client/src/performance/state.test.ts",
+        "before_sha256": "f52d92635db3bff396be589fdfae6ef153ee3b8f4d9200cbb00d3b2c6ce9a5d6",
+        "after_sha256": "6a85a469c422421daa20519a4054768edad59d1fde7119afea75ea39f4c98e92"
+      },
+      {
+        "path": "src/client/src/performance/state-generation.test-support.json",
+        "before_sha256": null,
+        "after_sha256": "c3d572b8c39c8db4de72e1d72e61f64a697ddf3549f9b2054bb03110adb384c1"
+      }
+    ],
+    "response_composition_origin": {
+      "evidence_commit": "5bf48a6ec523a24dc9b35fefe3df7ba64952a909",
+      "evidence_path": "docs/reports/c1-c5/runtime-finding-review-artifacts/original-response.json",
+      "original_response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401",
+      "selection": "performance.composition only; formatted with configured Prettier"
+    }
+  },
+  "original_source_files_verified": 1067,
+  "corrected_changed_files_verified": 3,
+  "builds": [
+    {
+      "name": "client",
+      "files": 16,
+      "sha256": "4e5163f31bff96b3f3dc47767a5c898d82bba000bfed17dd23321156a4175265"
+    },
+    {
+      "name": "server",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    },
+    {
+      "name": "baselineClient",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    {
+      "name": "old_client",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    {
+      "name": "old_server",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    }
+  ],
+  "states": [
+    {
+      "name": "original_db",
+      "bytes": 421888,
+      "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+    },
+    {
+      "name": "original_trace",
+      "bytes": 135926,
+      "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+    }
+  ],
+  "critical_hashes_verified": 8,
+  "provided_checksum_count": 20,
+  "provided_command_log_pairs": 30,
+  "checksumEntries": [
+    {
+      "name": "before.png",
+      "sha256": "821768ffec6a0411dd41e9d2da5aaa21add1016cd07fb6a04b25e72d7d81ec7b"
+    },
+    {
+      "name": "build-manifest.json",
+      "sha256": "312ba0ff2ca555641b98adb9f359768ae5772d566f5744fc4da5f0bd40d76c4b"
+    },
+    {
+      "name": "cause-probes.json",
+      "sha256": "5fe0eb1c2e785d5f8104b3e963872b5798fdc2029d704611b58f225fa8d36b6b"
+    },
+    {
+      "name": "mq-f01.patch",
+      "sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc"
+    },
+    {
+      "name": "preservation.json",
+      "sha256": "3d1c55dfb2c27251435d24157677033882a4b0cc959ab44276dc6d4aa03d6b8d"
+    },
+    {
+      "name": "product-check.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "product-check.stdout.log",
+      "sha256": "df55c8df512b2c5d7a7b3cc843bd1082c93e0bcd9c727a6f3f9dfe6f6ea383db"
+    },
+    {
+      "name": "red-state-authorized.stderr.log",
+      "sha256": "7b61b5e505922c88654462522d1c4f09015d503f362188c43cffe91c7b565590"
+    },
+    {
+      "name": "red-state-authorized.stdout.log",
+      "sha256": "afc5a9a3e0273e3bc72c5914bd7035ad17afc2431bcd1d9480d8799856e2941b"
+    },
+    {
+      "name": "reopened.mid",
+      "sha256": "92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9"
+    },
+    {
+      "name": "reopened.png",
+      "sha256": "39c0d88fba4cddccf7a4d0799b9cbf90da6e941f6a8a2c8f33e3406495d703ea"
+    },
+    {
+      "name": "ruach-check-with-pinned-deps.stderr.log",
+      "sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "ruach-check-with-pinned-deps.stdout.log",
+      "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5"
+    },
+    {
+      "name": "ruach-tests-authorized.stderr.log",
+      "sha256": "e05dd80c38692fa28c9fc4a6d006c0a7f277bdb58beb66d57577c9da6ccb3ffe"
+    },
+    {
+      "name": "ruach-tests-authorized.stdout.log",
+      "sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c"
+    },
+    {
+      "name": "runtime-smoke.json",
+      "sha256": "98d11d203e241092a774b1c080bf9c35bbf05e7eb0e1a5cc0a78b42aa249e32f"
+    },
+    {
+      "name": "smoke-request.json",
+      "sha256": "3bb6241991f87c41c1f11f9bdbaab4ebcd480c816a868e9cf77d2131250e658d"
+    },
+    {
+      "name": "source-manifest.json",
+      "sha256": "07abf36c88a28b618d362257dc742fdbb18332bc69c3baf80026cc1360274704"
+    },
+    {
+      "name": "verification.json",
+      "sha256": "e78e2f26585cc986bb562c33b41b9f64300b98d9fff97c4b3b9522c3376163d8"
+    },
+    {
+      "name": "versions.json",
+      "sha256": "16736a0922e174b124beffc1971df895ad5b2c2bde12dc6f3844160dbfea1b83"
+    }
+  ],
+  "recorded_checks": [
+    {
+      "name": "red-state-authorized",
+      "argv": [
+        "just",
+        "test-client-focused",
+        "src/performance/state.test.ts"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "PLAYWRIGHT_BROWSERS_PATH": "$P/tools/playwright"
+      },
+      "started": "2026-10-25T22:34:10.305Z",
+      "ended": "2026-10-25T22:34:21.040Z",
+      "wall_ms": 10735.040877000001,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "afc5a9a3e0273e3bc72c5914bd7035ad17afc2431bcd1d9480d8799856e2941b",
+      "stderr_sha256": "7b61b5e505922c88654462522d1c4f09015d503f362188c43cffe91c7b565590"
+    },
+    {
+      "name": "product-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "PLAYWRIGHT_BROWSERS_PATH": "$P/tools/playwright",
+        "DOTNET": "$P/tools/dotnet-10.0.110/dotnet",
+        "DOTNET_CLI_HOME": "$C/cache/dotnet-home",
+        "NUGET_PACKAGES": "$C/cache/nuget",
+        "BUN_INSTALL_CACHE_DIR": "$C/cache/bun"
+      },
+      "started": "2026-10-25T22:35:11.553Z",
+      "ended": "2026-10-25T22:39:25.603Z",
+      "wall_ms": 254049.611887,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "f3451d96b29a898e5411cab2003f156c52f9c88bd712727ac3220a2bcf22f7de",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "corrected-runtime-smoke",
+      "argv": [
+        "bun",
+        "$C/smoke.ts"
+      ],
+      "cwd": "$C",
+      "environment": {
+        "TMPDIR": "$C/runtime/tmp",
+        "XDG_CACHE_HOME": "$C/runtime/state/xdg-cache"
+      },
+      "started": "2026-10-25T22:37:26.058Z",
+      "ended": "2026-10-25T22:37:37.907Z",
+      "wall_ms": 11848.902444,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "907007f9afb230684f4a98933eec2b4ab920cfde4ccdc19a6336023403da89ab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruach-tests-authorized",
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "$RUACH",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg"
+      },
+      "started": "2026-10-25T22:38:32.083Z",
+      "ended": "2026-10-25T22:39:03.685Z",
+      "wall_ms": 31602.530053000002,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "e05dd80c38692fa28c9fc4a6d006c0a7f277bdb58beb66d57577c9da6ccb3ffe"
+    },
+    {
+      "name": "final-ruach-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:42:31.524Z",
+      "ended": "2026-10-25T22:42:31.974Z",
+      "wall_ms": 450.17184,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    }
+  ],
+  "store_fixture_origin_verified": true,
+  "reported_runtime": {
+    "assets_verified": 16,
+    "complete_original_request_equal": true,
+    "generation_status": 200,
+    "generation_count": 1,
+    "before_ids": [
+      "1"
+    ],
+    "after_ids": [
+      "2",
+      "1"
+    ],
+    "admitted_url": "http://127.0.0.1:46097/performances/2",
+    "browser_closed": true,
+    "server_exit": 0,
+    "recorded_server_absence": true,
+    "export": {
+      "bytes": 2831,
+      "sha256": "92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9",
+      "suggestedFilename": "performance-2.mid"
+    }
+  },
+  "independent_runtime_retest": "not run by Reviewer; original Tester gate remains pending",
+  "assignment_sha256": "dc8d0fc0ffe7b96a0b90f6a66c09c81ca0cfd449b2d1724ea8541d15cd7083f8",
+  "independent": {
+    "baseline_pair": {
+      "source": "baseline",
+      "complete_original_pair": true,
+      "preconditions": {
+        "request_vocal_reservation_omitted": true,
+        "response_vocal_reservation_null": true
+      },
+      "original_pair_unchanged": true,
+      "cases": [
+        {
+          "name": "unchanged complete original pair",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "only request reservation null",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "only response reservation omitted",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "genuine reservation introduced",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "same real reservation preserved",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "different valid sung span",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different valid lower range",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different valid upper range",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different provenance",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different Composition value",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        }
+      ]
+    },
+    "candidate_pair": {
+      "source": "candidate",
+      "complete_original_pair": true,
+      "preconditions": {
+        "request_vocal_reservation_omitted": true,
+        "response_vocal_reservation_null": true
+      },
+      "original_pair_unchanged": true,
+      "cases": [
+        {
+          "name": "unchanged complete original pair",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "only request reservation null",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "only response reservation omitted",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "genuine reservation introduced",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "same real reservation preserved",
+          "expected": true,
+          "admitted": true
+        },
+        {
+          "name": "different valid sung span",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different valid lower range",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different valid upper range",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different provenance",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        },
+        {
+          "name": "different Composition value",
+          "expected": false,
+          "admitted": false,
+          "error": "Error: Returned Performance does not match the submitted request."
+        }
+      ]
+    },
+    "focused_state": {
+      "passed": 44,
+      "failed": 0,
+      "receipt": {
+        "name": "candidate-state-authorized-retry",
+        "argv": [
+          "just",
+          "test-client-focused",
+          "src/performance/state.test.ts"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:57:41.490Z",
+        "ended": "2026-10-25T22:57:58.566Z",
+        "wall_ms": 17076.250745,
+        "pid": 876970,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 300000,
+        "stdout_sha256": "b0c45462088132805ee81fc06381bbc6c31f31b8c7ec605034bc80d1ea725718",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "own_generated_client": {
+      "files": 16,
+      "sha256": "4e5163f31bff96b3f3dc47767a5c898d82bba000bfed17dd23321156a4175265",
+      "matches_provided_corrected": true
+    },
+    "commands": [
+      {
+        "name": "product-archive",
+        "argv": [
+          "git",
+          "archive",
+          "--format=tar",
+          "--output=/tmp/c15-mq-review-01-acRZPk/product.tar",
+          "6f17044de0b46cedef51eb71c9816ce11b6a589a"
+        ],
+        "cwd": "/opt/dev/ramec",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.109Z",
+        "ended": "2026-10-25T22:54:06.213Z",
+        "wall_ms": 103.53469899999999,
+        "pid": 6,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "extract-baseline",
+        "argv": [
+          "tar",
+          "xf",
+          "/tmp/c15-mq-review-01-acRZPk/product.tar",
+          "-C",
+          "/tmp/c15-mq-review-01-acRZPk/baseline"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.272Z",
+        "ended": "2026-10-25T22:54:06.313Z",
+        "wall_ms": 41.94958299999999,
+        "pid": 9,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "extract-candidate",
+        "argv": [
+          "tar",
+          "xf",
+          "/tmp/c15-mq-review-01-acRZPk/product.tar",
+          "-C",
+          "/tmp/c15-mq-review-01-acRZPk/candidate"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.314Z",
+        "ended": "2026-10-25T22:54:06.352Z",
+        "wall_ms": 38.72654800000001,
+        "pid": 10,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "read-exact-patch",
+        "argv": [
+          "git",
+          "show",
+          "7b53c336f435a0c740e7ab61f71d4ce801562c69:docs/reports/c1-c5/music-fix-artifacts/mq-f01.patch"
+        ],
+        "cwd": "/opt/dev/ruach-worktrees/c15-review",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.353Z",
+        "ended": "2026-10-25T22:54:06.355Z",
+        "wall_ms": 2.486568000000034,
+        "pid": 11,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "check-patch",
+        "argv": [
+          "git",
+          "apply",
+          "--check",
+          "/tmp/c15-mq-review-01-acRZPk/mq-f01.patch"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.355Z",
+        "ended": "2026-10-25T22:54:06.357Z",
+        "wall_ms": 2.1594910000000027,
+        "pid": 13,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "apply-exact-patch",
+        "argv": [
+          "git",
+          "apply",
+          "/tmp/c15-mq-review-01-acRZPk/mq-f01.patch"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:06.357Z",
+        "ended": "2026-10-25T22:54:06.359Z",
+        "wall_ms": 2.0587449999999876,
+        "pid": 14,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "read-original-request",
+        "argv": [
+          "git",
+          "show",
+          "5bf48a6ec523a24dc9b35fefe3df7ba64952a909:docs/reports/c1-c5/runtime-finding-review-artifacts/original-request.json"
+        ],
+        "cwd": "/opt/dev/ruach-worktrees/c15-review",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:07.456Z",
+        "ended": "2026-10-25T22:54:07.459Z",
+        "wall_ms": 2.893974000000071,
+        "pid": 16,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "read-original-response",
+        "argv": [
+          "git",
+          "show",
+          "5bf48a6ec523a24dc9b35fefe3df7ba64952a909:docs/reports/c1-c5/runtime-finding-review-artifacts/original-response.json"
+        ],
+        "cwd": "/opt/dev/ruach-worktrees/c15-review",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:07.459Z",
+        "ended": "2026-10-25T22:54:07.463Z",
+        "wall_ms": 4.114962999999989,
+        "pid": 18,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "candidate-state-default",
+        "argv": [
+          "just",
+          "test-client-focused",
+          "src/performance/state.test.ts"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:47.859Z",
+        "ended": "2026-10-25T22:54:47.954Z",
+        "wall_ms": 94.754071,
+        "pid": 6,
+        "exit": 1,
+        "signal": null,
+        "timeout_ms": 300000,
+        "stdout_sha256": "4ae6330b58bc0ba510c16cc94f3c13098a4337d3f7eb6533baba6fa0d4917a4c",
+        "stderr_sha256": "af658715e53ff9fb622081209dda4b464236b0ae6e97b7f84c968961de982ccf"
+      },
+      {
+        "name": "pair-candidate",
+        "argv": [
+          "bun",
+          "/tmp/c15-mq-review-01-acRZPk/pair-check.ts",
+          "candidate"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:47.860Z",
+        "ended": "2026-10-25T22:54:48.175Z",
+        "wall_ms": 315.508815,
+        "pid": 6,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "19aa0f8cef9a3e77837f49949438c2f89998170442d29b1e090c01e94bfd7b51",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "pair-baseline",
+        "argv": [
+          "bun",
+          "/tmp/c15-mq-review-01-acRZPk/pair-check.ts",
+          "baseline"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:54:47.869Z",
+        "ended": "2026-10-25T22:54:48.187Z",
+        "wall_ms": 318.740111,
+        "pid": 6,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 120000,
+        "stdout_sha256": "e4517339136f911110c1f54f7c02ec2e52759c4ff0973f6b4e25ed132b09db81",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "candidate-state-linked-deps",
+        "argv": [
+          "just",
+          "test-client-focused",
+          "src/performance/state.test.ts"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:55:01.186Z",
+        "ended": "2026-10-25T22:55:05.879Z",
+        "wall_ms": 4692.480111,
+        "pid": 11,
+        "exit": 1,
+        "signal": null,
+        "timeout_ms": 300000,
+        "stdout_sha256": "70d612f359465e77823a59bdb61de4e5ace51dc2515440e7d723b5ac2aee9f74",
+        "stderr_sha256": "af658715e53ff9fb622081209dda4b464236b0ae6e97b7f84c968961de982ccf"
+      },
+      {
+        "name": "candidate-state-authorized-retry",
+        "argv": [
+          "just",
+          "test-client-focused",
+          "src/performance/state.test.ts"
+        ],
+        "cwd": "/tmp/c15-mq-review-01-acRZPk/candidate",
+        "environment": {
+          "TMPDIR": "/tmp/c15-mq-review-01-acRZPk/tmp",
+          "XDG_CACHE_HOME": "/tmp/c15-mq-review-01-acRZPk/cache",
+          "XDG_CONFIG_HOME": "/tmp/c15-mq-review-01-acRZPk/config",
+          "BUN_INSTALL_CACHE_DIR": "/tmp/c15-mq-review-01-acRZPk/cache/bun"
+        },
+        "started": "2026-10-25T22:57:41.490Z",
+        "ended": "2026-10-25T22:57:58.566Z",
+        "wall_ms": 17076.250745,
+        "pid": 876970,
+        "exit": 0,
+        "signal": null,
+        "timeout_ms": 300000,
+        "stdout_sha256": "b0c45462088132805ee81fc06381bbc6c31f31b8c7ec605034bc80d1ea725718",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "retained_failures": {
+    "dependency_copy": "Dereferenced .bin scripts lost package-relative execution context; first focused run failed before assertions. Only executable symlinks within own copied dependencies were restored; no source or provided dependency tree edited.",
+    "vite_startup": "Restricted correctly linked run stopped esbuild while loading Vite config, before tests. Exact cause remains unclassified; authorized same-source run passed.",
+    "approval_review": "First scoped escalation was not executed: automatic approval review timed out. Its explicit one-retry allowance was used; the retry ran the exact focused recipe successfully."
+  },
+  "acceptance": {
+    "material_source_findings": [],
+    "source_review": "passed for exact product base plus immutable patch",
+    "same_outcome": "MQ-F01",
+    "completed_failed_MQ_cycles": 0,
+    "default_MQ_limit": 2,
+    "independent_original_Tester_retest": "pending; not polled or inspected",
+    "C2_failed_cycles": 1,
+    "C2_scope": "unchanged and not reviewed",
+    "retained_consumer_delivery": "prohibited; no delivery or source acceptance for unperformed runtime gates"
+  }
+}

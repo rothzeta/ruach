@@ -1,0 +1,62 @@
+Skip to content
+Skip to timeline
+Skip to audition
+RAMEC
+Compositions
+Performances
+Decisions
+New Composition
+New Performance
+Library
+Commands
+Preferences
+Performances
+Library
+Setup for the next generation
+
+Supported writing: whole songs with validated meters, meter changes, Anacrusis and tonal-centre changes. All Tempo characters and valid Set, Ramp and Modulate sequences are supported. Use one or two standard-tuned Guitar Seats, one Bass Seat and one Drums Seat. Each decision interval chooses a Writing procedure before construction. The first Guitar owns RhythmAndLead selection with two Guitars. Bass owns BassAndGuitar selection; Drums owns DrumsAndGuitar selection. The owner’s First/TopShare mode and Decisiveness apply.
+
+No chord, Chord changes inside bars, variable Phrase lengths, Pulse changes, Hit, Stop, Resume and End are supported. Metric layers remain unsupported. Instrument limits and Required material must remain feasible. Explicit Recurrences offer full and partial Recall. Eligible State, Sequence, Fragment and Vary occurrences offer alternatives within their containing decision interval. Occurrences that cross decision boundaries remain ineligible. Required and Preferred Bass instructions keep their Part Sheet meaning. Other Personality dimensions remain inapplicable as shown below. Unsupported inputs receive the server's explanation.
+
+Choose a Composition
+Change Composition
+Paste or edit Composition JSON
+Question
+Part Sheet JSON
+Performance setup
+Lineup · 0 Seats
+
+Seats need distinct MIDI channels (1–16). Seats may share a channel only when their performing units share it.
+
+Performing unit to add
+Drums
+Bass
+Guitar
+Add Seat
+Add two Guitars, Bass and Drums
+
+Drums, Bass and two Guitar Seats
+
+Generation
+Performance seed
+
+Add one or two standard-tuned Guitar Seats, one Bass Seat and one Drums Seat.
+
+Record decision trace
+
+No decision trace is recorded. The decision inspector has nothing to show for this Performance.
+
+Select a Composition above.
+
+Choose a usable Composition.
+
+Correct the lineup.
+
+Generate Performance
+No Performance selected for audition
+ Play
+ Stop
+Start
+Choose MIDI output
+Connect MIDI
+Output settings

@@ -1,0 +1,365 @@
+{
+  "task": "C-IN-02",
+  "base_manifest": {
+    "revision": "843941ecbead2442bbb487031f5faddd06d8da89",
+    "path": "docs/reports/c1-c5/integration-imports.json",
+    "sha256": "9542aaefc8d1bfe615ce3a5bdcd804c807fb484c88be714f8f242a6cc29c6f56",
+    "entries": 102
+  },
+  "imports": [
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/assignments/c1-c5/MQ-F01-FIX-01.md",
+      "sha256": "ca4247971eed263c6ea150412e889d2726ef106de28d6ba3e68c11bc2a3af40f",
+      "bytes": 10639
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/SHA256SUMS",
+      "sha256": "a5655df9ce3bd843bb681b8ca2d25a9443c85e34408ec56d35f92ba1f7037fe7",
+      "bytes": 1779
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/before.png",
+      "sha256": "821768ffec6a0411dd41e9d2da5aaa21add1016cd07fb6a04b25e72d7d81ec7b",
+      "bytes": 249115
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/build-manifest.json",
+      "sha256": "312ba0ff2ca555641b98adb9f359768ae5772d566f5744fc4da5f0bd40d76c4b",
+      "bytes": 18167
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/cause-probes.json",
+      "sha256": "5fe0eb1c2e785d5f8104b3e963872b5798fdc2029d704611b58f225fa8d36b6b",
+      "bytes": 1865
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/mq-f01.patch",
+      "sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc",
+      "bytes": 9848
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/preservation.json",
+      "sha256": "3d1c55dfb2c27251435d24157677033882a4b0cc959ab44276dc6d4aa03d6b8d",
+      "bytes": 2736
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/product-check.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/product-check.stdout.log",
+      "sha256": "df55c8df512b2c5d7a7b3cc843bd1082c93e0bcd9c727a6f3f9dfe6f6ea383db",
+      "bytes": 28833
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/red-state-authorized.stderr.log",
+      "sha256": "7b61b5e505922c88654462522d1c4f09015d503f362188c43cffe91c7b565590",
+      "bytes": 71
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/red-state-authorized.stdout.log",
+      "sha256": "afc5a9a3e0273e3bc72c5914bd7035ad17afc2431bcd1d9480d8799856e2941b",
+      "bytes": 2374
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/reopened.mid",
+      "sha256": "92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9",
+      "bytes": 2831
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/reopened.png",
+      "sha256": "39c0d88fba4cddccf7a4d0799b9cbf90da6e941f6a8a2c8f33e3406495d703ea",
+      "bytes": 163333
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/ruach-check-with-pinned-deps.stderr.log",
+      "sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125",
+      "bytes": 46
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/ruach-check-with-pinned-deps.stdout.log",
+      "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "bytes": 107
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/ruach-tests-authorized.stderr.log",
+      "sha256": "e05dd80c38692fa28c9fc4a6d006c0a7f277bdb58beb66d57577c9da6ccb3ffe",
+      "bytes": 9447
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/ruach-tests-authorized.stdout.log",
+      "sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "bytes": 28
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/runtime-smoke.json",
+      "sha256": "98d11d203e241092a774b1c080bf9c35bbf05e7eb0e1a5cc0a78b42aa249e32f",
+      "bytes": 8336
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/smoke-request.json",
+      "sha256": "3bb6241991f87c41c1f11f9bdbaab4ebcd480c816a868e9cf77d2131250e658d",
+      "bytes": 6053
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/source-manifest.json",
+      "sha256": "07abf36c88a28b618d362257dc742fdbb18332bc69c3baf80026cc1360274704",
+      "bytes": 1466
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/verification.json",
+      "sha256": "e78e2f26585cc986bb562c33b41b9f64300b98d9fff97c4b3b9522c3376163d8",
+      "bytes": 17717
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix-artifacts/versions.json",
+      "sha256": "16736a0922e174b124beffc1971df895ad5b2c2bde12dc6f3844160dbfea1b83",
+      "bytes": 718
+    },
+    {
+      "revision": "49e611d4c2dc40910c9a0f5118e43d6881774c7d",
+      "path": "docs/reports/c1-c5/music-fix.md",
+      "sha256": "d338163f92d560677cc0f8fdbb4329484299e00ebd90fbbbd62920db0dbcb781",
+      "bytes": 15303
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/assignments/c1-c5/MQ-F01-RETEST-01.md",
+      "sha256": "bde43ad0c9ac443396b545adae61c4b2d22a514e350dc4fcb63bfebb2468ebc8",
+      "bytes": 7725
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/SHA256SUMS",
+      "sha256": "a1a9ddd15010243f584196fa79a463b0baf20ae05b5f31db373f9cd252c84428",
+      "bytes": 1772
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/admitted.png",
+      "sha256": "0993bd948d20d7dcf3ec0d92f9537e828b33663a9b4804517d0a775a546ccc5c",
+      "bytes": 112228
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/admitted.txt",
+      "sha256": "52d74dbf4db37ffa59dd43c4e4da2d2f60d81a6886b049520383b86125f6a4d1",
+      "bytes": 1931
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/before-generate.png",
+      "sha256": "821768ffec6a0411dd41e9d2da5aaa21add1016cd07fb6a04b25e72d7d81ec7b",
+      "bytes": 249115
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/before-generate.txt",
+      "sha256": "f1aeb914106c1c73e6edd44f8e9cdeaecbb5b9bedb874e22f2ab276089dcea4c",
+      "bytes": 3585
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/generation-request.json",
+      "sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b",
+      "bytes": 2978
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/generation-response.json",
+      "sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401",
+      "bytes": 214760
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/initial.png",
+      "sha256": "27db62659821506dc258bdcc4202eadf219690f580fd10536f6d44e7b2d6210c",
+      "bytes": 125048
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/initial.txt",
+      "sha256": "ad3827324c0029aa40a4fc818ac60746c8929a18fb70de16667c455e9b42b9f0",
+      "bytes": 2166
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/invalid-import.png",
+      "sha256": "8b7d7054daac415eb39a9f38df45bee3f0ef58d5d75abf9c935284dc92fc4c87",
+      "bytes": 185452
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/library-after.json",
+      "sha256": "492b7f1b710fbd9bc5ed653ebb557bdb38d21423256f622ddac19649b86870e0",
+      "bytes": 1544
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/library-before.json",
+      "sha256": "96fe7c615b8e3f9f7060afe4cb28b04f2a73dbde39021bd9e77b65edd7b8dc7a",
+      "bytes": 786
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/preservation-after.json",
+      "sha256": "5cb58536525efe71cfdae6d692f435f1a04109471ecb65b186591a7f1a01e9ff",
+      "bytes": 433
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/preservation-before.json",
+      "sha256": "5cb58536525efe71cfdae6d692f435f1a04109471ecb65b186591a7f1a01e9ff",
+      "bytes": 433
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/probe-source.txt",
+      "sha256": "f07dd6f481f749c3175aa2bd6d7fc0d0a6b32f3d61e64fd0a4685853ec438e1e",
+      "bytes": 14637
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/provenance-before.json",
+      "sha256": "741072a4e671d5ae7044b8ff9284b3102dc87c0954b0828f2aa082b9e652d980",
+      "bytes": 4441
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/provenance-final.json",
+      "sha256": "8ca71d4f1dace1a9bff1b3de6088f4501b00153e3bff734b88ab42a48acaeceb",
+      "bytes": 4440
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/public-summary.json",
+      "sha256": "c514057be003ed022a9bd9d945e03b55440a3ad3afdef2f1216a44c014f703da",
+      "bytes": 24069
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/reopened.mid",
+      "sha256": "92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9",
+      "bytes": 2831
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/reopened.png",
+      "sha256": "e339cb5d712be6cc48110d25c0e864277f9e8bd62c8023f173982220f62722c8",
+      "bytes": 121244
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/reopened.txt",
+      "sha256": "dc80550bcd1afd769be27e9eb3ead6b643f5bfe0af27a57610297ad0a1a7b588",
+      "bytes": 1932
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest-artifacts/served-assets.json",
+      "sha256": "01b98182503030328a20275ef610e50ec88a1cf22986e195fad8311f8ecbccda",
+      "bytes": 3921
+    },
+    {
+      "revision": "30deb550359d09ecd3381bfb581e688b8ae40491",
+      "path": "docs/reports/c1-c5/music-retest.md",
+      "sha256": "258286479394c1acc26cc5e3b34c556cf204360625978d1cbfda5f4bcd72e610",
+      "bytes": 14819
+    },
+    {
+      "revision": "fe8eae24e1d784ec49d9eeaacd756a178f3caf98",
+      "path": "docs/assignments/c1-c5/MQ-F01-REVIEW-01.md",
+      "sha256": "dc8d0fc0ffe7b96a0b90f6a66c09c81ca0cfd449b2d1724ea8541d15cd7083f8",
+      "bytes": 5990
+    },
+    {
+      "revision": "fe8eae24e1d784ec49d9eeaacd756a178f3caf98",
+      "path": "docs/reports/c1-c5/music-fix-review-artifacts/focused-state.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "revision": "fe8eae24e1d784ec49d9eeaacd756a178f3caf98",
+      "path": "docs/reports/c1-c5/music-fix-review-artifacts/focused-state.stdout.txt",
+      "sha256": "b0c45462088132805ee81fc06381bbc6c31f31b8c7ec605034bc80d1ea725718",
+      "bytes": 46
+    },
+    {
+      "revision": "fe8eae24e1d784ec49d9eeaacd756a178f3caf98",
+      "path": "docs/reports/c1-c5/music-fix-review-artifacts/public-summary.json",
+      "sha256": "54332d946fbe5755aa3a57c10fb654862d0867158c0eff73092280aa0fa9c46b",
+      "bytes": 28930
+    },
+    {
+      "revision": "fe8eae24e1d784ec49d9eeaacd756a178f3caf98",
+      "path": "docs/reports/c1-c5/music-fix-review.md",
+      "sha256": "68aa4a5cf2d0483b3f98bc3176e7fdc996ee9a83164078386f8a9d52cab73697",
+      "bytes": 14690
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/assignments/c1-c5/REVIEW-C2-ADAPTER-01.md",
+      "sha256": "8b30b249820fc2292a5c1fe78b3f70ea9563af3d075d486a0d07a1b83956edf6",
+      "bytes": 5465
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review-artifacts/agy-focused.stderr.txt",
+      "sha256": "42d1065ff35cf73953f37ac907152814389147f56d4a38ac184442f51cb033bf",
+      "bytes": 2503
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review-artifacts/agy-focused.stdout.txt",
+      "sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "bytes": 28
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review-artifacts/public-summary.json",
+      "sha256": "2c9cd6974ce0194f24d6847d9f8661fc0ac0d95d48290be928023cd0a8aa9b56",
+      "bytes": 18154
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review-artifacts/routing-focused.stderr.txt",
+      "sha256": "4cb2bff4219b4abc02290a59eeaf6d8c00b0b6ac8d73604c61435ccb11d90203",
+      "bytes": 1780
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review-artifacts/routing-focused.stdout.txt",
+      "sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "bytes": 28
+    },
+    {
+      "revision": "823be77f4e35e73107470d276c0fad2f0f6a4797",
+      "path": "docs/reports/c1-c5/c2-adapter-review.md",
+      "sha256": "fff05600c242bbcc266e1ec4942261364ab3491d6809ac6457055036714c392f",
+      "bytes": 14206
+    }
+  ]
+}

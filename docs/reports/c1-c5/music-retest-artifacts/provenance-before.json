@@ -1,0 +1,108 @@
+{
+  "mode": "before",
+  "at": "2026-10-25T22:46:50.301Z",
+  "candidate": "7b53c336f435a0c740e7ab61f71d4ce801562c69",
+  "source": {
+    "canonical_source_commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+    "canonical_source_tree": "91daf580664322620eb9dddf0a0bfaf827c3657e",
+    "archive_sha256": "1c42adc97769db6636468cce40e208507d0b0848f21c41fd441fa39113eb406f",
+    "original_file_count": 1067,
+    "patch_sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc",
+    "files": [
+      {
+        "path": "src/client/src/performance/state.ts",
+        "before_sha256": "6146e16b7eb37b040cea8270192fdf29b76dc25f0de0f56bc083628c56c2cc5e",
+        "after_sha256": "9b91f4adb499abc5e9ba1fcb50502183904079b1a9808e3a31bf0361b89a5c23"
+      },
+      {
+        "path": "src/client/src/performance/state.test.ts",
+        "before_sha256": "f52d92635db3bff396be589fdfae6ef153ee3b8f4d9200cbb00d3b2c6ce9a5d6",
+        "after_sha256": "6a85a469c422421daa20519a4054768edad59d1fde7119afea75ea39f4c98e92"
+      },
+      {
+        "path": "src/client/src/performance/state-generation.test-support.json",
+        "before_sha256": null,
+        "after_sha256": "c3d572b8c39c8db4de72e1d72e61f64a697ddf3549f9b2054bb03110adb384c1"
+      }
+    ],
+    "response_composition_origin": {
+      "evidence_commit": "5bf48a6ec523a24dc9b35fefe3df7ba64952a909",
+      "evidence_path": "docs/reports/c1-c5/runtime-finding-review-artifacts/original-response.json",
+      "original_response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401",
+      "selection": "performance.composition only; formatted with configured Prettier"
+    }
+  },
+  "builds": {
+    "client": {
+      "path": "/tmp/c15-mq-f01-fix-01-airon2/ramec/src/client/dist",
+      "files": 16,
+      "sha256": "4e5163f31bff96b3f3dc47767a5c898d82bba000bfed17dd23321156a4175265"
+    },
+    "server": {
+      "path": "/tmp/c15-mq-f01-fix-01-airon2/ramec/src/server/bin/Release/net10.0",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    },
+    "baselineClient": {
+      "path": "/tmp/c15-mq-f01-fix-01-airon2/baseline-client-dist",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    "originalClient": {
+      "path": "/tmp/c15-provision-01.6o1CPD/ramec/src/client/dist",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    "originalServer": {
+      "path": "/tmp/c15-provision-01.6o1CPD/ramec/src/server/bin/Release/net10.0",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    }
+  },
+  "preserved": {
+    "implementation_evidence": {
+      "path": "/tmp/c15-mq-f01-fix-01-airon2/evidence",
+      "files": 101,
+      "sha256": "f51ee3d7237d09201cff35a61832d51d654001aecdc24337ce24e8cb2f3d7ad0"
+    },
+    "original_tester": {
+      "path": "/tmp/c15-runtime-qa-hunt-01-sFconW",
+      "files": 1941,
+      "sha256": "9bd572783aa5427437e961cfff89b6684babe8ebba59954c9fcecf2d603d00f9"
+    },
+    "original_reviewer": {
+      "path": "/tmp/c15-runtime-finding-review-01-nskd0K",
+      "files": 1999,
+      "sha256": "9f9b8ca696f8b06339a5f6f142b96ea7978172a18974342f5d4399a67794c74e"
+    }
+  },
+  "originalState": {
+    "db": {
+      "path": "/tmp/c15-provision-01.6o1CPD/state/ramec.sqlite",
+      "bytes": 421888,
+      "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+    },
+    "trace": {
+      "path": "/tmp/c15-provision-01.6o1CPD/artifacts/pralice/recognition.jsonl",
+      "bytes": 135926,
+      "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+    }
+  },
+  "skills": [
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-runtime-tester/skills/ruach-runtime-testing/SKILL.md",
+      "sha256": "0bccb15ae24324138466641310ede6b14155488438c3c3e9e5a3c624c0eb8621"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-runtime-tester/skills/ruach-testing/SKILL.md",
+      "sha256": "d0a3b269e7525fe339e7365085cbc30c88ac9f54919b613e15dc8c727f592186"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-runtime-tester/skills/ruach-handoff/SKILL.md",
+      "sha256": "59e43c30321167aceaf5b59837db1c5e114c48f4d23bd340c5aa579957569445"
+    }
+  ],
+  "assignment_sha256": "bde43ad0c9ac443396b545adae61c4b2d22a514e350dc4fcb63bfebb2468ebc8",
+  "checks": 2169,
+  "all_passed": true
+}

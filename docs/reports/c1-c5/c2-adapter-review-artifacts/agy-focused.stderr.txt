@@ -1,0 +1,34 @@
+
+tests/agy.test.ts:
+(pass) additive private rule/source include and technical links preserve literal argv, sources and native configuration [818.97ms]
+(pass) resolve, dry-run and start agree on exact selection without eager material or task submission [2369.18ms]
+(pass) Coordinator and auto-review fail before native inspection or mutation [981.22ms]
+(pass) missing Agy executable remains an unavailable prerequisite [205.60ms]
+(pass) unrepresentable canonical include path stays held before mutation [475.39ms]
+(pass) separate effort none is not inferred from native slug [555.00ms]
+(pass) separate effort low is not inferred from native slug [495.68ms]
+(pass) separate effort medium is not inferred from native slug [473.99ms]
+(pass) separate effort high is not inferred from native slug [541.64ms]
+(pass) unsupported native pass-through is held: --agent [668.29ms]
+(pass) unsupported native pass-through is held: --print [450.87ms]
+(pass) unsupported native pass-through is held: --add-dir [522.19ms]
+(pass) unsupported native pass-through is held: --mode [570.92ms]
+(pass) native capability failure stays before mutation: {"agyVersion":"1.4.6"} [686.29ms]
+(pass) native capability failure stays before mutation: {"agyVersion":"1.4.8"} [639.11ms]
+(pass) native capability failure stays before mutation: {"agyMissingFlag":true} [607.60ms]
+(pass) native capability failure stays before mutation: {"agyModels":["gemini-3.8-flash-medium-other"]} [650.92ms]
+(pass) native capability failure stays before mutation: {"agyCatalogFailure":true,"leak":"private native catalog detail"} [963.12ms]
+(pass) expanded oversized roles and nested include uncertainty are held without shortening [1038.96ms]
+(pass) valid large role stays a canonical source reference [956.05ms]
+(pass) different same-name native skill is held, shared canonical realpath is retained [1726.31ms]
+(pass) duplicate canonical skill names fail before materialization [772.78ms]
+(pass) linked startup repeats native preparation in the actual checkout and retains sources [1277.65ms]
+(pass) second-cwd conflict retains the created checkout without a launch-space start [967.20ms]
+(pass) private additive material survives uncertain or blocked startup: startFailure [958.92ms]
+(pass) private additive material survives uncertain or blocked startup: splitFailure [794.92ms]
+(pass) private additive material survives uncertain or blocked startup: startBlocked [994.72ms]
+
+ 27 pass
+ 0 fail
+ 168 expect() calls
+Ran 27 tests across 1 file. [22.24s]

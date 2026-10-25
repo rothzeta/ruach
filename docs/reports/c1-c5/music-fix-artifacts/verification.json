@@ -1,0 +1,568 @@
+{
+  "candidate_commit": "7b53c336f435a0c740e7ab61f71d4ce801562c69",
+  "commands": [
+    {
+      "name": "provenance-before",
+      "argv": [
+        "bun",
+        "$C/provenance.ts",
+        "before"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:32:34.677Z",
+      "ended": "2026-10-25T22:32:35.068Z",
+      "wall_ms": 390.966476,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "5c20694b346a29997ec67db78a0768a483f08ef77f946133df1a1ddf06d7f44f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "init-copy-git",
+      "argv": [
+        "git",
+        "init"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {},
+      "started": "2026-10-25T22:32:51.973Z",
+      "ended": "2026-10-25T22:32:51.977Z",
+      "wall_ms": 4.621396999999998,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "0006e8dad8588b64c980a038f846dc2f0caaf1895c6c3b08ebf60fb541e7d993",
+      "stderr_sha256": "80971547c9b16697fc7a8e05595d9c1eb193a2b6abfa8c18f4d1ddff003e935c"
+    },
+    {
+      "name": "index-copy-baseline",
+      "argv": [
+        "git",
+        "add",
+        "-f",
+        "--",
+        "."
+      ],
+      "cwd": "$C/ramec",
+      "environment": {},
+      "started": "2026-10-25T22:32:52.008Z",
+      "ended": "2026-10-25T22:32:52.500Z",
+      "wall_ms": 491.675662,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install-client",
+      "argv": [
+        "bun",
+        "install",
+        "--cwd",
+        "src/client",
+        "--frozen-lockfile"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "BUN_INSTALL_CACHE_DIR": "$C/cache/bun",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "TMPDIR": "$C"
+      },
+      "started": "2026-10-25T22:32:52.582Z",
+      "ended": "2026-10-25T22:32:52.630Z",
+      "wall_ms": 48.677431,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "12c364a795837cc390db208e774e3f64badb2fa42e4823c29662df46aa18e03a",
+      "stderr_sha256": "1fd59b804ecc4de19ffc21f33b6467838543b14ce44c2802be8d2a3e359839aa"
+    },
+    {
+      "name": "install-client-authorized",
+      "argv": [
+        "bun",
+        "install",
+        "--cwd",
+        "src/client",
+        "--frozen-lockfile"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "BUN_INSTALL_CACHE_DIR": "$C/cache/bun",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "TMPDIR": "$C"
+      },
+      "started": "2026-10-25T22:33:02.057Z",
+      "ended": "2026-10-25T22:33:02.597Z",
+      "wall_ms": 539.7999590000001,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "bfe3186d7ee1b4b1662b62c0a8a2dbd3950cba5e49e3d963c515655bbbf7cc96",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "discriminate-baseline",
+      "argv": [
+        "bun",
+        "$C/probe.ts",
+        "baseline"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:33:40.084Z",
+      "ended": "2026-10-25T22:33:40.239Z",
+      "wall_ms": 155.419014,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "971f08fe49b90d2f569cf97587f54595221d97f1455e3d9d48942267d6f9a0f7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "red-state",
+      "argv": [
+        "just",
+        "test-client-focused",
+        "src/performance/state.test.ts"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "PLAYWRIGHT_BROWSERS_PATH": "$P/tools/playwright"
+      },
+      "started": "2026-10-25T22:33:54.375Z",
+      "ended": "2026-10-25T22:33:57.670Z",
+      "wall_ms": 3294.838575,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "70d612f359465e77823a59bdb61de4e5ace51dc2515440e7d723b5ac2aee9f74",
+      "stderr_sha256": "af658715e53ff9fb622081209dda4b464236b0ae6e97b7f84c968961de982ccf"
+    },
+    {
+      "name": "esbuild-diagnostic",
+      "argv": [
+        "$C/ramec/src/client/node_modules/@esbuild/linux-x64/bin/esbuild",
+        "--version"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {},
+      "started": "2026-10-25T22:34:08.353Z",
+      "ended": "2026-10-25T22:34:08.356Z",
+      "wall_ms": 2.4240829999999995,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "ac134cf53a2f5d5520a44906b3bd542bffa2ca5862bae971f999b7c86ed4ce26",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "red-state-authorized",
+      "argv": [
+        "just",
+        "test-client-focused",
+        "src/performance/state.test.ts"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "PLAYWRIGHT_BROWSERS_PATH": "$P/tools/playwright"
+      },
+      "started": "2026-10-25T22:34:10.305Z",
+      "ended": "2026-10-25T22:34:21.040Z",
+      "wall_ms": 10735.040877000001,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "afc5a9a3e0273e3bc72c5914bd7035ad17afc2431bcd1d9480d8799856e2941b",
+      "stderr_sha256": "7b61b5e505922c88654462522d1c4f09015d503f362188c43cffe91c7b565590"
+    },
+    {
+      "name": "format-owned-client",
+      "argv": [
+        "bun",
+        "run",
+        "prettier",
+        "--write",
+        "src/performance/state.ts",
+        "src/performance/state.test.ts",
+        "src/performance/state-generation.test-support.json"
+      ],
+      "cwd": "$C/ramec/src/client",
+      "environment": {},
+      "started": "2026-10-25T22:34:26.828Z",
+      "ended": "2026-10-25T22:34:27.413Z",
+      "wall_ms": 585.3702559999999,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "80febb9e9c4327a0af85e9ae5c2450b5f6d613eb3e27a06c01256e9f8642edce",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "probe-candidate",
+      "argv": [
+        "bun",
+        "$C/probe.ts",
+        "candidate"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:35:09.657Z",
+      "ended": "2026-10-25T22:35:09.815Z",
+      "wall_ms": 157.707541,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "4fb8de08de166d98a6f812bfd1d9202c560eca0bebe198520f211267e139fed2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "product-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "PLAYWRIGHT_BROWSERS_PATH": "$P/tools/playwright",
+        "DOTNET": "$P/tools/dotnet-10.0.110/dotnet",
+        "DOTNET_CLI_HOME": "$C/cache/dotnet-home",
+        "NUGET_PACKAGES": "$C/cache/nuget",
+        "BUN_INSTALL_CACHE_DIR": "$C/cache/bun"
+      },
+      "started": "2026-10-25T22:35:11.553Z",
+      "ended": "2026-10-25T22:39:25.603Z",
+      "wall_ms": 254049.611887,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "f3451d96b29a898e5411cab2003f156c52f9c88bd712727ac3220a2bcf22f7de",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruach-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:35:12.763Z",
+      "ended": "2026-10-25T22:35:12.824Z",
+      "wall_ms": 61.092788999999996,
+      "exit": 127,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "b4f8ed1175658b305e06ab7ab38b32353517bc0fce2c55c2cb3e210c2b153393"
+    },
+    {
+      "name": "ruach-tests",
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:35:18.131Z",
+      "ended": "2026-10-25T22:35:42.002Z",
+      "wall_ms": 23870.832739999998,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "b2eef4c75313723f46ce6d176c72b687b407a34d3d7107b0ad3b70c0dbc602a2"
+    },
+    {
+      "name": "ruach-release-check",
+      "argv": [
+        "bun",
+        "run",
+        "release-check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:35:19.370Z",
+      "ended": "2026-10-25T22:35:19.400Z",
+      "wall_ms": 30.135977999999994,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "f6f2b16a9f5ac32c43c71c30e679a5521e9fa40178c1200af48c2530233a7895",
+      "stderr_sha256": "3b58f2e74a7474a1f4d798216f71d12bb0d8a48a543941efa0fd6f6087746cb2"
+    },
+    {
+      "name": "corrected-runtime-smoke",
+      "argv": [
+        "bun",
+        "$C/smoke.ts"
+      ],
+      "cwd": "$C",
+      "environment": {
+        "TMPDIR": "$C/runtime/tmp",
+        "XDG_CACHE_HOME": "$C/runtime/state/xdg-cache"
+      },
+      "started": "2026-10-25T22:37:26.058Z",
+      "ended": "2026-10-25T22:37:37.907Z",
+      "wall_ms": 11848.902444,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "907007f9afb230684f4a98933eec2b4ab920cfde4ccdc19a6336023403da89ab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-provenance",
+      "argv": [
+        "bun",
+        "$C/provenance.ts",
+        "final"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:37:27.287Z",
+      "ended": "2026-10-25T22:37:28.055Z",
+      "wall_ms": 767.983119,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "11d778caa148da14226d60cac074d2bf0d136510080c50919471486e78a27689",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruach-install-pinned",
+      "argv": [
+        "just",
+        "install"
+      ],
+      "cwd": "$RUACH",
+      "environment": {
+        "BUN_INSTALL_CACHE_DIR": "$C/cache/bun",
+        "XDG_CACHE_HOME": "$C/cache/xdg",
+        "TMPDIR": "$C",
+        "BUN_BIN": "$BUN"
+      },
+      "started": "2026-10-25T22:38:19.132Z",
+      "ended": "2026-10-25T22:38:19.606Z",
+      "wall_ms": 473.903339,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "fccf3c4ca58532298b8da4fe105db83a2642af5e315a4f5e1d7de6c67811fc34",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ruach-check-with-pinned-deps",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg"
+      },
+      "started": "2026-10-25T22:38:29.844Z",
+      "ended": "2026-10-25T22:38:30.506Z",
+      "wall_ms": 661.766071,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "ruach-tests-authorized",
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "$RUACH",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CACHE_HOME": "$C/cache/xdg"
+      },
+      "started": "2026-10-25T22:38:32.083Z",
+      "ended": "2026-10-25T22:39:03.685Z",
+      "wall_ms": 31602.530053000002,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "e05dd80c38692fa28c9fc4a6d006c0a7f277bdb58beb66d57577c9da6ccb3ffe"
+    },
+    {
+      "name": "dotnet-version",
+      "argv": [
+        "$P/tools/dotnet-10.0.110/dotnet",
+        "--version"
+      ],
+      "cwd": "$C",
+      "environment": {
+        "DOTNET_ROOT": "$P/tools/dotnet-10.0.110",
+        "DOTNET_CLI_HOME": "$C/cache/dotnet-home",
+        "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+        "TMPDIR": "$C"
+      },
+      "started": "2026-10-25T22:39:27.109Z",
+      "ended": "2026-10-25T22:39:27.242Z",
+      "wall_ms": 132.994695,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "a3bb03e8bbb466bb3f7b038bd098289296625786024305c319e213a762e5d793",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "bun-version",
+      "argv": [
+        "bun",
+        "--version"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:39:27.279Z",
+      "ended": "2026-10-25T22:39:27.282Z",
+      "wall_ms": 2.1485780000000005,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "b99b4c7cdf236f59bc9f65d963deaecae3b16a7dad87939cacb9057f7664daee",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "just-version",
+      "argv": [
+        "just",
+        "--version"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:39:27.318Z",
+      "ended": "2026-10-25T22:39:27.320Z",
+      "wall_ms": 2.0047539999999984,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "8d6f0a07c8ca190580cee0c54feade94b72d6c1d90dd6e3c221c299496f1ccd1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "patch-reverse-check",
+      "argv": [
+        "git",
+        "apply",
+        "--reverse",
+        "--check",
+        "$RUACH/docs/reports/c1-c5/music-fix-artifacts/mq-f01.patch"
+      ],
+      "cwd": "$C/ramec",
+      "environment": {},
+      "started": "2026-10-25T22:39:27.455Z",
+      "ended": "2026-10-25T22:39:27.459Z",
+      "wall_ms": 3.1739040000000003,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "owned-server-absence",
+      "argv": [
+        "ps",
+        "-p",
+        "834830",
+        "-o",
+        "pid,ppid,uid,comm"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:40:29.338Z",
+      "ended": "2026-10-25T22:40:29.356Z",
+      "wall_ms": 17.978966,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "38ce6b66f5b66403181a5d93268c2495fe06e4887cf506d69a93b7870e52f255",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "complete-provenance",
+      "argv": [
+        "bun",
+        "$C/provenance.ts",
+        "complete"
+      ],
+      "cwd": "$C",
+      "environment": {},
+      "started": "2026-10-25T22:40:29.479Z",
+      "ended": "2026-10-25T22:40:29.990Z",
+      "wall_ms": 510.561542,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "ff2d73fc9d18b6ff6c502ce6695a0b06b15b61a0e38f5e150f6a364eef3ae796",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "chromium-version",
+      "argv": [
+        "$P/tools/playwright/chromium-1248/chrome-linux64/chrome",
+        "--version"
+      ],
+      "cwd": "$C",
+      "environment": {
+        "TMPDIR": "$C",
+        "XDG_CONFIG_HOME": "$C/cache/xdg-config",
+        "XDG_CACHE_HOME": "$C/cache/xdg"
+      },
+      "started": "2026-10-25T22:41:07.003Z",
+      "ended": "2026-10-25T22:41:07.034Z",
+      "wall_ms": 31.950224000000006,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e80c4d9fde0435da1c86813c0248cd6a000255879eb2dc86cde8e09a0213e3b6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-validator",
+      "argv": [
+        "bun",
+        "/opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/c1-c5/music-fix.md",
+        "--repo",
+        "$RUACH"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:42:31.318Z",
+      "ended": "2026-10-25T22:42:31.421Z",
+      "wall_ms": 103.356869,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "9c2ac5d48b43520bbdc55f43449139261bc27ffd536f2be08bc0574f62090e55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-ruach-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:42:31.524Z",
+      "ended": "2026-10-25T22:42:31.974Z",
+      "wall_ms": 450.17184,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "final-staged-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "$RUACH",
+      "environment": {},
+      "started": "2026-10-25T22:43:02.797Z",
+      "ended": "2026-10-25T22:43:02.800Z",
+      "wall_ms": 3.7822790000000026,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "log_digest_scope": "Commands identify full raw logs under C/evidence. Exported logs substitute C, P, RUACH and BUN paths; their digests are in SHA256SUMS."
+}

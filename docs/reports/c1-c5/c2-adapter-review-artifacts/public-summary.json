@@ -1,0 +1,528 @@
+{
+  "reviewed_revision": "f17e9233ddf00830aa11032bebd9d8df2ff1b0f3",
+  "source_baseline": "75f10abc2af9c4b043b393d7352ce74ba6eb4016",
+  "source": [
+    {
+      "path": "config/agent-routing/models.yaml",
+      "sha256": "4816dd68092b6800f849a35957fa80fc138b26c35d9572ddf0d52e5695fcf535"
+    },
+    {
+      "path": "config/agent-routing/roles.yaml",
+      "sha256": "220cf73a7052303ac7fef521151826c82dfdbe15af4e342a25fac3f4f72e9db4"
+    },
+    {
+      "path": "config/agent-routing/routing.yaml",
+      "sha256": "85895151048a8b779d7aca68d55f7264824e0d957263df2a5d12269f45a0e73f"
+    },
+    {
+      "path": "scripts/agent-routing.ts",
+      "sha256": "79693f441376838e31749d2b51f0bbdda63f0502879444d8b189a5b972424882"
+    },
+    {
+      "path": "skills/ruach-herdr/SKILL.md",
+      "sha256": "6dd6dae981f7ec895a5e62cad7819c33f763e178bce07bda5718ee7f872372a5"
+    },
+    {
+      "path": "skills/ruach-herdr/references/adapters.md",
+      "sha256": "d8969318c9b949b650fe0b1d978875623b92593406f46cc96ae9574d140515ec"
+    },
+    {
+      "path": "skills/ruach-herdr/references/agy.md",
+      "sha256": "40e40f950c4bdb13b77e9b76779decd88658463ada29d558188d892a00b7a878"
+    },
+    {
+      "path": "skills/ruach-herdr/scripts/adapters/agy.ts",
+      "sha256": "d0ef7ecbc7db16c160e6e5dd8a537a1e59be44829a2e669965be590a857a5b99"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/agy.test.ts",
+      "sha256": "0f8080d1c044630d3c3414fe0db7ec5230fe7f8d6d9395dc74c28ebb363a3cfb"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/fake-cli.ts",
+      "sha256": "e0d8183a203eeaaa030fa80e115ba12b2e78aaa3b5eb4fdda18ce07afbdd781c"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/worker.test.ts",
+      "sha256": "6bcc47817e2792bc30f707a459e646560287cdbcddabd8ec9a584f4076ca97d6"
+    },
+    {
+      "path": "tests/agent-routing.test.ts",
+      "sha256": "cd8b1568565c81870791247b21e1adae49c320e831ddcdfac8f31f564db7d064"
+    }
+  ],
+  "accepted_transport": [
+    {
+      "path": "skills/ruach-herdr/scripts/worker.ts",
+      "sha256": "5b03bef880de79ba74717381b9fadddb906842692b3eea599fbd92fd12ace921",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/scripts/launch-transport.ts",
+      "sha256": "53016524964932d09d5003b3f6eca565acc2aacc3605ac581099714a96b7994b",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/scripts/native-launch.ts",
+      "sha256": "8c6fa379a805acc23caeb43998519dd06d1beca66acb5b0ae1ba59c3eb2943a1",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/tests/launch-transport.test.ts",
+      "sha256": "f75749bc6ab337083d4c2691b1cce8d95a035590f5bb0194a34b2284e2b1f8c1",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-host.ts",
+      "sha256": "6ebb296d615798f1e04ec7d88701c77201654e15a0410d1b62f33fb6675b9c80",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-client.ts",
+      "sha256": "0955ebc21cb80d69e69d2a95a61e3cf76cda2c01719434f25e59ab066b85b89b",
+      "matches_accepted_transport": true
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-start.ts",
+      "sha256": "abee9c7ad1f2ab2f7b1f91572e0e81ec8edb526dc08e71eaa20f6d5e11010628",
+      "matches_accepted_transport": true
+    }
+  ],
+  "supplied_checksum_count": 34,
+  "supplied": [
+    {
+      "file": "agy-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "agy-final.log",
+      "sha256": "f40063f29ca5a00f7aa6823a7d53b4a34df61f3c15da1c1e18814177926c554a"
+    },
+    {
+      "file": "agy-initial.log",
+      "sha256": "53b93924d432ef48fb09d3d23d571eca509a4af01ae1efbdd32d5bd400728013"
+    },
+    {
+      "file": "agy-test.log",
+      "sha256": "fe263e3127186debc559ba72e903aec0f10de37146512120337f982d9f38b1fd"
+    },
+    {
+      "file": "assignment.sha256",
+      "sha256": "1dd73afe4dcaa595ee64e53fb1dc48e051ffc9063044359b8924bfde9ab046bd"
+    },
+    {
+      "file": "check-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "check-final.log",
+      "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "file": "check-initial.log",
+      "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "file": "check.log",
+      "sha256": "dda0f558e940e1632457f3c3ccb42db8a20000c97edf5ad3c052f21470ba07fa"
+    },
+    {
+      "file": "diff-check.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "handoff-draft.log",
+      "sha256": "d0a406e23afeaccca51e73836efa2c2100496f1b0d58c402b46d050372dd6606"
+    },
+    {
+      "file": "handoff-validate.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "handoff-validate.log",
+      "sha256": "d0a406e23afeaccca51e73836efa2c2100496f1b0d58c402b46d050372dd6606"
+    },
+    {
+      "file": "herdr-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "herdr-final.log",
+      "sha256": "da3833817a0ef6f9fb3b661bd3475b28ad19e999aa8c2d8586cff869540c7218"
+    },
+    {
+      "file": "herdr-test.log",
+      "sha256": "c64642e6d167dbf4083f9a514637ee8486c89a677ea8379fad385268d94a94d5"
+    },
+    {
+      "file": "native-executable.sha256",
+      "sha256": "200b00410597643dbbc057fd354959982e98907131d228aace76a352ba277c6c"
+    },
+    {
+      "file": "native-help.stderr",
+      "sha256": "a12355e8fc064b330eeb25ba52de596406582752442e293083bcda6388a63b78"
+    },
+    {
+      "file": "native-help.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "native-version.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "native-version.stdout",
+      "sha256": "794d9bfd2d064be2041cba080923b3e39ba3bec84c35794780482852b5f4007e"
+    },
+    {
+      "file": "protected-comparison.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "protected-comparison.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "release-check.log",
+      "sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640"
+    },
+    {
+      "file": "release-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "release-final.log",
+      "sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640"
+    },
+    {
+      "file": "report-resource.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "report-resource.log",
+      "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5"
+    },
+    {
+      "file": "root-final.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "root-final.log",
+      "sha256": "45e6c78600cd47c15046f2aaf2bcf6e84d8f2e11777042810b83521cfa7daa1b"
+    },
+    {
+      "file": "root-test.log",
+      "sha256": "2494ed2d40af617f05ac005ae144891ab3eba65d6ea7488466061b3f881316ab"
+    },
+    {
+      "file": "route-final.json",
+      "sha256": "b6af07569fd154f80033a3a3b2b2c83ae2138bb5ce2154db30f60ba5b584a52b"
+    },
+    {
+      "file": "routing-initial.log",
+      "sha256": "8bf51cdd24a66c999ab1d413bad2352532104f5a0a05bacc0b01e9eafb3741fe"
+    }
+  ],
+  "finalChecks": [
+    {
+      "name": "check-final",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "name": "agy-final",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "f40063f29ca5a00f7aa6823a7d53b4a34df61f3c15da1c1e18814177926c554a"
+    },
+    {
+      "name": "root-final",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "45e6c78600cd47c15046f2aaf2bcf6e84d8f2e11777042810b83521cfa7daa1b"
+    },
+    {
+      "name": "release-final",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640"
+    },
+    {
+      "name": "herdr-final",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "da3833817a0ef6f9fb3b661bd3475b28ad19e999aa8c2d8586cff869540c7218"
+    },
+    {
+      "name": "diff-check",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "protected-comparison",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-validate",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "d0a406e23afeaccca51e73836efa2c2100496f1b0d58c402b46d050372dd6606"
+    },
+    {
+      "name": "report-resource",
+      "recorded_exit": 0,
+      "stdout_log_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5"
+    }
+  ],
+  "commands": [
+    {
+      "name": "routing-focused",
+      "argv": [
+        "bun",
+        "test",
+        "tests/agent-routing.test.ts"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3/candidate",
+      "started": "2026-10-25T22:38:07.510Z",
+      "ended": "2026-10-25T22:38:18.031Z",
+      "wall_ms": 10521.398919,
+      "pid": 6,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 300000,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "4cb2bff4219b4abc02290a59eeaf6d8c00b0b6ac8d73604c61435ccb11d90203"
+    },
+    {
+      "name": "agy-focused",
+      "argv": [
+        "bun",
+        "test",
+        "--timeout",
+        "30000",
+        "tests/agy.test.ts"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T22:38:07.509Z",
+      "ended": "2026-10-25T22:38:29.802Z",
+      "wall_ms": 22293.022429,
+      "pid": 6,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 300000,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "42d1065ff35cf73953f37ac907152814389147f56d4a38ac184442f51cb033bf"
+    },
+    {
+      "name": "startup-default",
+      "argv": [
+        "bun",
+        "/tmp/c2-adapter-review-01-miZYl3/startup-probe.ts",
+        "default"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3",
+      "started": "2026-10-25T22:40:36.279Z",
+      "ended": "2026-10-25T22:40:39.943Z",
+      "wall_ms": 3664.261341,
+      "pid": 6,
+      "exit": 4,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "8d4d2dc6e3914e791066ce8edb792c7659c5c3be2b4d4b073fb6c2a6e10d2f42",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "startup-authorized",
+      "argv": [
+        "bun",
+        "/tmp/c2-adapter-review-01-miZYl3/startup-probe.ts",
+        "authorized"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3",
+      "started": "2026-10-25T22:41:03.424Z",
+      "ended": "2026-10-25T22:41:04.078Z",
+      "wall_ms": 653.859097,
+      "pid": 850770,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "1eaae4a16695149d0c0796da7ec062b22d9b459796ed80cd9895604484d424ef",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "startup-clean",
+      "argv": [
+        "bun",
+        "/tmp/c2-adapter-review-01-miZYl3/startup-probe.ts",
+        "clean"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3",
+      "started": "2026-10-25T22:41:39.475Z",
+      "ended": "2026-10-25T22:41:40.096Z",
+      "wall_ms": 621.207499,
+      "pid": 851730,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "1ba0da326b250e4a8ab842974bb58d4551763efd345837724a14c7cc40294521",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "startup-versioned",
+      "argv": [
+        "bun",
+        "/tmp/c2-adapter-review-01-miZYl3/startup-probe.ts",
+        "versioned"
+      ],
+      "cwd": "/tmp/c2-adapter-review-01-miZYl3",
+      "started": "2026-10-25T22:41:41.441Z",
+      "ended": "2026-10-25T22:41:42.095Z",
+      "wall_ms": 653.531209,
+      "pid": 851885,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "f1d58b784cdd253e0ef4f7455567946871a166929cf79202c4bc778c34a1d01e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "assignment_sha256": "8b30b249820fc2292a5c1fe78b3f70ea9563af3d075d486a0d07a1b83956edf6",
+  "finding": {
+    "id": "C2-AR-01",
+    "severity": "P1",
+    "classification": "required exact-native gate bypass reproduced in no-model terminal fixture",
+    "clean_control": {
+      "exit": 0,
+      "result": {
+        "ok": true,
+        "ready": true,
+        "cli_version": "1.4.7",
+        "submission_state": "started",
+        "diagnostics": []
+      },
+      "preflight_agy_calls": [
+        {
+          "exe": "agy",
+          "args": [
+            "--help"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/checkout"
+        },
+        {
+          "exe": "agy",
+          "args": [
+            "--version"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/checkout"
+        },
+        {
+          "exe": "agy",
+          "args": [
+            "models"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/checkout"
+        }
+      ],
+      "expected_executable": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/bin/agy",
+      "decoy_fixture_version": "1.4.6",
+      "observations": [
+        {
+          "exe": "agy",
+          "executable": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/bin/agy",
+          "args": [
+            "--model",
+            "gemini-3.8-flash-medium",
+            "--add-dir",
+            "/tmp/c2-adapter-review-01-miZYl3/startup-clean/private/ruach-herdr-rEQyTT"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/checkout",
+          "path": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/bin",
+          "pid": 851826,
+          "configHomes": {
+            "home": "/tmp/c2-adapter-review-01-miZYl3/startup-clean/home"
+          }
+        }
+      ]
+    },
+    "customized_control": {
+      "exit": 0,
+      "result": {
+        "ok": true,
+        "ready": true,
+        "cli_version": "1.4.7",
+        "submission_state": "started",
+        "diagnostics": []
+      },
+      "preflight_agy_calls": [
+        {
+          "exe": "agy",
+          "args": [
+            "--help"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/checkout"
+        },
+        {
+          "exe": "agy",
+          "args": [
+            "--version"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/checkout"
+        },
+        {
+          "exe": "agy",
+          "args": [
+            "models"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/checkout"
+        }
+      ],
+      "expected_executable": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/bin/agy",
+      "decoy_fixture_version": "1.4.6",
+      "observations": [
+        {
+          "exe": "agy",
+          "executable": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/startup-bin/agy",
+          "decoyUsed": "yes",
+          "args": [
+            "--model",
+            "gemini-3.8-flash-medium",
+            "--add-dir",
+            "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/private/ruach-herdr-JpFT1g"
+          ],
+          "cwd": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/checkout",
+          "path": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/startup-bin:/tmp/c2-adapter-review-01-miZYl3/startup-versioned/bin",
+          "pid": 851990,
+          "startupSentinel": "customization-retained",
+          "configHomes": {
+            "home": "/tmp/c2-adapter-review-01-miZYl3/startup-versioned/home"
+          }
+        }
+      ]
+    },
+    "limits": "All programs are harmless fake native/Herdr executables; this proves the shell execution-selection defect, not actual Agy role or policy behavior."
+  },
+  "disposition": "Changes required before the separately assigned actual native advisory",
+  "correction_accounting": {
+    "outcome": "C2 initial adapter source",
+    "previous_completed_failed_cycles": 0,
+    "this_review_rejects_required_source_gate": true,
+    "resulting_completed_failed_cycles": 1,
+    "authority": "REVIEW-C2-ADAPTER-01; no task record edited and no LAUNCH-LONG-ARGV history changed"
+  },
+  "capability_probe": {
+    "command": [
+      "bun",
+      "-e",
+      "const s=Bun.serve({unix:\"/tmp/c2-adapter-review-01-miZYl3/tmp/capability.sock\",fetch(){return new Response(\"fixture\")}}); s.stop(true);"
+    ],
+    "exit": 1,
+    "observed_error": "EPERM: operation not permitted, listen on the owned Unix socket; retained original tool result"
+  },
+  "limits": [
+    "No actual Agy/Herdr/native/model launch, current-model refresh, trust answer or private metadata read",
+    "Full native role/skill composition, aggregate budget, declared/plugin precedence, identity and useful advisory remain held",
+    "Both matching clean and prepended-PATH controls use exact candidate public worker with real Bash/PTY and harmless native recorders",
+    "Prepared role/technical-skill artifacts and config file preservation are independently tested; no wholesale native/account equality inferred"
+  ],
+  "probe_source_sha256": "38df292337bd71760b2d5fe508dbf52f9c094ce3d3fe8199f9d03058524a616d"
+}

@@ -1,0 +1,43 @@
+{
+  "oracle": "Supported offered Composition generation must admit an accepted saved result; omitted/null optional reservation means no vocal. Values, provenance and real reservation differences remain exact.",
+  "boundary": "Unmodified public validateGeneration with actual independent original request and full saved HTTP response; no import or normalization on the failing input.",
+  "original_data": {
+    "evidence_commit": "5bf48a6ec523a24dc9b35fefe3df7ba64952a909",
+    "request_sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b",
+    "response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+  },
+  "baseline": {
+    "original": {
+      "admitted": false,
+      "error": "Error: Returned Performance does not match the submitted request."
+    },
+    "onlyRequestReservationNull": {
+      "admitted": true
+    },
+    "onlyResponseReservationOmitted": {
+      "admitted": true
+    },
+    "genuineReservationDifference": {
+      "admitted": false,
+      "error": "Error: Returned Performance does not match the submitted request."
+    }
+  },
+  "candidate": {
+    "name": "probe-candidate",
+    "argv": [
+      "bun",
+      "$C/probe.ts",
+      "candidate"
+    ],
+    "cwd": "$C",
+    "environment": {},
+    "started": "2026-10-25T22:35:09.657Z",
+    "ended": "2026-10-25T22:35:09.815Z",
+    "wall_ms": 157.707541,
+    "exit": 0,
+    "signal": null,
+    "stdout_sha256": "4fb8de08de166d98a6f812bfd1d9202c560eca0bebe198520f211267e139fed2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "confidence": "High for this admission mismatch: either one-field representation alignment alone admits the complete original captured pair on baseline; real corrected browser original sequence admits unchanged request. This does not identify all optional-field defects."
+}

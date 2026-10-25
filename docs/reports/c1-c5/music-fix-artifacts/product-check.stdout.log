@@ -1,0 +1,252 @@
+check: just typecheck-client
+check: cd src/client && $C/ramec/bin/run-bun run eslint --no-warn-ignored -- src/performance/state.test.ts src/performance/state.ts
+check: cd src/client && $C/ramec/bin/run-bun run prettier --check --ignore-unknown -- src/performance/state-generation.test-support.json src/performance/state.test.ts src/performance/state.ts
+check: just build-client
+check: cd src/client && $C/ramec/bin/run-bun run vitest related --run --passWithNoTests --reporter=dot --silent src/performance/state-generation.test-support.json src/performance/state.test.ts src/performance/state.ts
+check: ok after 5 s: just typecheck-client
+check: ok after 6 s: cd src/client && $C/ramec/bin/run-bun run eslint --no-warn-ignored -- src/performance/state.test.ts src/performance/state.ts
+check: ok after 1 s: cd src/client && $C/ramec/bin/run-bun run prettier --check --ignore-unknown -- src/performance/state-generation.test-support.json src/performance/state.test.ts src/performance/state.ts
+Checking formatting...
+All matched files use Prettier code style!
+check: ok after 9 s: just build-client
+ok: run src/client build
+check: ok after 232 s: cd src/client && $C/ramec/bin/run-bun run vitest related --run --passWithNoTests --reporter=dot --silent src/performance/state-generation.test-support.json src/performance/state.test.ts src/performance/state.ts
+
+ RUN  v2.1.9 $C/ramec/src/client
+
+ ✓ src/performance/page.test.ts (25 tests) 28090ms
+   ✓ Performances product page in the atomic SPA > shows saved provenance 720ms
+   ✓ Performances product page in the atomic SPA > shows saved Part instructions without trace, edits a new Part Sheet and reports an admission path 1141ms
+   ✓ Performances product page in the atomic SPA > validates pasted Composition JSON, saves Question and Notes, reopens without generation and reuses the setup 1746ms
+   ✓ Performances product page in the atomic SPA > retries each inspected export locally while auditioning another Performance 2087ms
+   ✓ Performances product page in the atomic SPA > retries catalogs beside Setup and keeps independent edits and card focus 1043ms
+   ✓ Performances product page in the atomic SPA > starts with no source or MIDI permission and uses explicit source and lineage for generation 336ms
+   ✓ Performances product page in the atomic SPA > inspects saved Personality values independently of a changed or failed catalog 1178ms
+   ✓ Performances product page in the atomic SPA > offers the supported fixture for the next generation 719ms
+   ✓ Performances product page in the atomic SPA > adopts next sources in place and retains saved selection, export and the usable source on rejection or cancellation 1883ms
+   ✓ Performances product page in the atomic SPA > shows the HTTP 500 generation error without replacing accepted music 1064ms
+   ✓ Performances product page in the atomic SPA > shows the HTTP 503 generation error without replacing accepted music 966ms
+   ✓ Performances product page in the atomic SPA > keeps random input empty, submits real trace choice and reuses the resolved seed/settings only explicitly 1181ms
+   ✓ Performances product page in the atomic SPA > shows generation progress, retains the submitted draft and inspected selection on failure, and retries generation 1252ms
+   ✓ Performances product page in the atomic SPA > keeps actual selection distinct from audition and exports only inspected committed music 1315ms
+   ✓ Performances product page in the atomic SPA > restores the second member, exact List page and passage across Back, reload and resize without MIDI 2802ms
+   ✓ Performances product page in the atomic SPA > rejects an invalid saved expanded member with the whole tab envelope while keeping the Performance usable 630ms
+   ✓ Performances product page in the atomic SPA > rejects an invalid saved List member with the whole tab envelope while keeping the Performance usable 632ms
+   ✓ Performances product page in the atomic SPA > rejects an invalid saved note reference with the whole tab envelope while keeping the Performance usable 671ms
+   ✓ Performances product page in the atomic SPA > gives an explicit note address and tick precedence and rejects a mismatched address visibly 794ms
+   ✓ Performances product page in the atomic SPA > preserves the next draft and disclosure focus while saved selection and export remain independent 1463ms
+   ✓ Performances product page in the atomic SPA > keeps accepted detail on evidence failure, retries only evidence, and ignores a stale selection reply 780ms
+   ✓ Performances product page in the atomic SPA > cleans its MIDI channels with optional queue clearing true and keeps playing across route navigation 866ms
+   ✓ Performances product page in the atomic SPA > cleans its MIDI channels with optional queue clearing false and keeps playing across route navigation 867ms
+   ✓ Performance Inspector exact decision handoff > keeps music and focus after decision evidence failure, retries locally and opens the exact decision 773ms
+   ✓ Performance Inspector exact decision handoff > keeps accepted Seat choices after failure, retries locally and offers several exact Intervals with predictable focus 693ms
+ ✓ src/composition/timeline.browser.test.ts (31 tests) 38702ms
+   ✓ production Composition interaction > restores explicit musical and object anchors across Reload, resize and density changes without autoplay 1085ms
+   ✓ production Composition interaction > selects exact Form children, reveals Recurrence sources and preserves written harmony events 1352ms
+   ✓ production Composition interaction > selects exact Motif invitations and follows only recorded Answer sources by keyboard 1436ms
+   ✓ production Composition interaction > reveals the recorded Motif cell beyond the first page without changing an occurrence selection 1481ms
+   ✓ production Composition interaction > pages 45 exact Motif events while retaining the selected cell and Inspector 1029ms
+   ✓ production Composition interaction > keeps a custom zoom draft when an exact source selection updates the view 1053ms
+   ✓ production Composition interaction > selects a quiet Closed Half cadence without scrolling and Inspect focuses its facts 875ms
+   ✓ production Composition interaction > keeps the empty Motif lane truthful when musical zoom changes 886ms
+   ✓ production Composition interaction > keeps current facts on retained Form focus after keyboard navigation 898ms
+   ✓ production Composition interaction > retains dense Bar and Section ruler labels for pickup-tune 705ms
+   ✓ production Composition interaction > retains dense Bar and Section ruler labels for thrash-epic 929ms
+   ✓ production Composition interaction > keeps exact musical selection while toggling actual layers and zooming pickup-tune 1365ms
+   ✓ production Composition interaction > keeps exact musical selection while toggling actual layers and zooming meter-walk 1317ms
+   ✓ production Composition interaction > pans the whole Composition viewport independently on thrash-epic 1803ms
+   ✓ production Composition interaction > pans the whole Composition viewport independently on pickup-tune 1495ms
+   ✓ production Composition interaction > pans the whole Composition viewport independently on meter-walk 1484ms
+   ✓ production Composition interaction > retries a local whole Composition failure without losing the admitted source 771ms
+   ✓ production Composition interaction > keeps the verified audition position independent of the whole Composition viewport 1546ms
+   ✓ production Composition interaction > keeps panned ruler targets reachable by pointer and keyboard while vertically sticky 1158ms
+   ✓ production Composition interaction > keeps written chord facts while selecting an exact bar in dark 991ms
+   ✓ production Composition interaction > keeps written chord facts while selecting an exact bar in light 1033ms
+   ✓ production Composition interaction > retains visible exact native focus across the original pan and phone reflow in dark without selecting 1296ms
+   ✓ production Composition interaction > retains visible exact native focus across the original pan and phone reflow in light without selecting 1283ms
+   ✓ production Composition interaction > reveals an already retained exact focus after selected Bar100 phone reflow in dark 1100ms
+   ✓ production Composition interaction > reveals an already retained exact focus after selected Bar100 phone reflow in light 1122ms
+   ✓ production Composition interaction > resets exact List paging after filtering and reveals the selected mark without changing musical time 1522ms
+   ✓ production Composition interaction > returns picker focus to its precise trigger and reveals the chosen real onset 1732ms
+   ✓ production Composition interaction > retries failed exact pages while retaining accepted rows and chooser focus 1546ms
+   ✓ production Composition interaction > keeps the complete saved identity inside 1920px at 1080 height and 100 percent text 1544ms
+   ✓ production Composition interaction > keeps the complete saved identity inside 390px at 844 height and 100 percent text 1351ms
+   ✓ production Composition interaction > keeps the complete saved identity inside 390px at 844 height and 200 percent text 1300ms
+ ✓ src/performance/timeline-layout.browser.test.ts (18 tests) 18987ms
+   ✓ actual saved music responsive lanes > keeps exact choices after selection and reopening (projection interrupted: false) 872ms
+   ✓ actual saved music responsive lanes > keeps exact choices after selection and reopening (projection interrupted: true) 901ms
+   ✓ actual saved music responsive lanes > returns focus to the overview canvas after cancelling exact choices 598ms
+   ✓ actual saved music responsive lanes > retries exact note choices locally and restores the precise trigger after selection and Cancel 1052ms
+   ✓ actual saved music responsive lanes > filters exact note and Span pages, keeps accepted rows after failed Next, and reaches the final filtered note 1795ms
+   ✓ actual saved music responsive lanes > opens exact choices for colliding notes without selecting or seeking 805ms
+   ✓ actual saved music responsive lanes > expands saved Seats with distinct header focus and preserves off-page inspection 1299ms
+   ✓ actual saved music responsive lanes > restores Seat 12 and its member into the raster-limited slice after reload 1423ms
+   ✓ actual saved music responsive lanes > restores Seat 24 and its member into the raster-limited slice after reload 1279ms
+   ✓ actual saved music responsive lanes > expands saved drum-hit lanes with bounded height and keeps neighboring Seats 1041ms
+   ✓ actual saved music responsive lanes > names drum detail key guides from the saved kit after a catalog change 705ms
+   ✓ actual saved music responsive lanes > fits actual bars and selects saved context without seeking, pausing Follow on manual navigation 1827ms
+   ✓ actual saved music responsive lanes > keeps exact List notes reachable when canvas is unavailable 637ms
+   ✓ actual saved music responsive lanes > preserves the accepted musical viewport while pending and rejects an older reply 647ms
+   ✓ actual saved music responsive lanes > aligns Seat labels with the same canvas rows across density text and logical viewport changes 1544ms
+   ✓ actual saved music responsive lanes > refreshes native canvas DPR when musical pane CSS width stays unchanged 511ms
+   ✓ actual saved music responsive lanes > turns viewport Follow off when Reduce becomes effective 555ms
+   ✓ actual saved music responsive lanes > shows the shared playhead only after the actual displayed Composition matches playing music 1287ms
+ ✓ src/shell/shared.browser.test.ts (15 tests) 18046ms
+   ✓ workspace keyboard Help > limits Composition navigation and inspection Help to the musical viewport 694ms
+   ✓ workspace keyboard Help > opens Commands with Ctrl/Cmd+K, restores focus and protects editing and modified viewport keys 719ms
+   ✓ workspace keyboard Help > leaves browser keys and disabled character shortcuts to the musical viewport 1077ms
+   ✓ routed audition output and exact seek > stops the old output before adopting another port and retains the stopped tick without autoplay 1010ms
+   ✓ routed audition output and exact seek > keeps playing identity through saved inspection and all three routes, with shared modal Stop and silent Reload 2033ms
+   ✓ routed audition output and exact seek > keeps the selected destination and actual error after cleanup rejects a port change 875ms
+   ✓ routed audition output and exact seek > requires explicit connection, retries permission failure, and separates canonical seek drafts from the stopped position with focus return 1361ms
+   ✓ native shared shell and worker contracts > renders Page-owned bounded choices in the same phone Stop and focus frame 1625ms
+   ✓ native shared shell and worker contracts > imports a native File, generates from its admitted handle, and releases its full generated root after bounded music delivery 836ms
+   ✓ native shared shell and worker contracts > awaitable Stop cancels cached restart queued behind a held native-worker MIDI export 786ms
+   ✓ native shared shell and worker contracts > preserves the accepted source when an actual large valid native File import is cancelled while pending 1455ms
+   ✓ native shared shell and worker contracts > reports successful native-worker release of an unbound saved music handle 894ms
+   ✓ saved Library metadata and selection > adopts a saved source into the current Performance draft without navigating 808ms
+   ✓ saved Library metadata and selection > applies exact category filters, ignores a stale search, and retries a failed page without fetching documents 1347ms
+   ✓ saved Library metadata and selection > retains the source after failure or cancel and chooses trace-eligible metadata 1347ms
+ ✓ src/composition/page.test.ts (31 tests) 28864ms
+   ✓ distinguishes dense Motif previews when only an interior event moves within an aggregate 431ms
+   ✓ Composition public consumers in the atomic SPA > restores the accepted List page and exact selection without changing its filter 1571ms
+   ✓ Composition public consumers in the atomic SPA > restores Composition disclosures and exact lane visibility across Reload and Back 2039ms
+   ✓ Composition public consumers in the atomic SPA > offers Retry when saved reference validation is unavailable without discarding the tab 1163ms
+   ✓ Composition public consumers in the atomic SPA > rejects the whole tab for a saved Composition with an invalid item 1448ms
+   ✓ Composition public consumers in the atomic SPA > rejects the whole tab for a saved Composition with an invalid lane 1519ms
+   ✓ Composition public consumers in the atomic SPA > rejects the whole tab for a saved Composition with an invalid offset 1330ms
+   ✓ Composition public consumers in the atomic SPA > rejects the whole tab for a saved Composition with an invalid visibility 1611ms
+   ✓ Composition public consumers in the atomic SPA > copies the selected exact reference and inspects without replacing musical facts with provenance 2027ms
+   ✓ Composition public consumers in the atomic SPA > retains accepted musical facts after a local exact-field failure and retries copy without moving focus 1076ms
+   ✓ Composition public consumers in the atomic SPA > shows New composition and one compact explanation without a source 411ms
+   ✓ Composition public consumers in the atomic SPA > retains the selected imported item when Save adopts the returned identity 850ms
+   ✓ Composition public consumers in the atomic SPA > keeps the HTTP 500 generation reason visible 477ms
+   ✓ Composition public consumers in the atomic SPA > keeps the HTTP 503 generation reason visible 481ms
+   ✓ Composition public consumers in the atomic SPA > submits the explicit plain style without changing the accepted result while editing 728ms
+   ✓ Composition public consumers in the atomic SPA > submits the explicit hardRockBandMaid style without changing the accepted result while editing 834ms
+   ✓ Composition public consumers in the atomic SPA > starts with Setup visible and one closed Library, and navigates Perform with the exact saved source 668ms
+   ✓ Composition public consumers in the atomic SPA > opens and closes the single metadata Library without hiding accepted music 646ms
+   ✓ Composition public consumers in the atomic SPA > pages exact saved metadata and keeps historical downloads without unsupported Open 584ms
+   ✓ Composition public consumers in the atomic SPA > shows the typed HTTP 409 reopen failure without substituting a remembered result 493ms
+   ✓ Composition public consumers in the atomic SPA > shows the typed HTTP 500 reopen failure without substituting a remembered result 558ms
+   ✓ Composition public consumers in the atomic SPA > shows the typed HTTP 503 reopen failure without substituting a remembered result 596ms
+   ✓ Composition public consumers in the atomic SPA > shows the typed HTTP 200 reopen failure without substituting a remembered result 483ms
+   ✓ Composition public consumers in the atomic SPA > keeps random and locked seeds exact and reuses settings separately from the seed 1067ms
+   ✓ Composition public consumers in the atomic SPA > shows import status and retains music, selection and draft after rejection 1374ms
+   ✓ Composition public consumers in the atomic SPA > keeps the last valid draft and inline disclosure when revisiting the same history entry at 1440px 894ms
+   ✓ Composition public consumers in the atomic SPA > keeps the last valid draft and inline disclosure when revisiting the same history entry at 390px 1013ms
+   ✓ Composition public consumers in the atomic SPA > works in memory when storage is unavailable without reading a musical handoff 598ms
+   ✓ Composition public consumers in the atomic SPA > selects exact structure and types a seed for a 1440-bar document on cold admission 763ms
+   ✓ Composition public consumers in the atomic SPA > selects exact structure and types a seed for a 1440-bar document on warm admission 830ms
+ ✓ src/shell/persistence.test.ts (70 tests) 55ms
+ ✓ src/shell/application.browser.test.ts (11 tests) 10465ms
+   ✓ production atomic shell consumers > opens a fresh root with explicit Resume and restores the saved address only on request 931ms
+   ✓ production atomic shell consumers > retries preferences inside their focus boundary without writing current tab work 1691ms
+   ✓ production atomic shell consumers > explains a whole-tab reset once and retries failed cleanup while saved music and preferences remain usable 938ms
+   ✓ production atomic shell consumers > retries the actual failed Performing-unit catalog without replacing its accepted draft 744ms
+   ✓ production atomic shell consumers > returns overlay focus to its connected trigger or the current page after the trigger disappears 514ms
+   ✓ production atomic shell consumers > opens contextual Decisions from metadata and returns with Back without starting audition 895ms
+   ✓ production atomic shell consumers > keeps the full maximum saved ID and reachable Generate at 390 px and 200 percent text 717ms
+   ✓ production atomic shell consumers > keeps SPA audition across navigation, cleans its channels, and resumes at the retained tick 1235ms
+   ✓ production atomic shell consumers > admits an Unsaved source only through its deliberate Perform handoff and asks again after reload 790ms
+   ✓ production atomic shell consumers > restores a valid Performance draft after its Performing units arrive without settling defaults over it 760ms
+   ✓ production atomic shell consumers > shows meter-aware context, exact notes, completion and keyboard inspection in the real saved music view 1007ms
+ ✓ src/performance/audition.test.ts (56 tests) 56ms
+ ✓ src/library/shell-runtime.test.ts (23 tests) 215ms
+ ✓ src/library/worker.test.ts (25 tests) 2955ms
+   ✓ document worker > downloads a recorded trace the size of Performance 93 with Content-Length: true 1241ms
+   ✓ document worker > downloads a recorded trace the size of Performance 93 with Content-Length: false 1425ms
+ ✓ src/shell/context.test.ts (36 tests) 202ms
+ ✓ src/performance/documents.test.ts (98 tests) 401ms
+ ✓ src/player-decisions/candidate-audition.test.ts (23 tests) 970ms
+   ✓ plays and exports the constrained selected span without a ranking comparison 578ms
+ ✓ src/performance/selection.test.ts (18 tests) 994ms
+ ✓ src/performance/visible-timeline.test.ts (12 tests) 1213ms
+   ✓ draws only intersecting spans and notes and keeps selection across scroll, zoom and Fit 765ms
+ ✓ src/performance/setup.test.ts (10 tests) 200ms
+ ✓ src/shell/design.browser.test.ts (11 tests) 10265ms
+   ✓ musical workspace design > keeps native Tab focus on disclosures above the transport at 400 percent zoom 1108ms
+   ✓ musical workspace design > keeps native Tab focus on Motif labels and previews above the transport at 400 percent zoom 867ms
+   ✓ musical workspace design > keeps the whole Composition overview usable for saved nullable Recurrence fields 1142ms
+   ✓ musical workspace design > keeps phone header words intact at 200 percent text in light theme 924ms
+   ✓ musical workspace design > keeps phone header words intact at 200 percent text in dark theme 920ms
+   ✓ musical workspace design > searches and executes registered Commands with active descendants and returns to its trigger 1146ms
+   ✓ musical workspace design > replaces Menu with Preferences, focuses Theme, and returns to the original Menu trigger 806ms
+   ✓ musical workspace design > offers a retry beside a failed saved Composition load 632ms
+   ✓ musical workspace design > shows Performance notes in the initial phone viewport above the transport 666ms
+   ✓ musical workspace design > selects a visible note directly and retains the same exact List selection 955ms
+   ✓ musical workspace design > draws individual off-beat events at their exact onset and duration 754ms
+ ✓ src/performance/state.test.ts (44 tests) 198ms
+ ✓ src/composition/tonal-controls.test.ts (4 tests) 5118ms
+   ✓ submits global tonal controls and the selected beat grouping from ../composition/CompositionPage.vue 1157ms
+   ✓ shared Composer controls in the routed SPA > retains the Composition draft after rejection and resets only the draft 3610ms
+ ✓ src/library/source-pages.test.ts (10 tests) 169ms
+ ✓ src/library/api.test.ts (72 tests) 51ms
+ ✓ src/composition/timeline.test.ts (12 tests) 1941ms
+   ✓ reports a reader startup failure and retries without replacing the Composition 704ms
+ ✓ src/library/composition-projection.test.ts (7 tests) 690ms
+   ✓ Composition worker projection > bounds dense Fit by screen columns and exposes every exact bar and item through picker pages 467ms
+ ✓ src/library/performance-projection.test.ts (10 tests) 74ms
+ ✓ src/performance/view.test.ts (17 tests) 112ms
+ ✓ src/performance/inspection.test.ts (7 tests) 396ms
+   ✓ bounded Performance inspection > opens diagnostics and nested containers on demand, with no rows in closed disclosures 307ms
+ ✓ src/library/decision-reader.test.ts (6 tests) 386ms
+   ✓ opens a saved decision trace of real 192-bar size 351ms
+ ✓ src/composition/saved-identities.test.ts (12 tests) 11078ms
+   ✓ Composition saved identity in the atomic SPA > consumes the real HTTP 200 Location and downloads the exact accepted document 967ms
+   ✓ Composition saved identity in the atomic SPA > keeps Validate unsaved, then consumes only the explicit HTTP 201 Save identity 891ms
+   ✓ Composition saved identity in the atomic SPA > preserves the accepted saved identity and exact data after generation Location null 965ms
+   ✓ Composition saved identity in the atomic SPA > preserves the accepted saved identity and exact data after generation Location "/api/compositions/01" 989ms
+   ✓ Composition saved identity in the atomic SPA > preserves the accepted saved identity and exact data after generation Location "/api/performances/42" 946ms
+   ✓ Composition saved identity in the atomic SPA > preserves an accepted import and permits explicit Save retry after Location null 927ms
+   ✓ Composition saved identity in the atomic SPA > preserves an accepted import and permits explicit Save retry after Location "/api/compositions/01" 874ms
+   ✓ Composition saved identity in the atomic SPA > preserves an accepted import and permits explicit Save retry after Location "/api/performances/42" 742ms
+   ✓ Composition saved identity in the atomic SPA > clears the previous saved identity when a new Unsaved import is admitted 840ms
+   ✓ Composition saved identity in the atomic SPA > reopens the exact selected library identity and preserves it after a rejected import 1165ms
+   ✓ Composition saved identity in the atomic SPA > keeps a pending generate from navigating or stealing the next entry focus 728ms
+   ✓ Composition saved identity in the atomic SPA > keeps a pending save from navigating or stealing the next entry focus 788ms
+ ✓ src/performance/timeline-colors.test.ts (3 tests) 3205ms
+   ✓ rendered Performance musical color roles > distinguishes two Guitar Seats with stable note accents 838ms
+   ✓ rendered Performance musical color roles > keeps normal Cue and ruler data neutral with a dark theme 1075ms
+   ✓ rendered Performance musical color roles > keeps normal Cue and ruler data neutral with a light theme 978ms
+ ✓ src/performance/admission.test.ts (8 tests) 642ms
+ ✓ src/library/list.test.ts (8 tests) 106ms
+ ✓ src/composition/timeline.regression.test.ts (9 tests) 2293ms
+   ✓ keeps the selected middle bar at its screen position when zooming out after pan 730ms
+ ✓ src/shell/route-state.test.ts (5 tests) 39ms
+ ✓ src/performance/selection-summary.browser.test.ts (3 tests) 2743ms
+   ✓ immediate Performance selection facts > shows accepted facts and explicit Details at 1600 px without changing focus, time or audition 1023ms
+   ✓ immediate Performance selection facts > shows accepted facts and explicit Details at 390 px without changing focus, time or audition 826ms
+   ✓ immediate Performance selection facts > keeps no recorded match distinct from absent trace and opens the selected Seat timeline 575ms
+ ✓ src/player-decisions/page.test.ts (7 tests) 1147ms
+   ✓ inspects complete joint music with participants and paged Candidate evidence 493ms
+ ✓ src/palette.test.ts (5 tests) 1240ms
+   ✓ rendered common palette > keeps all dark text and essential boundaries readable on opaque plates 309ms
+ ✓ src/shell/navigation.browser.test.ts (2 tests) 2441ms
+   ✓ saved relationship navigation > provides a named return link from a directly addressed decision 650ms
+   ✓ saved relationship navigation > shares related destinations across the header and Menu and excludes an unrelated remembered Performance 1503ms
+ ✓ src/performance/api.test.ts (13 tests) 14ms
+ ✓ src/library/music-labels.test.ts (3 tests) 13ms
+ ✓ src/player-decisions/api.test.ts (5 tests) 41ms
+ ✓ src/theme.test.ts (8 tests) 3315ms
+   ✓ one actual shell preference owner > applies the theme from Preferences at / and persists only the strict envelope 869ms
+   ✓ one actual shell preference owner > applies the theme from Preferences at /performances and persists only the strict envelope 911ms
+   ✓ one actual shell preference owner > applies the theme from Preferences at /performances/1/decisions/bass-1 and persists only the strict envelope 669ms
+   ✓ one actual shell preference owner > tracks system changes only for System and preserves explicit Light 590ms
+ ✓ src/performance/saved-identity.test.ts (11 tests) 135ms
+ ✓ src/composition/playhead.test.ts (2 tests) 86ms
+ ✓ src/performance/source-picker.test.ts (2 tests) 147ms
+ ✓ src/test-support/component-host.test.ts (1 test) 1089ms
+   ✓ mounts the actual inline Setup with real shell provision and preserves native v-show display 1089ms
+ ✓ src/player-decisions/detail-layout.test.ts (3 tests) 150ms
+ ✓ src/performance/timeline.measurement.test.ts (1 test) 581ms
+   ✓ completes bounded frames and paints every supplied note at both widths 580ms
+ ✓ src/performance/admission.measurement.test.ts (1 test) 712ms
+   ✓ bounds diagnostic candidate rows for cold and warm admitted Performance 712ms
+ ✓ src/library/measurement.test.ts (1 test) 442ms
+   ✓ lists and scrolls 10,000 items in 200 pages 442ms
+
+ Test Files  49 passed (49)
+      Tests  815 passed (815)
+   Start at  22:35:33
+   Duration  231.70s (transform 535ms, setup 0ms, collect 18.84s, tests 201.47s, environment 5ms, prepare 1.78s)

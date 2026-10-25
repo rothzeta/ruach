@@ -1,0 +1,470 @@
+{
+  "source": {
+    "canonical_source_commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+    "canonical_source_tree": "91daf580664322620eb9dddf0a0bfaf827c3657e",
+    "archive_sha256": "1c42adc97769db6636468cce40e208507d0b0848f21c41fd441fa39113eb406f",
+    "original_file_count": 1067,
+    "patch_sha256": "3f209b4eab7b1520c8302783aba02705fe1bf7ed6ffd20ce3b519d985a63c2fc",
+    "files": [
+      {
+        "path": "src/client/src/performance/state.ts",
+        "before_sha256": "6146e16b7eb37b040cea8270192fdf29b76dc25f0de0f56bc083628c56c2cc5e",
+        "after_sha256": "9b91f4adb499abc5e9ba1fcb50502183904079b1a9808e3a31bf0361b89a5c23"
+      },
+      {
+        "path": "src/client/src/performance/state.test.ts",
+        "before_sha256": "f52d92635db3bff396be589fdfae6ef153ee3b8f4d9200cbb00d3b2c6ce9a5d6",
+        "after_sha256": "6a85a469c422421daa20519a4054768edad59d1fde7119afea75ea39f4c98e92"
+      },
+      {
+        "path": "src/client/src/performance/state-generation.test-support.json",
+        "before_sha256": null,
+        "after_sha256": "c3d572b8c39c8db4de72e1d72e61f64a697ddf3549f9b2054bb03110adb384c1"
+      }
+    ],
+    "response_composition_origin": {
+      "evidence_commit": "5bf48a6ec523a24dc9b35fefe3df7ba64952a909",
+      "evidence_path": "docs/reports/c1-c5/runtime-finding-review-artifacts/original-response.json",
+      "original_response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401",
+      "selection": "performance.composition only; formatted with configured Prettier"
+    }
+  },
+  "client": {
+    "files": 16,
+    "sha256": "4e5163f31bff96b3f3dc47767a5c898d82bba000bfed17dd23321156a4175265",
+    "entries": [
+      {
+        "path": "assets/CompositionPage-BimdidgE.js",
+        "sha256": "1c1b6c8dc4b3214137e8a229986ea539669dc76df38792c4f40bdd48bcff84f2"
+      },
+      {
+        "path": "assets/CompositionPage-MdUswI7l.css",
+        "sha256": "92de6ca48605b4a5f995e5208cb2b5e317e2ac9a5bf7c5dc74ed383e63c72bf9"
+      },
+      {
+        "path": "assets/CopyId.vue_vue_type_script_setup_true_lang-CCuTal2j.js",
+        "sha256": "6b1c77af260c3fc90aebcd30ce272a710bcfbdb45d333662e3e0287749f7c1c6"
+      },
+      {
+        "path": "assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "path": "assets/PerformancePage-o2BSP96m.js",
+        "sha256": "fbb8f5f8283bdf68bac7c7f351545e5562faab43243682cedb2fe5b89f63ae38"
+      },
+      {
+        "path": "assets/PlayerDecisionsPage-CNp9Nzkb.js",
+        "sha256": "d2bdc53c2c22ebc1af164e4fdd02e9ad499843016bcdbf1bc9842552b5330dcb"
+      },
+      {
+        "path": "assets/PlayerDecisionsPage-f9TXpx1z.css",
+        "sha256": "2b46ad0db2ef0215b242ea574623bb97dcd6b5bfbf6cdc69a22a965fa8cfaa69"
+      },
+      {
+        "path": "assets/audition.worker-D_fjLcDd.js",
+        "sha256": "3f42de3eb8f6742575003abb905fcc16e03eaace2779d5b1f974433664015982"
+      },
+      {
+        "path": "assets/document.worker-ClzLzBXW.js",
+        "sha256": "27ce10d9793b26704ac697a4aa9b563ee116a4cff437d1e4d026718c3de3e83e"
+      },
+      {
+        "path": "assets/index-B1pJ1vd0.js",
+        "sha256": "a8f0eb7acf6929fdb78a2933fdbfecfa6332fdd9720465087d8838cd7172376b"
+      },
+      {
+        "path": "assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "path": "fonts/Geist-OFL.txt",
+        "sha256": "f12f59163d92084b0473315ae4566cde0c1233d940ae464f5225a69c347cc691"
+      },
+      {
+        "path": "fonts/JetBrainsMono-OFL.txt",
+        "sha256": "c1ab7c666206842a02b35b30770dac0d7a10156ed401c9defc3f02a754d89e90"
+      },
+      {
+        "path": "fonts/geist.ttf",
+        "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659"
+      },
+      {
+        "path": "fonts/jetbrains-mono-regular.woff2",
+        "sha256": "f1a7a03672cdd494ce0d5543fac6e4360fe22403c6de297fdc2e55a815f7baff"
+      },
+      {
+        "path": "index.html",
+        "sha256": "8f39580fbe8c4984256d8fdb82806d84a9bed3a24ab29e6fd68978fad4591ea8"
+      }
+    ]
+  },
+  "server": {
+    "files": 71,
+    "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+    "entries": [
+      {
+        "path": "Microsoft.Data.Sqlite.dll",
+        "sha256": "b98d957462be432895b00dccca012d3c127e118d3d4262418014b92c7bbd66cf"
+      },
+      {
+        "path": "Microsoft.Extensions.DependencyModel.dll",
+        "sha256": "0d7fae30684654fa9173ad248ab41b713a48d81df0ef446ee4e40c8d380893e8"
+      },
+      {
+        "path": "Ramec.Band.dll",
+        "sha256": "5d2731e77e1aec61bf0ea5055a2f41e47d7b6da18910b88a5658070c2c2e1874"
+      },
+      {
+        "path": "Ramec.Band.pdb",
+        "sha256": "66667d2109a187b9f2245e4b7f9c661e9c2f9deff721a1f2e1df90a659c47efd"
+      },
+      {
+        "path": "Ramec.Composition.dll",
+        "sha256": "62f798f1730cd1b6b03a4947b5add9ab069cdb6664e3a8154afccd3762179fcc"
+      },
+      {
+        "path": "Ramec.Composition.pdb",
+        "sha256": "83575987997c89f089d5692a43c0e8e2d158dbb995d35b02ef2da06e00c6c5b7"
+      },
+      {
+        "path": "Ramec.Server",
+        "sha256": "fac5b6be243e53033a6b43b059157811fd52b11b02f9a0d665311877f8fe4625"
+      },
+      {
+        "path": "Ramec.Server.deps.json",
+        "sha256": "e5060ace09b2cf690e7e313da07d360b322a2f08c4b06c2f355b4689b7241afe"
+      },
+      {
+        "path": "Ramec.Server.dll",
+        "sha256": "943804f625afffa6b5f92faa1fb4e1662053d0529eed3303dda46f16cd80d0c8"
+      },
+      {
+        "path": "Ramec.Server.pdb",
+        "sha256": "93cf8d12abb5d8c7f6eaa49b33ed82da0b882d15fc99e9f21c725b8b733ade0c"
+      },
+      {
+        "path": "Ramec.Server.runtimeconfig.json",
+        "sha256": "e435f8e233ff7237dd9c9c8ab73c5f19549a7f67788a575f3f81c7feeee507dc"
+      },
+      {
+        "path": "Ramec.Server.staticwebassets.endpoints.json",
+        "sha256": "eb6525c892afda953a2560f151f9c5e5bc6e79ef6741d886488ac450262c91e3"
+      },
+      {
+        "path": "SQLitePCLRaw.batteries_v2.dll",
+        "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+      },
+      {
+        "path": "SQLitePCLRaw.core.dll",
+        "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+      },
+      {
+        "path": "SQLitePCLRaw.provider.e_sqlite3.dll",
+        "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+      },
+      {
+        "path": "Serilog.AspNetCore.dll",
+        "sha256": "a550c57df7a04edbed00da036fc14be12acd0d425b7401855975fb628e3dbada"
+      },
+      {
+        "path": "Serilog.Extensions.Hosting.dll",
+        "sha256": "3e6d0284179ee0e1c197568fd79b58f869d15298fff8ecb8447322fe87d44f47"
+      },
+      {
+        "path": "Serilog.Extensions.Logging.dll",
+        "sha256": "80d3edbe3e3ac0b4c5bc764474220e7da11df8d285e0098f3dc1b65a734c8507"
+      },
+      {
+        "path": "Serilog.Formatting.Compact.dll",
+        "sha256": "319fbcefc2161dd50ccdd8d60b30edee48a09f794aedb28421a23f35ddd670d9"
+      },
+      {
+        "path": "Serilog.Settings.Configuration.dll",
+        "sha256": "ec8cfd1f8970a44e2aa3f7bcc71116ca2691b196564bff83e3e3ead0c1143b67"
+      },
+      {
+        "path": "Serilog.Sinks.Console.dll",
+        "sha256": "dc88002ddd9f5fd0ffec9a6568ef89954671f60f2c9161593ee78932538c1e3e"
+      },
+      {
+        "path": "Serilog.Sinks.Debug.dll",
+        "sha256": "df543d3df8bd00d72e5eb2b9b2a15e67a6e4d10c13834de4cedbf500b8793e01"
+      },
+      {
+        "path": "Serilog.Sinks.File.dll",
+        "sha256": "4f4282671c2ac68284b4dc99f7a76eac9cbd4e659978cef642cff9e6c01b676d"
+      },
+      {
+        "path": "Serilog.Sinks.Seq.dll",
+        "sha256": "47df9a8a3653b30ab646ce6507f56aad66d1b032059ebfb4223cde01e47521d9"
+      },
+      {
+        "path": "Serilog.dll",
+        "sha256": "e6b551a75ff7fff20dd0024670d5c42dfb74afa16d54aa0201106dea400a9505"
+      },
+      {
+        "path": "appsettings.json",
+        "sha256": "dbc0b2eb3fa9ed3ef1ccf43e803267a0f53a2177103001d8ce1fbd1fcf1710fb"
+      },
+      {
+        "path": "fixtures/edge/bare-vamp.json",
+        "sha256": "de6ba735c79d1b0a2b5e9a984d7bb10d172f1d1aa560a25b3ddfa67663e38c19"
+      },
+      {
+        "path": "fixtures/edge/drum-feature.json",
+        "sha256": "6c464f335f47acb4ab30c40deb252e4d6f8bab5351dd8255ce9dddeb847f7b77"
+      },
+      {
+        "path": "fixtures/edge/free-form.json",
+        "sha256": "54c03f02cb4b2382c940e66c8418946b451f3e28bfd7ab5e9e58bb92632ad357"
+      },
+      {
+        "path": "fixtures/edge/irregular-phrasing.json",
+        "sha256": "48e0cf4b310981d6118e0a38f2029bfa69bd10712d9d01169948af6a4828ebb0"
+      },
+      {
+        "path": "fixtures/edge/meter-walk.json",
+        "sha256": "496228503988f59836f70055a76c165720108daf7797d34f8726deba67265de6"
+      },
+      {
+        "path": "fixtures/edge/modal-pedal.json",
+        "sha256": "f0dca3cb86198db91674478cc83a7018559cd248d3a1b2c2ae1edbea7b73b43f"
+      },
+      {
+        "path": "fixtures/edge/one-section.json",
+        "sha256": "12acb3118d19cb1eb6039ef5a10ba371d8a32c0bb490cf867e9119e816c513d7"
+      },
+      {
+        "path": "fixtures/edge/pickup-tune.json",
+        "sha256": "72d7a24f67fcd5c2df894003e3c9548daeaabf4c2c27039abc1ebb4bcfffe458"
+      },
+      {
+        "path": "fixtures/edge/polymeter.json",
+        "sha256": "6e9efe14d9aa428bd9b0d8e5ba40141cfbc6db5b524a5b0a3fb1cfee7743fa7d"
+      },
+      {
+        "path": "fixtures/edge/quarter-groupings.json",
+        "sha256": "baf896bda58f0431fe65b691441316ad3c0028dc9abc3ebaaf7daff0fbe92eb7"
+      },
+      {
+        "path": "fixtures/edge/stop-time.json",
+        "sha256": "8583a878fdf220c269823f1b016e4bd864a14e5e3d9f2f39250dead85d261d1a"
+      },
+      {
+        "path": "fixtures/edge/tempo-journey.json",
+        "sha256": "e4e868808730f4a8aabf0c90021bf41302b4bf330802bbbeaeb043af9cde7b83"
+      },
+      {
+        "path": "fixtures/songs/emo-rock.json",
+        "sha256": "0a78914bc673a626754645a1eef3742ffbde9e95162fe778cc58d651ffa662c6"
+      },
+      {
+        "path": "fixtures/songs/end-cue-final-cadence-arrival.json",
+        "sha256": "4dfcbde341bcc7e1a323a66bd094396db355e00a23794dce060aef2655b78bd7"
+      },
+      {
+        "path": "fixtures/songs/guitar-relationships.json",
+        "sha256": "9dde5e6a0b86dc285c2c69bc49f7539525c8efcf43f5422dded30217bc7b0b95"
+      },
+      {
+        "path": "fixtures/songs/metric-layer-support.json",
+        "sha256": "9990f31f57b145d7ef01bb0c719aa0295aac9ae1a5f20e95a39a7567a08b6606"
+      },
+      {
+        "path": "fixtures/songs/motif-restatement.json",
+        "sha256": "115bd80ec3c98a8bafcc61f5f3166fa53c5200796f55a9a555b039c1d7c04a21"
+      },
+      {
+        "path": "fixtures/songs/part-sheet-occurrence.json",
+        "sha256": "14f7206051b6504279db5b1c7d6ccb72388230da82f6f1fb93b85f2a9d67798d"
+      },
+      {
+        "path": "fixtures/songs/pulse-changes.json",
+        "sha256": "a6f4787888855e60b5607fce1d24390333ef6dae5e2441e437a77cc44eee99be"
+      },
+      {
+        "path": "fixtures/songs/rhythm-and-lead-fast.json",
+        "sha256": "ce4e951b8d603b8c0618373d105796b743f70f16607eee895f775df6d54dfce8"
+      },
+      {
+        "path": "fixtures/songs/rhythm-and-lead.json",
+        "sha256": "93374c8fe07a361f34af92b553fffd5c3418280ce66c2f26e3d2b8e0dd729a5c"
+      },
+      {
+        "path": "fixtures/songs/slash-bass-realization.json",
+        "sha256": "6e81bd650eb4c2f85701919636952c7a6a25b299e11d73391791792c579f64a1"
+      },
+      {
+        "path": "fixtures/songs/thrash-epic.json",
+        "sha256": "5907a235f8ab2007898a0c1d040352fcc7c6ea63ace6368d2d21b2ba03e6cc24"
+      },
+      {
+        "path": "runtimes/browser-wasm/nativeassets/net9.0/e_sqlite3.a",
+        "sha256": "c64ae8d44dc3e1aa03aca4e79ccc501cbc3a3c490e8e2ea9e369367f68cf0f21"
+      },
+      {
+        "path": "runtimes/linux-arm/native/libe_sqlite3.so",
+        "sha256": "43556c2f5075857bf57be1136d556733bdc27195884fbdde127cd976d1c25ad5"
+      },
+      {
+        "path": "runtimes/linux-arm64/native/libe_sqlite3.so",
+        "sha256": "707fff6b18c1f083158e7a543c8d2545d5485f547ffd96db29679a95f52878d5"
+      },
+      {
+        "path": "runtimes/linux-armel/native/libe_sqlite3.so",
+        "sha256": "3f4d9b9ca49bb3f100882e78ba85807398cee19b481bfd4c301a8f5f58d48540"
+      },
+      {
+        "path": "runtimes/linux-mips64/native/libe_sqlite3.so",
+        "sha256": "985884523e512414f3e50aa359f08dad3ce635e99405e7823de9b26a7db38d09"
+      },
+      {
+        "path": "runtimes/linux-musl-arm/native/libe_sqlite3.so",
+        "sha256": "7fec7057d16e8b5ae54fed0c42a0e6b85e40df0d57092ef20cd647a4e1c1e0ed"
+      },
+      {
+        "path": "runtimes/linux-musl-arm64/native/libe_sqlite3.so",
+        "sha256": "530e2f74f259fe04faa4b595336e671fab5eedbb6f4e94dad59494efb7b00c2a"
+      },
+      {
+        "path": "runtimes/linux-musl-riscv64/native/libe_sqlite3.so",
+        "sha256": "d8e54eb7dc52ea0a7df9b78ac6feb85af429e7264613099df478825dea5805d4"
+      },
+      {
+        "path": "runtimes/linux-musl-s390x/native/libe_sqlite3.so",
+        "sha256": "64260c0460ad6efa7dce9263bff7a4b64ad66172ccc580cb09181c845e1a3407"
+      },
+      {
+        "path": "runtimes/linux-musl-x64/native/libe_sqlite3.so",
+        "sha256": "647b7b5886526691aed58e0fcbb56dc1e6dea8b1f9f5390782f0c95269250db1"
+      },
+      {
+        "path": "runtimes/linux-ppc64le/native/libe_sqlite3.so",
+        "sha256": "1ef00b5e3ac63e491f59ecf587680fc52ad844cea62e0a879a1315ef6bd10fc6"
+      },
+      {
+        "path": "runtimes/linux-riscv64/native/libe_sqlite3.so",
+        "sha256": "6b390eecbc6f55c44d9ab8a774f1fe4283dfb33a72e6f29f4e0b173065e7e105"
+      },
+      {
+        "path": "runtimes/linux-s390x/native/libe_sqlite3.so",
+        "sha256": "dfd5ab35f6d61155a3c629d0bceff4d6e0f0f190983f3fb8f681fb34ec08c67e"
+      },
+      {
+        "path": "runtimes/linux-x64/native/libe_sqlite3.so",
+        "sha256": "b0f5c48026fedcf9f05cf31c6fadf9e1e001ca59cd85aa68b8b6814e52c18a07"
+      },
+      {
+        "path": "runtimes/linux-x86/native/libe_sqlite3.so",
+        "sha256": "fe8229e5baeaf21e721cf65626a6b07ec22d9b17d07bd624e7a77927174277f1"
+      },
+      {
+        "path": "runtimes/maccatalyst-arm64/native/libe_sqlite3.dylib",
+        "sha256": "8d63d80bc6caa754679d6fc89fd741a32c156f136c34759cc8fff8cd51468a93"
+      },
+      {
+        "path": "runtimes/maccatalyst-x64/native/libe_sqlite3.dylib",
+        "sha256": "43d27adbc5ba40850bac42a12aea08314a22a43d3ce77cdc7a6cc47ecffb5746"
+      },
+      {
+        "path": "runtimes/osx-arm64/native/libe_sqlite3.dylib",
+        "sha256": "09fe20a6c050912a7944b2f2f2981debe31679f7919f523c87251ae8cf0f2daa"
+      },
+      {
+        "path": "runtimes/osx-x64/native/libe_sqlite3.dylib",
+        "sha256": "02344e1d0bcb5ed447ad9b79ed19e37a590fb1ece3eba1e63efbc35e36e47bdf"
+      },
+      {
+        "path": "runtimes/win-arm64/native/e_sqlite3.dll",
+        "sha256": "4177542756bd94f75b55fb74367e0cf34e66a88ffaf95755489af14c6ca2f792"
+      },
+      {
+        "path": "runtimes/win-x64/native/e_sqlite3.dll",
+        "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+      },
+      {
+        "path": "runtimes/win-x86/native/e_sqlite3.dll",
+        "sha256": "d13eb819d1353d98c684c88672868bbfcc6a52eb5987bdf2557ec02fabce4ea7"
+      }
+    ]
+  },
+  "baselineClient": {
+    "files": 16,
+    "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+    "entries": [
+      {
+        "path": "assets/CompositionPage-CsPdn04t.js",
+        "sha256": "6bd73b6c8f65e67e4e902767fd67683d861c7377408d398eb72e0b7546cb4d53"
+      },
+      {
+        "path": "assets/CompositionPage-MdUswI7l.css",
+        "sha256": "92de6ca48605b4a5f995e5208cb2b5e317e2ac9a5bf7c5dc74ed383e63c72bf9"
+      },
+      {
+        "path": "assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "path": "assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "path": "assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "path": "assets/PlayerDecisionsPage-DRjjggpu.js",
+        "sha256": "2a7eea28daaaad00128a145a9d01b16067c9f80b87abc0c31bc9eccb67f81dd4"
+      },
+      {
+        "path": "assets/PlayerDecisionsPage-f9TXpx1z.css",
+        "sha256": "2b46ad0db2ef0215b242ea574623bb97dcd6b5bfbf6cdc69a22a965fa8cfaa69"
+      },
+      {
+        "path": "assets/audition.worker-D_fjLcDd.js",
+        "sha256": "3f42de3eb8f6742575003abb905fcc16e03eaace2779d5b1f974433664015982"
+      },
+      {
+        "path": "assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      },
+      {
+        "path": "assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "path": "assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "path": "fonts/Geist-OFL.txt",
+        "sha256": "f12f59163d92084b0473315ae4566cde0c1233d940ae464f5225a69c347cc691"
+      },
+      {
+        "path": "fonts/JetBrainsMono-OFL.txt",
+        "sha256": "c1ab7c666206842a02b35b30770dac0d7a10156ed401c9defc3f02a754d89e90"
+      },
+      {
+        "path": "fonts/geist.ttf",
+        "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659"
+      },
+      {
+        "path": "fonts/jetbrains-mono-regular.woff2",
+        "sha256": "f1a7a03672cdd494ce0d5543fac6e4360fe22403c6de297fdc2e55a815f7baff"
+      },
+      {
+        "path": "index.html",
+        "sha256": "c22fd86679f5aefe7708d5b1a687901b5a49af9964dfb0799c1200a6720dc9e1"
+      }
+    ]
+  },
+  "serving": {
+    "cwd": "C/ramec",
+    "program": "src/server/bin/Release/net10.0/Ramec.Server.dll",
+    "clientDist": "src/client/dist",
+    "configuration": "Production",
+    "urls": "http://127.0.0.1:0",
+    "source": "src/server/Program.cs"
+  }
+}

@@ -1,0 +1,2 @@
+ok: run src/client build
+Tests 44 passed (44)

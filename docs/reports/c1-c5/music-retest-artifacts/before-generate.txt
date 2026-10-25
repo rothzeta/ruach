@@ -1,0 +1,109 @@
+Skip to content
+Skip to timeline
+Skip to audition
+RAMEC
+Compositions
+Performances
+Decisions
+New Composition
+New Performance
+Library
+Commands
+Preferences
+Performances
+Library
+Setup for the next generation
+
+Supported writing: whole songs with validated meters, meter changes, Anacrusis and tonal-centre changes. All Tempo characters and valid Set, Ramp and Modulate sequences are supported. Use one or two standard-tuned Guitar Seats, one Bass Seat and one Drums Seat. Each decision interval chooses a Writing procedure before construction. The first Guitar owns RhythmAndLead selection with two Guitars. Bass owns BassAndGuitar selection; Drums owns DrumsAndGuitar selection. The owner’s First/TopShare mode and Decisiveness apply.
+
+No chord, Chord changes inside bars, variable Phrase lengths, Pulse changes, Hit, Stop, Resume and End are supported. Metric layers remain unsupported. Instrument limits and Required material must remain feasible. Explicit Recurrences offer full and partial Recall. Eligible State, Sequence, Fragment and Vary occurrences offer alternatives within their containing decision interval. Occurrences that cross decision boundaries remain ineligible. Required and Preferred Bass instructions keep their Part Sheet meaning. Other Personality dimensions remain inapplicable as shown below. Unsupported inputs receive the server's explanation.
+
+C Major · 4/4
+
+Unsaved Composition · reload requires source again
+
+C Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop
+
+handwritten · rev 1 · Seed used: 0
+
+Change Composition
+Paste or edit Composition JSON
+Question
+Part Sheet JSON
+Performance setup
+Lineup · 4 Seats
+
+Seats need distinct MIDI channels (1–16). Seats may share a channel only when their performing units share it.
+
+guitar-1GuitarAmple Guitar PF · v1String tuning: standardPersonality: SteadyMIDI channel: 1
+Instrument members: guitar
+String tuning
+Standard · E A D G B E
+Seat 1 Rendering profile
+Ample Guitar PF · v1
+Generic MIDI · v1
+
+Generic MIDI does not encode palm mute or let ring. Saved note lengths and velocities remain.
+
+Seat ID
+Performing unit
+Drums
+Bass
+Guitar
+
+Instrument members · 1
+
+guitar · Range resolves from String tuning before generation.
+
+Members share this Seat's MIDI channel and use separate MIDI tracks.
+
+Advanced selection
+MIDI channel
+Personality
+Restless
+Steady
+Adventurous
+Busy
+Listener
+Seeded
+Custom
+
+ActivityTarget evaluates fresh written attacks. Recall omits ActivityFit. Persistence and Adventure apply in RhythmAndLead, BassAndGuitar, DrumsAndGuitar and GuitarUnison.
+
+Activity lists are inapplicable. LockAppetite requires a committed Source; selected Written parts do not establish Lock or an Answer claim.
+
+Inapplicable dimensions: Responsiveness, Lock appetite, Hit eagerness, Join appetite. Their values are retained.
+
+Steady catalog values
+Remove
+guitar-2GuitarAmple Guitar PF · v1String tuning: standardPersonality: SteadyMIDI channel: 2
+Instrument members: guitar
+bass-1BassMODO BASS · v1Personality: SteadyMIDI channel: 3
+Instrument members: bass guitar
+drums-1DrumsMODO DRUMS · v1Personality: SteadyMIDI channel: 10
+Instrument members: drum kit
+Performing unit to add
+Drums
+Bass
+Guitar
+Add Seat
+Add two Guitars, Bass and Drums
+
+Drums, Bass and two Guitar Seats
+
+Generation
+Performance seed
+Record decision trace
+
+No decision trace is recorded. The decision inspector has nothing to show for this Performance.
+
+Performs: 8 bars · cold stop
+
+Generate Performance
+No Performance selected for audition
+ Play
+ Stop
+Start
+Choose MIDI output
+Connect MIDI
+Output settings

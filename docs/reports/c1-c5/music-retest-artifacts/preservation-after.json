@@ -1,0 +1,11 @@
+{
+  "url": "http://127.0.0.1:42053/performances/2",
+  "source": "Choose a Composition\nChange Composition\nPaste or edit Composition JSON",
+  "selection": " Interval interval/0/161280 · Note bass-1:span:0-161280:span:161280-322560:occurrence:riff-c:bass-1:placement:1:line:0:0",
+  "seat": "bass-1",
+  "scroll": {
+    "x": 0,
+    "y": 187
+  },
+  "document_sha256": "35b0601d36d2c1cb06d3e9b627f4a924e8d409af7166f14350caef409e0a3c37"
+}

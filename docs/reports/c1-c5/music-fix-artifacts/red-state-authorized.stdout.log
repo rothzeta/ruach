@@ -1,0 +1,41 @@
+ok: run src/client build
+ RUN  v2.1.9 src/client
+ ❯ src/performance/state.test.ts (44 tests | 2 failed) 75ms
+   × supported writing state > admits the offered stop-time Composition with server-written optional defaults 10ms
+     → expected false to be true // Object.is equality
+   × Composition admission values > compares omitted and null vocalReservation equally but rejects a changed value 1ms
+     → expected false to be true // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/performance/state.test.ts > supported writing state > admits the offered stop-time Composition with server-written optional defaults
+AssertionError: expected false to be true // Object.is equality
+- Expected
++ Received
+- true
++ false
+ ❯ src/performance/state.test.ts:96:49
+     94|     expect(composition.composition.sections[0]).not.toHaveProperty('vo…
+     95|     expect(returned.composition.composition.sections[0].vocalReservati…
+     96|     expect((await store.actions.generate()).ok).toBe(true)
+       |                                                 ^
+     97|     expect(store.state.error).toBeNull()
+     98|     expect(store.state.runs).toHaveLength(1)
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+ FAIL  src/performance/state.test.ts > Composition admission values > compares omitted and null vocalReservation equally but rejects a changed value
+AssertionError: expected false to be true // Object.is equality
+- Expected
++ Received
+- true
++ false
+ ❯ src/performance/state.test.ts:324:78
+    322|     ;(select(changed.composition) as Record<string, unknown>)[field] =…
+    323|     const before = JSON.stringify([omitted, explicit])
+    324|     expect(sameComposition(parseEnvelope(omitted), parseEnvelope(expli…
+       |                                                                              ^
+    325|     expect(sameComposition(parseEnvelope(explicit), parseEnvelope(omit…
+    326|     expect(sameComposition(parseEnvelope(omitted), parseEnvelope(chang…
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+ Test Files  1 failed (1)
+      Tests  2 failed | 42 passed (44)
+   Start at  22:34:19
+   Duration  1.05s (transform 650ms, setup 0ms, collect 797ms, tests 75ms, environment 0ms, prepare 58ms)
+error: script "test" exited with code 1

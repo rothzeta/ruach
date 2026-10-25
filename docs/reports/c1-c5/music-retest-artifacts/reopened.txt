@@ -1,0 +1,129 @@
+Skip to content
+Skip to timeline
+Skip to audition
+RAMEC
+Compositions
+Performances
+Decisions
+New Composition
+New Performance
+Library
+Commands
+Preferences
+Performance 2
+Source: Composition 2
+Saved · 220 notes · 0 missed Hits · Decisions not recorded
+Play
+Library
+Edit setup
+Export MIDI
+More
+
+C Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop · 4 Seats
+
+No trace was recorded for this Performance.
+
+Setup for next generation · Choose a Composition · 4 Seats · Seed: 41
+
+Next-generation Personality and channels
+Performance music
+Inspect
+Fit
+−
++
+Range
+Choose
+Whole
+Section
+4 bars
+8 bars
+16 bars
+Scale
+Overview
+List
+Follow
+Context
+
+Visible: 1:1 · 00:00.000–8:4 +1/4 · 00:18.824
+
+Section
+
+Bars
+
+Chord
+
+guitar-1
+Guitar · ch 1 · 1 member
+68 notes · C3–G4
+
+guitar · A♯2–A4
+
+guitar-2
+Guitar · ch 2 · 1 member
+68 notes · C3–G4
+
+guitar · A♯2–A4
+
+bass-1
+Bass · ch 3 · 1 member
+30 notes · C1–C2
+
+bass guitar · B0–D2
+
+drums-1
+Drums · ch 10 · 1 member
+54 notes · Kick, Crash, Snare, Closed Hat
+
+drum kit · Saved kit rows
+
+1
+2
+3
+4
+5
+6
+7
+8
+A · Stop-time chorus
+C7
+F7
+G7
+C7
+A4
+A♯3
+A♯2
+A4
+A♯3
+A♯2
+D2
+G1
+B0
+Crash
+Closed Hat
+Snare
+Kick
+Recorded completion
+
+Seats 1–4 of 4
+
+Written duration: solid body · Intended release: vertical marker · Modeled effective sounding extent: dashed line
+Modeled extents, not measured audio or reverb tails.
+
+Cues show Covered Hits and Missed Hits from saved accented onsets and completed music, including runs without recorded decisions. End overrides Hits at or after its onset cutoff. Inspect Stop, Resume and End in the timeline.
+
+Question and Notes
+Inspector · select an exact Interval or note
+Browse Intervals
+Previous Intervals
+Decision trace
+
+Decisions were not recorded.
+
+Player decisions for a SeatEnable trace in next setup
+No Performance selected for audition
+ Play
+ Stop
+Start
+Choose MIDI output
+Connect MIDI
+Output settings

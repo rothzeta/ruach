@@ -1,0 +1,136 @@
+$ bun test --timeout 30000 ./tests
+
+tests/ready.test.ts:
+(pass) ready never changes files and runs only version probes [406.93ms]
+(pass) a snapshot reports its version and revision, and drift makes the native route fail [300.12ms]
+(pass) nested package state is missing, mismatched or ready with a remediation command [657.31ms]
+(pass) a missing prerequisite fails only the routes that need it [468.06ms]
+(pass) Pi and Goose readiness checks report optional executables without requiring them [208.51ms]
+(pass) a Ruach skill duplicated across locations warns without changing the exit code [140.39ms]
+(pass) --json is stable and renders home paths with a tilde [131.83ms]
+(pass) exit codes: usage 2, unreadable location 3, no route 0 [326.86ms]
+(pass) ready works from the source layout and from an installed snapshot after the source is removed [194.96ms]
+
+tests/dependencies.test.ts:
+(pass) ruach-herdr lockfile resolves patched dependency versions [2.47ms]
+(pass) ruach-handoff lockfile resolves patched dependency versions [0.08ms]
+
+tests/typecheck.test.ts:
+(pass) sources and tests typecheck under the pinned compiler [467.04ms]
+
+tests/check.test.ts:
+(pass) top-level evals pass from a foreign cwd [48.96ms]
+(pass) installed evals/cases/01/task.md fails [78.48ms]
+(pass) installed references/rubric.md fails [71.54ms]
+(pass) skill identity and description are required [72.81ms]
+(pass) relative links resolve encoded filenames and anchors and ignore code and external URLs [124.45ms]
+(pass) source symlinks are rejected and dependencies are excluded [120.14ms]
+(pass) standalone skill folder must carry the root LICENSE [125.82ms]
+(pass) standalone skill folder must carry the root PROVENANCE.md [114.15ms]
+(pass) compatibility metadata must be a single bounded line [176.37ms]
+(pass) an executable skill must declare its Bun prerequisite early [123.16ms]
+
+tests/docs-consistency.test.ts:
+(pass) user docs describe the shipped readiness command instead of calling it planned [2.05ms]
+(pass) the 0.3.0 changelog entry covers the integrated tracks accurately [0.62ms]
+(pass) operations guide documents recovery and linked-worktree cleanup [0.24ms]
+(pass) roadmap numbers linked worktrees A7 and hardening A8 [0.23ms]
+(pass) delivery is a separate gated Implementer assignment everywhere, with no Merger role or integration-and-merging pairing [0.96ms]
+(pass) the escalation count names where a consumer sets it [0.27ms]
+(pass) native parity guide records evidence, pending smoke checks and undecided items, and its links resolve [0.64ms]
+(pass) the 0.3.0 changelog states Track E honestly: documented, smoke checks pending [0.17ms]
+(pass) the Herdr suite runs with a raised per-test timeout in just test and is documented [0.15ms]
+(pass) known limitations document the filter fail-closed behavior and the trust boundary [0.21ms]
+
+tests/agent-routing.test.ts:
+(pass) real source offline selection for coordinator works from a foreign cwd [362.48ms]
+(pass) real source offline selection for architect works from a foreign cwd [180.27ms]
+(pass) real source offline selection for scout works from a foreign cwd [189.26ms]
+(pass) real source offline selection for implementer works from a foreign cwd [176.26ms]
+(pass) real source offline selection for reviewer works from a foreign cwd [169.25ms]
+(pass) real source offline selection for librarian works from a foreign cwd [186.56ms]
+(pass) offline resolution honors declared alternatives and rejects other routes [292.54ms]
+(pass) start delegates once with default name, source roots, and exact output forwarding [217.08ms]
+(pass) external worktree selects policy and cwd while source code and resources remain canonical [207.96ms]
+(pass) Architect wrapper forwards exact background worktree options once [184.62ms]
+(pass) worker exit 2 is preserved without retry [164.21ms]
+(pass) worker exit 3 is preserved without retry [153.73ms]
+(pass) worker exit 4 is preserved without retry [152.99ms]
+(pass) invalid arguments do not invoke the worker [438.75ms]
+(pass) codex policy agrees across resolve, dry-run and start regardless of caller harness [429.07ms]
+(pass) opencode policy agrees across resolve, dry-run and start regardless of caller harness [390.40ms]
+(pass) permission conflicts, undeclared policy and native permission overrides fail before launcher invocation [427.16ms]
+
+tests/release.test.ts:
+(pass) matching semantic release metadata passes from a foreign cwd [45.02ms]
+(pass) plugin version drift fails [46.81ms]
+(pass) marketplace release drift fails [53.14ms]
+(pass) an unreleased package version needs a changelog entry [44.79ms]
+(pass) invalid semantic version and native agent identity fail [90.34ms]
+(pass) release requires every standalone skill folder to carry the root LICENSE and PROVENANCE [224.81ms]
+
+tests/install.test.ts:
+(pass) committed snapshot runs without source and preserves policy [276.66ms]
+(pass) development evals are not installed [288.41ms]
+(pass) drift requires explicit replace before update [542.50ms]
+(pass) added skill files are drift but extra consumer skills and dependencies are allowed [448.78ms]
+(pass) update prunes only previously managed files [436.63ms]
+(pass) unmanaged conflict fails before any write [272.16ms]
+(pass) symlink destination and source are rejected [168.81ms]
+(pass) metadata symlink is rejected before writes [94.40ms]
+(pass) missing file and executable mode drift are detected [387.49ms]
+(pass) upstream check detects locally rewritten manifest [275.16ms]
+(pass) invalid revision and unsafe metadata do not mutate [385.55ms]
+(pass) binary blobs and unusual filenames survive pinned installation [357.95ms]
+(pass) update removes the previous installer while preserving consumer policy [484.74ms]
+(pass) Git environment cannot redirect the explicit source [222.93ms]
+(pass) replacement refs cannot alter the pinned snapshot [252.61ms]
+(pass) unknown and incomplete CLI options fail without mutation [136.99ms]
+(pass) installing an annotated release records its version and immutable commit [242.29ms]
+(pass) release selection requires a tag with matching committed package metadata [181.15ms]
+(pass) ambiguous and invalid version options are rejected before writes [430.67ms]
+(pass) upstream check detects a locally rewritten release version [283.82ms]
+(pass) RU-08: updating a hardlinked managed file leaves the outside link untouched [384.79ms]
+(pass) RU-08: a mode change does not alter the outside hardlink [374.03ms]
+(pass) RU-08: pruning and --replace adoption leave outside hardlinks untouched [577.61ms]
+(pass) RU-07: a failing commit restores the previous tree [399.82ms]
+(pass) RU-07: removals are restored when the commit fails [341.50ms]
+(pass) RU-07: directories created by a failed update are removed [383.42ms]
+(pass) RU-09: a leftover in an incoming skill root fails without --replace [360.40ms]
+(pass) RU-09: --replace removes a leftover in an incoming skill root [549.13ms]
+(pass) RU-09: dependencies in an incoming skill root are not leftovers [389.67ms]
+(pass) RU-09: non-regular leftovers fail even with --replace [403.76ms]
+(pass) an interrupted install blocks install and check [347.54ms]
+(pass) RU-07: structural conflicts are rejected before any mutation, even with --replace [203.82ms]
+(pass) R2-I: drift created while waiting for the lock is refused without overwriting [545.10ms]
+(pass) R2-I: removals come from the manifest current under the lock [690.62ms]
+(pass) R2-I: a path another install creates is not planned as a create and lost [371.62ms]
+(pass) R2-I: another owner of the staging lock is left untouched [300.14ms]
+(pass) R2-I: metadata that becomes invalid under the lock is refused and owned staging is removed [736.57ms]
+(pass) R2-I: an unsafe skill entry that appears under the lock is refused even with --replace [389.63ms]
+(pass) R2-I: --replace plans a file deleted while waiting as a create from the current state [375.17ms]
+(pass) R2-I: --replace overwrites drift that appears while waiting [323.02ms]
+(pass) R2-I: a symlinked target ancestor is refused before anything is created through it [90.01ms]
+(pass) R2-I: a symlinked target root is refused without a transient lock in the link destination [100.76ms]
+
+tests/readme-routing.test.ts:
+(pass) the README "Choose your models" catalogs are valid and alternatives are explicit-only [309.97ms]
+
+tests/plugin-install.test.ts:
+(pass) install-plugin registers the checkout path and installs the native plugin [92.01ms]
+(pass) install-plugins registers the checkout path and installs the native plugin [116.36ms]
+(pass) install-plugin ruach registers the checkout path and installs the native plugin [100.80ms]
+(pass) install-plugins ruach registers the checkout path and installs the native plugin [108.45ms]
+(pass) marketplace registration failure prevents plugin installation [65.71ms]
+(pass) plugin argument is passed literally without shell interpolation [92.69ms]
+
+tests/agent-waiting.test.ts:
+(pass) consumer entry uses canonical delivery through dropped events, busy parking, interrupted send and restart [3120.42ms]
+(pass) consumer arming rejects a replaced Coordinator and reports removed/replaced workers with old identity [746.83ms]
+(pass) consumer retains an actionable failure when a registered worker disappears [647.61ms]
+(pass) consumer fails unsupported continuation and missing authoritative identity without a delivery [2112.07ms]
+
+ 108 pass
+ 0 fail
+ 1316 expect() calls
+Ran 108 tests across 11 files. [31.57s]

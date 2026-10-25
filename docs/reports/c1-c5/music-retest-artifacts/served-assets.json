@@ -1,0 +1,114 @@
+[
+  {
+    "path": "assets/CompositionPage-BimdidgE.js",
+    "url": "http://127.0.0.1:42053/assets/CompositionPage-BimdidgE.js",
+    "status": 200,
+    "bytes": 88408,
+    "sha256": "1c1b6c8dc4b3214137e8a229986ea539669dc76df38792c4f40bdd48bcff84f2"
+  },
+  {
+    "path": "assets/CompositionPage-MdUswI7l.css",
+    "url": "http://127.0.0.1:42053/assets/CompositionPage-MdUswI7l.css",
+    "status": 200,
+    "bytes": 21956,
+    "sha256": "92de6ca48605b4a5f995e5208cb2b5e317e2ac9a5bf7c5dc74ed383e63c72bf9"
+  },
+  {
+    "path": "assets/CopyId.vue_vue_type_script_setup_true_lang-CCuTal2j.js",
+    "url": "http://127.0.0.1:42053/assets/CopyId.vue_vue_type_script_setup_true_lang-CCuTal2j.js",
+    "status": 200,
+    "bytes": 3349,
+    "sha256": "6b1c77af260c3fc90aebcd30ce272a710bcfbdb45d333662e3e0287749f7c1c6"
+  },
+  {
+    "path": "assets/PerformancePage-BV2TpO8j.css",
+    "url": "http://127.0.0.1:42053/assets/PerformancePage-BV2TpO8j.css",
+    "status": 200,
+    "bytes": 17684,
+    "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+  },
+  {
+    "path": "assets/PerformancePage-o2BSP96m.js",
+    "url": "http://127.0.0.1:42053/assets/PerformancePage-o2BSP96m.js",
+    "status": 200,
+    "bytes": 122166,
+    "sha256": "fbb8f5f8283bdf68bac7c7f351545e5562faab43243682cedb2fe5b89f63ae38"
+  },
+  {
+    "path": "assets/PlayerDecisionsPage-CNp9Nzkb.js",
+    "url": "http://127.0.0.1:42053/assets/PlayerDecisionsPage-CNp9Nzkb.js",
+    "status": 200,
+    "bytes": 22761,
+    "sha256": "d2bdc53c2c22ebc1af164e4fdd02e9ad499843016bcdbf1bc9842552b5330dcb"
+  },
+  {
+    "path": "assets/PlayerDecisionsPage-f9TXpx1z.css",
+    "url": "http://127.0.0.1:42053/assets/PlayerDecisionsPage-f9TXpx1z.css",
+    "status": 200,
+    "bytes": 1420,
+    "sha256": "2b46ad0db2ef0215b242ea574623bb97dcd6b5bfbf6cdc69a22a965fa8cfaa69"
+  },
+  {
+    "path": "assets/audition.worker-D_fjLcDd.js",
+    "url": "http://127.0.0.1:42053/assets/audition.worker-D_fjLcDd.js",
+    "status": 200,
+    "bytes": 68,
+    "sha256": "3f42de3eb8f6742575003abb905fcc16e03eaace2779d5b1f974433664015982"
+  },
+  {
+    "path": "assets/document.worker-ClzLzBXW.js",
+    "url": "http://127.0.0.1:42053/assets/document.worker-ClzLzBXW.js",
+    "status": 200,
+    "bytes": 718174,
+    "sha256": "27ce10d9793b26704ac697a4aa9b563ee116a4cff437d1e4d026718c3de3e83e"
+  },
+  {
+    "path": "assets/index-B1pJ1vd0.js",
+    "url": "http://127.0.0.1:42053/assets/index-B1pJ1vd0.js",
+    "status": 200,
+    "bytes": 811672,
+    "sha256": "a8f0eb7acf6929fdb78a2933fdbfecfa6332fdd9720465087d8838cd7172376b"
+  },
+  {
+    "path": "assets/index-CMvh_tAN.css",
+    "url": "http://127.0.0.1:42053/assets/index-CMvh_tAN.css",
+    "status": 200,
+    "bytes": 25972,
+    "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+  },
+  {
+    "path": "fonts/Geist-OFL.txt",
+    "url": "http://127.0.0.1:42053/fonts/Geist-OFL.txt",
+    "status": 200,
+    "bytes": 4387,
+    "sha256": "f12f59163d92084b0473315ae4566cde0c1233d940ae464f5225a69c347cc691"
+  },
+  {
+    "path": "fonts/JetBrainsMono-OFL.txt",
+    "url": "http://127.0.0.1:42053/fonts/JetBrainsMono-OFL.txt",
+    "status": 200,
+    "bytes": 4398,
+    "sha256": "c1ab7c666206842a02b35b30770dac0d7a10156ed401c9defc3f02a754d89e90"
+  },
+  {
+    "path": "fonts/geist.ttf",
+    "url": "http://127.0.0.1:42053/fonts/geist.ttf",
+    "status": 200,
+    "bytes": 169056,
+    "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659"
+  },
+  {
+    "path": "fonts/jetbrains-mono-regular.woff2",
+    "url": "http://127.0.0.1:42053/fonts/jetbrains-mono-regular.woff2",
+    "status": 200,
+    "bytes": 92380,
+    "sha256": "f1a7a03672cdd494ce0d5543fac6e4360fe22403c6de297fdc2e55a815f7baff"
+  },
+  {
+    "path": "index.html",
+    "url": "http://127.0.0.1:42053/index.html",
+    "status": 200,
+    "bytes": 389,
+    "sha256": "8f39580fbe8c4984256d8fdb82806d84a9bed3a24ab29e6fd68978fad4591ea8"
+  }
+]

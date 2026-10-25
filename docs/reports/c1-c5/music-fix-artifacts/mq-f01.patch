@@ -1,0 +1,343 @@
+diff --git a/src/client/src/performance/state-generation.test-support.json b/src/client/src/performance/state-generation.test-support.json
+new file mode 100644
+index 0000000..9190417
+--- /dev/null
++++ b/src/client/src/performance/state-generation.test-support.json
+@@ -0,0 +1,239 @@
++{
++  "formatVersion": 7,
++  "ticksPerQuarter": 10080,
++  "composition": {
++    "style": "plain",
++    "dynamics": {
++      "level": "mf",
++      "changes": []
++    },
++    "meter": [
++      {
++        "position": 0,
++        "denominator": 4,
++        "grouping": [1, 1, 1, 1]
++      }
++    ],
++    "metricLayers": [],
++    "tempo": [
++      {
++        "kind": "set",
++        "position": 0,
++        "character": "moderate"
++      }
++    ],
++    "sections": [
++      {
++        "id": "theme",
++        "label": "Stop-time chorus",
++        "span": {
++          "start": 0,
++          "end": 322560
++        },
++        "intent": "establish",
++        "pulse": "normal",
++        "recurrenceOf": null,
++        "recurrenceMode": null,
++        "type": null,
++        "vocalReservation": null
++      }
++    ],
++    "phrases": [],
++    "phraseGroups": [],
++    "sectionGroups": [],
++    "tonalCentres": [
++      {
++        "position": 0,
++        "tonic": {
++          "letter": "c",
++          "accidental": 0
++        },
++        "mode": "major"
++      }
++    ],
++    "harmony": [
++      {
++        "kind": "chord",
++        "root": {
++          "letter": "c",
++          "accidental": 0
++        },
++        "quality": "dominant7",
++        "extensions": [],
++        "slashBass": null,
++        "position": 0
++      },
++      {
++        "kind": "chord",
++        "root": {
++          "letter": "f",
++          "accidental": 0
++        },
++        "quality": "dominant7",
++        "extensions": [],
++        "slashBass": null,
++        "position": 120960
++      },
++      {
++        "kind": "chord",
++        "root": {
++          "letter": "g",
++          "accidental": 0
++        },
++        "quality": "dominant7",
++        "extensions": [],
++        "slashBass": null,
++        "position": 201600
++      },
++      {
++        "kind": "chord",
++        "root": {
++          "letter": "c",
++          "accidental": 0
++        },
++        "quality": "dominant7",
++        "extensions": [],
++        "slashBass": null,
++        "position": 282240
++      }
++    ],
++    "motifs": [
++      {
++        "id": "riff",
++        "length": 40320,
++        "events": [
++          {
++            "onset": 0,
++            "duration": 10080,
++            "accent": true,
++            "pitch": {
++              "degree": 1,
++              "alteration": 0,
++              "octave": 0
++            }
++          },
++          {
++            "onset": 20160,
++            "duration": 10080,
++            "accent": false,
++            "pitch": {
++              "degree": 3,
++              "alteration": -1,
++              "octave": 0
++            }
++          },
++          {
++            "onset": 30240,
++            "duration": 10080,
++            "accent": true,
++            "pitch": {
++              "degree": 5,
++              "alteration": 0,
++              "octave": 0
++            }
++          }
++        ]
++      }
++    ],
++    "motifOccurrences": [
++      {
++        "id": "riff-a",
++        "motif": "riff",
++        "position": 0,
++        "treatment": "state",
++        "metricLayer": null,
++        "answers": null,
++        "degreeShift": null
++      },
++      {
++        "id": "riff-b",
++        "motif": "riff",
++        "position": 80640,
++        "treatment": "vary",
++        "metricLayer": null,
++        "answers": null,
++        "degreeShift": null
++      },
++      {
++        "id": "riff-c",
++        "motif": "riff",
++        "position": 161280,
++        "treatment": "fragment",
++        "metricLayer": null,
++        "answers": null,
++        "degreeShift": null
++      },
++      {
++        "id": "riff-d",
++        "motif": "riff",
++        "position": 241920,
++        "treatment": "vary",
++        "metricLayer": null,
++        "answers": null,
++        "degreeShift": null
++      }
++    ],
++    "cues": [
++      {
++        "kind": "stop",
++        "position": 40320
++      },
++      {
++        "kind": "hit",
++        "position": 40320
++      },
++      {
++        "kind": "hit",
++        "position": 60480
++      },
++      {
++        "kind": "resume",
++        "position": 80640
++      },
++      {
++        "kind": "hit",
++        "position": 80640
++      },
++      {
++        "kind": "stop",
++        "position": 120960
++      },
++      {
++        "kind": "hit",
++        "position": 131040
++      },
++      {
++        "kind": "resume",
++        "position": 161280
++      },
++      {
++        "kind": "stop",
++        "position": 201600
++      },
++      {
++        "kind": "hit",
++        "position": 221760
++      },
++      {
++        "kind": "resume",
++        "position": 241920
++      },
++      {
++        "kind": "stop",
++        "position": 302400
++      },
++      {
++        "kind": "end",
++        "ceaseOnsetsAt": 322560,
++        "releaseAt": 322560
++      }
++    ],
++    "anacrusis": 0
++  },
++  "provenance": {
++    "composer": "handwritten",
++    "revision": "1",
++    "seed": "0",
++    "settings": {}
++  }
++}
+diff --git a/src/client/src/performance/state.test.ts b/src/client/src/performance/state.test.ts
+index fd6cff0..6bb11a0 100644
+--- a/src/client/src/performance/state.test.ts
++++ b/src/client/src/performance/state.test.ts
+@@ -12,6 +12,8 @@ import {
+ } from './state'
+ import { knownPerformingUnits } from './fixtures.test-support'
+ import fullComposition from '../fixtures/composition/full.json'
++import stopTime from '../fixtures/composition/edge/stop-time.json'
++import returnedStopTime from './state-generation.test-support.json'
+ import { parseEnvelope } from '../composition/envelope'
+ import type { Outcome } from './outcome'
+ import type { AdmittedGeneration } from './run-state'
+@@ -74,6 +76,58 @@ describe('supported writing state', () => {
+       ;(store.state.start as { seed: string }).seed = '9'
+     }).toThrow()
+   })
++  it('admits the offered stop-time Composition with server-written optional defaults', async () => {
++    const client = api(),
++      store = createPerformanceStore(client)
++    const composition = parseEnvelope(stopTime)
++    const returned = {
++      ...performance,
++      composition: parseEnvelope(returnedStopTime),
++      start: { ...performance.start, seed: '41' }
++    }
++    client.generate.mockResolvedValueOnce(ok({ ...completed, performance: returned }))
++    store.actions.setPerformingUnits(knownPerformingUnits)
++    store.actions.selectComposition({ kind: 'fixture', id: 'stop-time' }, composition)
++    store.actions.setStart({ ...request.start, seed: '41' })
++    store.actions.setRecordTrace(false)
++
++    expect(composition.composition.sections[0]).not.toHaveProperty('vocalReservation')
++    expect(returned.composition.composition.sections[0].vocalReservation).toBeNull()
++    expect((await store.actions.generate()).ok).toBe(true)
++    expect(store.state.error).toBeNull()
++    expect(store.state.runs).toHaveLength(1)
++    expect(JSON.parse(store.actions.downloadJson(store.state.runs[0].id))).toEqual(returned)
++    expect(client.generate).toHaveBeenCalledWith({
++      composition,
++      start: { ...request.start, seed: '41' },
++      recordTrace: false
++    })
++    expect(client.release).not.toHaveBeenCalled()
++  })
++  it.each([{ sungSpans: [{ start: 10080, end: 20160 }] }, { lowest: 61 }, { highest: 73 }])(
++    'rejects a changed vocal reservation %j',
++    (change) => {
++      const reservation = { sungSpans: [{ start: 0, end: 10080 }], lowest: 60, highest: 72 }
++      const withReservation = (value: typeof reservation) =>
++        parseEnvelope({
++          ...returnedStopTime,
++          composition: {
++            ...returnedStopTime.composition,
++            sections: returnedStopTime.composition.sections.map((section) => ({ ...section, vocalReservation: value }))
++          }
++        })
++      const composition = withReservation(reservation)
++      const input = { ...request, composition }
++      const returned = { ...performance, composition }
++      expect(() => validateGeneration(input, returned)).not.toThrow()
++      expect(() =>
++        validateGeneration(input, {
++          ...returned,
++          composition: withReservation({ ...reservation, ...change })
++        })
++      ).toThrow('does not match')
++    }
++  )
+   it.each([
+     'seed',
+     'channel',
+@@ -236,6 +290,11 @@ describe('Composition admission values', () => {
+     ['recurrenceOf', (c: typeof fullComposition.composition) => c.sections[0], 'theme'],
+     ['recurrenceMode', (c: typeof fullComposition.composition) => c.sections[0], 'varied'],
+     ['type', (c: typeof fullComposition.composition) => c.sections[0], 'verse'],
++    [
++      'vocalReservation',
++      (c: typeof fullComposition.composition) => c.sections[0],
++      { sungSpans: [{ start: 0, end: 10080 }], lowest: 60, highest: 72 }
++    ],
+     ['recurrenceOf', (c: typeof fullComposition.composition) => c.phrases[0], 'b'],
+     ['recurrenceMode', (c: typeof fullComposition.composition) => c.phrases[0], 'varied'],
+     [
+diff --git a/src/client/src/performance/state.ts b/src/client/src/performance/state.ts
+index d71da47..f5a687a 100644
+--- a/src/client/src/performance/state.ts
++++ b/src/client/src/performance/state.ts
+@@ -220,7 +220,8 @@ export function sameComposition(a: CompositionEnvelope, b: CompositionEnvelope):
+           ...section,
+           recurrenceOf: section.recurrenceOf ?? null,
+           recurrenceMode: section.recurrenceMode ?? null,
+-          type: section.type ?? null
++          type: section.type ?? null,
++          vocalReservation: section.vocalReservation ?? null
+         })),
+         phrases: composition.phrases.map((phrase) => ({
+           ...phrase,

@@ -1,6 +1,6 @@
 # Ruach
 
-Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). Source review, native advisory validation, product correction/retest and final combined acceptance remain open; this preparation does not authorize publication.
+Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). The bounded disposable music correction/retest loop is closed. C2 corrected-source review, actual native advisory validation and final combined acceptance remain open; this preparation does not authorize publication.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -29,6 +29,8 @@ The snapshot route is for projects that want an auditable, committed installatio
 To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
 
 For a known failure, use [debugging](skills/ruach-debugging/SKILL.md) with the [bugfix assignment specimen](docs/examples/bugfix-assignment.md). For runtime evidence, assign the [Tester](agents/tester.md) with [runtime testing](skills/ruach-runtime-testing/SKILL.md) and its [QA specimen](docs/examples/runtime-qa-assignment.md). The Coordinator owns [council](skills/ruach-workflow-council/SKILL.md), [bugfix](skills/ruach-workflow-bugfix/SKILL.md), [QA](skills/ruach-workflow-qa/SKILL.md) and [bounded hunt](skills/ruach-workflow-bug-hunt/SKILL.md) orchestration; workers receive bounded assignments. The [council member specimen](docs/examples/council-member-assignment.md) does not establish an independent execution boundary. See the roadmap for demonstrated results and remaining gates; static [capability cases](evals/ruach-capabilities/) are preparation, not behavioral proof.
+
+The completed bounded music example retains its [relative patch](docs/reports/c1-c5/music-fix-artifacts/mq-f01.patch), [source review](docs/reports/c1-c5/music-fix-review.md) and [actual original Tester retest](docs/reports/c1-c5/music-retest.md). Coordinator closure combines those separate source/runtime results. Retained Ramec is unchanged: this is a disposable correction and patch/evidence outcome, without upstream delivery, listening or musical-quality acceptance. The final union Reviewer still needs to audit the actual Tester packet.
 
 ## Design and testing expectations
 

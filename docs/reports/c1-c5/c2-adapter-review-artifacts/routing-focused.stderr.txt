@@ -1,0 +1,26 @@
+
+tests/agent-routing.test.ts:
+(pass) real source offline selection for coordinator works from a foreign cwd [407.16ms]
+(pass) real source offline selection for architect works from a foreign cwd [383.01ms]
+(pass) real source offline selection for scout works from a foreign cwd [429.70ms]
+(pass) real source offline selection for implementer works from a foreign cwd [475.10ms]
+(pass) real source offline selection for reviewer works from a foreign cwd [440.52ms]
+(pass) real source offline selection for librarian works from a foreign cwd [525.33ms]
+(pass) offline resolution honors declared alternatives and rejects other routes [707.82ms]
+(pass) start delegates once with default name, source roots, and exact output forwarding [269.52ms]
+(pass) external worktree selects policy and cwd while source code and resources remain canonical [277.14ms]
+(pass) Architect wrapper forwards exact background worktree options once [269.24ms]
+(pass) worker exit 2 is preserved without retry [256.65ms]
+(pass) worker exit 3 is preserved without retry [249.33ms]
+(pass) worker exit 4 is preserved without retry [279.60ms]
+(pass) invalid arguments do not invoke the worker [770.25ms]
+(pass) codex policy agrees across resolve, dry-run and start regardless of caller harness [692.46ms]
+(pass) opencode policy agrees across resolve, dry-run and start regardless of caller harness [837.78ms]
+(pass) agy policy agrees across resolve, dry-run and start regardless of caller harness [801.82ms]
+(pass) permission conflicts, undeclared policy and native permission overrides fail before launcher invocation [1248.36ms]
+(pass) Agy advisory is an explicit Scout-only development alternative with native slug effort [1153.51ms]
+
+ 19 pass
+ 0 fail
+ 141 expect() calls
+Ran 19 tests across 1 file. [10.51s]
