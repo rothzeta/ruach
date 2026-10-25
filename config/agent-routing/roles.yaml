@@ -2,16 +2,21 @@
 roles:
   coordinator:
     preferred: claude-sonnet-5.5-medium
+    alternatives: [gpt-6.1-sol-high]
   architect:
     preferred: claude-opus-5.5-medium
-    alternatives: [claude-opus-5.5-high]
+    alternatives: [claude-opus-5.5-high, gpt-6.1-sol-high]
   scout:
     preferred: claude-sonnet-5.5-medium
+    alternatives: [gpt-6.1-sol-high]
   implementer:
     preferred: claude-sonnet-5.5-medium
-    alternatives: [claude-sonnet-5.5-low]
+    alternatives: [claude-sonnet-5.5-low, gpt-6.1-sol-high]
   reviewer:
     preferred: claude-opus-5.5-medium
-    alternatives: [claude-sonnet-5.5-low, claude-sonnet-5.5-medium]
+    alternatives: [claude-sonnet-5.5-low, claude-sonnet-5.5-medium, gpt-6.1-sol-high]
   librarian:
     preferred: claude-sonnet-5.5-medium
+    alternatives: [gpt-6.1-sol-high]
+  tester:
+    preferred: gpt-6.1-sol-high
