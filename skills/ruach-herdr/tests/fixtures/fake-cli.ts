@@ -61,8 +61,18 @@ if(exe==='herdr') {
     // Execute only fake harnesses, which record actual native arguments.
     const envFile=join(root,'pane-environment.jsonl');
     const paneEnv=existsSync(envFile)?JSON.parse(readFileSync(envFile,'utf8').trim().split('\n').at(-1)!):{};
-    const proc=Bun.spawnSync([join(root,'bin',args[args.indexOf('--kind')+1]),...native],{cwd:process.cwd(),env:{...process.env,...paneEnv}});
-    if(proc.exitCode!==0)process.exit(1);
+    const launchEnv={...process.env,...paneEnv};
+    if(data.terminalStart) {
+      const {terminalStart}=await import('./terminal-start');
+      const result=await terminalStart([args[args.indexOf('--kind')+1],...native],process.cwd(),launchEnv,join(root,'native-launches.jsonl'));
+      appendFileSync(join(root,'terminal-start.jsonl'),JSON.stringify(result)+'\n');
+      if(!result.observed)process.exit(1);
+    } else {
+      const nativeExe=Bun.which(args[args.indexOf('--kind')+1],{PATH:launchEnv.PATH});
+      if(!nativeExe)process.exit(1);
+      const proc=Bun.spawnSync([nativeExe,...native],{cwd:process.cwd(),env:launchEnv});
+      if(proc.exitCode!==0)process.exit(1);
+    }
     if(data.startBlocked){console.error(JSON.stringify({error:{code:'agent_not_ready',message:'Native input required'}}));process.exit(1);}
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
@@ -140,5 +150,19 @@ else if(args.join(' ')==='app-server daemon version') {
     appendFileSync(join(root,'pi-prompts.jsonl'),JSON.stringify(prompt)+'\n');
   }
   if(exe==='claude'&&data.managedRoot)appendFileSync(join(root,'customizations.jsonl'),JSON.stringify({managedSourcesPresent:['managed-settings.json','managed-settings.d/policy.json','.claude/skills/workflow/SKILL.md'].every(p=>existsSync(join(data.managedRoot,p)))})+'\n');
-  appendFileSync(join(root,'native-launches.jsonl'),JSON.stringify({exe,args,cwd:process.cwd(),...(exe==='opencode'?{config:JSON.parse(process.env.OPENCODE_CONFIG_CONTENT??'{}'),configDir:process.env.OPENCODE_CONFIG_DIR}: {})})+'\n');
+  appendFileSync(join(root, 'native-launches.jsonl'), JSON.stringify({
+    exe,
+    args,
+    cwd: process.cwd(),
+    path: process.env.PATH,
+    configHomes: {
+      home: process.env.HOME,
+      codex: process.env.CODEX_HOME,
+      claude: process.env.CLAUDE_CONFIG_DIR,
+    },
+    ...(exe === 'opencode' ? {
+      config: JSON.parse(process.env.OPENCODE_CONFIG_CONTENT ?? '{}'),
+      configDir: process.env.OPENCODE_CONFIG_DIR,
+    } : {}),
+  }) + '\n');
 }

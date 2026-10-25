@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { mkdtemp, mkdir, writeFile, readFile, cp, rm, readdir, chmod, stat } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { delimiter, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { WebSocketServer } from 'ws';
 import { createServer, type Server } from 'node:http';
@@ -117,6 +117,74 @@ test('explicit Codex start composes developer text and existing skills, passes e
   expect(skills.config.find((e:any)=>e.path===join(repo,'unrelated')).enabled).toBe(false);
   expect(skills.config.filter((e:any)=>e.path.includes('workflow')).every((e:any)=>!e.enabled)).toBe(true);
   expect(r.stdout+r.stderr).not.toContain(secret);expect(r.stdout).not.toContain(pass[1]);
+});
+test('long literal native argv crosses the canonical PTY and preserves role, config, permissions and native PATH', async () => {
+  behavior.terminalStart = true;
+  const longRole = "Canonical role: spaces ü 漢字 ' \" `literal` $(literal).\n".repeat(240);
+  await writeFile(join(repo, '.agents/agents/implementer.md'), longRole);
+  const literal = join(root, "directory ü ' \" `touch SHOULD_NOT_RUN` $(touch SHOULD_NOT_RUN) " + 'x'.repeat(5000));
+  const pass = ['--add-dir', literal, '--no-alt-screen'];
+  const r = await launch('start', [...explicit, '--permissions', 'auto-review', '--temp-dir', temporary, '--', ...pass]);
+  console.info('PTY transport observation:', (await lines('terminal-start.jsonl'))[0]);
+  expect(r.exit, r.stderr).toBe(0);
+  expect(r.result.submission_state).toBe('started');
+  const native = (await lines('native-launches.jsonl'))[0];
+  expect(native.args.slice(-pass.length)).toEqual(pass);
+  expect(native.path).toBe(bin);
+  expect(native.configHomes).toEqual({
+    home,
+    codex: join(home, '.codex'),
+    claude: join(home, '.claude'),
+  });
+  expect(native.cwd).toBe(repo);
+  expect(native.args.slice(0, 4)).toEqual(['--model', 'test-model', '--cd', repo]);
+  expect(native.args).toContain('--approve-for-me');
+  expect(native.args).toContain('model_reasoning_effort="high"');
+  const developer = (Bun.TOML.parse as (text: string) => any)(native.args.find((arg: string) => arg.startsWith('developer_instructions=')));
+  expect(developer.developer_instructions).toBe(secret + '\n\n' + longRole);
+  const skills = (Bun.TOML.parse as (text: string) => any)(native.args.find((arg: string) => arg.startsWith('skills.config='))).skills.config;
+  expect(skills.find((entry: any) => entry.path === join(repo, 'unrelated')).enabled).toBe(false);
+  expect(skills.filter((entry: any) => entry.path.includes('workflow')).every((entry: any) => !entry.enabled)).toBe(true);
+  expect(await Bun.file(join(repo, 'SHOULD_NOT_RUN')).exists()).toBe(false);
+  expect(r.stdout + r.stderr).not.toContain(longRole);
+  expect((await lines('mutations.jsonl')).filter((entry) => entry.action === 'start')).toHaveLength(1);
+  const material = r.result.temporary_directory;
+  expect((await stat(material)).mode & 0o777).toBe(0o700);
+  expect((await stat(join(material, 'bootstrap/argv.json'))).mode & 0o777).toBe(0o600);
+}, 15000);
+test('normal argv still starts through a canonical PTY without private bootstrap material', async () => {
+  behavior.terminalStart = true;
+  const pass = ['--add-dir', join(root, "normal ü ' \" `literal` $(literal)"), '--no-alt-screen'];
+  const r = await launch('start', [...explicit, '--temp-dir', temporary, '--', ...pass]);
+  expect(r.exit, r.stderr).toBe(0);
+  const native = (await lines('native-launches.jsonl'))[0];
+  expect(native.args.slice(-pass.length)).toEqual(pass);
+  expect(native.path).toBe(bin);
+  expect(r.result.temporary_directory).toBeNull();
+  expect((await lines('terminal-start.jsonl'))[0].continuation).toBe(false);
+});
+for (const failure of ['splitFailure', 'startFailure', 'startBlocked']) {
+  test(`large startup retains private argv material on ${failure} without resubmission`, async () => {
+    behavior[failure] = true;
+    behavior.inspectPane = 'w1:p2';
+    behavior.inspectKind = 'codex';
+    await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+    const r = await launch('start', [...explicit, '--temp-dir', temporary]);
+    expect(r.exit).toBe(failure === 'startBlocked' ? 0 : 4);
+    expect(r.result.submission_state).toBe(failure === 'startBlocked' ? 'awaiting-input' : 'unknown');
+    expect(await Bun.file(join(r.result.temporary_directory, 'bootstrap/argv.json')).exists()).toBe(true);
+    expect((await lines('mutations.jsonl')).filter((entry) => entry.action === 'start')).toHaveLength(failure === 'splitFailure' ? 0 : 1);
+  });
+}
+test('an unrepresentable bootstrap PATH directory fails before launch-space mutation', async () => {
+  const incompatible = join(root, 'temporary' + delimiter + 'part');
+  await mkdir(incompatible);
+  await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
+  const r = await launch('start', [...explicit, '--temp-dir', incompatible]);
+  expect(r.exit).toBe(2);
+  expect(r.result.diagnostics[0].code).toBe('invalid_transport_directory');
+  await noMutation();
+  expect(await readdir(incompatible)).toEqual([]);
 });
 test('duplicate launcher options are rejected before any mutation',async()=>{
   const r=await launch('start',['--role','coordinator','--temp-dir',temporary]);

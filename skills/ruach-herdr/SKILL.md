@@ -44,6 +44,8 @@ Preflight checks the native route, destination, branch and resolved base before 
 
 `--placement pane` explicitly requests a sibling pane in the supplied cwd. Only this mode requires `HERDR_PANE_ID` and readable caller layout. It splits once with `--no-focus`; worktree-specific options are invalid in this mode. Both modes preserve executable PATH and harness configuration roots in the new terminal. Neither sends a task prompt or retries.
 
+Large prepared argv uses a private per-launch bootstrap to avoid terminal canonical-input truncation. The pane temporarily receives a private executable directory before its pinned PATH; `agent start` still selects the declared kind and performs named same-pane readiness. The bootstrap reads private JSON data, restores native PATH and execs the already-probed absolute executable with the full prepared argv, model/effort, permissions and configuration. User text is never evaluated as shell code. Short argv keeps the direct path. Large starts require Bun `process.execve` support and a temp root without the platform PATH delimiter; unsupported preparation fails before launch-space mutation. Resolve/dry-run create no bootstrap. Retain reported private material after working, blocked or uncertain startup for Coordinator cleanup when reuse ends. See [transport and lifecycle evidence](references/adapters.md#lifecycle-and-failure).
+
 Successful results report `workspace`, `pane`, `worktree_mode`, `worktree` (path, cwd, branch and resolved base), `worktree_state` and inspection argv. An authorized caller with access to the same Herdr session can read or focus the background worker when needed:
 
 ```sh

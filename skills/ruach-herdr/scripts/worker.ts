@@ -6,6 +6,7 @@ import { contents, directory, fail, Failure, identifier, kinds, efforts, string,
 import { environment, executable, json, run } from './process';
 import { routed } from './routing';
 import { prepare } from './adapters';
+import { materializeBootstrap, needsBootstrap, verifyBootstrapRuntime } from './launch-transport';
 import { worktreePlan, createWorktree, createLinkedWorktree, linkedParent, type Worktree } from './spaces';
 const usage='bun scripts/worker.ts resolve|start --name NAME --role ROLE --cwd DIR [--repo DIR] [--resources DIR] [--catalogs DIR] [--route ID | --kind KIND --model MODEL [--effort LEVEL]] [--placement worktree|pane] [--worktree DIR] [--branch NAME] [--base REF] [--dry-run | --offline] [--temp-dir DIR] [--permissions inherit|auto-review] [-- NATIVE_FLAGS]';
 function options(args:string[]) {
@@ -68,7 +69,8 @@ try {
   }
   // Validate source prerequisites before creating worktrees or launch spaces.
   // Codex native inspection may initialize its runtime state under authorization.
-  const herdr=executable('herdr');executable(selected.kind);
+  const herdr = executable('herdr');
+  const nativeExecutable = executable(selected.kind);
   const h=await run([herdr,'agent','start','--help'],cwd);
   const available=h.stdout.match(/\[possible values:([^\]]+)\]/)?.[1].split(',').map(x=>x.trim());
   if(h.exit!==0||h.timedOut||!available?.includes(selected.kind))fail(3,'unsupported_herdr_kind','Installed Herdr does not support the selected kind','kind');
@@ -95,8 +97,42 @@ try {
   if(!Array.isArray(agents))fail(3,'invalid_probe','Agent list shape is unavailable','herdr');
   if(agents.some((a:any)=>a.name===v.name))fail(2,'duplicate_name','Agent name is already in use','name');
   let plan=await prepare(selected,o.pass);
+  verifyBootstrapRuntime(selected.kind, plan.argv, tempRoot);
   if(placement==='worktree')worktree=await worktreePlan(cwd,v.name,v);
-  const output=()=>({schema_version:1,ok:true,selection:selected!,permissions:selected!.permissions,placement,worktree:worktree??null,worktree_state:worktreeState,worktree_mode:placement==='worktree'?(linkedMode?'linked':'standalone'):null,linked_parent:link.parent,...(placement==='worktree'&&!linkedMode?{linked_unavailable:link.reason}:{}),git_root:gitRoot??null,launchable:true,coverage:plan.coverage,cli_version:plan.version,config_reader:plan.configReader??null,argv:plan.redactedArgv,hidden_workflows:plan.hiddenWorkflows,temporary_operations:plan.operations,direction:direction??null,diagnostics:[],limits:['No paid session, native prompt/skill acceptance, account entitlement or model availability is established by preflight.',...(worktree?['A new worktree starts from the resolved commit; uncommitted source changes are not copied. Dry-run inspects native settings in the source cwd; start reads them again in the new worktree.']:[])]});
+  let bootstrapped = false;
+  const output = () => ({
+    schema_version: 1,
+    ok: true,
+    selection: selected!,
+    permissions: selected!.permissions,
+    placement,
+    worktree: worktree ?? null,
+    worktree_state: worktreeState,
+    worktree_mode: placement === 'worktree' ? (linkedMode ? 'linked' : 'standalone') : null,
+    linked_parent: link.parent,
+    ...(placement === 'worktree' && !linkedMode ? { linked_unavailable: link.reason } : {}),
+    git_root: gitRoot ?? null,
+    launchable: true,
+    coverage: plan.coverage,
+    cli_version: plan.version,
+    config_reader: plan.configReader ?? null,
+    argv: plan.redactedArgv,
+    hidden_workflows: plan.hiddenWorkflows,
+    temporary_operations: [
+      ...plan.operations,
+      ...(bootstrapped || needsBootstrap(selected!.kind, plan.argv)
+        ? ['private argv bootstrap retained for Coordinator cleanup']
+        : []),
+    ],
+    direction: direction ?? null,
+    diagnostics: [],
+    limits: [
+      'No paid session, native prompt/skill acceptance, account entitlement or model availability is established by preflight.',
+      ...(worktree ? [
+        'A new worktree starts from the resolved commit; uncommitted source changes are not copied. Dry-run inspects native settings in the source cwd; start reads them again in the new worktree.',
+      ] : []),
+    ],
+  });
   if(o.command==='resolve'||o.dry){console.log(JSON.stringify({...output(),action:o.command==='resolve'?'resolved':'dry-run',submission_state:state}));}
   else {
     if(worktree) {
@@ -114,10 +150,38 @@ try {
       phase='prepare';temp=await mkdtemp(join(tempRoot,'ruach-herdr-'));await chmod(temp,0o700);
       argv=await plan.materialize(temp);
     }
+    let bootstrapEnvironment: Record<string, string> = {};
+    if (needsBootstrap(selected.kind, argv)) {
+      phase = 'prepare';
+      verifyBootstrapRuntime(selected.kind, argv, tempRoot);
+      if (!temp) {
+        temp = await mkdtemp(join(tempRoot, 'ruach-herdr-'));
+        await chmod(temp, 0o700);
+      }
+      bootstrapEnvironment = {
+        PATH: await materializeBootstrap(
+          temp,
+          nativeExecutable,
+          selected.kind,
+          argv,
+          plan.environment?.PATH ?? environment().PATH,
+        ),
+      };
+      argv = [];
+      bootstrapped = true;
+    }
     if(sha(await contents(roleFile))!==selected.roleHash)fail(2,'role_changed','Canonical role changed during preparation','role');
     phase=placement==='pane'||linkedMode?'split':'workspace';state='unknown';
     const rootPane=linkedMode?pane:undefined;if(linkedMode)pane=undefined;
-    const paneEnvironment=Object.entries({...Object.fromEntries(['PATH','HOME','CODEX_HOME','CLAUDE_CONFIG_DIR'].filter(key=>process.env[key]!==undefined).map(key=>[key,(environment() as Record<string,string>)[key]])),...plan.environment}).flatMap(([key,value])=>['--env',`${key}=${value}`]);
+    const paneEnvironment = Object.entries({
+      ...Object.fromEntries(
+        ['PATH', 'HOME', 'CODEX_HOME', 'CLAUDE_CONFIG_DIR']
+          .filter(key => process.env[key] !== undefined)
+          .map(key => [key, (environment() as Record<string, string>)[key]]),
+      ),
+      ...plan.environment,
+      ...bootstrapEnvironment,
+    }).flatMap(([key, value]) => ['--env', `${key}=${value}`]);
     // Herdr's worktree create takes no environment, so the worker pane is split from the linked
     // workspace's root pane to carry the caller's PATH and configuration homes.
     const topology=placement==='pane'?[herdr,'pane','split','--current','--direction',direction!]:linkedMode?[herdr,'pane','split',rootPane!,'--direction','right']:[herdr,'workspace','create','--label',v.name];
