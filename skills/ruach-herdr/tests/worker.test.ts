@@ -242,7 +242,8 @@ test('missing Bun execve support fails before launch-space mutation', async () =
 test('LR-01: startup cannot redirect the prepared launch to a different native executable', async () => {
   const decoyBin = join(root, 'startup-bin');
   await mkdir(decoyBin);
-  await writeFile(join(decoyBin, 'codex'), `#!${process.execPath}\nprocess.env.DECOY_USED='yes';\nimport ${JSON.stringify(join(fixture, 'fake-cli.ts'))};\n`, { mode: 0o700 });
+  await writeFile(join(decoyBin, 'codex'), `#!${process.execPath}\nprocess.env.DECOY_USED='yes';\nawait import(${JSON.stringify(join(fixture, 'fake-cli.ts'))});\n`, { mode: 0o700 });
+  behavior.terminalStart = true;
   behavior.startupPathPrepend = true;
   behavior.startupBin = decoyBin;
   await writeFile(join(repo, '.agents/agents/implementer.md'), roleText.repeat(180));
