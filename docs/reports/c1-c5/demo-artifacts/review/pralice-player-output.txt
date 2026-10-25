@@ -1,0 +1,128 @@
+Pralice CLI Host
+Scenario: frontier-compact
+Active Actor: crown
+Simulation Day: 0
+Type 'help' for available commands.
+
+crown [day 0]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    0
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 15
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 0
+  - league: Available; next legal day 0
+  - march: Available; next legal day 0
+  - officers: Available; next legal day 0
+  - vale: Available; next legal day 0
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):
+
+crown [day 0]> Unavailable subject: 'prop-insufficient' is not known to actor 'crown'.
+
+crown [day 0]>   Menu: Case case-westbank, crown -> march; Expiry Day: 4
+  Counterpart selection required from march before remaining domestic consent.
+  Option 1:
+    - Immediate transfer: crown pays march 150 gold
+    - Recognition: march recognizes claim westbank-claim
+  Proposal Preview:
+    Immediate Payments:
+      - crown pays march 150 gold
+    Direct Object Changes:
+      - Recognize claim 'westbank-claim' by 'march'.
+    Known Required Consents: [council, crown, march]
+    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.
+    Feasibility: Infeasible (Known treasury balance for actor 'crown' (100) with net immediate delta (-150) results in negative balance (-50).)
+    Delta Utility (Observer): -105
+    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.
+    Unknown: Status quo access grant 'port-access' is unknown in observation.
+    Counterpart estimate: OpposedByExplicitEvidence — Explicit observed positions from 'march' oppose terms in the proposed package.
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.
+Command 'cmd-propose-1' status: Queued (Success) - Command queued successfully.
+
+crown [day 0]> Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):
+
+crown [day 0]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    0
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 15
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 0
+  - league: Available; next legal day 0
+  - march: Available; next legal day 0
+  - officers: Available; next legal day 0
+  - vale: Available; next legal day 0
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> Advanced simulation by 1 day(s). Current Day: 1.
+Newly Delivered Reports:
+  - Report rep-1 [Day 1]: Source crown -> Command Rejected: Command 'cmd-propose-1' (InvalidEnvelope) - Submit proposal validation failed: Actor has insufficient funds for net immediate transfer.
+  - Report rep-3 [Day 1]: Source league -> Proposal Published: ID prop-league-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Access: crown grants league right port-access on subject westbank | Option 2: Access: crown grants league right port-access on subject westbank; Future promise: league promises crown 10 gold due day 5 | Option 3: Access: crown grants league right port-access on subject westbank; Immediate transfer: league pays crown 10 gold
+  - Report rep-5 [Day 1]: Source march -> Proposal Published: ID prop-march-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Recognition: march recognizes claim westbank-claim; Future promise: crown promises march 40 gold due day 5 | Option 2: Recognition: march recognizes claim westbank-claim; Immediate transfer: crown pays march 40 gold
+  - Report rep-7 [Day 1]: Source vale -> Protection Called (ID: vale-protection, Promisor: crown, Beneficiary: vale, Amount: 20)
+  - Report rep-8 [Day 1]: Source vale -> ObjectRevisionAssertion
+  - Report rep-9 [Day 1]: Source vale -> CommitmentSnapshotAssertion
+  - Report rep-10 [Day 1]: Source vale -> ObjectRevisionAssertion
+  - Report rep-11 [Day 1]: Source vale -> CommitmentSnapshotAssertion
+
+crown [day 1]> Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):
+  Command 'cmd-propose-1' status: Rejected (InvalidEnvelope) - Submit proposal validation failed: Actor has insufficient funds for net immediate transfer.
+    Reasons: InsufficientFundsForImmediateTransfer
+    Actual attempt: Published menu prop-insufficient
+    Attempted menu: Case case-westbank, crown -> march, expiry day 4
+    Option 1:
+    - Immediate transfer: crown pays march 150 gold
+    - Recognition: march recognizes claim westbank-claim
+
+crown [day 1]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    1
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 23
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 1
+  - league: Available; next legal day 1
+  - march: Available; next legal day 1
+  - officers: Available; next legal day 1
+  - vale: Available; next legal day 1
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing duty duty-vale-protection-d0: 20 gold due day 1
+      Existing active own obligations: 20; proposed own obligations in this option: 0; combined: 20 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 1]> Unavailable subject: 'prop-insufficient' is not known to actor 'crown'.
+
+crown [day 1]> Exiting session.

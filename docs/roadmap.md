@@ -1,23 +1,24 @@
 # Ruach roadmap
 
-Backlog reconciled **2026-10-23** after branch consolidation, against the published 0.3.1 release, completed OpenCode evaluations, wave-2 independent preparation review and the [RAMEC orchestration proposals](design/0.4-suggestions-from-ramec-orchestration.md). This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcome packages to split into bounded assignments when work starts.
+Backlog reconciled **2026-10-25** for the untagged **0.7.0 preparation**, preserving the published **0.6.1** baseline and earlier [RAMEC proposal](design/0.4-suggestions-from-ramec-orchestration.md) dispositions. This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcomes, not automatic execution authority.
 
-Current state: **0.4.0** adds verified OpenCode v2 launch preparation; release verification is recorded in `docs/reports/releases/0.4.0.md`. The earlier **0.3.1 is published** to origin main and annotated `v0.3.1` / `ruach--v0.3.1` tags; see the [publication receipt](reports/releases/0.3.1/publication.md). R1's test correction, R2's reliability fixes, R3's coordination guidance and `ruach-changelog` shipped in this release. Wave 2 (R4–R7) preparation and the multi-machine council are consolidated on main. The missing R5 synthetic verifier artifact and report wording are corrected; all four wave-2 packet suites pass (36 tests). Remaining guides, startup-contract tests, specimens, packet refresh and independent combined acceptance are still open. See the [consolidation record](reports/consolidation-2026-10-23.md). Those earlier v1/task-runner results remain separate from the new v2.1.4 adapter and its local mock-provider transport checks. Five capped OpenCode evaluations finished: smoke, synthetic Enoch and authorization accepted; resume and ambiguity failed under runtime write restrictions. Hosted green CI, original Claude/Codex compatibility, resume/ambiguity proof and a real consumer-task report remain open. New capabilities remain proposals until assigned; backlog organization does not authorize implementation, paid sessions or publication.
+Current state: six C1–C5 skills, Tester, specimens/static cases, the accepted Codex/Bash long-argv correction and bounded Agy preparation are combined in source. The [instruction review](reports/c1-c5/instruction-review.md), [transport review](reports/c1-c5/launch-review-02.md), [C2 handoff](reports/c1-c5/c2-adapter.md), [council boundary decision](design/c1-c5/council-boundary-decision.md) and [runtime finding review](reports/c1-c5/runtime-finding-review.md) establish different, bounded outcomes below. C2 exact-source review and actual advisory validation, MQ-F01 correction/retest/review, C1 independent execution, final refreshed union review, hosted CI and delivery remain open. No 0.7.0 tag/publication/install or complete feedback-loop acceptance is claimed. Earlier OpenCode smoke/Enoch/authorization acceptance and resume/ambiguity failures remain dated evidence; original install-route/native parity and real-consumer criteria are not closed by local checks.
 
 ## Priorities and sequencing
 
 | Order | Packages | Outcome |
 | --- | --- | --- |
-| Current wave | R4–R7 | Finish guides/tests/specimens, refresh packets, then independently review the complete combined batch |
+| Current preparation | C1–C5 | Preserve immutable source review; finish separately assigned native advisory and product correction evidence, then refresh and independently review the exact union |
+| Existing guidance/evidence | R4–R7 | Preserve 0.6.1 source improvements and the dated preparation docket; remaining behavioral/combined gates need their own evidence |
 | Evidence follow-ups | R1, R3; R2 live boundary | Record hosted green and missing behavioral/consumer evidence; preserve the documented replacement-ref limitation |
-| 0.4 capability sequence | C1 → C3 → C4 → C5 | Council, known-bug correction, runtime QA, then defect discovery |
-| Conditional 0.4 companion | C2 | Gemini advisors when needed; council can use supported harnesses first |
+| Capability execution | C1, C3–C5 | Council boundary held; Codex/Bash transport accepted; runtime findings retained, product feedback loop pending |
+| Conditional companion | C2 | Exact Agy source under review; actual linked Scout advisory/identity/brief/skill validation pending |
 | Measurement | M1 | Establish whether the workflow earns its overhead; prepare cases early, run after R1 |
 | Decisions / later | D1–D3 and parked proposals | Resolve packaging choices separately; expand from demonstrated need |
 
 R1–R3's source changes are released; their remaining evidence gaps stay separate from wave-2 preparation. R4/R5 use R3's resource record; R6/R7 can proceed independently with coordinated edits to shared files. Council uses R3's decision/assignment record and R5's waiting guidance. Runtime QA uses the bugfix path; hunt follows once findings can be reproduced and corrected. Every 0.3.x improvement need not ship before any 0.4 work starts.
 
-## Current docket — R4–R7
+## Dated preparation docket — R4–R7
 
 Independent preparation review at `40a591b5e1cfccfd9005ef1eb8622496397aa147` is retained in main history, report `docs/reports/wave2-review/preparation.md`. Its results supersede the operational record's earlier “review active” state. All three preparation units are now merged into main under the owner's consolidation request. Historical review applies to the pinned revisions below; it is not independent acceptance of the later combined revision.
 
@@ -34,7 +35,7 @@ Next steps, from the accepted [permissions/communication](design/next-permission
 3. Refresh R6/R7 packets against accepted guidance/specimens; assemble and independently review the R6/R7 subcandidate (HV-IN).
 4. Assemble R4–R7 through B2-IN, the sole final shared-doc/changelog writer; run the full affected union checks, independently review the exact combined revision, then perform separately assigned delivery under valid target authority.
 
-R4/R5 native behavioral smoke and other live evidence remain separate gates. The earlier five-subject budget is exhausted; wave-2 engineering preparation does not authorize additional evaluation subjects. The [accepted plan index](design/next-roadmap-plans.md) records the four completed planning batches; C1–C5 and M1 implementation remains queued.
+R4/R5 native behavioral smoke and other live evidence remain separate gates. The earlier five-subject budget is exhausted; wave-2 engineering preparation does not authorize additional evaluation subjects. The [accepted plan index](design/next-roadmap-plans.md) records the four planning batches. C1–C5 now have the bounded source/execution statuses below; M1 remains queued. This dated docket is not new review or completion evidence for unrelated packages.
 
 ## Active backlog
 
@@ -109,41 +110,51 @@ Consolidate environment classification, known-flake disposition and wording in `
 
 **Done when:** isolated packets distinguish environment blocks, registered flakes and regressions without weakening tests or claiming unrun checks. Public-contract and before/after examples already shipped; extend missing guidance only. Sources: Track F2; 0.3.x wording; RAMEC F9/§3.9.
 
-## 0.4 — Deliberate, find, fix, exercise
+## C1–C5 — Deliberate, find, fix, exercise
 
-Names/packaging remain proposals. Keep one coordination owner per task; consumers declare domain experts through existing routing. Council chair can be an Architect assignment and steward a delivery Implementer assignment, without new reusable roles.
+Source unit `90230d1` adds six skills and Tester with three specimens and static evaluation cases; independent review `e3d93d6` found the bounded instruction unit compatible with existing Coordinator protocols. Static cases are not behavioral proof. Keep one coordination owner per task; domain expertise and routing remain consumer-owned. The 0.7.0 metadata is preparation only.
 
 ### C1 — Council workflow and read-only assignment specimen
 
-Add `ruach-workflow-council` and a copyable advisor/member brief: owner decisions, question, inputs, output-only edit scope, roster, evidence and round mode. Assign evidence collection when needed; Coordinator synthesizes reports.
+`ruach-workflow-council` and a [member brief](examples/council-member-assignment.md) exist: owner decisions, question, inputs, output-only scope, roster, evidence and round mode. Coordinator synthesizes reports; members receive assignments.
 
 Manual mode runs one independent round then pauses. Automatic mode runs N total rounds including the first; “up to N, stop when stable” is explicit. Close each round before distributing answers; keep first-round peers' answers inaccessible. Later rounds receive actual peer reports, question and new evidence. Members state positions, assumptions, accepted/rejected arguments with reasons, changes, disagreement and resolving evidence. Synthesize by proposition/attribution rather than votes; preserve supported minority objections. Retain round artifacts and support later resumption after releasing sessions. APPROVE/CHANGES is an optional specimen, not a universal three-round rule.
 
 **Done when:** manual/automatic runs obey independence/counts, preserve consequential objections and resume from artifacts. Compare final output with round one for corrected assumptions and missed requirements, not consensus rate. Sources: original 0.4 council; 0.3.x advisor/council templates; RAMEC §§3.1/4.
 
+**Status / next action:** independently audited child-filesystem/configuration controls exist, but design `228b306` holds real manual/automatic, real-project and resume demonstrations. A complete actual member action/input surface bound to execution, or a verified whole-member boundary preserving required native connectivity/account/context, is missing. This is not universal impossibility or a council pass. Reopen only for a concrete supported capability delta; do not repeat marker/configuration probes without one. See the [boundary review](reports/c1-c5/council-boundary-review.md) and [decision](design/c1-c5/council-boundary-decision.md).
+
 ### C2 — Gemini worker/advisor adapter
 
-Add a thin `agy` adapter for non-Coordinator roles when needed. Snapshots fit `.agents/skills`, but the current adapter deliberately returns `unsupported_adapter`; changelog-hook support does not establish launch support. Verify additive role delivery, workflow exclusion, headless flags and approval behavior before emitting argv. Launch linked worktrees, deliver role/assignment separately, pass large prompts by file path. Trust/allowlists and routing stay consumer-owned; no global writes or automatic substitution.
+Thin non-Coordinator Agy preparation exists at exact source `f17e923`, using the independently reviewed 1.4.7 additive canonical-rule/technical-skill interface. The only added development route is Scout's explicit `gemini-3.8-flash-medium` alternative, portable effort `auto`, inherited permissions; preferences and Codex alternatives are unchanged. Source checks passed 27 focused, 110 root and 268 Herdr tests. No separate native effort flag, Coordinator adapter, global workflow absence or same-session watcher/continuation support is claimed. Trust, account, routing and permissions remain native/consumer-owned; no global writes or automatic substitution.
+
+**Status / next action:** REVIEW-C2-ADAPTER-01 is active on immutable `f17e923`. Actual linked native Scout identity/role/permission, aggregate rule budget, ambient visibility, literal brief reading, technical-skill activation and useful advisory output remain pending. Preparation and the prior diagnostic composition turn are not native advisory acceptance. See the [implementation handoff](reports/c1-c5/c2-adapter.md), [safe composition](reports/c1-c5/c2-composition.md), [independent composition review](reports/c1-c5/c2-composition-review.md) and [adapter limits](../skills/ruach-herdr/references/agy.md).
 
 **Done when:** capability checks and an authorized advisory task establish launch, authority, discovery and handoff. Coordinator stays on a supported harness. Sources: original 0.4 Gemini; RAMEC F11; [adapter evidence](../skills/ruach-herdr/references/adapters.md).
 
 ### C3 — Known-bug correction
 
-Add `ruach-debugging` and `ruach-workflow-bugfix`: intended behavior → reproduce → supported cause → scoped correction → regression coverage → repeat failure → required review/delivery. Architect is optional.
+`ruach-debugging` and `ruach-workflow-bugfix` implement intended behavior → reproduce → supported cause → scoped correction → regression coverage → repeat failure → required review/delivery. Architect is optional.
+
+**Status:** LAUNCH-LONG-ARGV's original 4095-byte truncation and failed correction `2c114e8` / LR-01 review `4f86897` remain recorded. Attempt 2 `f6d9c2c` passed independent source and actual source-wrapper native Tester review `31b4522`, closing the observed Codex/Bash transport defect only. One historical failed completed correction cycle is preserved; no other harness/shell parity or combined release/delivery follows. See [correction evidence](reports/c1-c5/launch-fix-02.md) and [acceptance scope](reports/c1-c5/launch-review-02.md). MQ-F01's separate product correction is active under C5 and remains unaccepted.
 
 **Done when:** a small real defect completes the sequence with evidence and proportionate overhead. Source: original 0.4 bugfix/debugging.
 
 ### C4 — Runtime QA and Tester
 
-Add Tester, `ruach-runtime-testing` and `ruach-workflow-qa`. Assign goals, identified build and required capabilities (browser/desktop input, logs, screenshots, audio). State actual exercised experiences: reading audio code is not hearing it. Consumers isolate profiles/saves/ports/databases; record seeds/save states for reproduction without making them contracts.
+Tester, `ruach-runtime-testing` and `ruach-workflow-qa` exist. Assign goals, identified build and required capabilities (browser/desktop input, logs, screenshots, audio). State actual exercised experiences: reading audio code is not hearing it. Consumers isolate profiles/saves/ports/databases; record seeds/save states for reproduction without making them contracts.
 
 UI/measurement specimens use real-size data, named viewports, existing palette and recorded fields. Distinguish script/component timing from browser layout/paint; carry unmet budgets into named follow-ups with measured inputs. Reuse this package for UI budgets, design-to-build and measurement specimens before adding skills/workflows.
 
 **Done when:** observations reproduce on an identified build and the original failure can be retested after C3. Sources: original 0.4 QA; RAMEC F10/§§3.8/4–5.
 
+**Status:** actual Tester QA on pinned music/prototype builds exercised browser/CLI input, saved state, MIDI export/structure and public-state measurements. MQ-F01 is independently confirmed P2. The original browser driver took 302.865 seconds, breached its 120-second cap and exited 1; Coordinator disposition preserves that deviation and evidence, never a retroactive pass. Independent reproduction drivers fit their newly explicit bounds. Audio/listening/device evidence and delayed-expiry expectation ambiguity remain held. [Original QA/hunt](reports/c1-c5/runtime-qa-hunt.md) and [independent finding review](reports/c1-c5/runtime-finding-review.md) retain the exact limits.
+
 ### C5 — Bounded bug-hunt and feedback-loop demonstration
 
-Add `ruach-workflow-bug-hunt`: bound area/risk; classify source-supported, reproduced, suspected and product observations. “No confirmed defects” is valid with coverage/uncertainty. Independently check significant findings. Findings-only ends at the report; authorized “find and fix” chains to C3.
+`ruach-workflow-bug-hunt` bounds area/risk and classifies source-supported, reproduced, suspected and product observations. “No confirmed defects” is valid with coverage/uncertainty. Independently check significant findings. Findings-only ends at the report; authorized “find and fix” chains to C3.
+
+**Status / next action:** the bounded Pralice hunt found no confirmed defects within its public-state coverage; no bug is fabricated for the prototype. Music finding MQ-F01 is independently confirmed by `5bf48a6`. MQ-F01-FIX-01 is active in a new disposable copy, preserving retained consumers and the provisioned baseline. Regression evidence, corrected build, original Tester retest and independent patch review remain pending. No complete successful feedback loop or product delivery is claimed. C1 demonstrations, hosted CI and the full install-route/behavior matrix remain separate gates.
 
 **Done when:** the feedback loop runs on music software and a playable prototype: Tester observes on a named build, hunt preserves steps/state, bugfix corrects with regression evidence, Tester repeats, Reviewer checks, Coordinator records delivery/open items. Council also completes its demonstration on those projects; new resources pass checks/CI. Sources: original hunt and 0.4 exit demonstrations.
 

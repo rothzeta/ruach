@@ -1,0 +1,61 @@
+{
+  "mode": "before",
+  "at": "2026-10-25T22:00:42.721Z",
+  "builds": {
+    "ramec_server": {
+      "path": "ramec/src/server/bin/Release/net10.0",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+      "actual_sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    },
+    "ramec_client": {
+      "path": "ramec/src/client/dist",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+      "actual_sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    "pralice_cli": {
+      "path": "pralice/src/Pralice.Cli/bin/Release/net10.0",
+      "files": 13,
+      "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755",
+      "actual_sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755"
+    }
+  },
+  "sources": {
+    "ramec": {
+      "commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+      "files": 1067,
+      "sha256": "b031193926643d9950916284e84d1cd714522bc8d63adf8d923de755778e2a21"
+    },
+    "pralice": {
+      "commit": "3e15253ce542d259280b95ce2b9a3262040dc32c",
+      "files": 442,
+      "sha256": "97da65b617c44affc7670239377a174e25ab7711f7110ad609c471dc7c3163a3"
+    }
+  },
+  "state": {
+    "original_db": {
+      "path": "/tmp/c15-provision-01.6o1CPD/state/ramec.sqlite",
+      "bytes": 421888,
+      "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+    },
+    "original_hidden_trace": {
+      "path": "/tmp/c15-provision-01.6o1CPD/artifacts/pralice/recognition.jsonl",
+      "bytes": 135926,
+      "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+    }
+  },
+  "critical": {
+    "tools/bun/bin/bun": "a83d263767d839e4d2649ca8e35d07159c7afc99afdc96d731ced29e056dda0c",
+    "tools/dotnet-10.0.110/dotnet": "55117d7d1f27537ee6e7a81b8b9f84f0b50c8cbd2d1d1e21684c31db1518230a",
+    "pralice/.tools/dotnet/dotnet": "01d89e0a0191052bfea616cd4ce624c8faf13b05bbddf7f64499c23e2a9d9269",
+    "pralice/.tools/cache/dotnet-install.sh": "082f7685e156738a1b2e2ed8381a621870d4ce8e8c59278034556f05c186eb2e",
+    "pralice/.tools/cache/Godot_v4.7.2-stable_mono_linux_x86_64.zip": "129f82db7bafd54ae14bb5bb284041c73860e8c7a009a3a026ca5e946cbff247",
+    "tools/playwright/chromium-1248/chrome-linux64/chrome": "377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025",
+    "ramec/src/client/bun.lock": "adf0a5bbbeaaf0f5cc67159cf21f9134290a8a8772c0466903f6965e08ea5cc1",
+    "nuget.config": "4770f0974d81c5cb73b3290f075bb632f97289a7115daa4c67d95b12321e9fe6"
+  },
+  "assignment_sha256": "6141595e3f7f67c6381f9f96591c92005fbf6f4c5cc64694177ae16503dba1bf",
+  "checks": 1534,
+  "all_passed": true
+}

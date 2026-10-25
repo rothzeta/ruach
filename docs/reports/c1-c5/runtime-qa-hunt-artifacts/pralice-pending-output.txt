@@ -1,0 +1,84 @@
+Pralice CLI Host
+Scenario: frontier-compact
+Active Actor: crown
+Simulation Day: 0
+Type 'help' for available commands.
+
+crown [day 0]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    0
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 15
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 0
+  - league: Available; next legal day 0
+  - march: Available; next legal day 0
+  - officers: Available; next legal day 0
+  - vale: Available; next legal day 0
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):
+
+crown [day 0]>   Menu: Case case-westbank, crown -> march; Expiry Day: 4
+  Counterpart selection required from march before remaining domestic consent.
+  Option 1:
+    - Immediate transfer: crown pays march 40 gold
+    - Recognition: march recognizes claim westbank-claim
+  Proposal Preview:
+    Immediate Payments:
+      - crown pays march 40 gold
+    Direct Object Changes:
+      - Recognize claim 'westbank-claim' by 'march'.
+    Known Required Consents: [council, crown, march]
+    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.
+    Feasibility: Feasible
+    Delta Utility (Observer): 5
+    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.
+    Unknown: Status quo access grant 'port-access' is unknown in observation.
+    Counterpart estimate: OpposedByExplicitEvidence — Explicit observed positions from 'march' oppose terms in the proposed package.
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.
+Command 'cmd-propose-1' status: Queued (Success) - Command queued successfully.
+
+crown [day 0]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    0
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 15
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 0
+  - league: Available; next legal day 0
+  - march: Available; next legal day 0
+  - officers: Available; next legal day 0
+  - vale: Available; next legal day 0
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):
+
+crown [day 0]> Unavailable subject: 'prop-qa-pending' is not known to actor 'crown'.
+
+crown [day 0]> Exiting session.

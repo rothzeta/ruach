@@ -1,0 +1,583 @@
+{
+  "scope": "REVIEW-LAUNCH-02; exact source and already launched native Tester, without new prompts",
+  "outcome": "No material findings; bounded source/native launch contract established",
+  "correction_accounting": {
+    "outcome": "LAUNCH-LONG-ARGV",
+    "current_attempt": 2,
+    "prior_completed_failed_correction_cycles": 1,
+    "current_attempt_rejected": false
+  },
+  "native": {
+    "reviewed_revision": "f6d9c2c5b35d437dbf0183bd37968ede3bee7b7f",
+    "authoritative_herdr_native_binding": true,
+    "binding_used_without_enumeration_or_registration": true,
+    "worker_name": "c15-runtime-tester",
+    "native_status": "done",
+    "native_version": "0.164.0",
+    "tester_sha256": "63c3de0422165cbd792d8db7b1bd34f4aeb83364d1952fe924dee361b792ff7f",
+    "developer_sha256": "1ba61e812c5967b05e6345132ec376d7e7daac5e15a0b9a27d48b1185c5f841d",
+    "developer_bytes": 3085,
+    "payload_sha256": "f73e142fde6b97f5d4b2f11e5edb202318f8ad9969620a29ce67c545c1c48ce6",
+    "receipt_nonce_and_hash_match": true,
+    "observed_foreground_pid_and_group_match": true,
+    "entire_recorded_native_argv_matches": true,
+    "argv_count": 12,
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "approval_policy": "on-request",
+    "approvals_reviewer": "auto_review",
+    "sandbox_type": "workspace-write",
+    "exact_prepared_developer_present_in_native_messages": true,
+    "full_canonical_tester_present_in_native_messages": true,
+    "source_reference_context": true,
+    "prepared_skill_entries": 16,
+    "prepared_workflow_overrides_disabled": 16,
+    "native_function_calls": 0,
+    "contexts": 1,
+    "private_modes": [
+      "700",
+      "700",
+      "600",
+      "600",
+      "600",
+      "700"
+    ],
+    "metadata_read_requests": [
+      "initialize",
+      "initialized",
+      "thread/read (authoritatively bound ID, includeTurns:false)"
+    ],
+    "limits": [
+      "No model prompt or product assignment by Reviewer",
+      "Instruction/catalog presence is not task compliance or technical-skill activation",
+      "No universal account/ambient workflow equivalence claim"
+    ],
+    "forwarded_environment_matches_live_process": true,
+    "pinned_PATH_matches_live_process": true,
+    "live_executable_realpath_matches": true,
+    "referenced_source_files_exist_and_match_candidate": true,
+    "runtime_technical_skill_source_sha256": "0bccb15ae24324138466641310ede6b14155488438c3c3e9e5a3c624c0eb8621",
+    "runtime_technical_skill_explicit_source_reference_preserved": true,
+    "automatic_runtime_skill_catalog_presence": "not established; explicit canonical source reference is preserved",
+    "workflow_catalog_observation": "No ruach-workflow-* entries matched the native catalog list format; prepared workflow restrictions are independently verified",
+    "private_modes_verified": true
+  },
+  "evidence_audit": {
+    "candidate": "f6d9c2c5b35d437dbf0183bd37968ede3bee7b7f",
+    "baseline": "a88d44b7aa84143307a7298e4cd423c7f7e75c68",
+    "supplied_checksum_count": 33,
+    "supplied_receipt_log_count": 13,
+    "supplied": [
+      {
+        "file": "after-lr01-initial.log",
+        "sha256": "646f24d873cdb4516ec5c6bc03494dbf17536fd75d7d6d8655a95edd8c422726"
+      },
+      {
+        "file": "assignment-check.log",
+        "sha256": "d64501ab1c4cac395d1d0c937e2d618a25ccac0f3fbe8a98b5e0995122474777"
+      },
+      {
+        "file": "assignment.sha256",
+        "sha256": "9e796e252a5864fa665133f4b11e885241aea05ef8bfca651e895d84945489d4"
+      },
+      {
+        "file": "baseline-replay.log",
+        "sha256": "c04dfe332efa8b86cf8c9300d9f38526cab4cb8ae2aab85c91aabf08456f0abb"
+      },
+      {
+        "file": "baseline-source-comparison.json",
+        "sha256": "2934e9ba9160af06726ef7e9e50d4d142f14654b2ec87651b52c7002c63424a7"
+      },
+      {
+        "file": "before-lr01-default.log",
+        "sha256": "06e482dbbadafa880d5bf2470c73b49e663d953b33e5461ee0a9a1dd1862f739"
+      },
+      {
+        "file": "before-lr01.log",
+        "sha256": "add28554dccec85a4a4b0f0a8a3c5548e8663617b00271a712b72d8063002e14"
+      },
+      {
+        "file": "bun-version.log",
+        "sha256": "b99b4c7cdf236f59bc9f65d963deaecae3b16a7dad87939cacb9057f7664daee"
+      },
+      {
+        "file": "c90-baseline-replay.log",
+        "sha256": "9d74ffc5451e50ba3568d8878fef511e51d70805422c6b073e6d32a08e0e510d"
+      },
+      {
+        "file": "c90-check.log",
+        "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+      },
+      {
+        "file": "c90-focused.log",
+        "sha256": "434924f8852ba780eb37464d8b5231ab432936caf6bd101691ea5ad166c74266"
+      },
+      {
+        "file": "c90-herdr-test.log",
+        "sha256": "21b87a48b486cc8a4156699f3dc8cae7f7a92cc4321afb7e556ad4df75215d7a"
+      },
+      {
+        "file": "c90-release-check.log",
+        "sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640"
+      },
+      {
+        "file": "c90-root-test.log",
+        "sha256": "92542385de836f926cd70a2687e741e16859128a99fc759435489599ef8b613e"
+      },
+      {
+        "file": "canonical-input.json",
+        "sha256": "6c4e92775783ce28a85d77fa2794eda14daaef4485ce44278d21165603d89817"
+      },
+      {
+        "file": "canonical-input.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "file": "check-initial.log",
+        "sha256": "3ee186ec184364c5b5b098e929a7d7b7beee42e35fc6a43b779fa653499dc5a3"
+      },
+      {
+        "file": "check-iteration.log",
+        "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+      },
+      {
+        "file": "check-precommit.log",
+        "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+      },
+      {
+        "file": "check.log",
+        "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+      },
+      {
+        "file": "diff-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "file": "final-resource-check.log",
+        "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5"
+      },
+      {
+        "file": "focused-iteration.log",
+        "sha256": "79cf6ee828846f82e0069ec255f326cd45b270af2a61edfb18d126c57042c76d"
+      },
+      {
+        "file": "focused-precommit.log",
+        "sha256": "e552c57719134583f05d74624ef5dd42385ff8acea81e85b6860a821c460c39c"
+      },
+      {
+        "file": "focused.log",
+        "sha256": "54a1219661f2bd9f4f0578d371f4579eda737d0ab5a59d452fc36123566edafd"
+      },
+      {
+        "file": "git-version.log",
+        "sha256": "677d4fdffca093d9560ed3480cbd75f8069d041bbb34bdae1286f6b0bb476738"
+      },
+      {
+        "file": "handoff-validate.log",
+        "sha256": "6c41ff40b1f30d3757851453ab6d55fd11ab63cebcefa83cfda449937998c387"
+      },
+      {
+        "file": "herdr-test.log",
+        "sha256": "0dc76def9dd76be21de97ae901471b6db2f4f88b5ca669f5f73552c9b275e3b5"
+      },
+      {
+        "file": "just-version.log",
+        "sha256": "8d6f0a07c8ca190580cee0c54feade94b72d6c1d90dd6e3c221c299496f1ccd1"
+      },
+      {
+        "file": "release-check.log",
+        "sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640"
+      },
+      {
+        "file": "root-test.log",
+        "sha256": "8357a6b09dbd6992729c684c3385ce85f4aa060e80916390034c0c57fa670da9"
+      },
+      {
+        "file": "verification.json",
+        "sha256": "2e9682663c51410ca3a21a194bbe5b740a0a2553dc3477f020c51a9979e95752"
+      },
+      {
+        "file": "write-receipt.ts",
+        "sha256": "0818531fe3e2662da140c55c27aa3c7dcc2b78512f1cdb2d23134bef43b55bb3"
+      }
+    ],
+    "receipts": [
+      {
+        "command": "timeout 300s bun test tests/worker.test.ts --test-name-pattern 'LR-01:'",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+        "recorded_exit": 1,
+        "log": "before-lr01-default.log",
+        "sha256": "06e482dbbadafa880d5bf2470c73b49e663d953b33e5461ee0a9a1dd1862f739",
+        "scope": "Initial environment block before assertions: Unix-socket EPERM; not product proof."
+      },
+      {
+        "command": "timeout 300s bun test tests/worker.test.ts --test-name-pattern 'LR-01:'",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+        "recorded_exit": 1,
+        "log": "before-lr01.log",
+        "sha256": "add28554dccec85a4a4b0f0a8a3c5548e8663617b00271a712b72d8063002e14",
+        "scope": "Before correction, expected failure: ready with zero prepared arguments. Authorized sockets/PTY."
+      },
+      {
+        "command": "timeout 300s bun test tests/worker.test.ts --test-name-pattern 'LR-01:'",
+        "cwd": "/tmp/ruach-fix-launch02-QRC4dvhF/baseline-skill",
+        "recorded_exit": 1,
+        "log": "baseline-replay.log",
+        "sha256": "c04dfe332efa8b86cf8c9300d9f38526cab4cb8ae2aab85c91aabf08456f0abb",
+        "scope": "Exact prior production transport files, final candidate fixtures; expected 0 pass/2 fail. Authorized sockets/PTY."
+      },
+      {
+        "command": "timeout 10s bun docs/reports/c1-c5/launch-artifacts/canonical-input.ts",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "canonical-input.json",
+        "sha256": "6c4e92775783ce28a85d77fa2794eda14daaef4485ce44278d21165603d89817",
+        "scope": "Physical canonical PTY: 6000 -> 4095 bytes, original hashes unchanged."
+      },
+      {
+        "command": "timeout 300s bun test tests/launch-transport.test.ts tests/worker.test.ts --test-name-pattern 'canonical PTY|LR-01:|large startup|private binding|post-initialization launch|long literal|missing Bun|failed native exec'",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+        "recorded_exit": 0,
+        "log": "focused.log",
+        "sha256": "54a1219661f2bd9f4f0578d371f4579eda737d0ab5a59d452fc36123566edafd",
+        "scope": "Final candidate, authorized sockets/PTY: 21 pass/0 fail."
+      },
+      {
+        "command": "timeout 300s just check",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "check.log",
+        "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5",
+        "scope": "Final candidate"
+      },
+      {
+        "command": "timeout 300s bun run test",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "root-test.log",
+        "sha256": "8357a6b09dbd6992729c684c3385ce85f4aa060e80916390034c0c57fa670da9",
+        "scope": "Final candidate, authorized sockets: 108 pass/0 fail."
+      },
+      {
+        "command": "timeout 300s bun run release-check",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "release-check.log",
+        "sha256": "c7ff866b4853d78f499a7ae05803c2f8e215b11ad20b887c6bd041468e1e5640",
+        "scope": "Final candidate"
+      },
+      {
+        "command": "timeout 300s bun test --timeout 30000",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+        "recorded_exit": 0,
+        "log": "herdr-test.log",
+        "sha256": "0dc76def9dd76be21de97ae901471b6db2f4f88b5ca669f5f73552c9b275e3b5",
+        "scope": "Final candidate, authorized sockets/PTY: 243 pass/0 fail, 193.79 seconds."
+      },
+      {
+        "command": "git diff --check a88d44b7aa84143307a7298e4cd423c7f7e75c68 HEAD",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "diff-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": "sha256sum -c /tmp/ruach-fix-launch02-QRC4dvhF/assignment.sha256",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "assignment-check.log",
+        "sha256": "d64501ab1c4cac395d1d0c937e2d618a25ccac0f3fbe8a98b5e0995122474777"
+      },
+      {
+        "command": "bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/c1-c5/launch-fix-02.md --repo /opt/dev/ruach-worktrees/c15-instructions",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "handoff-validate.log",
+        "sha256": "6c41ff40b1f30d3757851453ab6d55fd11ab63cebcefa83cfda449937998c387"
+      },
+      {
+        "command": "bun scripts/check.ts",
+        "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+        "recorded_exit": 0,
+        "log": "final-resource-check.log",
+        "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+        "scope": "Includes final report."
+      }
+    ],
+    "source": [
+      {
+        "path": "skills/ruach-herdr/SKILL.md",
+        "sha256": "32a45744e634d45af5487cdb8928c88a012a76d7102d7519709c06976b899268"
+      },
+      {
+        "path": "skills/ruach-herdr/references/adapters.md",
+        "sha256": "f4a77798b1dd4114757ef5d8f3df0328175c29b548e27aaa9d084d7f1e45470d"
+      },
+      {
+        "path": "skills/ruach-herdr/scripts/launch-transport.ts",
+        "sha256": "53016524964932d09d5003b3f6eca565acc2aacc3605ac581099714a96b7994b"
+      },
+      {
+        "path": "skills/ruach-herdr/scripts/native-launch.ts",
+        "sha256": "8c6fa379a805acc23caeb43998519dd06d1beca66acb5b0ae1ba59c3eb2943a1"
+      },
+      {
+        "path": "skills/ruach-herdr/scripts/worker.ts",
+        "sha256": "5b03bef880de79ba74717381b9fadddb906842692b3eea599fbd92fd12ace921"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/fixtures/fake-cli.ts",
+        "sha256": "4b962f4222316eb55d404a280a690ee8094bed80c64d3b4c4183b5681374dffc"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/fixtures/terminal-client.ts",
+        "sha256": "0955ebc21cb80d69e69d2a95a61e3cf76cda2c01719434f25e59ab066b85b89b"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/fixtures/terminal-host.ts",
+        "sha256": "6ebb296d615798f1e04ec7d88701c77201654e15a0410d1b62f33fb6675b9c80"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/fixtures/terminal-start.ts",
+        "sha256": "abee9c7ad1f2ab2f7b1f91572e0e81ec8edb526dc08e71eaa20f6d5e11010628"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/launch-transport.test.ts",
+        "sha256": "f75749bc6ab337083d4c2691b1cce8d95a035590f5bb0194a34b2284e2b1f8c1"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/spaces.test.ts",
+        "sha256": "d93c9c2bd09fc7c399a169c5086e9cbf562319beef804a73f51263365896c1ee"
+      },
+      {
+        "path": "skills/ruach-herdr/tests/worker.test.ts",
+        "sha256": "5ff813feeca527ba0982da158cfbfdaa5213546ed9e091b4ef621976883113a8"
+      }
+    ],
+    "baselineFiles": [
+      {
+        "path": "scripts/worker.ts",
+        "sha256": "d6c128694ad7cd3357a5ed0832b58dc21cb87b489c3fcb7cc1152bbed1275ab4",
+        "matches_exact_baseline": true
+      },
+      {
+        "path": "scripts/launch-transport.ts",
+        "sha256": "6c432266aead11f64373d29f2c42cfd2853ee9b0849002a03af5b74f6cb13a12",
+        "matches_exact_baseline": true
+      },
+      {
+        "path": "scripts/native-launch.ts",
+        "sha256": "c77f0f5fe71c0d452dd3ad3415ea7543e3beea8fdaa2e33ff67608d4ba9023b1",
+        "matches_exact_baseline": true
+      }
+    ],
+    "replayFixtures": [
+      {
+        "path": "tests/worker.test.ts",
+        "sha256": "5ff813feeca527ba0982da158cfbfdaa5213546ed9e091b4ef621976883113a8",
+        "matches_final_candidate": true
+      },
+      {
+        "path": "tests/fixtures/fake-cli.ts",
+        "sha256": "4b962f4222316eb55d404a280a690ee8094bed80c64d3b4c4183b5681374dffc",
+        "matches_final_candidate": true
+      },
+      {
+        "path": "tests/fixtures/terminal-start.ts",
+        "sha256": "abee9c7ad1f2ab2f7b1f91572e0e81ec8edb526dc08e71eaa20f6d5e11010628",
+        "matches_final_candidate": true
+      },
+      {
+        "path": "tests/fixtures/terminal-host.ts",
+        "sha256": "6ebb296d615798f1e04ec7d88701c77201654e15a0410d1b62f33fb6675b9c80",
+        "matches_final_candidate": true
+      },
+      {
+        "path": "tests/fixtures/terminal-client.ts",
+        "sha256": "0955ebc21cb80d69e69d2a95a61e3cf76cda2c01719434f25e59ab066b85b89b",
+        "matches_final_candidate": true
+      }
+    ],
+    "physical": {
+      "platform": "linux",
+      "canonical": true,
+      "inputBytesBeforeNewline": 6000,
+      "receivedBytesBeforeNewline": 4095,
+      "inputSHA256": "1554d4b01d511f5918b739d07993476b80e1ece6c74f447f35064a31062f49f0",
+      "receivedSHA256": "e2e8bab8dad4a3879ffed30a624fee2310f39141d454c57f89e908e527dfd8cd"
+    },
+    "assignment": "docs/assignments/c1-c5/REVIEW-LAUNCH-02.md",
+    "assignment_sha256": "c5222d16d153e669727c8b29d3758586d0a3f3c48b834ba0e0864671695086c1"
+  },
+  "independent_commands": [
+    {
+      "name": "focused-default",
+      "argv": [
+        "bun",
+        "test",
+        "tests/launch-transport.test.ts",
+        "tests/worker.test.ts",
+        "--test-name-pattern",
+        "canonical PTY|LR-01:|large startup|private binding|post-initialization launch|long literal|missing Bun|failed native exec"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T21:43:58.265Z",
+      "ended": "2026-10-25T21:43:58.739Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 5,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "b1f88819ff7a5c7457428c33e03f40cd156ad8a0c22ad33adb5b66f10553c1cb",
+      "timeout_seconds": 300
+    },
+    {
+      "name": "focused-authorized",
+      "argv": [
+        "bun",
+        "test",
+        "tests/launch-transport.test.ts",
+        "tests/worker.test.ts",
+        "--test-name-pattern",
+        "canonical PTY|LR-01:|large startup|private binding|post-initialization launch|long literal|missing Bun|failed native exec"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T21:44:54.909Z",
+      "ended": "2026-10-25T21:45:04.923Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 718523,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "fe4fb7107f7abfaee2e053e1da18ecda209efa0f8dae13a87a216979a0c7dc97",
+      "stderr_sha256": "fdf07a7da431c6ec2de11369d9efec74e3ad6786ff8ddb8f687b11c78751684e",
+      "timeout_seconds": 300
+    },
+    {
+      "name": "native-audit-default",
+      "argv": [
+        "bun",
+        "/tmp/launch-review-02-psvnGQ/native-audit.ts"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ",
+      "started": "2026-10-25T21:44:56.163Z",
+      "ended": "2026-10-25T21:44:56.241Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 5,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b5ed7fedf6c6c522321f32716acc1e1e696416656b0564cf2f7057379aab581c",
+      "timeout_seconds": 300
+    },
+    {
+      "name": "native-audit-authorized",
+      "argv": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=5",
+        "120",
+        "bun",
+        "/tmp/launch-review-02-psvnGQ/native-audit.ts"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ",
+      "started": "2026-10-25T21:45:16.517Z",
+      "ended": "2026-10-25T21:45:16.613Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 720964,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5c66319ac520b202220e95e7455e555872d364b611b4af8cfe7bb68b10ff13ce",
+      "timeout_seconds": 300
+    },
+    {
+      "name": "native-stored-comparison",
+      "argv": [
+        "timeout",
+        "120",
+        "bun",
+        "/tmp/launch-review-02-psvnGQ/native-compare.ts"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ",
+      "started": "2026-10-25T21:46:43.381Z",
+      "ended": "2026-10-25T21:46:43.418Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 5,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "2d6e881bb36105aca9d608f39db6e37c75c9d358ff0eca383b603711470171f6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 300
+    },
+    {
+      "name": "native-live-environment-comparison",
+      "argv": [
+        "timeout",
+        "120",
+        "bun",
+        "/tmp/launch-review-02-psvnGQ/native-compare.ts",
+        "--host-process"
+      ],
+      "cwd": "/tmp/launch-review-02-psvnGQ",
+      "started": "2026-10-25T21:47:20.633Z",
+      "ended": "2026-10-25T21:47:20.668Z",
+      "environment": {
+        "DOTNET_CLI_HOME": "/tmp/launch-review-02-psvnGQ/state/dotnet-home",
+        "XDG_CONFIG_HOME": "/tmp/launch-review-02-psvnGQ/config",
+        "XDG_DATA_HOME": "/tmp/launch-review-02-psvnGQ/data",
+        "XDG_CACHE_HOME": "/tmp/launch-review-02-psvnGQ/cache",
+        "TMPDIR": "/tmp/launch-review-02-psvnGQ/tmp"
+      },
+      "pid": 722508,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e09d5d4f32cf0c2f9cbb99cce2ca3e227adb076e5ccfbe198ef5e97d122fa20b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 300
+    }
+  ],
+  "command_notes": {
+    "focused-default": "Environment-blocked at worker module Unix socket probe; five helper tests passed before the block. Original exit 1 retained.",
+    "focused-authorized": "Assignment-authorized socket/PTY runtime, exit 0: 21 pass, 158 filtered, 0 fail, 161 assertions.",
+    "native-audit-default": "Environment-blocked existing daemon socket read, exit 1; no metadata read completed.",
+    "native-audit-authorized": "Exact bound metadata read completed; local parser then failed on a non-message developer item without content, exit 1. Private response retained; no extra native query was needed.",
+    "native-stored-comparison": "Corrected local parser compared already retrieved metadata/selected stored developer messages and context, exit 0.",
+    "native-live-environment-comparison": "Scoped known-process executable and explicitly forwarded environment comparison, exit 0."
+  }
+}

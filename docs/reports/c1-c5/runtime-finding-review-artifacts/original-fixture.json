@@ -1,0 +1,219 @@
+{
+  "formatVersion": 7,
+  "ticksPerQuarter": 10080,
+  "composition": {
+    "anacrusis": 0,
+    "meter": [
+      {
+        "position": 0,
+        "denominator": 4,
+        "grouping": [1, 1, 1, 1]
+      }
+    ],
+    "metricLayers": [],
+    "tempo": [
+      {
+        "kind": "set",
+        "position": 0,
+        "character": "moderate"
+      }
+    ],
+    "sections": [
+      {
+        "id": "theme",
+        "label": "Stop-time chorus",
+        "span": {
+          "start": 0,
+          "end": 322560
+        },
+        "intent": "establish",
+        "pulse": "normal"
+      }
+    ],
+    "phrases": [],
+    "phraseGroups": [],
+    "sectionGroups": [],
+    "tonalCentres": [
+      {
+        "position": 0,
+        "tonic": {
+          "letter": "c",
+          "accidental": 0
+        },
+        "mode": "major"
+      }
+    ],
+    "harmony": [
+      {
+        "kind": "chord",
+        "position": 0,
+        "root": {
+          "letter": "c",
+          "accidental": 0
+        },
+        "quality": "dominant7",
+        "extensions": []
+      },
+      {
+        "kind": "chord",
+        "position": 120960,
+        "root": {
+          "letter": "f",
+          "accidental": 0
+        },
+        "quality": "dominant7",
+        "extensions": []
+      },
+      {
+        "kind": "chord",
+        "position": 201600,
+        "root": {
+          "letter": "g",
+          "accidental": 0
+        },
+        "quality": "dominant7",
+        "extensions": []
+      },
+      {
+        "kind": "chord",
+        "position": 282240,
+        "root": {
+          "letter": "c",
+          "accidental": 0
+        },
+        "quality": "dominant7",
+        "extensions": []
+      }
+    ],
+    "motifs": [
+      {
+        "id": "riff",
+        "length": 40320,
+        "events": [
+          {
+            "onset": 0,
+            "duration": 10080,
+            "accent": true,
+            "pitch": {
+              "degree": 1,
+              "alteration": 0,
+              "octave": 0
+            }
+          },
+          {
+            "onset": 20160,
+            "duration": 10080,
+            "accent": false,
+            "pitch": {
+              "degree": 3,
+              "alteration": -1,
+              "octave": 0
+            }
+          },
+          {
+            "onset": 30240,
+            "duration": 10080,
+            "accent": true,
+            "pitch": {
+              "degree": 5,
+              "alteration": 0,
+              "octave": 0
+            }
+          }
+        ]
+      }
+    ],
+    "motifOccurrences": [
+      {
+        "id": "riff-a",
+        "motif": "riff",
+        "position": 0,
+        "treatment": "state"
+      },
+      {
+        "id": "riff-b",
+        "motif": "riff",
+        "position": 80640,
+        "treatment": "vary"
+      },
+      {
+        "id": "riff-c",
+        "motif": "riff",
+        "position": 161280,
+        "treatment": "fragment"
+      },
+      {
+        "id": "riff-d",
+        "motif": "riff",
+        "position": 241920,
+        "treatment": "vary"
+      }
+    ],
+    "cues": [
+      {
+        "kind": "stop",
+        "position": 40320
+      },
+      {
+        "kind": "hit",
+        "position": 40320
+      },
+      {
+        "kind": "hit",
+        "position": 60480
+      },
+      {
+        "kind": "resume",
+        "position": 80640
+      },
+      {
+        "kind": "hit",
+        "position": 80640
+      },
+      {
+        "kind": "stop",
+        "position": 120960
+      },
+      {
+        "kind": "hit",
+        "position": 131040
+      },
+      {
+        "kind": "resume",
+        "position": 161280
+      },
+      {
+        "kind": "stop",
+        "position": 201600
+      },
+      {
+        "kind": "hit",
+        "position": 221760
+      },
+      {
+        "kind": "resume",
+        "position": 241920
+      },
+      {
+        "kind": "stop",
+        "position": 302400
+      },
+      {
+        "kind": "end",
+        "ceaseOnsetsAt": 322560,
+        "releaseAt": 322560
+      }
+    ],
+    "style": "plain",
+    "dynamics": {
+      "level": "mf",
+      "changes": []
+    }
+  },
+  "provenance": {
+    "composer": "handwritten",
+    "revision": "1",
+    "seed": "0",
+    "settings": {}
+  }
+}

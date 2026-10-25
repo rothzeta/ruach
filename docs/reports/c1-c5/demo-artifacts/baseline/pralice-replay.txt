@@ -1,0 +1,8 @@
+=== Replay Trace Execution Summary ===
+Scenario: frontier-compact
+Content Hash: e33d56e12581d7f71edb8887129aec1e5b786200d316c6fc90f9657ec8679491
+Days Replayed: 3
+Status: SUCCESS (Recorded-command outcome equivalence verified)
+Canonical Digest: cb98db7bcc9a28cc7d656032079b7025e1aa471a2a0a17dfbd73cb20be2f3e1e
+Tracked Causation Outcomes: 3
+======================================

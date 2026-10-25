@@ -1,0 +1,12 @@
+bun test v1.4.2 (744846f84)
+PTY transport observation: {
+  observed: true,
+  canonical: true,
+  submittedBytes: 7,
+  continuation: false,
+}
+LR-01 public observation: {
+  ready: true,
+  actualArgc: 13,
+  startup: "customization-retained",
+}

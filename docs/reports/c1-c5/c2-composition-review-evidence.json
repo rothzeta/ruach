@@ -1,0 +1,45 @@
+{
+  "reviewed_revision": "dbbd831a1566cba3c148fe60bf3ed44d7493ed66",
+  "release_artifacts_checked": 3,
+  "known_private_identifier_matches": 0,
+  "uuid_like_matches": 0,
+  "original_source_artifact_digests_verified": 2,
+  "immutable_system_field_hash_matches": true,
+  "canonical_role_body_exact": true,
+  "canonical_role_in_added_root_rules": true,
+  "baseline_rule_in_same_section": true,
+  "native_identity_nonempty": true,
+  "technical_catalog_realpath_matches": true,
+  "technical_body_eagerly_loaded": false,
+  "builtins_cataloged": 2,
+  "actual_user_input_in_system": false,
+  "user_input_separate_and_matches_recorded_accident": true,
+  "selected_steps": [
+    {
+      "type": "USER_INPUT",
+      "status": "DONE"
+    },
+    {
+      "type": "PLANNER_RESPONSE",
+      "status": "DONE",
+      "input_tokens": 7972,
+      "output_tokens": 1543,
+      "cache_read_tokens": 0
+    }
+  ],
+  "usage": {
+    "input": 7972,
+    "output": 1543,
+    "cache_read": 0
+  },
+  "version_catalog_receipts_match": true,
+  "trust_added_named_fixture_only_by_saved_hash_comparison": 1,
+  "database_and_sidecars_unchanged": true,
+  "new_native_or_model_probe": false,
+  "limitations": [
+    "No complete native-context equivalence proof",
+    "No literal-brief or technical-skill activation",
+    "No production/Herdr/linked/continuation/permission mapping acceptance",
+    "No global-account or full plugin-preservation proof"
+  ]
+}

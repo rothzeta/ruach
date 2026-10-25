@@ -1,0 +1,179 @@
+{
+  "task": "C2-COMPOSITION-01",
+  "native": {
+    "executable": "/home/metatron/.local/bin/agy",
+    "version": "1.4.7",
+    "sha256": "40349135371a8ed1f1af1e9f8b741de99174ae9fce6380b96c2d1f543480af7a",
+    "model": "gemini-3.8-flash-medium",
+    "separateEffortFlag": false,
+    "permissionFlags": [],
+    "cwd": "/tmp/c15-c2-native-probes/project",
+    "extraDirectory": "/tmp/c15-c2-native-probes/private role ü"
+  },
+  "process": {
+    "started": "2026-10-25T21:10:10Z",
+    "ended": "2026-10-25T21:12:10Z",
+    "boundSeconds": 120,
+    "exit": 124,
+    "reason": "External timeout expired; native process exited and printed own conversation identity. No process retained.",
+    "languageServerAbsentAfterExit": true,
+    "shutdownEvidenceReference": "release-provenance-private.json"
+  },
+  "inference": {
+    "userPrompt": "/rules/skills",
+    "plannedLiteralBriefDelivered": false,
+    "reason": "Unknown /rules remained in editor; subsequent /skills appended and submitted as a model request.",
+    "userInputSteps": 1,
+    "plannerResponses": 1,
+    "toolSteps": 0,
+    "inputTokens": 7972,
+    "cacheReadTokens": 0,
+    "outputTokens": 1543,
+    "totalInputPlusOutputTokens": 9515,
+    "thinkingTokensExact": null,
+    "retry": false
+  },
+  "composition": {
+    "source": "own native conversation SQLite gen_metadata idx 0 data",
+    "wirePath": "1[4].1[0]",
+    "caveat": "Numeric protobuf path recovered locally; schema/version is not a supported adapter API.",
+    "systemPromptBytes": 18722,
+    "systemPromptSha256": "10a83d25da4941d1b8948b38209900c4ab443e3517ab102b8aaeeac1550172b6",
+    "canonicalRoleBodySha256": "137ba40ec338f12acb7f47d0c6756703bf466e29a713f75c777805401b57dc54",
+    "entries": [
+      {
+        "name": "nativeIdentity",
+        "present": true,
+        "bytes": 19,
+        "utf16Offset": 11
+      },
+      {
+        "name": "baseline",
+        "present": true,
+        "bytes": 27,
+        "utf16Offset": 13348
+      },
+      {
+        "name": "canonicalRole",
+        "present": true,
+        "bytes": 1588,
+        "utf16Offset": 13690
+      },
+      {
+        "name": "canonicalSource",
+        "present": true,
+        "bytes": 30,
+        "utf16Offset": 15303
+      },
+      {
+        "name": "canonicalSkills",
+        "present": true,
+        "bytes": 21,
+        "utf16Offset": 15363
+      },
+      {
+        "name": "overlay",
+        "present": true,
+        "bytes": 24,
+        "utf16Offset": 15533
+      },
+      {
+        "name": "technical",
+        "present": true,
+        "bytes": 13,
+        "utf16Offset": 14681
+      },
+      {
+        "name": "nativeSkillOne",
+        "present": true,
+        "bytes": 18,
+        "utf16Offset": 16902
+      },
+      {
+        "name": "nativeSkillTwo",
+        "present": true,
+        "bytes": 17,
+        "utf16Offset": 17247
+      },
+      {
+        "name": "workflowPrefix",
+        "present": false,
+        "bytes": 15,
+        "utf16Offset": -1
+      },
+      {
+        "name": "includeLiteral",
+        "present": false,
+        "bytes": 50,
+        "utf16Offset": -1
+      },
+      {
+        "name": "actualPrompt",
+        "present": false,
+        "bytes": 13,
+        "utf16Offset": -1
+      }
+    ],
+    "technicalRealpath": "/opt/dev/ruach/skills/ruach-handoff/SKILL.md",
+    "probeLabel": "c2-composition-probe-01",
+    "privateSnapshotReference": "native-conversation.db"
+  },
+  "skills": {
+    "skillsSectionBytes": 2311,
+    "technicalCatalogEntry": true,
+    "technicalSourcePath": true,
+    "canonicalSkillBodyInPrompt": false,
+    "builtins": [
+      {
+        "name": "agy-customizations",
+        "catalogEntry": true
+      },
+      {
+        "name": "antigravity-guide",
+        "catalogEntry": true
+      }
+    ],
+    "rulesSectionContainsBothRoots": true,
+    "roleSourceContextInRules": true,
+    "workflowNamesPresent": false,
+    "skillBodySha256": "59e43c30321167aceaf5b59837db1c5e114c48f4d23bd340c5aa579957569445"
+  },
+  "persistentSettings": [
+    {
+      "path": "/home/metatron/.gemini/antigravity-cli/settings.json",
+      "changedKeys": [
+        "trustedWorkspaces"
+      ],
+      "removedTrustEntries": 0,
+      "addedTrustEntries": [
+        {
+          "namedFixture": true
+        }
+      ],
+      "sameFileHash": false,
+      "exactAddedTrustEntry": "/tmp/c15-c2-native-probes/project"
+    },
+    {
+      "path": "/home/metatron/.gemini/config/config.json",
+      "changedKeys": [],
+      "removedTrustEntries": 0,
+      "addedTrustEntries": [],
+      "sameFileHash": true
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "path": "native-conversation.db",
+      "sha256": "4b516f2c92ca58e086ab2829d652a5ae4f495ffe114025a9b44ebd006a22f3ef"
+    },
+    {
+      "path": "native-inspection.ansi",
+      "sha256": "1f1f84e9f84dcd645f309abf962c77ad491be15ce39a33f1271399ea5c55622b"
+    }
+  ],
+  "limits": [
+    "Only this disposable fixture and one native generation were inspected.",
+    "Native numeric protobuf path is private evidence extraction, not a supported adapter API.",
+    "No controlled brief-path round trip, skill activation, linked checkout, Herdr launch, continuation or advisory acceptance."
+  ]
+}

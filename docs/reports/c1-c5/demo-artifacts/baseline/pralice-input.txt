@@ -1,0 +1,13 @@
+status
+cases
+commitments
+inspect council
+propose preview case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+propose prop-recognition case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+advance 3
+inspect prop-recognition
+status
+actor march
+status
+reports
+quit

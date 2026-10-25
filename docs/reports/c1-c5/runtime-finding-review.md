@@ -1,0 +1,86 @@
+task: RUNTIME-FINDING-REVIEW-01
+status: complete
+outcome: "Confirmed MQ-F01 independently on the allocated immutable build. P2 supported-fixture UI admission defect; optional-field normalization is a source-supported explanation, not single-field runtime isolation."
+reviewed_revision: b3471feeaabc06f907553c0ac3c2cc149790ee2d
+baseline_revision: 56540a6868f771f605dbff8a52d8c7c3d371a623
+prior_review_revision: 46369782cad69fb8db42a5c011aac80402ba878a
+skill_revision: 75f10abc2af9c4b043b393d7352ce74ba6eb4016
+artifacts:
+  - docs/assignments/c1-c5/RUNTIME-FINDING-REVIEW-01.md
+  - docs/reports/c1-c5/runtime-finding-review.md
+  - docs/reports/c1-c5/runtime-finding-review-artifacts/public-summary.json
+  - docs/reports/c1-c5/runtime-finding-review-artifacts/SHA256SUMS
+  - /tmp/c15-runtime-finding-review-01-nskd0K
+verification:
+  - "Original browser sequence: two HTTP 200 saves, repeated UI mismatch, identical retry request, public library 1 to 2 to 3; saved Performance 2 reopens and exports. Defect confirmed."
+  - "Real public UI import controls: one-field-null fixture and unchanged fixture both admit successfully; their actual generation requests are identical after import normalization."
+  - "Before/final provenance: 1509 pinned source files, all three allocated build trees, critical tools/configuration and original DB/trace hashes preserved. Thirty served client assets match the build manifest."
+  - "Historical audit: all 25 artifact checksums and full logs for 30 recorded commands match; 78 scoped audit checks pass. No new Pralice run or hidden fresh trace inspection."
+  - "Own authorized original driver exit 1 after valid reproductions due a pre-action duplicate-lineup error; separate controls-only driver exit 0. Initial socket block and all failures retained. Owned browser handles closed and both host server PIDs absent."
+  - "Canonical handoff validator, safe artifact digest/privacy audit, unchanged assignment and owned staged whitespace checks passed."
+review:
+  - "P2 MQ-F01 confirmed; correction and corrected-build original-sequence retest require a separate assignment."
+discoveries:
+  - "Unmodified import also succeeds: the public import boundary normalizes optional fields, so the null input control alone cannot isolate vocalReservation."
+  - "Historical 302.865-second driver exceeded its former 120-second cap. The deviation and exit 1 remain recorded; this review's explicit allocation does not retroactively authorize it."
+blockers:
+  - "Supported-fixture generation acceptance remains blocked by MQ-F01 pending separately authorized correction and retest."
+  - "Original report's driver-bound deviation still requires Coordinator disposition."
+products:
+  ramec_source_commit: 6f17044de0b46cedef51eb71c9816ce11b6a589a
+  pralice_source_commit: 3e15253ce542d259280b95ce2b9a3262040dc32c
+
+Confirmed one material finding, **P2 MQ-F01**, against the report snapshot `b3471feeaabc06f907553c0ac3c2cc149790ee2d`. This is an independent runtime reproduction on unchanged source/build, followed by two public input controls. No source correction or corrected-build retest occurred. No additional material finding is asserted from the scoped Pralice evidence audit.
+
+The [safe evidence packet](runtime-finding-review-artifacts/public-summary.json) separates new observations, historical audit, exact commands/exits, process shutdown and before/final provenance. Full own raw logs, browser traces, profiles, DB copies, actions and HTTP captures remain at `R=/tmp/c15-runtime-finding-review-01-nskd0K`. Historical raw evidence `Q=/tmp/c15-runtime-qa-hunt-01-sFconW` remains unchanged. Only safe product-visible material is committed; no private native metadata, model reasoning, credentials or hidden fresh game trace contents were read.
+
+**P2 MQ-F01 — Offered stop-time fixture saves a generated Performance but the UI rejects it.** Location: pinned Ramec `src/client/src/performance/state.ts:211` (`sameComposition` defaults), `:262` (`validateGeneration`), and incomplete optional-field cases in `state.test.ts:235`; server optional default is `src/composition/Model.cs:104`. These locations refer to product source `6f17044de0b46cedef51eb71c9816ce11b6a589a`, not a mutable consumer checkout.
+
+Contract and impact: the pinned README describes an offline band generator with MIDI as its primary export. The actual offered Test pieces UI and pinned `docs/score-first-support.md` support this four-Seat, standard-tuning, Stop/Resume/End workload. An accepted supported Generate action should admit the saved result for use. Instead, the user receives a false failure, unchanged retry persists an additional result, and recovery requires opening the saved result separately. P2 reflects the reproduced supported path and available recovery; no data loss, whole-product outage, exact seeded melody or contractual latency is claimed.
+
+Original sequence on fresh own state:
+
+1. Directly start the allocated built server with a copy of the verified baseline DB and port `0`; open `/performances` in a fresh private Chromium profile. Public library initially contains only Performance 1, with no accepted current result.
+2. **Change Composition → Test pieces → stop-time → Use test piece**. Add **two Guitars, Bass and Drums**, keep Steady/topShare and offered standard profiles/tuning, channels 1/2/3/10. Set seed 41, trace off, Question empty. Actual before-action [UI](runtime-finding-review-artifacts/original-before.png), [text](runtime-finding-review-artifacts/original-before.txt) and [request](runtime-finding-review-artifacts/original-request.json) establish those conditions.
+3. **Generate Performance** returns HTTP 200. Public library grows from `[1]` to `[2,1]`, but URL remains `/performances` and the UI reports “Returned Performance does not match the submitted request.” The [response](runtime-finding-review-artifacts/original-response.json) and [failure screenshot](runtime-finding-review-artifacts/original-failure.png) preserve the result.
+4. **Retry generation** with an identical complete request returns another 200 and saves Performance 3; the same error remains. Library grows from two to three entries. [Retry response](runtime-finding-review-artifacts/retry-response.json) and [screenshot](runtime-finding-review-artifacts/retry-failure.png) corroborate the transition. There were exactly two original-sequence generation attempts.
+5. Open `/performances/2` through the browser: the saved 220-note result appears and its real **Export MIDI** action downloads 2,831 bytes, SHA-256 `92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9`. [Recovered UI](runtime-finding-review-artifacts/recovered.png) and [download](runtime-finding-review-artifacts/recovered.mid) establish recovery, not musical correctness or listening.
+
+Cause assessment: the actual request/response Composition differences are exclusively omitted optional values serialized as null. `sameComposition` explicitly normalizes those observed fields except `sections[0].vocalReservation`; `sameData` also compares object key counts. The server Section record defaults that field to null. This is a concrete source-supported explanation of the first admission guard, consistent with the observed false mismatch. Existing optional-field tests independently vary several fields but omit `vocalReservation`; they leave this representation boundary unprotected.
+
+Two additional real UI import controls refine that explanation. The [authored input](runtime-finding-review-artifacts/null-import-input.json) differs structurally from the original public fixture in exactly one field: omitted `sections[0].vocalReservation` becomes null. It imports and generates successfully. Crucially, importing the **unchanged** original fixture also succeeds. Their complete captured [null-import request](runtime-finding-review-artifacts/null-import-request.json) and [original-import request](runtime-finding-review-artifacts/original-import-request.json) are identical: import has already normalized all omitted optional fields. Relative to the failed fixture request, only those optional null defaults differ; lineup, seed and other generation inputs are equal. Thus normalization at an entry boundary is strongly supported, but these controls do **not** prove an isolated single-field runtime effect. No API response was mocked, store replaced or guard bypassed. Neither successful import is a corrected source/build retest.
+
+Alternative explanations considered: all 30 observed asset responses match the exact client build; both build trees match the frozen manifests before/final, and the captured original request equals the historical report's request. This substantially excludes stale/different assets or a changed workload. The original offered fixture was server-supplied and accepted/saved; unsupported lineup is excluded by actual original request and successful persistence/recovery. A driver navigation timeout cannot explain the observed real alert, HTTP responses and saved-entry transitions. Driver errors in a later control are recorded separately. Other admission predicates were not instrumented in the runtime, so exclusive branch-level causal isolation remains unverified. No claim extends to all fixtures or a regression introduction date.
+
+Minimum correction/retest direction, for the responsible owner: make optional absent/null Composition representations consistent at the admission boundary while preserving rejection of genuine Composition/provenance differences. Add an independently authored omitted-versus-null `vocalReservation` regression with a genuinely different reservation negative control, and protect the actual fixture → Generate admission path. Expected values must come from the public contract/input, without a mock that normalizes away the missing precondition. Identify corrected source and actual server/client artifacts, then repeat this original fresh-state fixture sequence at seed 41; require a usable admitted saved result without the mismatch, verify saved entry count and reopen/export, and retain affected admission/negative cases and import controls. No correction, broad suite, rebuild or retest on a corrected build is authorized or performed here.
+
+Provenance was independently audited before and after runtime. `P=/tmp/c15-provision-01.6o1CPD`; actual outputs match the supplied per-file manifests, whose top-level manifest matches frozen baseline `56540a6`. Source archives match 1,067 Ramec and 442 Pralice preserved regular files; eight critical tool/configuration hashes remain unchanged. No retained working-tree settings were read or adopted. Build-command provenance is the prior recorded Release `just build-dotnet`/`just build-client` and Pralice build; no build/restore/install was repeated.
+
+| Actual preserved artifact | Files | SHA-256 tree identity |
+| --- | ---: | --- |
+| Ramec server `P/ramec/src/server/bin/Release/net10.0` | 71 | `ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0` |
+| Ramec client `P/ramec/src/client/dist` | 16 | `7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7` |
+| Preserved Pralice CLI Release output | 13 | `833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755` |
+
+Tree hashes use sorted regular-file hash/path lines, as the baseline manifest specifies. The original DB remains 421,888 bytes / `fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a`, with no WAL/SHM/journal. The original trace remains 135,926 bytes / `c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f`. Runtime writes were confined to own DB copies, profile/cache/temp/log/export paths; original and control attempts used separate fresh roots under R. No old endpoint was reused.
+
+The direct server command was `P/tools/dotnet-10.0.110/dotnet P/ramec/src/server/bin/Release/net10.0/Ramec.Server.dll`, cwd `P/ramec`. Its explicit environment selected `Persistence__Path=R/<run>/state/music.sqlite`, empty Seq URL, Production, loopback port 0 and isolated CLI/XDG/temp paths; full expansions are in the packet. Authorized original server was PID 753686 at port 44103; controls server PID 754861 at port 41143. Both endpoints are stopped. Browser was supplied Chromium 156.0.8078.4 / Playwright Core 1.64.0, 1440×1000 CSS viewport, configured scale 1 and dark scheme. Fresh-profile default zoom was not independently read during actions. Actual browser input, DOM, HTTP capture, screenshots and UI download were exercised; two outcome screenshots were visually inspected. Audio/device playback, capture and listening were unperformed. No latency budget was evaluated.
+
+Historical report review is distinct from new execution. All 25 committed artifact checksums and full-log digests for 30 recorded commands match; 78 scoped audit checks pass. Crown-visible Pralice input/step/output alignment, ratified-proposal preservation, positive-amount and daily-cap rejection, queued versus resolved treasury observations and unavailable rejected IDs are supported. Recorded replay exits 0/1/0, explicit missing-completion rejection and pending zero-day/zero-outcome summary support the stated bounded replay claim. No new Pralice runtime or hidden fresh trace contents were needed. “No confirmed defects within coverage” remains appropriate; information security, foreign perspectives, fresh AI equivalence, balance and whole-product correctness remain unverified.
+
+The historical scroll action focuses the opener, establishes a nonzero Y=180 baseline **before** opening, then compares state across rejection/dismissal; recorded focus/scroll and MIDI equality support its narrow preservation claim. MIDI structural counts and byte consistency establish no musical/listening correctness. The historical overwritten initial catalog capture, selector failures and unreached null control remain limitations; generation captures after filename reservation have matching response digests. No historical output was overwritten or repaired.
+
+| Check / exact helper; cwd `/opt/dev/ruach-worktrees/c15-review` unless stated | Disposition |
+| --- | --- |
+| `bun R/provenance.ts before` and `final` | **Passed**, exit 0 each, full source/build/tool/original-state comparisons above. |
+| `bun R/run-browser.ts browser-default` | **Environment-blocked**, exit 1 before any browser action: server socket creation denied (`SocketException (13)`), no endpoint. Restricted server handle completed with null exit; raw evidence retained. |
+| `REVIEW_RUN_ROOT=R/authorized bun R/run-browser.ts browser-authorized` | **Defect reproduced**, driver exit 1: two original attempts and recovery completed, then the first import control added a duplicate lineup (eight Seats), so Generate remained disabled. Its response waiter also timed out. This is an own driver/precondition error, not additional product defect evidence. State/logs retained. |
+| `REVIEW_RUN_ROOT=R/controls bun R/run-browser.ts browser-controls --controls-only` | **Passed as input controls**, exit 0. Separate fresh DB/profile, observed four-Seat precondition, real null and unchanged imports both generate/admit. No third original-sequence attempt. |
+| `bun R/analyze.ts`; `bun R/historical-audit.ts` | **Passed**, exit 0: actual transition/request/response comparisons, 30 asset identities and historical integrity/scope checks. |
+| `bun R/shutdown.ts`, assigned host process-read capability | **Passed**, exit 0. Browser context closes awaited; both server handles exit 0. Exact owned `ps -p 753686,754861 -o pid,ppid,uid,comm` exits 1 with header only, confirming absence. No foreign process signaled or enumerated. |
+| Handoff validator, owned staged whitespace, assignment and safe artifact integrity | **Passed**, exit 0. Assignment unchanged at SHA-256 `952bde9d2d3f4ad50151ca792d10e38d40debc7cb59fd85db6ab0dfcd3e08409`; safe artifact hashes are in `SHA256SUMS`. |
+| New Pralice runs, whole suites, source fixes, corrected build/retest, listening and delivery | **Not run**, outside scope. No inferred pass. |
+
+The new drivers lived approximately 30.10 seconds (restricted), 19.69 seconds (original/recovery/control failure) and 7.69 seconds (controls); all fit the explicit 600-second driver/child allocation. Four authored behavioral scenarios were used: original+retry, saved recovery/export, null import and unchanged import. The failed null precondition was preserved and completed within that same control on separate fresh state. No registered flake, retry policy or silent limit increase was invoked. Socket remediation and the bounded controls continuation used assignment-authorized per-command runtime access.
+
+The **original** Tester's 302.865-second driver exceeded its 120-second helper cap and exited 1. That execution deviation remains unresolved for Coordinator disposition; the original report's `needs-decision` status is not retroactively converted to compliance by this review or by the new allocation. Original overall/runtime/state constraints remain supported by its retained evidence. The present review is complete with MQ-F01 confirmed and the cause bounded as above. Preserve all original and new source/build/state/evidence, sessions and worktrees. No correction, delivery, worker/model launch, security answer, integration, push or teardown occurred.

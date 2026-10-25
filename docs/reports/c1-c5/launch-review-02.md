@@ -1,0 +1,66 @@
+task: REVIEW-LAUNCH-02
+status: complete
+outcome: "No material findings in the exact second correction; bounded source-wrapper native Tester role, policy and authoritative identity checks pass. Productive Tester behavior remains unverified."
+source_baseline: a88d44b7aa84143307a7298e4cd423c7f7e75c68
+reviewed_revision: f6d9c2c5b35d437dbf0183bd37968ede3bee7b7f
+tested_revision: f6d9c2c5b35d437dbf0183bd37968ede3bee7b7f
+evidence_revision: 75f10abc2af9c4b043b393d7352ce74ba6eb4016
+prior_review_revision: 4f86897c654ddc6f3a610c01aaed2383f9fd3997
+artifacts:
+  - docs/assignments/c1-c5/REVIEW-LAUNCH-02.md
+  - docs/reports/c1-c5/launch-review-02.md
+  - docs/reports/c1-c5/launch-artifacts/review-02/public-summary.json
+  - docs/reports/c1-c5/launch-artifacts/review-02/focused.stdout.txt
+  - docs/reports/c1-c5/launch-artifacts/review-02/focused.stderr.txt
+  - /tmp/launch-review-02-psvnGQ
+  - /tmp/ruach-fix-launch02-QRC4dvhF
+verification:
+  - "Independent exact-candidate focused checks: authorized socket/PTY run exited 0, 21 pass/0 fail, 161 assertions; initial restricted socket block retained."
+  - "Selected native stored context/messages: exact prepared developer composition and full Tester role present; actual model/effort, auto-review policy and sandbox match."
+  - "Authoritative Herdr binding, private nonce/hash receipt, full 12-element native argv, foreground process/group, pinned executable/PATH and forwarded environment match."
+  - "Evidence audit: all 33 supplied checksums and 13 receipt/log digests match; three replay production files match baseline and five replay fixtures match final candidate."
+  - "Reported just check, 108 root tests, release check and 243 Herdr tests inspected with full logs and recorded passing exits; not independently rerun."
+  - "Canonical handoff validation, unchanged assignment integrity and owned staged whitespace checks passed."
+review:
+  - "No material findings or optional maintainability findings in the bounded transport correction. LR-01 is addressed for the reviewed source and observed new Codex/Bash launch."
+discoveries:
+  - "Current correction is attempt 2 of LAUNCH-LONG-ARGV. The original failure and one completed failed correction at 2c114e8 remain recorded; this bounded review does not add another failed correction."
+  - "READY establishes no productive runtime behavior or technical-skill activation; explicit canonical skill source/reference context is preserved."
+blockers: []
+
+No material findings. Reviewed the immutable twelve-path transport/test/document diff at `f6d9c2c5b35d437dbf0183bd37968ede3bee7b7f` against `a88d44b7aa84143307a7298e4cd423c7f7e75c68`, plus the already launched `c15-runtime-tester` evidence specified by the assignment. The implementation report was read at evidence-only successor `75f10ab`. The untracked C-IN draft and unrelated ongoing work were not inspected. No production source or fixture was changed.
+
+The source review and actual new native evidence support closure of the bounded LR-01 launch hold. This conclusion applies to the observed source-wrapper Codex/Bash launch and the tested transport contracts. It does not accept the full product union, certify other native harnesses/shells, or establish productive Tester behavior, skill use or delivery.
+
+The [safe evidence packet](launch-artifacts/review-02/public-summary.json) records source hashes, complete command receipts and native comparison results without native session identifiers or raw developer/configuration text. The independent focused run's complete [stdout](launch-artifacts/review-02/focused.stdout.txt) and [stderr](launch-artifacts/review-02/focused.stderr.txt) are durable alongside it. Raw private metadata remains in retained scratch and the explicitly assigned receipt locations.
+
+The correction binds the canonical command after shell initialization using existing `pane run` and `pane wait-output`, then makes one native start submission. Native data remains private JSON. The helper restores the explicitly forwarded environment, executes the pinned executable with exact argv and creates an exclusive receipt containing the payload digest, nonce and exec-preserved PID. Before accepting ready or matching blocked input, the worker requires both that receipt and matching pane foreground process/group evidence. Missing/foreign/forged receipts, lost binding, wrong foreground and unconfirmed setup fail closed, retain material and do not resubmit. Capability/runtime checks precede launch-space mutation; actual-cwd preparation and role-hash checks remain present. Short/direct launches, blocked-input authority and existing cleanup ownership are retained.
+
+New handwritten production helpers and changed transitions are readable. The persistent PTY fixture serves the required initialized-shell/process boundary; no separate maintainability or unnecessary-complexity finding is warranted. The documented POSIX-compatible binding and conservative short setup-path requirement are supported limits. The 3000-byte choice selects transport below the observed canonical-input boundary; it is not a public maximum native argument size.
+
+The two LR-01 regressions establish `terminalStart` and startup PATH prepending before invoking the public worker, regardless of whether the new binding exists. One observes preserved role/configuration, permission flag, literal arguments, pinned PATH/executable and the startup customization sentinel. The other places a distinct decoy executable in the prepended directory and asserts that the original executable runs with the prepared permissions and no decoy marker. The same real Bash/PTY persists across separate fixture Herdr calls; canonical input and actual foreground group are observed. Expected arrays, role text and byte/hash oracles come from authored inputs, independently of production serialization. The fixture native recorder establishes transport behavior; actual Codex policy is established separately below.
+
+The supplied final replay replaces only the three production transport files with exact baseline bytes while retaining final fixtures. All three baseline files and five relevant fixture files were independently hashed against Git. Its complete log records the expected exit 1, zero passes and two failures: apparent ready with zero prepared arguments, and the wrong decoy executable. This is failure-sensitive reproduction with the stated hybrid scope, not a pristine baseline suite. The earlier decoy precondition defect and earlier logs remain recorded separately. The unchanged physical evidence still records 6000 bytes sent and 4095 received before newline with the original hashes; it remains defect evidence, not evidence that the terminal limit changed.
+
+For the native audit, only the three named private coordination receipts and the assigned immutable private launch material were read. The exact native ID supplied by Herdr's existing authoritative binding selected one metadata-only `thread/read` with `includeTurns:false`. No conversation enumeration, guessed registration, prompt, resume or steering occurred. The stored path returned for that binding supplied selected existing turn-context and developer-message records; private reasoning was not inspected.
+
+The nonce and payload hash match the execution receipt. The recorded native argv equals the complete prepared twelve-element array, with the receipt PID matching the pane foreground process/group. A scoped live read of that known process confirms the pinned executable realpath, PATH and every explicitly forwarded environment value. Private root/directory/executable modes are 0700 and data/setup/receipt modes are 0600. These comparisons establish execution more strongly than a title, readiness caption or bootstrap marker alone.
+
+Native metadata records Codex 0.164.0. The single stored READY context records model `gpt-6.1-sol`, effort `high`, `approval_policy: on-request`, `approvals_reviewer: auto_review` and workspace-write sandbox. The exact prepared developer composition is present in native developer messages, including the entire canonical Tester body with SHA-256 `63c3de0422165cbd792d8db7b1bd34f4aeb83364d1952fe924dee361b792ff7f`. Its source-role and canonical-skills reference-resolution context is also present. Referenced Tester and runtime technical-skill source files exist and match the candidate. The safe packet retains composition/payload digests rather than instruction contents.
+
+All sixteen prepared skill entries are disabled workflow overrides, and the complete config-bearing argv reached the native process. No workflow entries matched the observed native catalog's list format. The runtime technical skill's explicit source reference is preserved; automatic catalog listing for that skill and its actual activation are not established. The READY turn made no function calls. Thus this review establishes prepared restrictions and source/reference preservation, without claiming exhaustive ambient/account equivalence or behavior from catalog presence. No productive assignment had been sent, and none was sent during this review.
+
+| Required check | Disposition and evidence |
+| --- | --- |
+| Independent focused source/PTY checks | **Passed** on exact archived candidate. `bun test tests/launch-transport.test.ts tests/worker.test.ts --test-name-pattern 'canonical PTY\|LR-01:\|large startup\|private binding\|post-initialization launch\|long literal\|missing Bun\|failed native exec'`, cwd `/tmp/launch-review-02-psvnGQ/candidate/skills/ruach-herdr`, authorized sockets/PTY, exit 0, 21 pass, 158 filtered, 0 fail, 161 assertions, 9.99 seconds. Full outputs retained before display. Initial restricted run exited 1: five helper cases passed, then worker module setup hit Unix-socket EPERM before worker assertions. Both runs remain recorded. |
+| Native bound metadata/context comparison | **Passed** for the selected properties above. Initial reader exited 1 on existing-daemon socket denial. Assignment-authorized 120-second bounded read succeeded, then the local parser exited 1 on an `additional_tools` developer item without a message-content array. The corrected parser filtered message items and reused the saved response; `timeout 120 bun /tmp/launch-review-02-psvnGQ/native-compare.ts`, scratch cwd, exited 0. This was a reviewer-helper error, not a source/native regression or another native query. |
+| Native actual executable/environment | **Passed**. `timeout 120 bun /tmp/launch-review-02-psvnGQ/native-compare.ts --host-process`, scratch cwd, authorized known-process read, exit 0. No process signal or mutation. |
+| Supplied required check evidence | **Passed as recorded; not independently rerun**. Full `just check`, root test, release and affected Herdr logs plus receipt exits inspected: respectively 0; 108 pass/0 fail; 0; 243 pass/0 fail in 193.79 seconds. All 33 checksum entries and 13 receipt/log digests match. Earlier type-check failure is retained as a pre-candidate implementation iteration. |
+| Baseline regression/physical evidence | **Expected defect reproduction**, inspected read-only rather than rerun. Both final LR-01 controls fail against exact prior production files; physical 6000→4095 result and hashes remain unchanged. These red results are not final-candidate regressions. |
+| Source/evidence integrity | **Passed**. All twelve inspected changed archive paths still match exact candidate bytes; baseline and replay-fixture hashes match their stated revisions. `bun /tmp/launch-review-02-psvnGQ/evidence-audit.ts` and `reference-audit.ts` exited 0. No source/fixture edit or dependency installation; existing pinned dependencies were copied into scratch. |
+| Handoff/assignment/privacy | **Passed**. Canonical validator with `--repo`, owned staged `git diff --check` and assignment SHA comparison exit 0. Unchanged assignment SHA-256: `c5222d16d153e669727c8b29d3758586d0a3f3c48b834ba0e0864671695086c1`. Durable artifacts exclude the bound native ID, prepared developer text and UUID-shaped strings. |
+| Productive runtime, skill activation, other harnesses, union acceptance and delivery | **Not run / unverified**, outside this bounded review. No new worker/model launch, product action, global settings write, dialog answer, registration, merge, push or cleanup occurred. |
+
+No registered-flake classification or flake retry authority was used. The assignment authorized the scoped socket/PTY and known-process remediation; initial failures and the local parser failure remain preserved with their own exits. Neither environment remediation, expected-red reproduction nor reviewer-helper repair resets correction accounting.
+
+The outcome remains LAUNCH-LONG-ARGV: original truncation and attempt-1 failure at `2c114e8` / prior review `4f86897` remain recorded. Current delivered correction `f6d9c2c` is attempt 2 and passes this bounded independent source/native review. The recorded completed failed-correction count remains one; this report does not erase it or add a failed cycle for a command failure. Preserve the Tester, original invalid launch evidence, both correction histories, private launch material and all raw scratch for Coordinator disposition and later productive assignment. No teardown or delivery is performed here.

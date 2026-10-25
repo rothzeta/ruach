@@ -1,0 +1,298 @@
+{
+  "checks": [
+    {
+      "name": "ratified prompt/input correspondence",
+      "ok": true
+    },
+    {
+      "name": "invalid prompt/input correspondence",
+      "ok": true
+    },
+    {
+      "name": "pending prompt/input correspondence",
+      "ok": true
+    },
+    {
+      "name": "ratified day-zero before ledger",
+      "ok": true
+    },
+    {
+      "name": "queued leaves treasury unchanged",
+      "ok": true
+    },
+    {
+      "name": "no final outcomes while queued",
+      "ok": true
+    },
+    {
+      "name": "documented 40+20 debits",
+      "ok": true
+    },
+    {
+      "name": "ratification consent and exact accepted terms",
+      "ok": true
+    },
+    {
+      "name": "called duty settled separately",
+      "ok": true
+    },
+    {
+      "name": "terminal proposal public inspections identical",
+      "ok": true
+    },
+    {
+      "name": "terminal rejection outcome delivered",
+      "ok": true
+    },
+    {
+      "name": "all post-ratification public ledgers unchanged",
+      "ok": true
+    },
+    {
+      "name": "zero input explicitly rejected",
+      "ok": true
+    },
+    {
+      "name": "zero leaves same-day status identical",
+      "ok": true
+    },
+    {
+      "name": "zero leaves proposals/outcomes unchanged",
+      "ok": true
+    },
+    {
+      "name": "valid next submission queues same day",
+      "ok": true
+    },
+    {
+      "name": "second submission hits cap",
+      "ok": true
+    },
+    {
+      "name": "rejected IDs remain unavailable",
+      "ok": true
+    },
+    {
+      "name": "valid path still ratifies with intended ledger",
+      "ok": true
+    },
+    {
+      "name": "pending quit has no debit or resolution",
+      "ok": true
+    },
+    {
+      "name": "music accepted state preserved across invalid import",
+      "ok": true
+    },
+    {
+      "name": "saved UI reload preserves export",
+      "ok": true
+    },
+    {
+      "name": "six persistent-context generation requests returned 200; separate fresh-context success retained",
+      "ok": true
+    },
+    {
+      "name": "actual client asset responses match build",
+      "ok": true
+    }
+  ],
+  "versions": [
+    {
+      "name": "environment",
+      "exit": 0,
+      "stdout": "Linux bezalel 6.12.111+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.111-1 (2026-09-28) x86_64 GNU/Linux\n"
+    },
+    {
+      "name": "ramec-sdk",
+      "exit": 0,
+      "stdout": "10.0.110\n"
+    },
+    {
+      "name": "pralice-sdk",
+      "exit": 0,
+      "stdout": "10.0.401\n"
+    },
+    {
+      "name": "chromium",
+      "exit": 0,
+      "stdout": "Google Chrome for Testing 156.0.8078.4 \n"
+    },
+    {
+      "name": "bun",
+      "exit": 0,
+      "stdout": "1.4.2\n"
+    }
+  ],
+  "skills": [
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-runtime-testing/SKILL.md",
+      "sha256": "0bccb15ae24324138466641310ede6b14155488438c3c3e9e5a3c624c0eb8621"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-runtime-testing/references/capabilities.md",
+      "sha256": "5a00a63a9aa1e89818032361ef2f4904e1f782f1c2def4d021898d7e99f6f098"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-runtime-testing/references/measurements.md",
+      "sha256": "e2e0d4e803b2fa72c97f4a4cd91481f8fce76994c2404ba0bee019b8d9b6a4de"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-testing/SKILL.md",
+      "sha256": "d0a3b269e7525fe339e7365085cbc30c88ac9f54919b613e15dc8c727f592186"
+    },
+    {
+      "path": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-handoff/SKILL.md",
+      "sha256": "59e43c30321167aceaf5b59837db1c5e114c48f4d23bd340c5aa579957569445"
+    }
+  ],
+  "generation_http_count": 7,
+  "served_assets_checked": 18,
+  "warm": [
+    {
+      "seed": 45,
+      "wall_ms": 571.2353719999956,
+      "status": 200,
+      "url": "http://127.0.0.1:38007/performances/5"
+    },
+    {
+      "seed": 46,
+      "wall_ms": 563.1355400000175,
+      "status": 200,
+      "url": "http://127.0.0.1:38007/performances/6"
+    },
+    {
+      "seed": 47,
+      "wall_ms": 621.6628930000006,
+      "status": 200,
+      "url": "http://127.0.0.1:38007/performances/7"
+    }
+  ],
+  "cold_client": {
+    "condition": "fresh browser context and empty cache; warm server; saved Composition 2",
+    "seed": 47,
+    "status": 200,
+    "wall_ms": 486.51306499997736,
+    "url": "http://127.0.0.1:38007/performances/8"
+  },
+  "rejection": {
+    "before": {
+      "id": "7",
+      "url": "http://127.0.0.1:38007/performances/7",
+      "source": "C Major · 4/4\n\nSaved · Next-generation source: Composition 2\n\nC Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop\n\nhandwritten · rev 1 · Seed used: 0\n\nChange Composition\nPaste or edit Composition JSON",
+      "selection": " Interval interval/0/161280 · Note bass-1:span:0-161280:span:161280-322560:occurrence:riff-c:bass-1:placement:1:line:0:0",
+      "seat": "bass-1",
+      "scroll": {
+        "x": 0,
+        "y": 180
+      },
+      "document_sha256": "f5522e0485b40cfd851caca87119e1fca73838b98bf46bfeadd79a2f13f0c269"
+    },
+    "rejection": "Choose Composition source\nClose\nSaved\nImport\nTest pieces\n\nChoose a saved Composition, import JSON or use a test piece from the server catalog. To use the Composer, generate a Composition on the Composition page and select Perform. Validated meters, tonal-centre changes, Anacrusis and all Tempo characters with Set, Ramp and Modulate are supported. Use one or two standard-tuned Guitars, one Bass and one Drums. Metric layers remain unsupported. Generation support is checked by the server. Explicit Recurrences offer Recall alternatives. Eligible State, Sequence, Fragment and Vary occurrences offer alternatives within their containing decision interval. Occurrences that cross decision boundaries remain ineligible.\n\nLoad Composition JSON\n\ncontract: Expected property name or '}' in JSON at position 1 (line 1 column 2)\n\nThe current Composition source remains available.\n\nRetry\nChoose Composition source\nCancel",
+    "after": {
+      "id": "7",
+      "url": "http://127.0.0.1:38007/performances/7",
+      "source": "C Major · 4/4\n\nSaved · Next-generation source: Composition 2\n\nC Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop\n\nhandwritten · rev 1 · Seed used: 0\n\nChange Composition\nPaste or edit Composition JSON",
+      "selection": " Interval interval/0/161280 · Note bass-1:span:0-161280:span:161280-322560:occurrence:riff-c:bass-1:placement:1:line:0:0",
+      "seat": "bass-1",
+      "scroll": {
+        "x": 0,
+        "y": 180
+      },
+      "document_sha256": "f5522e0485b40cfd851caca87119e1fca73838b98bf46bfeadd79a2f13f0c269"
+    },
+    "focus": true,
+    "unchanged": true,
+    "midi_sha256_before": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1",
+    "midi_sha256_after": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1"
+  },
+  "reload": {
+    "url": "http://127.0.0.1:38007/performances/7",
+    "reopen_ms": 954.677303000004,
+    "export_ms": 92.96486300003016,
+    "midi_sha256": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1",
+    "same_export": true,
+    "document_sha256": "f5522e0485b40cfd851caca87119e1fca73838b98bf46bfeadd79a2f13f0c269"
+  },
+  "midi": {
+    "file": "/tmp/c15-runtime-qa-hunt-01-sFconW/music/rejection-after.mid",
+    "sha256": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1",
+    "bytes": 2945,
+    "format": 1,
+    "tracks": 5,
+    "division": 10080,
+    "counts": [
+      {
+        "track": 0,
+        "on": 0,
+        "off": 0,
+        "end_tick": 322560
+      },
+      {
+        "track": 1,
+        "on": 124,
+        "off": 124,
+        "end_tick": 322560
+      },
+      {
+        "track": 2,
+        "on": 58,
+        "off": 58,
+        "end_tick": 322560
+      },
+      {
+        "track": 3,
+        "on": 33,
+        "off": 33,
+        "end_tick": 322560
+      },
+      {
+        "track": 4,
+        "on": 73,
+        "off": 73,
+        "end_tick": 322560
+      }
+    ],
+    "checks": 307,
+    "all_passed": true,
+    "scope": "MIDI structural observation, not note correctness, audio, playback or listening"
+  },
+  "cli": [
+    {
+      "name": "play-ratified",
+      "exit": 0,
+      "wall_ms": 1095.325386
+    },
+    {
+      "name": "play-invalid",
+      "exit": 0,
+      "wall_ms": 1080.263851
+    },
+    {
+      "name": "play-pending",
+      "exit": 0,
+      "wall_ms": 791.1923989999996
+    }
+  ],
+  "replay": [
+    {
+      "name": "ratified-intact",
+      "exit": 0,
+      "wall_ms": 874.031555,
+      "sha256": "15bf18051e1f180b8c3150b0a64a372c5d984a1b5ff402763fc311ada40d1863"
+    },
+    {
+      "name": "ratified-truncated",
+      "exit": 1,
+      "wall_ms": 824.1913480000001,
+      "sha256": "3ca8638b88d788f6a1234554457391eb99a080a08d939aafa906ac050e96ea8a"
+    },
+    {
+      "name": "pending-intact",
+      "exit": 0,
+      "wall_ms": 682.4134020000001,
+      "sha256": "b2e0d0db642073ccdd88040e4fd483ed22d63765d40c9d3c85524c8e01ed1773"
+    }
+  ],
+  "assignment_sha256": "6141595e3f7f67c6381f9f96591c92005fbf6f4c5cc64694177ae16503dba1bf"
+}

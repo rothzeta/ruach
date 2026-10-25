@@ -1,0 +1,162 @@
+[
+  {
+    "kind": "action",
+    "command": "01-inspect.json",
+    "code": "await writeFile(R+\"/music/initial-ui.txt\",await page.locator(\"body\").innerText());return {text:await page.locator(\"body\").innerText(),buttons:await page.getByRole(\"button\").allTextContents()};",
+    "ok": true,
+    "wall_ms": 45.50465599999916,
+    "at": "2026-10-25T22:01:21.949Z"
+  },
+  {
+    "kind": "action",
+    "command": "02-source.json",
+    "code": "await page.getByRole(\"button\",{name:\"Change Composition\",exact:true}).click();return {text:await page.getByRole(\"dialog\").innerText(),selects:await page.locator(\"select\").evaluateAll(xs=>xs.map(x=>({label:x.getAttribute(\"aria-label\"),text:x.textContent})))};",
+    "ok": false,
+    "error": "TimeoutError: innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n",
+    "at": "2026-10-25T22:01:41.126Z"
+  },
+  {
+    "kind": "action",
+    "command": "03-fixture.json",
+    "code": "await page.getByRole(\"tab\",{name:\"Test pieces\",exact:true}).click();return {text:await page.locator(\".overlay-panel.source\").innerText(),options:await page.getByLabel(\"Test piece\",{exact:true}).locator(\"option\").evaluateAll(xs=>xs.map(x=>({value:x.value,text:x.textContent})))};",
+    "ok": true,
+    "wall_ms": 53.114190000000235,
+    "at": "2026-10-25T22:01:46.001Z"
+  },
+  {
+    "kind": "action",
+    "command": "04-generation.json",
+    "code": "page.removeAllListeners(\"response\");let seq=0;page.on(\"response\",async(r)=>{const id=String(seq++).padStart(3,\"0\");try{if(r.url().startsWith(endpoint+\"/api/\")){const b=await r.body(),file=R+\"/music/api-v2-\"+id+\".body\";await writeFile(file,b);await note({kind:\"http-v2\",url:r.url(),method:r.request().method(),request:r.request().postData(),status:r.status(),body:file,sha256:sha(b)});}else if(r.url().includes(\"/assets/\")){await note({kind:\"asset-v2\",url:r.url(),status:r.status(),sha256:sha(await r.body())});}}catch(e){await note({kind:\"capture-error\",error:String(e)});}});await page.getByLabel(\"Test piece\",{exact:true}).selectOption(\"stop-time\");await page.getByRole(\"button\",{name:\"Use test piece\",exact:true}).click();await page.locator(\".overlay-panel.source\").waitFor({state:\"hidden\"});await page.getByRole(\"button\",{name:\"Add two Guitars, Bass and Drums\",exact:true}).click();await page.getByLabel(\"Performance seed\",{exact:true}).fill(\"41\");await page.screenshot({path:R+\"/music/before-generation.png\",fullPage:true});await writeFile(R+\"/music/before-generation.txt\",await page.locator(\"body\").innerText());const before=await (await fetch(endpoint+\"/api/performances\")).json();const begin=performance.now();await page.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();await page.waitForURL(/\\/performances\\/\\d+$/);await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();await page.waitForFunction(()=>document.body.innerText.includes(\"Saved ·\"));const wall_ms=performance.now()-begin;await page.screenshot({path:R+\"/music/generated-cold.png\",fullPage:true});await writeFile(R+\"/music/generated-cold.txt\",await page.locator(\"body\").innerText());return {before,wall_ms,url:page.url(),text:(await page.locator(\"body\").innerText()).slice(0,6000)};",
+    "ok": false,
+    "error": "TimeoutError: waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+    "at": "2026-10-25T22:02:12.438Z"
+  },
+  {
+    "kind": "action",
+    "command": "05-inspect-result.json",
+    "code": "await page.screenshot({path:R+\"/music/generation-attempt.png\",fullPage:true});return {url:page.url(),text:(await page.locator(\"body\").innerText()).slice(0,18000)};",
+    "ok": true,
+    "wall_ms": 205.6191880000115,
+    "at": "2026-10-25T22:02:23.993Z"
+  },
+  {
+    "kind": "action",
+    "command": "06-reproduce.json",
+    "code": "const before=await (await fetch(endpoint+\"/api/performances\")).json();const response=page.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await page.getByRole(\"button\",{name:\"Retry generation\",exact:true}).click();const r=await response;await page.getByRole(\"alert\").filter({hasText:\"Returned Performance\"}).waitFor();const wall_ms=performance.now()-begin;await page.screenshot({path:R+\"/music/generation-reproduced.png\",fullPage:true});return {before,wall_ms,status:r.status(),url:page.url(),alerts:await page.getByRole(\"alert\").allTextContents(),after:await (await fetch(endpoint+\"/api/performances\")).json()};",
+    "ok": true,
+    "wall_ms": 590.5976579999988,
+    "at": "2026-10-25T22:02:39.951Z"
+  },
+  {
+    "kind": "action",
+    "command": "07-reopen.json",
+    "code": "await page.goto(endpoint+\"/performances/2\",{waitUntil:\"networkidle\"});return {url:page.url(),text:(await page.locator(\"body\").innerText()).slice(0,7000),buttons:await page.getByRole(\"button\").allTextContents()};",
+    "ok": true,
+    "wall_ms": 984.3788809999969,
+    "at": "2026-10-25T22:02:47.765Z"
+  },
+  {
+    "kind": "action",
+    "command": "08-select-export.json",
+    "code": "const timeline=page.getByRole(\"region\",{name:\"Performance music\",exact:true});await timeline.getByRole(\"button\",{name:\"List\",exact:true}).click();await timeline.getByLabel(\"Detailed Seat\",{exact:true}).selectOption(\"bass-1\");await timeline.locator(\"button[data-note-target]\").first().click();await page.locator(\".selection-address\").waitFor();const selected=await page.locator(\".selection-address\").textContent();const d=page.waitForEvent(\"download\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();const dl=await d;await dl.saveAs(R+\"/music/accepted-before.mid\");await page.screenshot({path:R+\"/music/accepted-before.png\",fullPage:true});const saved=await (await fetch(endpoint+\"/api/performances/2/document\")).text();await writeFile(R+\"/music/accepted-before.document\",saved);await writeFile(R+\"/music/accepted-before.txt\",await page.locator(\"body\").innerText());return {selected,document_sha256:sha(saved),midi_sha256:sha(await readFile(R+\"/music/accepted-before.mid\")),filename:dl.suggestedFilename(),url:page.url()};",
+    "ok": false,
+    "error": "TimeoutError: waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.selection-address') to be visible\u001b[22m\n\u001b[2m    34 × locator resolved to hidden <p data-v-a6d0b015=\"\" class=\"selection-address\">…</p>\u001b[22m\n",
+    "at": "2026-10-25T22:03:11.215Z"
+  },
+  {
+    "kind": "action",
+    "command": "09-setup-source.json",
+    "code": "await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();await page.getByRole(\"button\",{name:\"Change Composition\",exact:true}).click();await page.getByRole(\"tab\",{name:\"Saved\",exact:true}).click();return {text:await page.locator(\".overlay-panel.source\").innerText(),buttons:await page.locator(\".overlay-panel.source\").getByRole(\"button\").allTextContents()};",
+    "ok": true,
+    "wall_ms": 282.551238,
+    "at": "2026-10-25T22:03:11.598Z"
+  },
+  {
+    "kind": "action",
+    "command": "10-warm-generation.json",
+    "code": "await page.getByRole(\"button\",{name:\"Use source\",exact:true}).first().click();await page.locator(\".overlay-panel.source\").waitFor({state:\"hidden\"});const measurements=[];for(const seed of [42,43,44]){if(await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).isVisible())await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();await page.getByLabel(\"Performance seed\",{exact:true}).fill(String(seed));const old=page.url();const response=page.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await page.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();const r=await response;await page.waitForURL(url=>url.toString()!==old&&/\\/performances\\/\\d+$/.test(url.pathname));await page.getByRole(\"heading\",{name:/^Performance \\d+$/,exact:true}).waitFor();await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();measurements.push({seed,wall_ms:performance.now()-begin,status:r.status(),url:page.url()});}await writeFile(R+\"/music/generation-measurements.json\",JSON.stringify(measurements,null,2));await page.screenshot({path:R+\"/music/generated-warm.png\",fullPage:true});return {measurements,text:(await page.locator(\"body\").innerText()).slice(0,1300)};",
+    "ok": false,
+    "error": "TimeoutError: click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Generate Performance', exact: true })\u001b[22m\n",
+    "at": "2026-10-25T22:03:43.711Z"
+  },
+  {
+    "kind": "action",
+    "command": "11-baseline.json",
+    "code": "const timeline=page.getByRole(\"region\",{name:\"Performance music\",exact:true});await timeline.getByRole(\"button\",{name:\"List\",exact:true}).click();await timeline.getByLabel(\"Detailed Seat\",{exact:true}).selectOption(\"bass-1\");await timeline.locator(\"button[data-note-target]\").first().click();await page.getByRole(\"button\",{name:\"Inspect\",exact:true}).click();await page.locator(\".selection-address\").waitFor({state:\"attached\"});const selected=await page.locator(\".selection-address\").textContent();const d=page.waitForEvent(\"download\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();const dl=await d;await dl.saveAs(R+\"/music/accepted-before.mid\");const id=page.url().split(\"/\").at(-1),saved=await (await fetch(endpoint+\"/api/performances/\"+id+\"/document\")).text();await writeFile(R+\"/music/accepted-before.document\",saved);await page.screenshot({path:R+\"/music/accepted-before.png\",fullPage:true});await writeFile(R+\"/music/accepted-before.txt\",await page.locator(\"body\").innerText());return {id,selected,selection_visible:await page.locator(\".selection-address\").isVisible(),document_sha256:sha(saved),midi_sha256:sha(await readFile(R+\"/music/accepted-before.mid\")),url:page.url()};",
+    "ok": true,
+    "wall_ms": 844.4599670000025,
+    "at": "2026-10-25T22:03:44.756Z"
+  },
+  {
+    "kind": "action",
+    "command": "12-current.json",
+    "code": "return {text:(await page.locator(\"body\").innerText()).slice(0,8500),setup:await page.locator(\"#performance-setup\").evaluate(e=>({class:e.className,hidden:e.getAttribute(\"aria-hidden\")})),inspector:await page.locator(\".selection-address\").evaluate(e=>({parent:e.parentElement.outerHTML.slice(0,1300)})),buttons:await page.getByRole(\"button\").allTextContents()};",
+    "ok": true,
+    "wall_ms": 68.71597499999916,
+    "at": "2026-10-25T22:03:54.564Z"
+  },
+  {
+    "kind": "action",
+    "command": "13-warm-generation.json",
+    "code": "const measurements=[];for(const seed of [42,43,44]){if(await page.locator(\"#performance-setup\").getAttribute(\"aria-hidden\")===\"true\")await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();await page.getByLabel(\"Performance seed\",{exact:true}).fill(String(seed));const old=page.url();const response=page.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await page.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();const r=await response;await page.waitForURL(url=>url.toString()!==old&&/\\/performances\\/\\d+$/.test(url.pathname));await page.getByRole(\"heading\",{name:/^Performance \\d+$/,exact:true}).waitFor();await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();measurements.push({seed,wall_ms:performance.now()-begin,status:r.status(),url:page.url()});}await writeFile(R+\"/music/generation-measurements.json\",JSON.stringify(measurements,null,2));await page.screenshot({path:R+\"/music/generated-warm.png\",fullPage:true});return {measurements,text:(await page.locator(\"body\").innerText()).slice(0,1100)};",
+    "ok": false,
+    "error": "TimeoutError: getAttribute: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#performance-setup')\u001b[22m\n",
+    "at": "2026-10-25T22:04:17.110Z"
+  },
+  {
+    "kind": "action",
+    "command": "14-rejection.json",
+    "code": "if(await page.locator(\"#performance-setup\").getAttribute(\"aria-hidden\")===\"true\")await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();const timeline=page.getByRole(\"region\",{name:\"Performance music\",exact:true});await timeline.getByRole(\"button\",{name:\"List\",exact:true}).click();await timeline.getByLabel(\"Detailed Seat\",{exact:true}).selectOption(\"bass-1\");await timeline.locator(\"button[data-note-target]\").first().click();const opener=page.getByRole(\"button\",{name:\"Change Composition\",exact:true});await opener.focus();await page.mouse.wheel(0,180);await page.waitForTimeout(100);const id=page.url().split(\"/\").at(-1);const snapshot=async()=>({id,url:page.url(),source:await page.getByRole(\"region\",{name:\"Next-generation Composition source\",exact:true}).innerText(),selection:await page.locator(\".selection-address\").textContent(),seat:await timeline.getByLabel(\"Detailed Seat\",{exact:true}).inputValue(),scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),document_sha256:sha(await (await fetch(endpoint+\"/api/performances/\"+id+\"/document\")).text())});const before=await snapshot();await writeFile(R+\"/music/rejection-before.json\",JSON.stringify(before,null,2));await page.screenshot({path:R+\"/music/rejection-before.png\"});await page.keyboard.press(\"Enter\");await page.getByRole(\"tab\",{name:\"Import\",exact:true}).click();await page.getByLabel(\"Load Composition JSON\",{exact:true}).setInputFiles({name:\"invalid.json\",mimeType:\"application/json\",buffer:Buffer.from(\"{\")});await page.locator(\".overlay-panel.source\").getByRole(\"alert\").waitFor();const rejection=await page.locator(\".overlay-panel.source\").innerText();await page.screenshot({path:R+\"/music/rejection-error.png\"});await page.keyboard.press(\"Escape\");await page.locator(\".overlay-panel.source\").waitFor({state:\"hidden\"});const after=await snapshot();const focus=await opener.evaluate(e=>e===document.activeElement);await writeFile(R+\"/music/rejection-after.json\",JSON.stringify(after,null,2));const dp=page.waitForEvent(\"download\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();const dl=await dp;await dl.saveAs(R+\"/music/rejection-after.mid\");await page.screenshot({path:R+\"/music/rejection-after.png\"});return {before,rejection,after,focus,unchanged:JSON.stringify(before)===JSON.stringify(after),midi_sha256:sha(await readFile(R+\"/music/rejection-after.mid\"))};",
+    "ok": false,
+    "error": "TimeoutError: getAttribute: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#performance-setup')\u001b[22m\n",
+    "at": "2026-10-25T22:04:32.316Z"
+  },
+  {
+    "kind": "action",
+    "command": "15-generation-measured.json",
+    "code": "const measurements=[];for(const seed of [45,46,47]){if(!(await page.locator(\"#performance-setup\").count())||await page.locator(\"#performance-setup\").getAttribute(\"aria-hidden\")===\"true\")await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();await page.getByLabel(\"Performance seed\",{exact:true}).fill(String(seed));const old=page.url();const response=page.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await page.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();const r=await response;await page.waitForURL(url=>url.toString()!==old&&/\\/performances\\/\\d+$/.test(url.pathname));await page.getByRole(\"heading\",{name:/^Performance \\d+$/,exact:true}).waitFor();await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();measurements.push({seed,wall_ms:performance.now()-begin,status:r.status(),url:page.url()});await writeFile(R+\"/music/generation-measurements.json\",JSON.stringify(measurements,null,2));}await page.screenshot({path:R+\"/music/generated-warm.png\",fullPage:true});return {measurements,text:(await page.locator(\"body\").innerText()).slice(0,1100)};",
+    "ok": true,
+    "wall_ms": 2438.6639759999816,
+    "at": "2026-10-25T22:04:34.855Z"
+  },
+  {
+    "kind": "action",
+    "command": "16-rejection.json",
+    "code": "await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();const timeline=page.getByRole(\"region\",{name:\"Performance music\",exact:true});await timeline.getByRole(\"button\",{name:\"List\",exact:true}).click();await timeline.getByLabel(\"Detailed Seat\",{exact:true}).selectOption(\"bass-1\");await timeline.locator(\"button[data-note-target]\").first().click();const opener=page.getByRole(\"button\",{name:\"Change Composition\",exact:true});await opener.focus();await page.mouse.wheel(0,180);await page.waitForTimeout(100);const id=page.url().split(\"/\").at(-1);const snapshot=async()=>({id,url:page.url(),source:await page.getByRole(\"region\",{name:\"Next-generation Composition source\",exact:true}).innerText(),selection:await page.locator(\".selection-address\").textContent(),seat:await timeline.getByLabel(\"Detailed Seat\",{exact:true}).inputValue(),scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),document_sha256:sha(await (await fetch(endpoint+\"/api/performances/\"+id+\"/document\")).text())});const dp=page.waitForEvent(\"download\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();await (await dp).saveAs(R+\"/music/rejection-before.mid\");await opener.focus();await page.mouse.wheel(0,180);await page.waitForTimeout(100);const before=await snapshot();await writeFile(R+\"/music/rejection-before.json\",JSON.stringify(before,null,2));await page.screenshot({path:R+\"/music/rejection-before.png\"});await page.keyboard.press(\"Enter\");await page.getByRole(\"tab\",{name:\"Import\",exact:true}).click();await page.getByLabel(\"Load Composition JSON\",{exact:true}).setInputFiles({name:\"invalid.json\",mimeType:\"application/json\",buffer:Buffer.from(\"{\")});await page.locator(\".overlay-panel.source\").getByRole(\"alert\").waitFor();const rejection=await page.locator(\".overlay-panel.source\").innerText();await page.screenshot({path:R+\"/music/rejection-error.png\"});await page.keyboard.press(\"Escape\");await page.locator(\".overlay-panel.source\").waitFor({state:\"hidden\"});const after=await snapshot();const focus=await opener.evaluate(e=>e===document.activeElement);await writeFile(R+\"/music/rejection-after.json\",JSON.stringify(after,null,2));const d=page.waitForEvent(\"download\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();await (await d).saveAs(R+\"/music/rejection-after.mid\");await page.screenshot({path:R+\"/music/rejection-after.png\"});return {before,rejection,after,focus,unchanged:JSON.stringify(before)===JSON.stringify(after),midi_sha256_before:sha(await readFile(R+\"/music/rejection-before.mid\")),midi_sha256_after:sha(await readFile(R+\"/music/rejection-after.mid\"))};",
+    "ok": true,
+    "wall_ms": 1557.5643120000022,
+    "at": "2026-10-25T22:04:46.155Z"
+  },
+  {
+    "kind": "action",
+    "command": "17-cold-client.json",
+    "code": "const fresh=await context.browser().newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1,colorScheme:\"dark\"});try{await fresh.route(\"**/*\",route=>new URL(route.request().url()).origin===endpoint?route.continue():route.abort());const p=await fresh.newPage();p.setDefaultTimeout(15000);await p.goto(endpoint+\"/performances\",{waitUntil:\"networkidle\"});await p.getByRole(\"button\",{name:\"Change Composition\",exact:true}).click();await p.getByRole(\"button\",{name:\"Use source\",exact:true}).first().click();await p.getByRole(\"button\",{name:\"Add two Guitars, Bass and Drums\",exact:true}).click();await p.getByLabel(\"Performance seed\",{exact:true}).fill(\"47\");const response=p.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await p.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();const r=await response;await p.waitForURL(/\\/performances\\/\\d+$/);await p.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();const wall_ms=performance.now()-begin;await writeFile(R+\"/music/cold-client-request.json\",r.request().postData());await writeFile(R+\"/music/cold-client-response.json\",await r.body());await p.screenshot({path:R+\"/music/cold-client-success.png\",fullPage:true});return {condition:\"fresh browser context and empty cache; warm server; saved Composition 2\",seed:47,status:r.status(),wall_ms,url:p.url()};}finally{await fresh.close();}",
+    "ok": true,
+    "wall_ms": 1646.2353679999942,
+    "at": "2026-10-25T22:05:28.085Z"
+  },
+  {
+    "kind": "action",
+    "command": "18-reload-export.json",
+    "code": "const before=await readFile(R+\"/music/rejection-after.mid\");const start=performance.now();await page.reload({waitUntil:\"networkidle\"});await page.getByRole(\"heading\",{name:\"Performance 7\",exact:true}).waitFor();const reopen_ms=performance.now()-start;const d=page.waitForEvent(\"download\"),begin=performance.now();await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).click();await (await d).saveAs(R+\"/music/reloaded-export.mid\");const export_ms=performance.now()-begin;const saved=await (await fetch(endpoint+\"/api/performances/7/document\")).text();await writeFile(R+\"/music/reloaded.document\",saved);await page.screenshot({path:R+\"/music/reloaded-ui.png\"});await writeFile(R+\"/music/reloaded-ui.txt\",await page.locator(\"body\").innerText());return {url:page.url(),reopen_ms,export_ms,midi_sha256:sha(await readFile(R+\"/music/reloaded-export.mid\")),same_export:sha(before)===sha(await readFile(R+\"/music/reloaded-export.mid\")),document_sha256:sha(saved)};",
+    "ok": true,
+    "wall_ms": 1178.1500499999966,
+    "at": "2026-10-25T22:05:44.832Z"
+  },
+  {
+    "kind": "action",
+    "command": "19-null-field-control.json",
+    "code": "await page.getByRole(\"button\",{name:\"Edit setup\",exact:true}).click();await page.getByRole(\"button\",{name:\"Change Composition\",exact:true}).click();await page.getByRole(\"tab\",{name:\"Import\",exact:true}).click();const fixture=JSON.parse(await readFile(R+\"/music/api-v2-000.body\",\"utf8\"));for(const section of fixture.composition.sections)section.vocalReservation=null;await writeFile(R+\"/music/null-field-control-input.json\",JSON.stringify(fixture,null,2));await page.getByLabel(\"Load Composition JSON\",{exact:true}).setInputFiles({name:\"stop-time-explicit-null.json\",mimeType:\"application/json\",buffer:Buffer.from(JSON.stringify(fixture))});await page.locator(\".overlay-panel.source\").waitFor({state:\"hidden\"});await page.getByLabel(\"Performance seed\",{exact:true}).fill(\"41\");const response=page.waitForResponse(r=>r.url().endsWith(\"/api/performances/generate\")&&r.request().method()===\"POST\");const begin=performance.now();await page.getByRole(\"button\",{name:\"Generate Performance\",exact:true}).click();const r=await response;await page.waitForURL(url=>/\\/performances\\/\\d+$/.test(url.pathname)&&url.pathname!==\"/performances/7\");await page.getByRole(\"button\",{name:\"Export MIDI\",exact:true}).waitFor();await page.screenshot({path:R+\"/music/null-field-control-success.png\"});return {status:r.status(),wall_ms:performance.now()-begin,url:page.url(),input_change:\"one optional field: sections[0].vocalReservation omitted -> null; same fixture, lineup and seed 41\",alerts:await page.getByRole(\"alert\").allTextContents()};",
+    "ok": false,
+    "error": "TimeoutError: click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Change Composition', exact: true })\u001b[22m\n",
+    "at": "2026-10-25T22:06:15.679Z"
+  },
+  {
+    "kind": "action",
+    "command": "99-stop.json",
+    "code": "return {stopping:true,endpoint,at:new Date().toISOString()};",
+    "ok": true,
+    "wall_ms": 0.40212199999950826,
+    "at": "2026-10-25T22:06:15.782Z"
+  }
+]

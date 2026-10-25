@@ -1,0 +1,400 @@
+{
+  "task": "RUNTIME-REVIEW-01",
+  "provenance": {
+    "sources": {
+      "ramec": {
+        "revision": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+        "regular_files": 1067,
+        "tree_sha256": "b031193926643d9950916284e84d1cd714522bc8d63adf8d923de755778e2a21",
+        "retained_clean": false,
+        "retained_status": "?? .claude/settings.local.json\n",
+        "retained_status_sha256": "3ab8895f206d466e87cc5b9008a83aa4b5f4ba861c536584cfeea7bec0586c82"
+      },
+      "pralice": {
+        "revision": "3e15253ce542d259280b95ce2b9a3262040dc32c",
+        "regular_files": 442,
+        "tree_sha256": "97da65b617c44affc7670239377a174e25ab7711f7110ad609c471dc7c3163a3",
+        "retained_clean": true,
+        "retained_status": "",
+        "retained_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "builds": {
+      "ramec_server": {
+        "path": "ramec/src/server/bin/Release/net10.0",
+        "files": 71,
+        "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+        "verified": true
+      },
+      "ramec_client": {
+        "path": "ramec/src/client/dist",
+        "files": 16,
+        "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+        "verified": true
+      },
+      "pralice_cli": {
+        "path": "pralice/src/Pralice.Cli/bin/Release/net10.0",
+        "files": 13,
+        "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755",
+        "verified": true
+      }
+    },
+    "original_state": {
+      "ramec.sqlite": {
+        "bytes": 421888,
+        "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+      },
+      "ramec.sqlite-wal": {
+        "absent": true
+      },
+      "ramec.sqlite-shm": {
+        "absent": true
+      },
+      "ramec.sqlite-journal": {
+        "absent": true
+      },
+      "trace": {
+        "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f",
+        "hidden_technical_only": true
+      }
+    },
+    "sdk": {
+      "ramec": "10.0.110",
+      "pralice": "10.0.401"
+    },
+    "browser": "Google Chrome for Testing 156.0.8078.4"
+  },
+  "music": {
+    "endpoint": "http://127.0.0.1:37743",
+    "records": [
+      {
+        "kind": "check",
+        "id": "M-01-owned-loopback",
+        "passed": true,
+        "observed": {
+          "endpoint": "http://127.0.0.1:37743",
+          "pid": 555461
+        }
+      },
+      {
+        "kind": "check",
+        "id": "M-02-health",
+        "passed": true
+      },
+      {
+        "kind": "check",
+        "id": "M-03-accepted-before-action",
+        "passed": true
+      },
+      {
+        "kind": "check",
+        "id": "M-04-explicit-unsupported-rejection",
+        "passed": true,
+        "observed": {
+          "issues": [
+            {
+              "code": "format.unsupportedVersion",
+              "path": "/performance/versions/engine",
+              "message": "Expected ensemble28."
+            }
+          ]
+        }
+      },
+      {
+        "kind": "check",
+        "id": "M-05-same-saved-music-after-rejection",
+        "passed": true,
+        "observed": {
+          "before": "92c721c8f87a42bf26d3470295df983ae092668d965088adcff600bf2c34dd7d",
+          "after": "92c721c8f87a42bf26d3470295df983ae092668d965088adcff600bf2c34dd7d"
+        }
+      },
+      {
+        "kind": "check",
+        "id": "M-06-real-pinned-UI",
+        "passed": true,
+        "observed": [
+          {
+            "path": "/assets/index-CMvh_tAN.css",
+            "status": 200,
+            "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177",
+            "expected_sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+          },
+          {
+            "path": "/assets/index-D_mwCNf5.js",
+            "status": 200,
+            "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a",
+            "expected_sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+          },
+          {
+            "path": "/assets/PerformancePage-BV2TpO8j.css",
+            "status": 200,
+            "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff",
+            "expected_sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+          },
+          {
+            "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+            "status": 200,
+            "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3",
+            "expected_sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+          },
+          {
+            "path": "/assets/PerformancePage-puQIFfH9.js",
+            "status": 200,
+            "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba",
+            "expected_sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+          },
+          {
+            "path": "/assets/document.worker-CMZuB1bT.js",
+            "status": 200,
+            "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a",
+            "expected_sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+          }
+        ]
+      },
+      {
+        "kind": "browser",
+        "version": "156.0.8078.4",
+        "fresh_context": true,
+        "permissions": [],
+        "dimensions": {
+          "width": 1440,
+          "height": 1000,
+          "scale": 1,
+          "zoomScale": 1
+        },
+        "off_origin_blocked": []
+      },
+      {
+        "kind": "check",
+        "id": "M-07-selected-UI-export-preserved",
+        "passed": true
+      },
+      {
+        "kind": "check",
+        "id": "M-08-no-page-errors",
+        "passed": true,
+        "observed": []
+      },
+      {
+        "kind": "server-stopped",
+        "pid": 555461,
+        "exit": 0,
+        "ended": "2026-10-25T19:48:36.742Z"
+      },
+      {
+        "kind": "state-preservation",
+        "original_database": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a",
+        "disposable_database": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a",
+        "original_trace": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+      }
+    ],
+    "server_pid": 555461,
+    "browser_pid": 555591
+  },
+  "prototype": {
+    "actor": "crown",
+    "checks": [
+      {
+        "id": "P-01-runtime-completed",
+        "passed": true,
+        "observed": {
+          "exit": 0
+        }
+      },
+      {
+        "id": "P-02-player-precondition",
+        "passed": true,
+        "observed": [
+          {
+            "actor": "crown",
+            "day": 0,
+            "treasury": 100
+          },
+          {
+            "actor": "crown",
+            "day": 0,
+            "treasury": 100
+          },
+          {
+            "actor": "crown",
+            "day": 1,
+            "treasury": 100
+          }
+        ]
+      },
+      {
+        "id": "P-03-queued-then-resolved-rejection",
+        "passed": true,
+        "observed": {
+          "queued_index": 3174,
+          "rejected_index": 6056
+        }
+      },
+      {
+        "id": "P-04-observed-ledger-preservation",
+        "passed": true,
+        "observed": [
+          {
+            "actor": "crown",
+            "day": 0,
+            "treasury": 100
+          },
+          {
+            "actor": "crown",
+            "day": 0,
+            "treasury": 100
+          },
+          {
+            "actor": "crown",
+            "day": 1,
+            "treasury": 100
+          }
+        ]
+      },
+      {
+        "id": "P-05-unaccepted-proposal-absent",
+        "passed": true
+      },
+      {
+        "id": "P-06-valid-tamper-preview-completed",
+        "passed": true,
+        "observed": {
+          "exit": 0
+        }
+      },
+      {
+        "id": "P-06a-positive-legal-amount-control",
+        "passed": true
+      },
+      {
+        "id": "P-05a-absent-before-and-after",
+        "passed": true
+      },
+      {
+        "id": "P-03a-no-resolution-before-advance",
+        "passed": true
+      },
+      {
+        "id": "P-07-intact-input-preserved",
+        "passed": true
+      },
+      {
+        "id": "P-08-intact-outcome-equivalence",
+        "passed": true
+      },
+      {
+        "id": "P-07-tampered-input-preserved",
+        "passed": true
+      },
+      {
+        "id": "P-09-tampered-detected",
+        "passed": true,
+        "observed": {
+          "exit": 1,
+          "stderr": "Error validating trace file: [/tmp/c15-runtime-review-01-WBC0gI/prototype/tampered-hidden.jsonl:line 12:day 0:section proposals] World checkpoint mismatch at section 'proposals': expected SHA-256 '9c85de96f13b95d11b654d5f535bcde2b7842e31748b375875c9ecb200bb1884', actual '13fd035263743c1350a4d13e4820b5005270995b3d82a4d8ce344972311edc07'.\n"
+        }
+      },
+      {
+        "id": "P-07-truncated-input-preserved",
+        "passed": true
+      },
+      {
+        "id": "P-09-truncated-detected",
+        "passed": true,
+        "observed": {
+          "exit": 1,
+          "stderr": "Error validating trace file: [/tmp/c15-runtime-review-01-WBC0gI/prototype/truncated-hidden.jsonl:line 26:day 3] Truncated trace file: missing completion record at end of file.\n"
+        }
+      },
+      {
+        "id": "P-10-original-trace-preserved",
+        "passed": true
+      }
+    ],
+    "tamper": {
+      "amount_before": 40,
+      "amount_after": 41,
+      "recorded_payload_and_command_data_changed_together": true
+    },
+    "replay": {
+      "intact": {
+        "exit": 0,
+        "signal": null,
+        "input_unchanged": true
+      },
+      "tampered": {
+        "exit": 1,
+        "signal": null,
+        "input_unchanged": true
+      },
+      "truncated": {
+        "exit": 1,
+        "signal": null,
+        "input_unchanged": true
+      }
+    }
+  },
+  "preservation": {
+    "sources": {
+      "ramec": {
+        "unchanged_original_files": 1067,
+        "retained_status_unchanged": true,
+        "commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a"
+      },
+      "pralice": {
+        "unchanged_original_files": 442,
+        "retained_status_unchanged": true,
+        "commit": "3e15253ce542d259280b95ce2b9a3262040dc32c"
+      }
+    },
+    "builds": {
+      "ramec_server": {
+        "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+        "unchanged": true
+      },
+      "ramec_client": {
+        "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+        "unchanged": true
+      },
+      "pralice_cli": {
+        "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755",
+        "unchanged": true
+      }
+    },
+    "state": {
+      "ramec.sqlite": {
+        "bytes": 421888,
+        "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+      },
+      "ramec.sqlite-wal": {
+        "absent": true
+      },
+      "ramec.sqlite-shm": {
+        "absent": true
+      },
+      "ramec.sqlite-journal": {
+        "absent": true
+      },
+      "trace": {
+        "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f",
+        "hidden_technical_only": true
+      }
+    },
+    "runtime_processes": {
+      "server": 555461,
+      "browser": 555591,
+      "ps_exit": 1,
+      "no_process_rows": true,
+      "scope": "host-context check; handles already closed, no kill by PID"
+    }
+  },
+  "findings": [],
+  "limitations": [
+    "No MIDI audition/audio rendering/capture/listening",
+    "No corrected build or regression claim",
+    "No graphical gameplay/multiplayer/enjoyment/balance acceptance",
+    "Delayed-recognition expiry excluded",
+    "No native Tester/worker/model launch or final combined Ruach acceptance"
+  ]
+}

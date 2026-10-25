@@ -1,0 +1,97 @@
+[
+  {
+    "step": 1,
+    "command": "status",
+    "output": "Match ID:          frontier-compact\nScenario:          frontier-compact\nActive Actor:      crown\nSimulation Day:    0\nKnown Treasury:    100\nActive Agendas:    0\nOpen Cases:        1\nAccess Grants:     0\nRecognized Claims: 1\nDelivered Reports: 15\nDaily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.\nOutgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):\n  - council: Available; next legal day 0\n  - league: Available; next legal day 0\n  - march: Available; next legal day 0\n  - officers: Available; next legal day 0\n  - vale: Available; next legal day 0\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 100; currently covered.\n\n"
+  },
+  {
+    "step": 2,
+    "command": "outcomes",
+    "output": "Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):\n\n"
+  },
+  {
+    "step": 3,
+    "command": "proposals",
+    "output": "No proposals visible to actor 'crown'.\n\n"
+  },
+  {
+    "step": 4,
+    "command": "propose prop-qa-zero case-westbank march transfer:crown:march:0",
+    "output": "Input error: Amounts must be positive whole units.\n\n"
+  },
+  {
+    "step": 5,
+    "command": "status",
+    "output": "Match ID:          frontier-compact\nScenario:          frontier-compact\nActive Actor:      crown\nSimulation Day:    0\nKnown Treasury:    100\nActive Agendas:    0\nOpen Cases:        1\nAccess Grants:     0\nRecognized Claims: 1\nDelivered Reports: 15\nDaily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.\nOutgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):\n  - council: Available; next legal day 0\n  - league: Available; next legal day 0\n  - march: Available; next legal day 0\n  - officers: Available; next legal day 0\n  - vale: Available; next legal day 0\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 100; currently covered.\n\n"
+  },
+  {
+    "step": 6,
+    "command": "outcomes",
+    "output": "Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):\n\n"
+  },
+  {
+    "step": 7,
+    "command": "proposals",
+    "output": "No proposals visible to actor 'crown'.\n\n"
+  },
+  {
+    "step": 8,
+    "command": "propose prop-qa-afterzero case-westbank march transfer:crown:march:40 recognize:march:westbank-claim",
+    "output": "  Menu: Case case-westbank, crown -> march; Expiry Day: 4\n  Counterpart selection required from march before remaining domestic consent.\n  Option 1:\n    - Immediate transfer: crown pays march 40 gold\n    - Recognition: march recognizes claim westbank-claim\n  Proposal Preview:\n    Immediate Payments:\n      - crown pays march 40 gold\n    Direct Object Changes:\n      - Recognize claim 'westbank-claim' by 'march'.\n    Known Required Consents: [council, crown, march]\n    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.\n    Feasibility: Feasible\n    Delta Utility (Observer): 5\n    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.\n    Unknown: Status quo access grant 'port-access' is unknown in observation.\n    Counterpart estimate: OpposedByExplicitEvidence — Explicit observed positions from 'march' oppose terms in the proposed package.\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 100; currently covered.\n  Delivered case positions (declared context, not private acceptance thresholds):\n    - council: Positive Claim:westbank-claim, published day 0\n    - league: Positive AccessRight:port-access, published day 0\n    - march: Negative Claim:westbank-claim, published day 0\n    - officers: Positive Claim:westbank-claim, published day 0\n    - vale: Positive Actor:vale, published day 0\n  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.\nCommand 'cmd-propose-1' status: Queued (Success) - Command queued successfully.\n\n"
+  },
+  {
+    "step": 9,
+    "command": "propose prop-qa-second case-westbank march transfer:crown:march:5",
+    "output": "  Menu: Case case-westbank, crown -> march; Expiry Day: 4\n  Counterpart selection required from march before remaining domestic consent.\n  Option 1:\n    - Immediate transfer: crown pays march 5 gold\n  Proposal Preview:\n    Immediate Payments:\n      - crown pays march 5 gold\n    Known Required Consents: [crown, march]\n    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.\n    Feasibility: Feasible\n    Delta Utility (Observer): -5\n    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.\n    Unknown: Status quo access grant 'port-access' is unknown in observation.\n    Counterpart estimate: Unknown — Observed positions from 'march' do not directly determine acceptance for this package.\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 100; currently covered.\n  Delivered case positions (declared context, not private acceptance thresholds):\n    - council: Positive Claim:westbank-claim, published day 0\n    - league: Positive AccessRight:port-access, published day 0\n    - march: Negative Claim:westbank-claim, published day 0\n    - officers: Positive Claim:westbank-claim, published day 0\n    - vale: Positive Actor:vale, published day 0\n  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.\nCommand 'cmd-propose-2' status: Rejected (DailyCommandCapExceeded) - Principal 'crown' has already submitted a command for day 0.\n\n"
+  },
+  {
+    "step": 10,
+    "command": "status",
+    "output": "Match ID:          frontier-compact\nScenario:          frontier-compact\nActive Actor:      crown\nSimulation Day:    0\nKnown Treasury:    100\nActive Agendas:    0\nOpen Cases:        1\nAccess Grants:     0\nRecognized Claims: 1\nDelivered Reports: 15\nDaily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.\nOutgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):\n  - council: Available; next legal day 0\n  - league: Available; next legal day 0\n  - march: Available; next legal day 0\n  - officers: Available; next legal day 0\n  - vale: Available; next legal day 0\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 100; currently covered.\n\n"
+  },
+  {
+    "step": 11,
+    "command": "outcomes",
+    "output": "Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):\n\n"
+  },
+  {
+    "step": 12,
+    "command": "proposals",
+    "output": "No proposals visible to actor 'crown'.\n\n"
+  },
+  {
+    "step": 13,
+    "command": "advance 3",
+    "output": "Advanced simulation by 3 day(s). Current Day: 3.\nNewly Delivered Reports:\n  - Report rep-2 [Day 1]: Source crown -> Proposal Published: ID prop-qa-afterzero, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Immediate transfer: crown pays march 40 gold; Recognition: march recognizes claim westbank-claim\n  - Report rep-4 [Day 1]: Source league -> Proposal Published: ID prop-league-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Access: crown grants league right port-access on subject westbank | Option 2: Access: crown grants league right port-access on subject westbank; Future promise: league promises crown 10 gold due day 5 | Option 3: Access: crown grants league right port-access on subject westbank; Immediate transfer: league pays crown 10 gold\n  - Report rep-6 [Day 1]: Source march -> Proposal Published: ID prop-march-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Recognition: march recognizes claim westbank-claim; Future promise: crown promises march 40 gold due day 5 | Option 2: Recognition: march recognizes claim westbank-claim; Immediate transfer: crown pays march 40 gold\n  - Report rep-8 [Day 1]: Source vale -> Protection Called (ID: vale-protection, Promisor: crown, Beneficiary: vale, Amount: 20)\n  - Report rep-9 [Day 1]: Source vale -> ObjectRevisionAssertion\n  - Report rep-10 [Day 1]: Source vale -> CommitmentSnapshotAssertion\n  - Report rep-11 [Day 1]: Source vale -> ObjectRevisionAssertion\n  - Report rep-12 [Day 1]: Source vale -> CommitmentSnapshotAssertion\n  - Report rep-14 [Day 2]: Source march -> Proposal Selected: ID prop-qa-afterzero, revision 0, option 1, status PendingApproval, approvals [crown, march]\n  - Report rep-16 [Day 2]: Source march -> Proposal Approved: ID prop-qa-afterzero, revision 0, actor march, status PendingApproval, approvals [crown, march]\n  - Report rep-18 [Day 2]: Source crown -> Commitment Settled (ID: duty-vale-protection-d0, Promisor: crown, Beneficiary: vale, Amount: 20)\n  - Report rep-19 [Day 2]: Source crown -> ObjectRevisionAssertion\n  - Report rep-20 [Day 2]: Source crown -> CommitmentSnapshotAssertion\n  - Report rep-21 [Day 2]: Source crown -> ObjectRevisionAssertion\n  - Report rep-22 [Day 2]: Source crown -> CommitmentSnapshotAssertion\n  - Report rep-23 [Day 2]: Source crown -> ActorTreasuryAssertion\n  - Report rep-25 [Day 3]: Source march -> ObjectRevisionAssertion\n  - Report rep-26 [Day 3]: Source march -> ClaimRecognitionAssertion\n  - Report rep-28 [Day 3]: Source council -> Proposal Ratified: ID prop-qa-afterzero, revision 0, actor council, status Ratified, approvals [council, crown, march]\n  - Report rep-29 [Day 3]: Source crown -> ActorTreasuryAssertion\n\n"
+  },
+  {
+    "step": 14,
+    "command": "inspect prop-qa-afterzero",
+    "output": "[Proposal Inspection] ID: prop-qa-afterzero\n  Case ID:           case-westbank\n  Proposer:          crown\n  Counterpart:       march\n  Status:            Ratified (Revision 0)\n  Expiry Day:        4\n  Options:           1\n  Option 1 [SELECTED]:\n    - Immediate transfer: crown pays march 40 gold\n    - Recognition: march recognizes claim westbank-claim\n    Required Consents: [council, crown, march]\n    Recorded Approvals: [council, crown, march]\n    Remaining Consents: []\n  Delivered case positions (declared context, not private acceptance thresholds):\n    - council: Positive Claim:westbank-claim, published day 0\n    - league: Positive AccessRight:port-access, published day 0\n    - march: Negative Claim:westbank-claim, published day 0\n    - officers: Positive Claim:westbank-claim, published day 0\n    - vale: Positive Actor:vale, published day 0\n\n"
+  },
+  {
+    "step": 15,
+    "command": "inspect prop-qa-zero",
+    "output": "Unavailable subject: 'prop-qa-zero' is not known to actor 'crown'.\n\n"
+  },
+  {
+    "step": 16,
+    "command": "inspect prop-qa-second",
+    "output": "Unavailable subject: 'prop-qa-second' is not known to actor 'crown'.\n\n"
+  },
+  {
+    "step": 17,
+    "command": "status",
+    "output": "Match ID:          frontier-compact\nScenario:          frontier-compact\nActive Actor:      crown\nSimulation Day:    3\nKnown Treasury:    40\nActive Agendas:    0\nOpen Cases:        1\nAccess Grants:     0\nRecognized Claims: 1\nDelivered Reports: 35\nDaily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.\nOutgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):\n  - council: Available; next legal day 3\n  - league: Available; next legal day 3\n  - march: Available; next legal day 3\n  - officers: Available; next legal day 3\n  - vale: Available; next legal day 3\n    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):\n      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.\n      Current confirmed treasury: 40; currently covered.\n\n"
+  },
+  {
+    "step": 18,
+    "command": "outcomes",
+    "output": "Proposal Submission Outcomes for 'crown' (resolved feedback, not queued acknowledgement):\n  Command 'cmd-propose-1' status: Resolved (Success) - Proposal 'prop-qa-afterzero' submitted successfully.\n    Actual attempt: Published menu prop-qa-afterzero\n    Attempted menu: Case case-westbank, crown -> march, expiry day 4\n    Option 1:\n    - Immediate transfer: crown pays march 40 gold\n    - Recognition: march recognizes claim westbank-claim\n\n"
+  },
+  {
+    "step": 19,
+    "command": "quit",
+    "output": "Exiting session.\n"
+  }
+]

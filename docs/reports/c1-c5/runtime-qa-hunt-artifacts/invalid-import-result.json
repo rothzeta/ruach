@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "wall_ms": 1557.3878039999981,
+  "value": {
+    "before": {
+      "id": "7",
+      "url": "http://127.0.0.1:38007/performances/7",
+      "source": "C Major · 4/4\n\nSaved · Next-generation source: Composition 2\n\nC Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop\n\nhandwritten · rev 1 · Seed used: 0\n\nChange Composition\nPaste or edit Composition JSON",
+      "selection": " Interval interval/0/161280 · Note bass-1:span:0-161280:span:161280-322560:occurrence:riff-c:bass-1:placement:1:line:0:0",
+      "seat": "bass-1",
+      "scroll": {
+        "x": 0,
+        "y": 180
+      },
+      "document_sha256": "f5522e0485b40cfd851caca87119e1fca73838b98bf46bfeadd79a2f13f0c269"
+    },
+    "rejection": "Choose Composition source\nClose\nSaved\nImport\nTest pieces\n\nChoose a saved Composition, import JSON or use a test piece from the server catalog. To use the Composer, generate a Composition on the Composition page and select Perform. Validated meters, tonal-centre changes, Anacrusis and all Tempo characters with Set, Ramp and Modulate are supported. Use one or two standard-tuned Guitars, one Bass and one Drums. Metric layers remain unsupported. Generation support is checked by the server. Explicit Recurrences offer Recall alternatives. Eligible State, Sequence, Fragment and Vary occurrences offer alternatives within their containing decision interval. Occurrences that cross decision boundaries remain ineligible.\n\nLoad Composition JSON\n\ncontract: Expected property name or '}' in JSON at position 1 (line 1 column 2)\n\nThe current Composition source remains available.\n\nRetry\nChoose Composition source\nCancel",
+    "after": {
+      "id": "7",
+      "url": "http://127.0.0.1:38007/performances/7",
+      "source": "C Major · 4/4\n\nSaved · Next-generation source: Composition 2\n\nC Major · 4/4 · grouping 1+1+1+1 · Moderate tempo · 8 bars · cold stop\n\nhandwritten · rev 1 · Seed used: 0\n\nChange Composition\nPaste or edit Composition JSON",
+      "selection": " Interval interval/0/161280 · Note bass-1:span:0-161280:span:161280-322560:occurrence:riff-c:bass-1:placement:1:line:0:0",
+      "seat": "bass-1",
+      "scroll": {
+        "x": 0,
+        "y": 180
+      },
+      "document_sha256": "f5522e0485b40cfd851caca87119e1fca73838b98bf46bfeadd79a2f13f0c269"
+    },
+    "focus": true,
+    "unchanged": true,
+    "midi_sha256_before": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1",
+    "midi_sha256_after": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1"
+  }
+}

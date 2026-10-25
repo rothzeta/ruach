@@ -1,0 +1,31 @@
+
+tests/launch-transport.test.ts:
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=false [111.62ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=true [106.95ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=false [116.79ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=true [101.24ms]
+(pass) failed native exec removes its receipt and withholds literal data [34.30ms]
+
+tests/worker.test.ts:
+(pass) long literal native argv crosses the canonical PTY and preserves role, config, permissions and native PATH [880.39ms]
+(pass) normal argv still starts through a canonical PTY without private bootstrap material [421.03ms]
+(pass) LR-01: public worker preserves prepared role and permissions after ordinary shell startup prepends PATH [716.17ms]
+(pass) large startup retains private argv material on splitFailure without resubmission [440.30ms]
+(pass) large startup retains private argv material on startFailure without resubmission [622.07ms]
+(pass) large startup retains private argv material on startBlocked without resubmission [732.60ms]
+(pass) missing post-initialization launch capability fails before launch-space mutation [281.78ms]
+(pass) missing Bun execve support fails before launch-space mutation [260.30ms]
+(pass) LR-01: startup cannot redirect the prepared launch to a different native executable [680.04ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: bypassBinding [610.35ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: removeReceipt [659.15ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: forgeReceipt [659.73ms]
+(pass) large startup fails closed when ready belongs to an unconfirmed launch: wrongForeground [734.09ms]
+(pass) private binding failure retains material and submits no native start: bootstrapSetupFailure [486.78ms]
+(pass) private binding failure retains material and submits no native start: bootstrapWaitFailure [566.03ms]
+(pass) large startup supports a temp directory containing the PATH delimiter without PATH dispatch [722.07ms]
+
+ 21 pass
+ 158 filtered out
+ 0 fail
+ 161 expect() calls
+Ran 21 tests across 2 files. [9.99s]

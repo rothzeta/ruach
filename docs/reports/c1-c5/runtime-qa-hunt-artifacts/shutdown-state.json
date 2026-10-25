@@ -1,0 +1,24 @@
+{
+  "server_pid": 734353,
+  "server_handle_exit": 0,
+  "browser_context_close_awaited": true,
+  "private_db": {
+    "path": "/tmp/c15-runtime-qa-hunt-01-sFconW/state/music.sqlite",
+    "sha256": "e75de83041f2f2088faca049fecfbc14afa14608e605afc0955742f8a484736f"
+  },
+  "trace_hashes": [
+    {
+      "path": "/tmp/c15-runtime-qa-hunt-01-sFconW/trace/ratified-hidden.jsonl",
+      "sha256": "15bf18051e1f180b8c3150b0a64a372c5d984a1b5ff402763fc311ada40d1863"
+    },
+    {
+      "path": "/tmp/c15-runtime-qa-hunt-01-sFconW/trace/invalid-hidden.jsonl",
+      "sha256": "43eb0738fcfa8329c8d0b8aac770d718433ad50bd507785ea1de67c84b176943"
+    },
+    {
+      "path": "/tmp/c15-runtime-qa-hunt-01-sFconW/trace/pending-hidden.jsonl",
+      "sha256": "b2e0d0db642073ccdd88040e4fd483ed22d63765d40c9d3c85524c8e01ed1773"
+    }
+  ],
+  "note": "Browser helper overall exit 1 from unhandled diagnostic response-wait timeout; explicit context/server finally completed and server exit 0. ps absence is supplementary; handle shutdown is primary."
+}

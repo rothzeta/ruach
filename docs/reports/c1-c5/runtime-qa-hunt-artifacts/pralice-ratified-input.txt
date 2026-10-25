@@ -1,0 +1,27 @@
+status
+outcomes
+propose preview case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+propose prop-qa-terminal case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+status
+outcomes
+advance 3
+inspect prop-qa-terminal
+status
+commitments
+outcomes
+reject prop-qa-terminal
+status
+inspect prop-qa-terminal
+advance 1
+inspect prop-qa-terminal
+status
+outcomes
+counter prop-qa-terminal transfer:crown:march:10
+status
+inspect prop-qa-terminal
+advance 1
+inspect prop-qa-terminal
+status
+outcomes
+reports
+quit

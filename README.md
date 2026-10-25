@@ -1,11 +1,11 @@
 # Ruach
 
-Current release: **0.6.1**. See the [changelog](CHANGELOG.md) and [operations guide](docs/operations.md) for installation, consumer launches and troubleshooting.
+Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). Source review, native advisory validation, product correction/retest and final combined acceptance remain open; this preparation does not authorize publication.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
-- `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer and Librarian contracts.
-- `skills/`: testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge workflows.
+- `agents/`: Coordinator, Architect, Scout, Implementer, Reviewer, Tester and Librarian contracts.
+- `skills/`: debugging, runtime testing, testing, simplification, structured handoffs, Herdr launch preparation, explicit harness evaluation, Librarian upkeep and Coordinator-only feature/knowledge/council/bugfix/QA/hunt workflows.
 - `docs/`: [operations guide](docs/operations.md), [native packaging and parity evidence](docs/native-parity.md), [examples](docs/examples/), [coordination ownership](docs/coordination.md), [roadmap](docs/roadmap.md) and the source/consumer ownership [ADR](docs/adr/0001-source-and-consumer-ownership.md).
 - `scripts/`: explicit pinned snapshot installation and resource checks.
 - `config/agent-routing/`: routing policy for developing Ruach itself.
@@ -21,12 +21,14 @@ Pick the route that matches what you want to do. Each route installs different t
 | Job | Route | Installs | Still needs |
 | --- | --- | --- | --- |
 | Use a technique (testing, simplification, handoff format) in any harness | [Standalone skills](#standard-installation) through the Skills CLI | Skill folders and native discovery links | Bun and a local `bun install --frozen-lockfile` for the executable skills (`ruach-handoff`, `ruach-herdr`, `ruach-harness-eval`). No role files. |
-| Work as a named role in Claude Code in your current terminal | [Direct native role](#standard-installation) through the Claude plugin | All skills and the six named agents (`ruach:coordinator`, `ruach:implementer`, …) | Claude Code. Nested skill dependencies are not installed automatically. No background workers. |
+| Work as a named role in Claude Code in your current terminal | [Direct native role](#standard-installation) through the Claude plugin | All skills and named agents (`ruach:coordinator`, `ruach:implementer`, …) | Claude Code. Nested skill dependencies are not installed automatically. No background workers. |
 | Coordinate separate workers in background worktrees | [Coordinated Herdr use](#install-a-pinned-project-snapshot) with a pinned project snapshot | Roles and skills together under `.agents/`, with a manifest for integrity checks | Bun, Git, Herdr, the selected native harness and account, consumer-owned routing or a direct model, and nested skill dependencies. |
 
 The snapshot route is for projects that want an auditable, committed installation. Start with the smallest route that covers the job; you can add another later. Avoid installing the same skills twice into one harness. The [lifecycle guide](docs/operations.md#lifecycle-inspect-upgrade-and-remove) covers inspecting, upgrading and removing an installation. To check, read-only, whether a copy can serve a route, run `just ready --route skill|native|herdr` from a checkout or `bun .agents/ruach-install.ts ready --route native` from a snapshot ([readiness](docs/operations.md#check-readiness)). If a snapshot install is interrupted or fails, see [failures and recovery](docs/operations.md#snapshot-installation-failures-and-recovery).
 
 To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
+
+For a known failure, use [debugging](skills/ruach-debugging/SKILL.md) with the [bugfix assignment specimen](docs/examples/bugfix-assignment.md). For runtime evidence, assign the [Tester](agents/tester.md) with [runtime testing](skills/ruach-runtime-testing/SKILL.md) and its [QA specimen](docs/examples/runtime-qa-assignment.md). The Coordinator owns [council](skills/ruach-workflow-council/SKILL.md), [bugfix](skills/ruach-workflow-bugfix/SKILL.md), [QA](skills/ruach-workflow-qa/SKILL.md) and [bounded hunt](skills/ruach-workflow-bug-hunt/SKILL.md) orchestration; workers receive bounded assignments. The [council member specimen](docs/examples/council-member-assignment.md) does not establish an independent execution boundary. See the roadmap for demonstrated results and remaining gates; static [capability cases](evals/ruach-capabilities/) are preparation, not behavioral proof.
 
 ## Design and testing expectations
 
@@ -38,7 +40,7 @@ The [Architect](agents/architect.md) plans the smallest complete increment that 
 
 Ruach does not ship model policy. A consumer declares it in three files under `.agents/` of its repository (the default; `--catalogs DIR` selects another directory). The schema and validation rules are in the [routing reference](skills/ruach-herdr/references/routing.md); Ruach's own [development catalogs](config/agent-routing/) are a working example.
 
-- `models.yaml`: each model ID maps to a `harness` (`claude`, `codex`, `opencode`, `pi` or `goose`; other registered harnesses fail at preparation) and a `native_model`. Pi and Goose use `provider/model`; Goose also requires a Herdr version advertising its kind.
+- `models.yaml`: each model ID maps to a `harness` (`claude`, `codex`, `opencode`, `pi`, `goose` or non-Coordinator `agy`; other registered harnesses fail at preparation) and a `native_model`. Pi and Goose use `provider/model`; Goose also requires a Herdr version advertising its kind. Agy preparation is pinned to the verified 1.4.7 interface; see its [capability limits](skills/ruach-herdr/references/agy.md).
 - `routing.yaml`: each route ID names a model and an `effort`.
 - `roles.yaml`: each role names a `preferred` route and an optional list of `alternatives`.
 
@@ -70,6 +72,8 @@ Ruach follows the [Agent Skills specification](https://agentskills.io/specificat
 
 Install the released skills globally for Codex and Claude Code:
 
+These remote examples remain pinned to published **0.6.1**. The resource navigation above describes the prepared 0.7.0 source, which adds Tester, six skills and bounded Agy preparation. No 0.7.0 tag or remote installation is available from this preparation; review a committed candidate locally with the installer's explicit `--revision SHA` instead.
+
 ```sh
 bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --global --agent codex --agent claude-code --skill '*'
 ```
@@ -84,7 +88,7 @@ bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --glob
 
 Skill discovery works independently of Herdr launch support. See the [Pi and Goose launch prerequisites](docs/operations.md#pi-and-goose-harnesses).
 
-For Claude Code, install the native plugin to expose all Ruach skills and six named agents together:
+For Claude Code, install the native plugin to expose Ruach skills and named agents together:
 
 ```sh
 claude plugin marketplace add rothzeta/ruach#v0.6.1 --scope user
@@ -135,7 +139,7 @@ bun skills/ruach-herdr/scripts/worker.ts start --name ruach-goose --role impleme
 just architect ruach-designer --placement pane
 ```
 
-The Coordinator and Architect prefer Claude Opus 5.5 at high effort; other roles follow [Ruach's development catalogs](config/agent-routing/roles.yaml), initially matching Brainlab's routes. These catalogs are local development policy and are not installed into consumers. The wrapper resolves permission policy by selected harness: Claude and Codex require `auto-review`, OpenCode requires `inherit`; conflicting requests fail before launch. Other harnesses require an explicit development policy decision. Preflight stderr identifies the effective mode and policy source; the portable launcher still defaults to `inherit`. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. When launched from a Herdr workspace of the same repository, the worktree is registered as a Herdr linked worktree of that workspace; otherwise it gets a standalone workspace. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md).
+The Coordinator and Architect prefer Claude Opus 5.5 at high effort; existing engineering roles retain explicit Codex high-effort alternatives, and Tester prefers Codex high. Scout alone has an explicit `gemini-3.8-flash-medium` advisory alternative. These [development catalogs](config/agent-routing/roles.yaml) are local policy and are not installed into consumers. The wrapper resolves permission policy by selected harness: Claude and Codex require `auto-review`; OpenCode and Agy require `inherit`. Agy's route uses portable effort `auto` because native medium is encoded in its exact model slug; no separate effort flag is sent. Conflicting requests fail before launch; other harnesses need an explicit development policy decision. Preflight stderr identifies the effective mode and policy source; the portable launcher still defaults to `inherit`. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. When launched from a Herdr workspace of the same repository, the worktree is registered as a Herdr linked worktree of that workspace; otherwise it gets a standalone workspace. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md). Catalog selection does not confer authority for a model call or establish native advisory acceptance.
 
 For `just architect`, the default worker name is `ruach-architect`, checkout `/path/to/ruach-worktrees/ruach-architect` next to this repo, branch `ruach/ruach-architect`, and base committed HEAD. Choose a fresh worker name for each launch; existing branches and paths are rejected. Uncommitted source edits are not copied. Use `--worktree DIR`, `--branch NAME` and `--base REF` to customize the checkout. Native settings are read again from the actual worker checkout before startup. `--placement pane` explicitly uses the supplied source cwd and requires a caller pane ID.
 
@@ -152,7 +156,7 @@ A native trust or onboarding dialog returns `action: awaiting-input` with `ready
 
 Use `BUN_BIN` to override Bun, otherwise Just uses `~/.bun/bin/bun` when present, then `bun` on PATH. `bun run agent-routing -- resolve coordinator` is also available. `--root DIR` selects another Ruach worktree's routing catalogs and working directory while retaining the launcher and canonical resources from this checkout.
 
-Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude/OpenCode and supplies their source location to Codex. Launch commands do not perform a global installation. OpenCode requires v2.1.4+ within major 2; use `--permissions inherit` and a model from its native catalog. Explicit effort selects an offered model variant; `auto` uses its default. See the [OpenCode adapter contract](skills/ruach-herdr/references/adapters.md#opencode-v2).
+Global discovery uses the standard installation commands above. The source launcher injects the selected role from its canonical source, exposes source skills privately for Claude/OpenCode/Agy and supplies their source location to Codex. Launch commands do not perform a global installation. OpenCode requires v2.1.4+ within major 2; use `--permissions inherit` and a model from its native catalog. Explicit effort selects an offered model variant; `auto` uses its default. See the [OpenCode adapter contract](skills/ruach-herdr/references/adapters.md#opencode-v2).
 
 ## Verify
 
@@ -165,7 +169,7 @@ bun install --frozen-lockfile
 bun test --timeout 30000   # Herdr suite only: real processes need more than the 5 s default
 ```
 
-Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex/OpenCode/Pi/Goose preparation is supported subject to runtime gates; DSH, OMP and Agy deliberately fail before mutation for unsupported/unverified capabilities. Pi requires v1.4+ within major 1; Goose requires v1.56+ within major 1 and Herdr support for `goose` (absent in the inspected Herdr). Both use `--permissions inherit`; Goose effort must be omitted or `auto`. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.
+Bun is required for executable skill suites. Herdr tests require local socket binding. Claude/Codex/OpenCode/Pi/Goose and bounded non-Coordinator Agy preparation are supported subject to runtime gates; DSH and OMP fail before mutation for unsupported/unverified capabilities. Pi requires v1.4+ within major 1; Goose requires v1.56+ within major 1 and Herdr support for `goose` (absent in the inspected Herdr). Both use `--permissions inherit`; Goose effort must be omitted or `auto`. Agy requires exactly 1.4.7 and inherited permissions; its [source review and actual linked advisory gates](docs/roadmap.md#c2--gemini-workeradvisor-adapter) remain open. No Agy continuation or ambient/global workflow exclusion is claimed. See [Herdr prerequisites and limits](skills/ruach-herdr/SKILL.md). Fake CLI tests and static checks do not establish model/account availability, live prompt discovery or behavioral quality. Librarian [evaluation cases](evals/ruach-librarian/README.md) are prepared for a separate blind evaluator.
 
 ## External Coordinator waiting
 
@@ -174,5 +178,7 @@ The Coordinator parks with no wait timer or idle model calls when only delegated
 ## Releases
 
 Use Semantic Versioning for the repository bundle. Update the root `package.json` version, `.claude-plugin/plugin.json` version, marketplace metadata version, the current release and installation examples in this README, and `CHANGELOG.md` together. Skill-local private package versions remain independent implementation-package metadata.
+
+An untagged preparation synchronizes metadata and records open gates before independent review; it is not publication or installation authority. Keep remote examples on the latest published version until separately authorized delivery publishes the new tags. Inspect a concrete preparation using `--revision` in a new temporary consumer. Refresh outstanding source/live/product evidence and independently review the exact combined candidate before assigning delivery.
 
 Run `just release-check`, `just check`, the root tests and affected skill suites before committing. Create an annotated `vMAJOR.MINOR.PATCH` tag on the release commit. `claude plugin tag .` creates the additional native `ruach--vMAJOR.MINOR.PATCH` tag used for Claude plugin dependency-version resolution; both tags name the same commit. Never move or overwrite a released tag. Remote publication is a separate explicit step.

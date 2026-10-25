@@ -1,0 +1,1465 @@
+{
+  "assignment": "RUNTIME-FINDING-REVIEW-01",
+  "reviewed_revision": "b3471feeaabc06f907553c0ac3c2cc149790ee2d",
+  "analysis": {
+    "finding": "MQ-F01",
+    "classification": "independently reproduced defect",
+    "suggested_severity": "P2",
+    "original_attempts": [
+      {
+        "name": "original",
+        "at": "2026-10-25T22:18:21.647Z",
+        "status": 200,
+        "url": "http://127.0.0.1:44103/performances",
+        "before_ids": [
+          "1"
+        ],
+        "after_ids": [
+          "2",
+          "1"
+        ],
+        "alerts": [
+          "Generate failed: Invalid server response: Returned Performance does not match the submitted request. Setup values remain available.Retry generationTechnical details{\n  \"kind\": \"contract\",\n  \"reason\": \"Returned Performance does not match the submitted request.\"\n}"
+        ],
+        "request_sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b",
+        "response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+      },
+      {
+        "name": "retry",
+        "at": "2026-10-25T22:18:22.626Z",
+        "status": 200,
+        "url": "http://127.0.0.1:44103/performances",
+        "before_ids": [
+          "2",
+          "1"
+        ],
+        "after_ids": [
+          "3",
+          "2",
+          "1"
+        ],
+        "alerts": [
+          "Generate failed: Invalid server response: Returned Performance does not match the submitted request. Setup values remain available.Retry generationTechnical details{\n  \"kind\": \"contract\",\n  \"reason\": \"Returned Performance does not match the submitted request.\"\n}"
+        ],
+        "request_sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b",
+        "response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+      }
+    ],
+    "unchanged_retry_request": true,
+    "workload": {
+      "seed": "41",
+      "question": "",
+      "recordTrace": false,
+      "lineup": [
+        {
+          "seat": "guitar-1",
+          "kind": "guitar",
+          "midiChannel": 1,
+          "renderingProfile": {
+            "id": "ampleGuitarPf",
+            "version": 1
+          },
+          "stringTuning": "standard",
+          "personality": {
+            "preset": "Steady"
+          },
+          "selectionMode": "topShare"
+        },
+        {
+          "seat": "guitar-2",
+          "kind": "guitar",
+          "midiChannel": 2,
+          "renderingProfile": {
+            "id": "ampleGuitarPf",
+            "version": 1
+          },
+          "stringTuning": "standard",
+          "personality": {
+            "preset": "Steady"
+          },
+          "selectionMode": "topShare"
+        },
+        {
+          "seat": "bass-1",
+          "kind": "bass",
+          "midiChannel": 3,
+          "renderingProfile": {
+            "id": "modoBass",
+            "version": 1
+          },
+          "stringTuning": null,
+          "personality": {
+            "preset": "Steady"
+          },
+          "selectionMode": "topShare"
+        },
+        {
+          "seat": "drums-1",
+          "kind": "drums",
+          "midiChannel": 10,
+          "renderingProfile": {
+            "id": "modoDrums",
+            "version": 1
+          },
+          "stringTuning": null,
+          "personality": {
+            "preset": "Steady"
+          },
+          "selectionMode": "topShare"
+        }
+      ]
+    },
+    "recovery": {
+      "url": "http://127.0.0.1:44103/performances/2",
+      "midi_sha256": "92dfa21532f4687d9addf9d7dd91e4ee92c6c639785d48d26e52016b9e3dcdd9",
+      "bytes": 2831
+    },
+    "fixture_sha256": "8583a878fdf220c269823f1b016e4bd864a14e5e3d9f2f39250dead85d261d1a",
+    "single_field_input_contrast": [
+      {
+        "path": "/composition/sections/0/vocalReservation",
+        "before": "<omitted>",
+        "after": null
+      }
+    ],
+    "returned_composition_differences": [
+      {
+        "path": "/composition/sections/0/recurrenceOf",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/sections/0/recurrenceMode",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/sections/0/type",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/sections/0/vocalReservation",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/harmony/0/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/harmony/1/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/harmony/2/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/harmony/3/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/0/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/0/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/0/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/1/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/1/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/1/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/2/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/2/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/2/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/3/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/3/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/motifOccurrences/3/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      }
+    ],
+    "generation_request_import_differences": [
+      {
+        "path": "/composition/composition/sections/0/recurrenceOf",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/sections/0/recurrenceMode",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/sections/0/type",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/sections/0/vocalReservation",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/harmony/0/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/harmony/1/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/harmony/2/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/harmony/3/slashBass",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/0/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/0/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/0/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/1/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/1/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/1/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/2/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/2/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/2/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/3/metricLayer",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/3/answers",
+        "before": "<omitted>",
+        "after": null
+      },
+      {
+        "path": "/composition/composition/motifOccurrences/3/degreeShift",
+        "before": "<omitted>",
+        "after": null
+      }
+    ],
+    "import_controls": [
+      {
+        "name": "null-import",
+        "status": 200,
+        "url": "http://127.0.0.1:41143/performances/2",
+        "alerts": [],
+        "request_sha256": "0130a89bc0aebd836e633a8b22dd559eea8235c81a2b1104a1bf649ca0cc9a97",
+        "response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+      },
+      {
+        "name": "original-import",
+        "status": 200,
+        "url": "http://127.0.0.1:41143/performances/3",
+        "alerts": [],
+        "request_sha256": "0130a89bc0aebd836e633a8b22dd559eea8235c81a2b1104a1bf649ca0cc9a97",
+        "response_sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+      }
+    ],
+    "both_import_requests_identical": true,
+    "causal_limit": "Both public imports normalize all optional fields and submit identical requests. The single-field import is not isolated causal proof. Pinned sameComposition omits vocalReservation normalization; actual original request/response exhibit omitted/null mismatch.",
+    "assets": [
+      {
+        "run": "authorized",
+        "path": "/assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "run": "authorized",
+        "path": "/assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/index-CMvh_tAN.css",
+        "sha256": "cd56b5b29dadfbc45160ef8a51750e285f2121371f5fe79b2dbd3433b40b0177"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/index-D_mwCNf5.js",
+        "sha256": "0d4c4d88329983d68873a6b1cad988b8a3d73cbce1f3edd25a1e3e93111eb76a"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/PerformancePage-BV2TpO8j.css",
+        "sha256": "c607094b0d7be913ba6147f24901d0a65e8c7f4543534c0777f7bcc9c5635fff"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/CopyId.vue_vue_type_script_setup_true_lang-BxyX2ux2.js",
+        "sha256": "74c5ba0f8d3b67d448be8fad626f557740bed6bc3ef5e42a7ec2f4a33eba4ef3"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/PerformancePage-puQIFfH9.js",
+        "sha256": "345eac267e436216048a2282ea8c0925b34f33a455ad3a26327d1ab7db88a4ba"
+      },
+      {
+        "run": "controls",
+        "path": "/assets/document.worker-CMZuB1bT.js",
+        "sha256": "bdd0f76419602811c747730e680bebd4f12037a8538d3f8fad170a950ea3568a"
+      }
+    ],
+    "source_builds_unchanged": true,
+    "environment": {
+      "original": {
+        "endpoint": "http://127.0.0.1:44103",
+        "server_pid": 753686,
+        "browser_version": "156.0.8078.4",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "deviceScaleFactor": 1,
+        "uid": 1000,
+        "zoom": 1
+      },
+      "controls": {
+        "endpoint": "http://127.0.0.1:41143",
+        "server_pid": 754861,
+        "browser_version": "156.0.8078.4",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "deviceScaleFactor": 1,
+        "uid": 1000,
+        "zoom": 1
+      },
+      "zoom_evidence": "Fresh profile default; zoom was not independently read during actions"
+    },
+    "drivers": [
+      {
+        "name": "browser-authorized",
+        "exit": 1,
+        "elapsed_ms": 19692.16756,
+        "error": "After two valid reproductions and saved recovery, duplicate lineup in attempted import prevented its Generate action."
+      },
+      {
+        "name": "browser-controls",
+        "exit": 0,
+        "elapsed_ms": 7691.876044000001
+      }
+    ],
+    "scenario_accounting": [
+      "original fixture generation and unchanged retry",
+      "saved-result recovery and UI MIDI export",
+      "single-field null import control (initial pre-action driver failure preserved, completed on separate fresh state)",
+      "unmodified import control"
+    ]
+  },
+  "before": {
+    "mode": "before",
+    "at": "2026-10-25T22:16:35.645Z",
+    "builds": {
+      "ramec_server": {
+        "path": "ramec/src/server/bin/Release/net10.0",
+        "files": 71,
+        "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+        "actual_sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+      },
+      "ramec_client": {
+        "path": "ramec/src/client/dist",
+        "files": 16,
+        "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+        "actual_sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+      },
+      "pralice_cli": {
+        "path": "pralice/src/Pralice.Cli/bin/Release/net10.0",
+        "files": 13,
+        "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755",
+        "actual_sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755"
+      }
+    },
+    "sources": {
+      "ramec": {
+        "commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+        "files": 1067,
+        "sha256": "b031193926643d9950916284e84d1cd714522bc8d63adf8d923de755778e2a21"
+      },
+      "pralice": {
+        "commit": "3e15253ce542d259280b95ce2b9a3262040dc32c",
+        "files": 442,
+        "sha256": "97da65b617c44affc7670239377a174e25ab7711f7110ad609c471dc7c3163a3"
+      }
+    },
+    "state": {
+      "original_db": {
+        "bytes": 421888,
+        "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+      },
+      "original_trace": {
+        "bytes": 135926,
+        "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+      }
+    },
+    "critical": {
+      "tools/bun/bin/bun": "a83d263767d839e4d2649ca8e35d07159c7afc99afdc96d731ced29e056dda0c",
+      "tools/dotnet-10.0.110/dotnet": "55117d7d1f27537ee6e7a81b8b9f84f0b50c8cbd2d1d1e21684c31db1518230a",
+      "pralice/.tools/dotnet/dotnet": "01d89e0a0191052bfea616cd4ce624c8faf13b05bbddf7f64499c23e2a9d9269",
+      "pralice/.tools/cache/dotnet-install.sh": "082f7685e156738a1b2e2ed8381a621870d4ce8e8c59278034556f05c186eb2e",
+      "pralice/.tools/cache/Godot_v4.7.2-stable_mono_linux_x86_64.zip": "129f82db7bafd54ae14bb5bb284041c73860e8c7a009a3a026ca5e946cbff247",
+      "tools/playwright/chromium-1248/chrome-linux64/chrome": "377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025",
+      "ramec/src/client/bun.lock": "adf0a5bbbeaaf0f5cc67159cf21f9134290a8a8772c0466903f6965e08ea5cc1",
+      "nuget.config": "4770f0974d81c5cb73b3290f075bb632f97289a7115daa4c67d95b12321e9fe6"
+    },
+    "assignment_sha256": "952bde9d2d3f4ad50151ca792d10e38d40debc7cb59fd85db6ab0dfcd3e08409",
+    "all_passed": true
+  },
+  "final": {
+    "mode": "final",
+    "at": "2026-10-25T22:20:00.296Z",
+    "builds": {
+      "ramec_server": {
+        "path": "ramec/src/server/bin/Release/net10.0",
+        "files": 71,
+        "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0",
+        "actual_sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+      },
+      "ramec_client": {
+        "path": "ramec/src/client/dist",
+        "files": 16,
+        "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7",
+        "actual_sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+      },
+      "pralice_cli": {
+        "path": "pralice/src/Pralice.Cli/bin/Release/net10.0",
+        "files": 13,
+        "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755",
+        "actual_sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755"
+      }
+    },
+    "sources": {
+      "ramec": {
+        "commit": "6f17044de0b46cedef51eb71c9816ce11b6a589a",
+        "files": 1067,
+        "sha256": "b031193926643d9950916284e84d1cd714522bc8d63adf8d923de755778e2a21"
+      },
+      "pralice": {
+        "commit": "3e15253ce542d259280b95ce2b9a3262040dc32c",
+        "files": 442,
+        "sha256": "97da65b617c44affc7670239377a174e25ab7711f7110ad609c471dc7c3163a3"
+      }
+    },
+    "state": {
+      "original_db": {
+        "bytes": 421888,
+        "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+      },
+      "original_trace": {
+        "bytes": 135926,
+        "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+      }
+    },
+    "critical": {
+      "tools/bun/bin/bun": "a83d263767d839e4d2649ca8e35d07159c7afc99afdc96d731ced29e056dda0c",
+      "tools/dotnet-10.0.110/dotnet": "55117d7d1f27537ee6e7a81b8b9f84f0b50c8cbd2d1d1e21684c31db1518230a",
+      "pralice/.tools/dotnet/dotnet": "01d89e0a0191052bfea616cd4ce624c8faf13b05bbddf7f64499c23e2a9d9269",
+      "pralice/.tools/cache/dotnet-install.sh": "082f7685e156738a1b2e2ed8381a621870d4ce8e8c59278034556f05c186eb2e",
+      "pralice/.tools/cache/Godot_v4.7.2-stable_mono_linux_x86_64.zip": "129f82db7bafd54ae14bb5bb284041c73860e8c7a009a3a026ca5e946cbff247",
+      "tools/playwright/chromium-1248/chrome-linux64/chrome": "377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025",
+      "ramec/src/client/bun.lock": "adf0a5bbbeaaf0f5cc67159cf21f9134290a8a8772c0466903f6965e08ea5cc1",
+      "nuget.config": "4770f0974d81c5cb73b3290f075bb632f97289a7115daa4c67d95b12321e9fe6"
+    },
+    "assignment_sha256": "952bde9d2d3f4ad50151ca792d10e38d40debc7cb59fd85db6ab0dfcd3e08409",
+    "all_passed": true
+  },
+  "historical": {
+    "reviewed_revision": "b3471feeaabc06f907553c0ac3c2cc149790ee2d",
+    "artifact_checksum_count": 25,
+    "entries": [
+      {
+        "path": "before-provenance.json",
+        "sha256": "9007b98002047b323cbddae213eec48b0f47d30118be43802d456963a0d0ee5a"
+      },
+      {
+        "path": "browser-actions.json",
+        "sha256": "612a07bfdad6f8564c663d9de516330ff62cefed97e402844aa6bd4d08157dae"
+      },
+      {
+        "path": "composition-diff.json",
+        "sha256": "57e2dea2accc013169c37d386e1bb168925930ceb2d5b245ac5bbf885f6ee7d8"
+      },
+      {
+        "path": "final-provenance.json",
+        "sha256": "7c6c130d1a08d2f4c323ba30918ddecadd40389ab6563652921c8c8cef574d40"
+      },
+      {
+        "path": "generation-failure.png",
+        "sha256": "1bf5927932d58da118f17447128d6b850d3ab801d070deaebfe76776c3d38c44"
+      },
+      {
+        "path": "generation-reproduced.png",
+        "sha256": "675b8be2692df3630aded100ecd257f03593e8ffaa5c44261bd280263068d3ed"
+      },
+      {
+        "path": "generation-reproduction-result.json",
+        "sha256": "a8b02f10f4bf6d90e776debe6f045b155e046ae9d9ef24cedc3f30195c0df730"
+      },
+      {
+        "path": "generation-request.json",
+        "sha256": "43bf3a83474bbab36fdfa6c9cb073b9db090bd7fec203167cd71e0f46d99c01b"
+      },
+      {
+        "path": "generation-response.json",
+        "sha256": "fceb1e2abc6ae1909bc6ae1a7632595c3d2dc8f7a317677eb12f7f7d6840d401"
+      },
+      {
+        "path": "invalid-import-result.json",
+        "sha256": "c9e52ec62745fb756dbce5ae2a957b8d72d55132c7c5c475cf211cdafb4dfad8"
+      },
+      {
+        "path": "invalid-import.png",
+        "sha256": "37aa149cfb60d1870626bec479a019b475ec0c31ed135beb0e2827cac92737cc"
+      },
+      {
+        "path": "midi-structure.json",
+        "sha256": "9a3b89fdd619f8fffd69d40c9efbd514a907215b93407a9d081e2e0611037999"
+      },
+      {
+        "path": "pralice-invalid-input.txt",
+        "sha256": "ec19154698110766c7cfb24b5d38997eae9a0f621ad1122ae39fd51a32c33040"
+      },
+      {
+        "path": "pralice-invalid-output.txt",
+        "sha256": "ac37868b177afbcf47ec47e505592a8e9cfececef75dde6062549c3f47671734"
+      },
+      {
+        "path": "pralice-invalid-steps.json",
+        "sha256": "59362d4de473c742ba0b731402ce7d4c18a6e68eafa2a7b2eec08da330b4681a"
+      },
+      {
+        "path": "pralice-pending-input.txt",
+        "sha256": "2b8e1fb3eaa3e9082a16382b08dde28098a6821e43a97b7c0a470e72096e6244"
+      },
+      {
+        "path": "pralice-pending-output.txt",
+        "sha256": "6258eb3aa51fb085c1476a585cb23517f280d9bd127fca59d50d19105e698d30"
+      },
+      {
+        "path": "pralice-pending-steps.json",
+        "sha256": "71c0348715970aff55c3743ad10e5e900e93723380fd3a2187ee3d326c6d43a3"
+      },
+      {
+        "path": "pralice-ratified-input.txt",
+        "sha256": "2335d6f4fcb7f84a38cface63a42664078828421d20b0dd4cd4254a68a0546f7"
+      },
+      {
+        "path": "pralice-ratified-output.txt",
+        "sha256": "7b827ca101ad0eae7657cbaa0fc2f97aeb7766dfd4d72c334b3ee8b22b0a68f4"
+      },
+      {
+        "path": "pralice-ratified-steps.json",
+        "sha256": "4091fe4672cf6f457a88d8e6966502079c985e283a4f3512697d8c85e9cacfc7"
+      },
+      {
+        "path": "public-summary.json",
+        "sha256": "8aabf90f7d7b00fc1ba49384355090344f56f30df7af4d5296116fa4daadab8d"
+      },
+      {
+        "path": "reloaded-ui.png",
+        "sha256": "2f7bae97130afc710416b2dae3053de3b4184cc36c9d7ac27b97b3ca8a7a610a"
+      },
+      {
+        "path": "shutdown-state.json",
+        "sha256": "5c91b22244336281dcf5d7c579ba2015b63eb94ef7baaa4d46bdc1b81f66192c"
+      },
+      {
+        "path": "stop-time-fixture.json",
+        "sha256": "8583a878fdf220c269823f1b016e4bd864a14e5e3d9f2f39250dead85d261d1a"
+      }
+    ],
+    "checks": [
+      {
+        "name": "ratified complete input/output alignment",
+        "passed": true
+      },
+      {
+        "name": "terminal inspections preserve accepted proposal",
+        "passed": true
+      },
+      {
+        "name": "queued no debit then observed 40 treasury",
+        "passed": true
+      },
+      {
+        "name": "typed terminal rejections delivered",
+        "passed": true
+      },
+      {
+        "name": "invalid complete input/output alignment",
+        "passed": true
+      },
+      {
+        "name": "zero input rejected without immediate mutation",
+        "passed": true
+      },
+      {
+        "name": "same-day cap explicitly rejected",
+        "passed": true
+      },
+      {
+        "name": "both rejected IDs unavailable",
+        "passed": true
+      },
+      {
+        "name": "pending complete input/output alignment",
+        "passed": true
+      },
+      {
+        "name": "pending quit no immediate debit",
+        "passed": true
+      },
+      {
+        "name": "historical before-frozen-manifest stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical before-frozen-manifest stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical before-ramec-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical before-ramec-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-archive stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-archive stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-extract stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-extract stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical before-pralice-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical before-pralice-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-archive stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-archive stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-extract stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-extract stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-ratified stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-ratified stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-invalid stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-invalid stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-pending stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical play-pending stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-ratified-intact stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-ratified-intact stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-ratified-truncated stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-ratified-truncated stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-pending-intact stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical replay-pending-intact stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical environment stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical environment stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-sdk stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical ramec-sdk stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-sdk stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical pralice-sdk stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical chromium stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical chromium stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical bun stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical bun stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-frozen-manifest stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-frozen-manifest stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-ramec-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-ramec-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-pralice-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical after-pralice-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-frozen-manifest stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-frozen-manifest stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-ramec-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-ramec-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-pralice-head stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical final-pralice-head stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical owned-server-absence stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical owned-server-absence stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical handoff-validator stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical handoff-validator stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical stage-owned-report stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical stage-owned-report stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical handoff-validator-final stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical handoff-validator-final stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical stage-owned-report-final stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical stage-owned-report-final stderr digest",
+        "passed": true
+      },
+      {
+        "name": "historical owned-doc-whitespace-final stdout digest",
+        "passed": true
+      },
+      {
+        "name": "historical owned-doc-whitespace-final stderr digest",
+        "passed": true
+      },
+      {
+        "name": "recorded replay exits 0/1/0",
+        "passed": true
+      },
+      {
+        "name": "pending replay zero days/outcomes",
+        "passed": true
+      },
+      {
+        "name": "truncation explicitly detected",
+        "passed": true
+      },
+      {
+        "name": "scroll baseline nonzero before opening; equal on return",
+        "passed": true
+      },
+      {
+        "name": "scroll action establishes baseline after focus before Enter",
+        "passed": true
+      },
+      {
+        "name": "original duration deviation remains",
+        "passed": true
+      },
+      {
+        "name": "historical original request matches independent request",
+        "passed": true
+      },
+      {
+        "name": "six persistent-context generation response digests match",
+        "passed": true
+      }
+    ],
+    "recorded_command_count": 30,
+    "original_driver": {
+      "elapsed_ms": 302865,
+      "reported_exit": 1,
+      "disposition": "Execution deviation: exceeded former 120-second cap; independent review does not grant retrospective compliance"
+    },
+    "replay": {
+      "exits": [
+        0,
+        1,
+        0
+      ],
+      "scope": "Safe post-run summaries and recorded log digests inspected; no hidden trace contents read and no runtime replay repeated"
+    },
+    "pralice_disposition": "No evidence contradicts no confirmed defect within the documented Crown-visible cases; not whole-product acceptance",
+    "midi_scope": "Historical structural/consistency evidence only; no listening or musical correctness established"
+  },
+  "shutdown": {
+    "resources": [
+      {
+        "directory": "authorized",
+        "server_pid": 753686,
+        "endpoint": "http://127.0.0.1:44103",
+        "server_exit": 0,
+        "browser_context_closed": true,
+        "database": {
+          "path": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/state/music.sqlite",
+          "bytes": 880640,
+          "sha256": "61e9fba89a766fe600f6f27bc62f8ded737ad97633f3e948f979689f1c8e2b73"
+        }
+      },
+      {
+        "directory": "controls",
+        "server_pid": 754861,
+        "endpoint": "http://127.0.0.1:41143",
+        "server_exit": 0,
+        "browser_context_closed": true,
+        "database": {
+          "path": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/state/music.sqlite",
+          "bytes": 880640,
+          "sha256": "86b45200fac0feae6d8c8ca41f7b61d769725d0980b2b2d7d17be51ed1bf87f6"
+        }
+      }
+    ],
+    "ps_exit": 1,
+    "ps_stdout": "    PID    PPID   UID COMMAND\n",
+    "no_owned_server_remains": true,
+    "raw_evidence_retained": true
+  },
+  "commands": [
+    {
+      "name": "before-frozen-manifest",
+      "argv": [
+        "git",
+        "show",
+        "56540a6868f771f605dbff8a52d8c7c3d371a623:docs/reports/c1-c5/demo-artifacts/baseline/manifest.json"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c15-review",
+      "environment": {},
+      "started": "2026-10-25T22:16:33.864Z",
+      "ended": "2026-10-25T22:16:33.867Z",
+      "wall_ms": 2.548209,
+      "pid": 8,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "3ac218afd1105df48bca567e55d21718900b1f7e7da5aef610c3939dd2483b81",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ramec-archive",
+      "argv": [
+        "git",
+        "archive",
+        "--format=tar",
+        "--output=/tmp/c15-runtime-finding-review-01-nskd0K/reference/ramec.tar",
+        "6f17044de0b46cedef51eb71c9816ce11b6a589a"
+      ],
+      "cwd": "/opt/dev/ramec",
+      "environment": {},
+      "started": "2026-10-25T22:16:33.990Z",
+      "ended": "2026-10-25T22:16:34.090Z",
+      "wall_ms": 100.42015,
+      "pid": 18,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ramec-extract",
+      "argv": [
+        "tar",
+        "xf",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/reference/ramec.tar",
+        "-C",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/reference/ramec"
+      ],
+      "cwd": "/tmp/c15-runtime-finding-review-01-nskd0K",
+      "environment": {},
+      "started": "2026-10-25T22:16:34.091Z",
+      "ended": "2026-10-25T22:16:34.130Z",
+      "wall_ms": 39.78823800000001,
+      "pid": 19,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "pralice-archive",
+      "argv": [
+        "git",
+        "archive",
+        "--format=tar",
+        "--output=/tmp/c15-runtime-finding-review-01-nskd0K/reference/pralice.tar",
+        "3e15253ce542d259280b95ce2b9a3262040dc32c"
+      ],
+      "cwd": "/opt/dev/pralice",
+      "environment": {},
+      "started": "2026-10-25T22:16:34.365Z",
+      "ended": "2026-10-25T22:16:34.387Z",
+      "wall_ms": 22.057389000000057,
+      "pid": 20,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "pralice-extract",
+      "argv": [
+        "tar",
+        "xf",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/reference/pralice.tar",
+        "-C",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/reference/pralice"
+      ],
+      "cwd": "/tmp/c15-runtime-finding-review-01-nskd0K",
+      "environment": {},
+      "started": "2026-10-25T22:16:34.387Z",
+      "ended": "2026-10-25T22:16:34.403Z",
+      "wall_ms": 15.478791999999999,
+      "pid": 21,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser-default",
+      "argv": [
+        "bun",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/browser.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c15-review",
+      "environment": {},
+      "started": "2026-10-25T22:17:32.389Z",
+      "ended": "2026-10-25T22:18:02.682Z",
+      "wall_ms": 30292.581442,
+      "pid": 8,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "3d27d2c792c085638a27205e38ea9a152e251c4764386dea03758ac657f0e3bc",
+      "stderr_sha256": "25e9e1fe5df1e233d84370358ea295d895700c7260c01bb72cac2305ce96870c"
+    },
+    {
+      "name": "final-frozen-manifest",
+      "argv": [
+        "git",
+        "show",
+        "56540a6868f771f605dbff8a52d8c7c3d371a623:docs/reports/c1-c5/demo-artifacts/baseline/manifest.json"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c15-review",
+      "environment": {},
+      "started": "2026-10-25T22:19:58.717Z",
+      "ended": "2026-10-25T22:19:58.720Z",
+      "wall_ms": 2.7598839999999996,
+      "pid": 8,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "3ac218afd1105df48bca567e55d21718900b1f7e7da5aef610c3939dd2483b81",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "owned-server-absence",
+      "argv": [
+        "ps",
+        "-p",
+        "753686,754861",
+        "-o",
+        "pid,ppid,uid,comm"
+      ],
+      "cwd": "/tmp/c15-runtime-finding-review-01-nskd0K",
+      "environment": {},
+      "started": "2026-10-25T22:22:18.074Z",
+      "ended": "2026-10-25T22:22:18.090Z",
+      "wall_ms": 16.058096,
+      "pid": 757437,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "38ce6b66f5b66403181a5d93268c2495fe06e4887cf506d69a93b7870e52f255",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser-authorized",
+      "argv": [
+        "bun",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/browser.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c15-review",
+      "environment": {},
+      "started": "2026-10-25T22:18:15.994Z",
+      "ended": "2026-10-25T22:18:35.885Z",
+      "wall_ms": 19890.426894,
+      "pid": 753670,
+      "uid": 1000,
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "ce4121107f0a58a4cd37937c4f8b41495a24b1a32bc4edbec5c88f620bb5ea77",
+      "stderr_sha256": "316335dcbb6c6d8cf1dea4dca68ea5331dcf8742d1d0f49912216777f8f97751"
+    },
+    {
+      "name": "browser-controls",
+      "argv": [
+        "bun",
+        "/tmp/c15-runtime-finding-review-01-nskd0K/browser.ts",
+        "--controls-only"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c15-review",
+      "environment": {
+        "REVIEW_RUN_ROOT": "/tmp/c15-runtime-finding-review-01-nskd0K/controls"
+      },
+      "started": "2026-10-25T22:19:27.066Z",
+      "ended": "2026-10-25T22:19:34.962Z",
+      "wall_ms": 7896.0071339999995,
+      "pid": 754839,
+      "uid": 1000,
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "f18827dd373b9f5467ac5fcc69d304d8e23a5eb14e352c214232b8f75b83d815",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "events": {
+    "authorized": [
+      {
+        "kind": "server-start",
+        "argv": [
+          "/tmp/c15-provision-01.6o1CPD/tools/dotnet-10.0.110/dotnet",
+          "/tmp/c15-provision-01.6o1CPD/ramec/src/server/bin/Release/net10.0/Ramec.Server.dll"
+        ],
+        "cwd": "/tmp/c15-provision-01.6o1CPD/ramec",
+        "environment": {
+          "DOTNET_ROOT": "/tmp/c15-provision-01.6o1CPD/tools/dotnet-10.0.110",
+          "Persistence__Path": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/state/music.sqlite",
+          "Observability__SeqUrl": "",
+          "ASPNETCORE_URLS": "http://127.0.0.1:0",
+          "ASPNETCORE_ENVIRONMENT": "Production",
+          "DOTNET_CLI_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/state/dotnet-home",
+          "XDG_CONFIG_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/state/xdg-config",
+          "XDG_CACHE_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/state/xdg-cache",
+          "TMPDIR": "/tmp/c15-runtime-finding-review-01-nskd0K/authorized/tmp"
+        },
+        "pid": 753686,
+        "uid": 1000,
+        "at": "2026-10-25T22:18:16.183Z"
+      },
+      {
+        "kind": "action",
+        "name": "original-fixture-setup",
+        "ok": true,
+        "wall_ms": 1491.4142190000002,
+        "at": "2026-10-25T22:18:20.298Z"
+      },
+      {
+        "kind": "action",
+        "name": "original-generation",
+        "ok": true,
+        "wall_ms": 1363.2395720000004,
+        "at": "2026-10-25T22:18:21.661Z"
+      },
+      {
+        "kind": "action",
+        "name": "unchanged-retry",
+        "ok": true,
+        "wall_ms": 966.510577,
+        "at": "2026-10-25T22:18:22.638Z"
+      },
+      {
+        "kind": "action",
+        "name": "saved-result-recovery",
+        "ok": true,
+        "wall_ms": 1314.708565,
+        "at": "2026-10-25T22:18:23.953Z"
+      },
+      {
+        "kind": "action",
+        "name": "null-import",
+        "ok": false,
+        "error": "TimeoutError: click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Generate Performance', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"submit\" data-v-d710d1bb=\"\" aria-describedby=\"performance-readiness\">Generate Performance</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+        "wall_ms": 11353.490386999998,
+        "at": "2026-10-25T22:18:35.307Z"
+      },
+      {
+        "kind": "browser-closed",
+        "at": "2026-10-25T22:18:35.834Z"
+      },
+      {
+        "kind": "server-stop",
+        "pid": 753686,
+        "exit": 0,
+        "signal": null,
+        "at": "2026-10-25T22:18:35.872Z"
+      }
+    ],
+    "controls": [
+      {
+        "kind": "server-start",
+        "argv": [
+          "/tmp/c15-provision-01.6o1CPD/tools/dotnet-10.0.110/dotnet",
+          "/tmp/c15-provision-01.6o1CPD/ramec/src/server/bin/Release/net10.0/Ramec.Server.dll"
+        ],
+        "cwd": "/tmp/c15-provision-01.6o1CPD/ramec",
+        "environment": {
+          "DOTNET_ROOT": "/tmp/c15-provision-01.6o1CPD/tools/dotnet-10.0.110",
+          "Persistence__Path": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/state/music.sqlite",
+          "Observability__SeqUrl": "",
+          "ASPNETCORE_URLS": "http://127.0.0.1:0",
+          "ASPNETCORE_ENVIRONMENT": "Production",
+          "DOTNET_CLI_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/state/dotnet-home",
+          "XDG_CONFIG_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/state/xdg-config",
+          "XDG_CACHE_HOME": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/state/xdg-cache",
+          "TMPDIR": "/tmp/c15-runtime-finding-review-01-nskd0K/controls/tmp"
+        },
+        "pid": 754861,
+        "uid": 1000,
+        "at": "2026-10-25T22:19:27.261Z"
+      },
+      {
+        "kind": "action",
+        "name": "null-import",
+        "ok": true,
+        "wall_ms": 2829.217076,
+        "at": "2026-10-25T22:19:32.614Z"
+      },
+      {
+        "kind": "action",
+        "name": "original-import",
+        "ok": true,
+        "wall_ms": 1913.6482349999997,
+        "at": "2026-10-25T22:19:34.528Z"
+      },
+      {
+        "kind": "browser-closed",
+        "at": "2026-10-25T22:19:34.901Z"
+      },
+      {
+        "kind": "server-stop",
+        "pid": 754861,
+        "exit": 0,
+        "signal": null,
+        "at": "2026-10-25T22:19:34.950Z"
+      }
+    ]
+  },
+  "limits": [
+    "Four authored behavioral scenarios; two original-sequence attempts total",
+    "No source or fixture correction, rebuild, install, delivery or model/native prompt",
+    "No hidden fresh game traces or private native metadata inspected",
+    "Historical driver cap deviation and own driver failures remain recorded",
+    "No audio/listening or musical-correctness claim",
+    "Browser zoom was default fresh-profile configuration, not independently measured during these actions"
+  ]
+}

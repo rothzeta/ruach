@@ -1,0 +1,19 @@
+status
+outcomes
+proposals
+propose prop-qa-zero case-westbank march transfer:crown:march:0
+status
+outcomes
+proposals
+propose prop-qa-afterzero case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+propose prop-qa-second case-westbank march transfer:crown:march:5
+status
+outcomes
+proposals
+advance 3
+inspect prop-qa-afterzero
+inspect prop-qa-zero
+inspect prop-qa-second
+status
+outcomes
+quit

@@ -1,0 +1,171 @@
+[
+  {
+    "name": "standard MIDI header chunk",
+    "ok": true
+  },
+  {
+    "name": "format 1",
+    "ok": true,
+    "observed": 1
+  },
+  {
+    "name": "contractual PPQN",
+    "ok": true,
+    "observed": 10080
+  },
+  {
+    "name": "track 0 chunk",
+    "ok": true
+  },
+  {
+    "name": "track 0 exact chunk consumption",
+    "ok": true
+  },
+  {
+    "name": "track 1 chunk",
+    "ok": true
+  },
+  {
+    "name": "track 1 exact chunk consumption",
+    "ok": true
+  },
+  {
+    "name": "track 2 chunk",
+    "ok": true
+  },
+  {
+    "name": "track 2 exact chunk consumption",
+    "ok": true
+  },
+  {
+    "name": "track 3 chunk",
+    "ok": true
+  },
+  {
+    "name": "track 3 exact chunk consumption",
+    "ok": true
+  },
+  {
+    "name": "track 4 chunk",
+    "ok": true
+  },
+  {
+    "name": "track 4 exact chunk consumption",
+    "ok": true
+  },
+  {
+    "name": "no trailing bytes",
+    "ok": true
+  },
+  {
+    "name": "track 0 terminal EndOfTrack",
+    "ok": true,
+    "observed": {
+      "endTick": 322560,
+      "expected": 322560
+    }
+  },
+  {
+    "name": "track 1 terminal EndOfTrack",
+    "ok": true,
+    "observed": {
+      "endTick": 322560,
+      "expected": 322560
+    }
+  },
+  {
+    "name": "track 2 terminal EndOfTrack",
+    "ok": true,
+    "observed": {
+      "endTick": 322560,
+      "expected": 322560
+    }
+  },
+  {
+    "name": "track 3 terminal EndOfTrack",
+    "ok": true,
+    "observed": {
+      "endTick": 322560,
+      "expected": 322560
+    }
+  },
+  {
+    "name": "track 4 terminal EndOfTrack",
+    "ok": true,
+    "observed": {
+      "endTick": 322560,
+      "expected": 322560
+    }
+  },
+  {
+    "name": "assigned public input channels only",
+    "ok": true,
+    "observed": [
+      1,
+      2,
+      3,
+      10
+    ]
+  },
+  {
+    "name": "Drums uses input channel ten",
+    "ok": true
+  },
+  {
+    "name": "decoded export and public projection agree on event membership and multiplicity",
+    "ok": true,
+    "observed": {
+      "midi": 987,
+      "projection": 987
+    }
+  },
+  {
+    "name": "default Crown initial authored balance",
+    "ok": true,
+    "observed": [
+      {
+        "actor": "crown",
+        "day": 0,
+        "treasury": 100
+      },
+      {
+        "actor": "crown",
+        "day": 3,
+        "treasury": 40
+      },
+      {
+        "actor": "march",
+        "day": 3,
+        "treasury": 65
+      }
+    ]
+  },
+  {
+    "name": "default Crown independently derived final ledger",
+    "ok": true
+  },
+  {
+    "name": "default March independently derived final ledger",
+    "ok": true
+  },
+  {
+    "name": "named player offer ratified with all required principals",
+    "ok": true
+  },
+  {
+    "name": "public inspection required consents supplied",
+    "ok": true
+  },
+  {
+    "name": "public replay outcome equivalence",
+    "ok": true
+  },
+  {
+    "name": "play and replay process success",
+    "ok": true
+  },
+  {
+    "name": "replay leaves original trace intact",
+    "ok": true
+  }
+]

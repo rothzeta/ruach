@@ -1,0 +1,82 @@
+[
+  {
+    "path": "/composition/composition/sections/0/recurrenceOf",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/sections/0/recurrenceMode",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/sections/0/type",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/sections/0/vocalReservation",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/harmony/0/slashBass",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/harmony/1/slashBass",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/harmony/2/slashBass",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/harmony/3/slashBass",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/0/metricLayer",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/0/answers",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/0/degreeShift",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/1/metricLayer",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/1/answers",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/1/degreeShift",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/2/metricLayer",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/2/answers",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/2/degreeShift",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/3/metricLayer",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/3/answers",
+    "response": null
+  },
+  {
+    "path": "/composition/composition/motifOccurrences/3/degreeShift",
+    "response": null
+  }
+]

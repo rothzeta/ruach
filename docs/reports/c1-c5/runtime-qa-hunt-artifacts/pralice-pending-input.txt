@@ -1,0 +1,7 @@
+status
+outcomes
+propose prop-qa-pending case-westbank march transfer:crown:march:40 recognize:march:westbank-claim
+status
+outcomes
+inspect prop-qa-pending
+quit

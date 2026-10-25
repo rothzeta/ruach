@@ -4,6 +4,14 @@ Evidence for roadmap [Track E](roadmap.md) collected 2026-10-06 with Claude Code
 
 Two decisions are deliberately left open and marked `needs-decision`: plugin-root versus per-skill packaging, and native Codex agent export. The current backlog tracks smoke/discovery evidence under [R1](roadmap.md#r1--close-release-and-native-use-evidence-gaps) and these choices under [D1/D2](roadmap.md#decisions-and-parked-proposals); the observations below remain dated evidence.
 
+## Subsequent bounded evidence — 0.7.0 preparation
+
+The counts and offline findings below describe the original 2026-10-06 installation, not the current source inventory. Existing dynamic snapshot/plugin discovery now includes Tester and six additional skills without a second editable resource copy. The repository's 0.7.0 metadata is untagged preparation; published 0.6.1 installation and final delivery remain separate.
+
+The [accepted long-argv review](reports/c1-c5/launch-review-02.md) observes the complete Tester role, native model/effort/auto-review policy and authoritative identity on the corrected source-wrapper Codex/Bash launch. It closes that transport defect, not the full original install-route/parity matrix. The [safe Agy composition](reports/c1-c5/c2-composition.md) and [independent review](reports/c1-c5/c2-composition-review.md) establish one additive role/technical-catalog mechanism on 1.4.7. The [adapter handoff](reports/c1-c5/c2-adapter.md) records local gates/tests; exact-source review and actual linked Scout role/identity/budget/ambient visibility/brief/skill/advisory validation remain pending. No Agy continuation, universal workflow absence or full native parity is inferred.
+
+Current concerns and next actions live in the [roadmap](roadmap.md#c1c5--deliberate-find-fix-exercise). This addendum neither rewrites historical failed probes nor promotes the smoke checklist to passed; full route/behavior and hosted CI evidence remain separate.
+
 ## Codex role and skill discovery
 
 Observed through `codex app-server --listen stdio://` (`initialize`, `config/read`, `skills/list` only), the same read the Herdr adapter uses.

@@ -1,0 +1,11 @@
+status
+outcomes
+inspect prop-insufficient
+propose prop-insufficient case-westbank march transfer:crown:march:150 recognize:march:westbank-claim
+outcomes
+status
+advance 1
+outcomes
+status
+inspect prop-insufficient
+quit

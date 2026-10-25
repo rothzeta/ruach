@@ -1,0 +1,276 @@
+Pralice CLI Host
+Scenario: frontier-compact
+Active Actor: crown
+Simulation Day: 0
+Type 'help' for available commands.
+
+crown [day 0]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    0
+Known Treasury:    100
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 15
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 0
+  - league: Available; next legal day 0
+  - march: Available; next legal day 0
+  - officers: Available; next legal day 0
+  - vale: Available; next legal day 0
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> Visible Political Cases:
+  Case case-westbank:
+    Status:       Open
+    Initiator:    crown
+    Subjects:     [WorldObject:westbank]
+    Participants: [crown, vale, league, march, council, officers]
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+
+crown [day 0]> Observed Commitments:
+  Protection vale-protection:
+    Parties:           crown (Promisor) -> vale (Beneficiary)
+    Status:            Active
+    Support Amount:    20 gold
+    Call Availability: Not Beneficiary (Uncalled)
+    Subject:           vale
+    Last Observed:     Day 0 (Provenance: initial-fixture)
+Claim Recognitions:
+  - Recognizer march -> Claim westbank-claim: Recognized=False
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+
+crown [day 0]> [Actor Inspection] ID: council
+  DisplayName: Council
+  Kind: Faction (Parent Polity: crown)
+  Known Treasury: Unknown
+  Delivered case position case-westbank: Positive Claim:westbank-claim, published day 0 (declared context, not a private threshold)
+  Contextual Actions:
+    - [OpenCase] Open Case for 'Actor:council' (Status: Met)
+      Description: Initiate a new political case concerning 'Actor:council'.
+      Prerequisites: SubjectKnown = Met (Subject is known in observer's knowledge.)
+      Prerequisites: AuthenticatedObserver = Met (Observer is an authenticated actor.)
+    - [TransferMoney] Transfer Treasury Funds to 'council' (Status: Met)
+      Description: Transfer money from treasury to actor 'council'.
+      Prerequisites: ValidPayee = Met (Payee is a recognized actor in roster.)
+      Prerequisites: SufficientFunds = Met (Observer has confirmed treasury balance greater than zero.)
+
+crown [day 0]>   Menu: Case case-westbank, crown -> march; Expiry Day: 4
+  Counterpart selection required from march before remaining domestic consent.
+  Option 1:
+    - Immediate transfer: crown pays march 40 gold
+    - Recognition: march recognizes claim westbank-claim
+  Proposal Preview:
+    Immediate Payments:
+      - crown pays march 40 gold
+    Direct Object Changes:
+      - Recognize claim 'westbank-claim' by 'march'.
+    Known Required Consents: [council, crown, march]
+    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.
+    Feasibility: Feasible
+    Delta Utility (Observer): 5
+    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.
+    Unknown: Status quo access grant 'port-access' is unknown in observation.
+    Counterpart estimate: OpposedByExplicitEvidence — Explicit observed positions from 'march' oppose terms in the proposed package.
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.
+
+crown [day 0]>   Menu: Case case-westbank, crown -> march; Expiry Day: 4
+  Counterpart selection required from march before remaining domestic consent.
+  Option 1:
+    - Immediate transfer: crown pays march 40 gold
+    - Recognition: march recognizes claim westbank-claim
+  Proposal Preview:
+    Immediate Payments:
+      - crown pays march 40 gold
+    Direct Object Changes:
+      - Recognize claim 'westbank-claim' by 'march'.
+    Known Required Consents: [council, crown, march]
+    Uncertain External Reactions: Foreign counterpart reaction depends on secret utility.
+    Feasibility: Feasible
+    Delta Utility (Observer): 5
+    Unknown: Treasury balance for actor 'march' is unknown in observation. Execution feasibility cannot be guaranteed.
+    Unknown: Status quo access grant 'port-access' is unknown in observation.
+    Counterpart estimate: OpposedByExplicitEvidence — Explicit observed positions from 'march' oppose terms in the proposed package.
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 100; currently covered.
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+  Preview describes eligible information; shared rules revalidate authority, references, consent and funding.
+Command 'cmd-propose-1' status: Queued (Success) - Command queued successfully.
+
+crown [day 0]> Advanced simulation by 3 day(s). Current Day: 3.
+Newly Delivered Reports:
+  - Report rep-2 [Day 1]: Source crown -> Proposal Published: ID prop-recognition, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Immediate transfer: crown pays march 40 gold; Recognition: march recognizes claim westbank-claim
+  - Report rep-4 [Day 1]: Source league -> Proposal Published: ID prop-league-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Access: crown grants league right port-access on subject westbank | Option 2: Access: crown grants league right port-access on subject westbank; Future promise: league promises crown 10 gold due day 5 | Option 3: Access: crown grants league right port-access on subject westbank; Immediate transfer: league pays crown 10 gold
+  - Report rep-6 [Day 1]: Source march -> Proposal Published: ID prop-march-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Recognition: march recognizes claim westbank-claim; Future promise: crown promises march 40 gold due day 5 | Option 2: Recognition: march recognizes claim westbank-claim; Immediate transfer: crown pays march 40 gold
+  - Report rep-8 [Day 1]: Source vale -> Protection Called (ID: vale-protection, Promisor: crown, Beneficiary: vale, Amount: 20)
+  - Report rep-9 [Day 1]: Source vale -> ObjectRevisionAssertion
+  - Report rep-10 [Day 1]: Source vale -> CommitmentSnapshotAssertion
+  - Report rep-11 [Day 1]: Source vale -> ObjectRevisionAssertion
+  - Report rep-12 [Day 1]: Source vale -> CommitmentSnapshotAssertion
+  - Report rep-14 [Day 2]: Source march -> Proposal Selected: ID prop-recognition, revision 0, option 1, status PendingApproval, approvals [crown, march]
+  - Report rep-16 [Day 2]: Source march -> Proposal Approved: ID prop-recognition, revision 0, actor march, status PendingApproval, approvals [crown, march]
+  - Report rep-18 [Day 2]: Source crown -> Commitment Settled (ID: duty-vale-protection-d0, Promisor: crown, Beneficiary: vale, Amount: 20)
+  - Report rep-19 [Day 2]: Source crown -> ObjectRevisionAssertion
+  - Report rep-20 [Day 2]: Source crown -> CommitmentSnapshotAssertion
+  - Report rep-21 [Day 2]: Source crown -> ObjectRevisionAssertion
+  - Report rep-22 [Day 2]: Source crown -> CommitmentSnapshotAssertion
+  - Report rep-23 [Day 2]: Source crown -> ActorTreasuryAssertion
+  - Report rep-25 [Day 3]: Source march -> ObjectRevisionAssertion
+  - Report rep-26 [Day 3]: Source march -> ClaimRecognitionAssertion
+  - Report rep-28 [Day 3]: Source council -> Proposal Ratified: ID prop-recognition, revision 0, actor council, status Ratified, approvals [council, crown, march]
+  - Report rep-29 [Day 3]: Source crown -> ActorTreasuryAssertion
+
+crown [day 3]> [Proposal Inspection] ID: prop-recognition
+  Case ID:           case-westbank
+  Proposer:          crown
+  Counterpart:       march
+  Status:            Ratified (Revision 0)
+  Expiry Day:        4
+  Options:           1
+  Option 1 [SELECTED]:
+    - Immediate transfer: crown pays march 40 gold
+    - Recognition: march recognizes claim westbank-claim
+    Required Consents: [council, crown, march]
+    Recorded Approvals: [council, crown, march]
+    Remaining Consents: []
+  Delivered case positions (declared context, not private acceptance thresholds):
+    - council: Positive Claim:westbank-claim, published day 0
+    - league: Positive AccessRight:port-access, published day 0
+    - march: Negative Claim:westbank-claim, published day 0
+    - officers: Positive Claim:westbank-claim, published day 0
+    - vale: Positive Actor:vale, published day 0
+
+crown [day 3]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      crown
+Simulation Day:    3
+Known Treasury:    40
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 35
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 3
+  - league: Available; next legal day 3
+  - march: Available; next legal day 3
+  - officers: Available; next legal day 3
+  - vale: Available; next legal day 3
+    Current own promise coverage for crown (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 40; currently covered.
+
+crown [day 3]> Switched active actor to 'march'.
+
+march [day 3]> Match ID:          frontier-compact
+Scenario:          frontier-compact
+Active Actor:      march
+Simulation Day:    3
+Known Treasury:    65
+Active Agendas:    0
+Open Cases:        1
+Access Grants:     0
+Recognized Claims: 1
+Delivered Reports: 20
+Daily rule: one submitted intention per principal per simulation day, shared by controller aliases; inspection, syntax errors and previews submit none.
+Outgoing new-offer availability (selection, approval, rejection and counters do not reset this clock):
+  - council: Available; next legal day 3
+  - crown: Available; next legal day 3
+  - league: Available; next legal day 3
+  - officers: Available; next legal day 3
+  - vale: Available; next legal day 3
+    Current own promise coverage for march (present balance only; no income forecast or fulfilment guarantee):
+      Existing active own obligations: 0; proposed own obligations in this option: 0; combined: 0 gold.
+      Current confirmed treasury: 65; currently covered.
+
+march [day 3]> Delivered Information Reports:
+  Report rep-pos-council [Occurred Day 0, Delivered Day 0]
+    Source:    council
+    Assertion: PublishedPositionAssertion
+  Report rep-case-westbank-opened [Occurred Day 0, Delivered Day 0]
+    Source:    crown
+    Assertion: Case Opened (ID: case-westbank, Initiator: crown, Subjects: [WorldObject:westbank])
+  Report rep-init-revision-case-case-westbank [Occurred Day 0, Delivered Day 0]
+    Source:    crown
+    Assertion: ObjectRevisionAssertion
+  Report rep-init-revision-claim-westbank-claim [Occurred Day 0, Delivered Day 0]
+    Source:    crown
+    Assertion: ObjectRevisionAssertion
+  Report rep-pos-league [Occurred Day 0, Delivered Day 0]
+    Source:    league
+    Assertion: PublishedPositionAssertion
+  Report rep-march-treasury [Occurred Day 0, Delivered Day 0]
+    Source:    march
+    Assertion: ActorTreasuryAssertion
+  Report rep-pos-march [Occurred Day 0, Delivered Day 0]
+    Source:    march
+    Assertion: PublishedPositionAssertion
+  Report rep-pos-officers [Occurred Day 0, Delivered Day 0]
+    Source:    officers
+    Assertion: PublishedPositionAssertion
+  Report rep-pos-vale [Occurred Day 0, Delivered Day 0]
+    Source:    vale
+    Assertion: PublishedPositionAssertion
+  Report rep-recognition-march-westbank-own-fact [Occurred Day 0, Delivered Day 0]
+    Source:    march
+    Assertion: ClaimRecognitionAssertion
+  Report rep-recognition-march-westbank-own-revision [Occurred Day 0, Delivered Day 0]
+    Source:    march
+    Assertion: ObjectRevisionAssertion
+  Report rep-2 [Occurred Day 0, Delivered Day 1]
+    Source:    crown
+    Assertion: Proposal Published: ID prop-recognition, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Immediate transfer: crown pays march 40 gold; Recognition: march recognizes claim westbank-claim
+  Report rep-4 [Occurred Day 0, Delivered Day 1]
+    Source:    league
+    Assertion: Proposal Published: ID prop-league-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Access: crown grants league right port-access on subject westbank | Option 2: Access: crown grants league right port-access on subject westbank; Future promise: league promises crown 10 gold due day 5 | Option 3: Access: crown grants league right port-access on subject westbank; Immediate transfer: league pays crown 10 gold
+  Report rep-6 [Occurred Day 0, Delivered Day 1]
+    Source:    march
+    Assertion: Proposal Published: ID prop-march-case-westbank-d0, revision 0, status PendingSelection, selected option unspecified, expiry day 4; Option 1: Recognition: march recognizes claim westbank-claim; Future promise: crown promises march 40 gold due day 5 | Option 2: Recognition: march recognizes claim westbank-claim; Immediate transfer: crown pays march 40 gold
+  Report rep-14 [Occurred Day 1, Delivered Day 2]
+    Source:    march
+    Assertion: Proposal Selected: ID prop-recognition, revision 0, option 1, status PendingApproval, approvals [crown, march]
+  Report rep-16 [Occurred Day 1, Delivered Day 2]
+    Source:    march
+    Assertion: Proposal Approved: ID prop-recognition, revision 0, actor march, status PendingApproval, approvals [crown, march]
+  Report rep-25 [Occurred Day 2, Delivered Day 3]
+    Source:    march
+    Assertion: ObjectRevisionAssertion
+  Report rep-26 [Occurred Day 2, Delivered Day 3]
+    Source:    march
+    Assertion: ClaimRecognitionAssertion
+  Report rep-28 [Occurred Day 2, Delivered Day 3]
+    Source:    council
+    Assertion: Proposal Ratified: ID prop-recognition, revision 0, actor council, status Ratified, approvals [council, crown, march]
+  Report rep-30 [Occurred Day 2, Delivered Day 3]
+    Source:    march
+    Assertion: ActorTreasuryAssertion
+
+march [day 3]> Exiting session.

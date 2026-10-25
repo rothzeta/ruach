@@ -1,0 +1,43 @@
+{
+  "file": "/tmp/c15-runtime-qa-hunt-01-sFconW/music/rejection-after.mid",
+  "sha256": "ade167183ee082479fc0e70803b44f54e719492c8124c0b4eff7d227935257c1",
+  "bytes": 2945,
+  "format": 1,
+  "tracks": 5,
+  "division": 10080,
+  "counts": [
+    {
+      "track": 0,
+      "on": 0,
+      "off": 0,
+      "end_tick": 322560
+    },
+    {
+      "track": 1,
+      "on": 124,
+      "off": 124,
+      "end_tick": 322560
+    },
+    {
+      "track": 2,
+      "on": 58,
+      "off": 58,
+      "end_tick": 322560
+    },
+    {
+      "track": 3,
+      "on": 33,
+      "off": 33,
+      "end_tick": 322560
+    },
+    {
+      "track": 4,
+      "on": 73,
+      "off": 73,
+      "end_tick": 322560
+    }
+  ],
+  "checks": 307,
+  "all_passed": true,
+  "scope": "MIDI structural observation, not note correctness, audio, playback or listening"
+}

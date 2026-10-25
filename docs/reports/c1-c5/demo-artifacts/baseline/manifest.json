@@ -1,0 +1,110 @@
+{
+  "source": {
+    "ramec": {
+      "files": 1067,
+      "sha256": "b031193926643d9950916284e84d1cd714522bc8d63adf8d923de755778e2a21",
+      "changed_source_files": []
+    },
+    "pralice": {
+      "files": 442,
+      "sha256": "97da65b617c44affc7670239377a174e25ab7711f7110ad609c471dc7c3163a3",
+      "changed_source_files": []
+    }
+  },
+  "builds": {
+    "ramec_server": {
+      "path": "ramec/src/server/bin/Release/net10.0",
+      "files": 71,
+      "sha256": "ac30c3742c233a9a68ed9199e326e49426800f39cef4710561a822c1440a5eb0"
+    },
+    "ramec_client": {
+      "path": "ramec/src/client/dist",
+      "files": 16,
+      "sha256": "7202376ca12a52cc448a480fc6b471c88530afdbfe9918b262177d58d4957ef7"
+    },
+    "pralice_cli": {
+      "path": "pralice/src/Pralice.Cli/bin/Release/net10.0",
+      "files": 13,
+      "sha256": "833be74c145a8d8acc6222d5eed42d8db58f74cdfc8b6d4023d54117bde70755"
+    }
+  },
+  "critical": {
+    "tools/bun/bin/bun": {
+      "sha256": "a83d263767d839e4d2649ca8e35d07159c7afc99afdc96d731ced29e056dda0c"
+    },
+    "tools/dotnet-10.0.110/dotnet": {
+      "sha256": "55117d7d1f27537ee6e7a81b8b9f84f0b50c8cbd2d1d1e21684c31db1518230a"
+    },
+    "pralice/.tools/dotnet/dotnet": {
+      "sha256": "01d89e0a0191052bfea616cd4ce624c8faf13b05bbddf7f64499c23e2a9d9269"
+    },
+    "pralice/.tools/cache/dotnet-install.sh": {
+      "sha256": "082f7685e156738a1b2e2ed8381a621870d4ce8e8c59278034556f05c186eb2e"
+    },
+    "pralice/.tools/cache/Godot_v4.7.2-stable_mono_linux_x86_64.zip": {
+      "sha256": "129f82db7bafd54ae14bb5bb284041c73860e8c7a009a3a026ca5e946cbff247"
+    },
+    "tools/playwright/chromium-1248/chrome-linux64/chrome": {
+      "sha256": "377a9fc07b495c3b8d0ab8ec1fdfd153641759f9756fea34d8dfce4de82f5025"
+    },
+    "ramec/src/client/bun.lock": {
+      "sha256": "adf0a5bbbeaaf0f5cc67159cf21f9134290a8a8772c0466903f6965e08ea5cc1"
+    },
+    "nuget.config": {
+      "sha256": "4770f0974d81c5cb73b3290f075bb632f97289a7115daa4c67d95b12321e9fe6"
+    }
+  },
+  "output": {
+    "ramec/saved-document.body": {
+      "sha256": "92c721c8f87a42bf26d3470295df983ae092668d965088adcff600bf2c34dd7d"
+    },
+    "ramec/generation-request.json": {
+      "sha256": "6d29e17cf547a52fa4605a12640e66fac0f5d07d793726f5715b22f757356de9"
+    },
+    "ramec/fixture.body": {
+      "sha256": "93374c8fe07a361f34af92b553fffd5c3418280ce66c2f26e3d2b8e0dd729a5c"
+    },
+    "ramec/projection.body": {
+      "sha256": "c65092c2e3a592d35cd5bf25072ab91cd2074962060828733b43949463d3025a"
+    },
+    "ramec/performance.mid": {
+      "sha256": "0d74406d0a293a295977878c6a9b6171a1b0107f4693a999094423ef4ef7424f"
+    },
+    "ramec/ui-export.mid": {
+      "sha256": "0d74406d0a293a295977878c6a9b6171a1b0107f4693a999094423ef4ef7424f"
+    },
+    "ramec/saved-ui.png": {
+      "sha256": "7e306fd4114895b88aeba04dddbe5f57a70cc2494abcbff97943d0c2e8f3dcef"
+    },
+    "pralice/input.txt": {
+      "sha256": "ff8a90f417685a758421e495d44b78e5ad3faa182afaf9dd17a595877bf40354"
+    },
+    "pralice/play.stdout": {
+      "sha256": "36574d9cc4f4d1ed22a2686a18ded18d7c55f10dd0df5f97750e761386b80097"
+    },
+    "pralice/replay.stdout": {
+      "sha256": "2f572921517a977dcc3fd82887481f22a5ccb563c6fb70dfb8a94846f563b0ad"
+    },
+    "pralice/recognition.jsonl": {
+      "sha256": "c685111631c2e3d8b9b5241bb083df40ca991e41859bbde6909aa3de0034cd0f"
+    },
+    "closed-ramec.sqlite": {
+      "sha256": "fb26dbdcafe4c3f6c01c8becee8287ea06fdeda0e8c84cd815c4cf4fe304ca5a"
+    }
+  },
+  "packages": {
+    "vue": "3.5.43",
+    "vite": "6.4.3",
+    "typescript": "5.9.3",
+    "vue-tsc": "2.2.12",
+    "playwright-core": "1.64.0"
+  },
+  "pralice_scenario": {
+    "id": "frontier-compact",
+    "seed": "frontier-compact-v1",
+    "content_hash": "e33d56e12581d7f71edb8887129aec1e5b786200d316c6fc90f9657ec8679491",
+    "trace_version": 3
+  },
+  "tree_digest_contract": "SHA-256 of sorted lines: FILE_SHA256 + two spaces + relative path + LF; regular files only",
+  "created_at": "2026-10-25T19:29:21.439Z"
+}

@@ -1,0 +1,74 @@
+{
+  "reviewed_revision": "2c114e8b10768862d0dd9eafab4f982dc4fff1e9",
+  "blocking_finding": "LR-01",
+  "prepared": {
+    "role_hash": "70170a1cc1bfa0c3070e56a930c51876418dc82d9460607f662eac4e29e26c84",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "permissions": "auto-review",
+    "argv_count": 12,
+    "private_modes": [
+      448,
+      448,
+      384,
+      448
+    ]
+  },
+  "actual": {
+    "foreground_kind": "codex",
+    "argv_count": 1,
+    "native_PATH_matches_prepared": false,
+    "bootstrap_directory_still_in_PATH": true,
+    "herdr_native_identity_present": false,
+    "scoped_native_thread_matches": 1,
+    "native_thread_id_retained_privately": true,
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "context": {
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "approval_policy": "on-request",
+      "approvals_reviewer": "user",
+      "sandbox_policy": {
+        "type": "workspace-write",
+        "network_access": false,
+        "exclude_tmpdir_env_var": false,
+        "exclude_slash_tmp": false
+      },
+      "has_developer_instructions": false,
+      "developer_contains_canonical_reviewer": false
+    },
+    "canonical_role_present_in_developer_messages": false
+  },
+  "discriminating_probe": [
+    {
+      "customized": false,
+      "expected_argc": 5,
+      "actual_argc": 5,
+      "payload_matches": true,
+      "native_path_matches": true,
+      "bootstrap_still_in_native_path": false,
+      "submitted_command_bytes": 7
+    },
+    {
+      "customized": true,
+      "expected_argc": 5,
+      "actual_argc": 0,
+      "payload_matches": false,
+      "native_path_matches": false,
+      "bootstrap_still_in_native_path": true,
+      "submitted_command_bytes": 7
+    }
+  ],
+  "scope": {
+    "no_prompts": true,
+    "no_registration": true,
+    "no_new_native_thread_or_worker": true,
+    "no_global_settings_writes": true
+  },
+  "limits": [
+    "Process listing alone does not establish native argv payload",
+    "Stored native identity was discovered by exact-cwd public metadata, not guessed or registered",
+    "Per-turn context establishes policy mismatch; matching model/effort does not establish transport"
+  ]
+}

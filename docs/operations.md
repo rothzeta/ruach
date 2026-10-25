@@ -21,6 +21,22 @@ Pi adds the role through a private native extension and adds canonical skills in
 
 The selected harness kind must also appear in `herdr agent start --help`. The Herdr version inspected for this release supports Pi and omits Goose, so Goose live resolve, dry-run and start return `unsupported_herdr_kind` (exit 3) before creating resources. Offline Goose routing works. Use an upstream Herdr release that advertises Goose before attempting startup; the launcher never substitutes another kind. See [adapter evidence](../skills/ruach-herdr/references/adapters.md#pi-and-goose) and the [direct source examples](../README.md#develop-ruach-itself).
 
+### Agy advisory preparation
+
+The untagged 0.7.0 candidate adds non-Coordinator preparation for exactly Agy 1.4.7. Ruach's development wrapper offers Scout's explicit `gemini-3.8-flash-medium` alternative with inherited native permissions and portable effort `auto`; medium is already encoded in the native slug. Offline selection is read-only:
+
+```sh
+just agent-routing resolve scout --route gemini-3.8-flash-medium
+```
+
+This does not verify native prerequisites or authorize inference. Actual preparation checks installed flags/version, exact available model, expanded per-file role size and known skill conflicts before launch-space mutation. It adds a private always-on canonical role include and technical-skill links while preserving native rules, built-ins, account/config and trust. Coordinator, auto-review, unsupported effort and pass-through are rejected. No trust answer or automatic assignment submission occurs.
+
+Exact-source review and actual linked Scout advisory validation remain open. The native aggregate rule budget and declared/plugin/ambient discovery can affect role inlining and skill precedence; supplied workflow-link omission is not ambient/global workflow suppression. No Agy same-session watcher/continuation is claimed. See the [adapter limits](../skills/ruach-herdr/references/agy.md) and [canonical status](roadmap.md#c2--gemini-workeradvisor-adapter) before any separately authorized live use.
+
+### Long-argument startup and retained resources
+
+The accepted Codex/Bash correction avoids the observed 4095-byte terminal-input truncation by privately retaining the full prepared payload and binding its pinned bootstrap after shell initialization. Ready/blocked acceptance also checks payload and foreground-process evidence. This does not certify every shell/harness or establish productive behavior. Preserve private material, helper source and existing pane/worktree after active, uncertain or blocked startup; inspect the returned state before any new submission. Resource cleanup remains the task owner's decision after reuse ends. The [independent review](reports/c1-c5/launch-review-02.md) retains the failed first correction and bounded acceptance.
+
 ## Snapshot installation failures and recovery
 
 `ruach-install.ts install` stages every file under `.ruach-staging` in the target, then renames it into place and verifies the result. It never writes through an existing path, so hardlinks to managed files outside the snapshot keep their content and mode.
