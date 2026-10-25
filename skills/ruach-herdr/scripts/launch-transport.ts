@@ -18,6 +18,9 @@ const quote = (path: string) => "'" + path.replaceAll("'", "'\\''") + "'";
 // Leave room below the observed 4095-byte canonical-input boundary, including
 // shell quoting. This chooses a transport, not a limit on valid native argv.
 export function needsBootstrap(kind: string, argv: string[]): boolean {
+  // Agy's exact-version capability gate requires the probed executable even
+  // for its usual four arguments; shell startup may prepend a different one.
+  if (kind === 'agy') return true;
   const quotedBytes = argv.reduce((size, arg) => {
     return size + Buffer.byteLength(arg) + (arg.match(/'/g)?.length ?? 0) * 4 + 3;
   }, Buffer.byteLength(kind));
@@ -27,7 +30,7 @@ export function needsBootstrap(kind: string, argv: string[]): boolean {
 export function verifyBootstrapRuntime(kind: string, argv: string[], temporaryRoot: string) {
   if (!needsBootstrap(kind, argv)) return;
   if (typeof process.execve !== 'function') {
-    fail(3, 'unsupported_runtime', 'Large native argv requires Bun process.execve support', 'Bun');
+    fail(3, 'unsupported_runtime', 'Pinned native execution requires Bun process.execve support', 'Bun');
   }
   const setup = join(temporaryRoot, 'ruach-herdr-XXXXXXXX', 'bootstrap', 'setup.sh');
   if (Buffer.byteLength('. ' + quote(setup)) > 3000) {

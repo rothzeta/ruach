@@ -31,8 +31,9 @@ async function records(name: string) {
 async function launch(action = 'start', extra: string[] = [], roleName = 'scout', environment: Record<string, string> = {}) {
   await writeFile(join(root, 'behavior.json'), JSON.stringify(behavior));
   const placement = extra.includes('--placement') ? [] : ['--placement', 'pane'];
+  const runtime = environment.FIXTURE_BUN_PRELOAD ? ['--preload', environment.FIXTURE_BUN_PRELOAD] : [];
   const process = Bun.spawn([
-    globalThis.process.execPath, worker, action, '--name', 'advisory', '--role', roleName,
+    globalThis.process.execPath, ...runtime, worker, action, '--name', 'advisory', '--role', roleName,
     '--cwd', repo, '--repo', repo, '--resources', resources, '--kind', 'agy', '--model', model,
     '--temp-dir', temporary, ...placement, ...extra,
   ], {
@@ -116,7 +117,7 @@ test('additive private rule/source include and technical links preserve literal 
   expect((await stat(join(temp, '.agents/rules/ruach-scout.md'))).mode & 0o777).toBe(0o600);
   expect(result.stdout + result.stderr).not.toContain(roleBody);
   expect(result.stdout).not.toContain(temporary);
-  expect((await records('mutations.jsonl')).map(item => item.action)).toEqual(['split', 'start']);
+  expect((await records('mutations.jsonl')).map(item => item.action)).toEqual(['split', 'bootstrap', 'start']);
 });
 
 test('resolve, dry-run and start agree on exact selection without eager material or task submission', async () => {
@@ -131,6 +132,63 @@ test('resolve, dry-run and start agree on exact selection without eager material
   expect(result.exit).toBe(0);
   expect((await records('native-launches.jsonl'))[0].args[1]).toBe(model);
 });
+
+for (const customized of [false, true]) {
+  test(`C2-AR-01: short Agy executes the exact preflight executable; startup=${customized}`, async () => {
+    const startupBin = join(root, 'startup-bin');
+    await mkdir(startupBin);
+    const decoy = join(startupBin, 'agy');
+    await writeFile(decoy, `#!${globalThis.process.execPath}
+import { appendFileSync } from 'node:fs';
+import { join } from 'node:path';
+if (process.argv.includes('--version')) console.log('1.4.6');
+else {
+  appendFileSync(join(process.env.FIXTURE_ROOT!, 'native-launches.jsonl'), JSON.stringify({
+    executable: process.argv[1], args: process.argv.slice(2), version: '1.4.6',
+    path: process.env.PATH, startupSentinel: process.env.STARTUP_SENTINEL,
+    decoyUsed: 'yes', pid: process.pid,
+  }) + '\\n');
+  if (process.env.FIXTURE_NATIVE_HOLD === '1') await new Promise(() => { setInterval(() => {}, 1000); });
+}
+`, { mode: 0o700 });
+    const version = Bun.spawnSync([decoy, '--version']);
+    expect(version.exitCode).toBe(0);
+    expect(version.stdout.toString().trim()).toBe('1.4.6');
+    const rcfile = join(root, 'isolated.bashrc');
+    const startup = `export PATH='${startupBin}':"$PATH"\nexport STARTUP_SENTINEL=customization-retained\nPS1='RUACH_TERMINAL_READY> '\n`;
+    if (customized) await writeFile(rcfile, startup);
+    Object.assign(behavior, { terminalStart: true, startupPathPrepend: customized, startupBin });
+    const settings = await readFile(join(home, '.gemini/config/config.json'));
+    const result = await launch('start', ['--effort', 'auto', '--permissions', 'inherit']);
+    expect(result.exit, result.stderr).toBe(0);
+    const native = (await records('native-launches.jsonl'))[0];
+    console.info('C2-AR-01 public observation:', {
+      ready: result.result.ready, claimedVersion: result.result.cli_version,
+      executable: native.executable, actualVersion: native.version, argc: native.args.length,
+      startup: native.startupSentinel,
+    });
+    expect(native.args).toEqual(['--model', model, '--add-dir', result.result.temporary_directory]);
+    expect(native.executable).toBe(join(bin, 'agy'));
+    expect(native.version).toBe('1.4.7');
+    expect(native.decoyUsed).not.toBe('yes');
+    expect(native.path).toBe(bin);
+    expect(native.configHomes.home).toBe(home);
+    expect(native.cwd).toBe(repo);
+    expect(result.result.cli_version).toBe('1.4.7');
+    expect(result.result.permissions).toBe('inherit');
+    expect(result.result.selection.roleHash).toBe(createHash('sha256').update(role).digest('hex'));
+    const rule = await readFile(join(result.result.temporary_directory, '.agents/rules/ruach-scout.md'), 'utf8');
+    expect(rule).toContain(join(resources, 'agents/scout.md'));
+    expect(await readFile(join(resources, 'agents/scout.md'), 'utf8')).toBe(role);
+    expect(await readFile(join(home, '.gemini/config/config.json'))).toEqual(settings);
+    expect((await records('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(1);
+    expect((await records('terminal-start.jsonl'))[0].continuation).toBe(false);
+    if (customized) {
+      expect(native.startupSentinel).toBe('customization-retained');
+      expect(await readFile(rcfile, 'utf8')).toBe(startup);
+    }
+  });
+}
 
 test('Coordinator and auto-review fail before native inspection or mutation', async () => {
   const coordinator = await launch('start', [], 'coordinator');
@@ -250,6 +308,65 @@ for (const fault of ['startFailure', 'splitFailure', 'startBlocked']) {
     expect(result.exit).toBe(fault === 'startBlocked' ? 0 : 4);
     expect(result.result.submission_state).toBe(fault === 'startBlocked' ? 'awaiting-input' : 'unknown');
     expect(await Bun.file(join(result.result.temporary_directory, '.agents/rules/ruach-scout.md')).exists()).toBe(true);
+    expect(await Bun.file(join(result.result.temporary_directory, 'bootstrap/argv.json')).exists()).toBe(true);
     expect((await records('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(fault === 'splitFailure' ? 0 : 1);
   });
 }
+
+for (const fault of ['bypassBinding', 'removeReceipt', 'forgeReceipt', 'wrongForeground']) {
+  for (const blocked of [false, true]) {
+    test(`short Agy rejects an unconfirmed ready/blocked process: ${fault}, blocked=${blocked}`, async () => {
+      Object.assign(behavior, {
+        [fault]: true, startBlocked: blocked, inspectPane: 'w1:p2', inspectKind: 'agy',
+      });
+      const result = await launch();
+      expect(result.exit).toBe(4);
+      expect(result.result.diagnostics[0].code).toBe('bootstrap_unconfirmed');
+      expect(result.result.ready).not.toBe(true);
+      expect(result.result.submission_state).toBe('unknown');
+      const temp = result.result.temporary_directory;
+      expect(await Bun.file(join(temp, 'bootstrap/argv.json')).exists()).toBe(true);
+      expect(await Bun.file(join(temp, '.agents/rules/ruach-scout.md')).exists()).toBe(true);
+      expect((await records('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(1);
+    });
+  }
+}
+for (const fault of ['bootstrapSetupFailure', 'bootstrapWaitFailure']) {
+  test(`short Agy binding failure retains material without native submission: ${fault}`, async () => {
+    behavior[fault] = true;
+    const result = await launch();
+    expect(result.exit).toBe(4);
+    expect(result.result.diagnostics[0].code).toBe('bootstrap_uncertain');
+    expect(result.result.submission_state).toBe('unknown');
+    expect(await Bun.file(join(result.result.temporary_directory, 'bootstrap/argv.json')).exists()).toBe(true);
+    expect((await records('mutations.jsonl')).filter(item => item.action === 'start')).toHaveLength(0);
+  });
+}
+for (const fault of ['noBootstrapPrimitive', 'noBootstrapWaitOutput', 'noBootstrapProcessInfo']) {
+  test(`short Agy requires binding capability before worktree or launch-space mutation: ${fault}`, async () => {
+    behavior[fault] = true;
+    const result = await launch('start', ['--placement', 'worktree']);
+    expect(result.exit).toBe(3);
+    expect(result.result.diagnostics[0].code).toBe('unsupported_herdr_transport');
+    expect(result.result.worktree_state).toBe('not-created');
+    await noMutation();
+  });
+}
+test('short Agy requires execve before mutation', async () => {
+  const preload = join(root, 'unsupported-runtime.ts');
+  await writeFile(preload, "Object.defineProperty(process, 'execve', { value: undefined });\n");
+  const result = await launch('start', [], 'scout', { FIXTURE_BUN_PRELOAD: preload });
+  expect(result.exit).toBe(3);
+  expect(result.result.diagnostics[0].code).toBe('unsupported_runtime');
+  await noMutation();
+});
+test('late Agy binding capability failure retains only the created checkout', async () => {
+  behavior.noBootstrapPrimitiveSecondCwd = true;
+  const result = await launch('start', ['--placement', 'worktree']);
+  expect(result.exit).toBe(4);
+  expect(result.result.diagnostics[0].code).toBe('unsupported_herdr_transport');
+  expect(result.result.worktree_state).toBe('created');
+  expect(result.result.submission_state).toBe('not-submitted');
+  expect(await readFile(join(result.result.worktree.cwd, 'AGENTS.md'), 'utf8')).toBe('Consumer authority remains active.\n');
+  await noMutation();
+});

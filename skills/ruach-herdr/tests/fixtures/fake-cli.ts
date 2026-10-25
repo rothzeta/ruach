@@ -10,9 +10,9 @@ const data=JSON.parse(readFileSync(join(root,'behavior.json'),'utf8'));
 function out(v:any){console.log(JSON.stringify(v));}
 if(exe==='herdr') {
   if(args.join(' ')==='agent start --help')console.log(`--kind --pane [possible values: ${data.kinds??'claude, codex, pi, opencode, omp, agy'}]`);
-  else if (args.join(' ') === 'pane run --help') console.log(data.noBootstrapPrimitive ? '' : '<PANE_ID> <COMMAND>');
-  else if (args.join(' ') === 'pane wait-output --help') console.log('--match --timeout');
-  else if (args.join(' ') === 'pane process-info --help') console.log('--pane');
+  else if (args.join(' ') === 'pane run --help') console.log(data.noBootstrapPrimitive || data.noBootstrapPrimitiveSecondCwd && process.cwd() !== data.repo ? '' : '<PANE_ID> <COMMAND>');
+  else if (args.join(' ') === 'pane wait-output --help') console.log(data.noBootstrapWaitOutput ? '' : '--match --timeout');
+  else if (args.join(' ') === 'pane process-info --help') console.log(data.noBootstrapProcessInfo ? '' : '--pane');
   else if (args.slice(0, 2).join(' ') === 'pane run') {
     appendFileSync(join(root, 'mutations.jsonl'), JSON.stringify({ action: 'bootstrap', args }) + '\n');
     if (data.bootstrapSetupFailure) process.exit(1);
@@ -205,6 +205,7 @@ else if(args.join(' ')==='app-server daemon version') {
     path: process.env.PATH,
     pid: process.pid,
     startupSentinel: process.env.STARTUP_SENTINEL,
+    ...(exe === 'agy' ? { version: data.agyVersion ?? '1.4.7' } : {}),
     configHomes: {
       home: process.env.HOME,
       codex: process.env.CODEX_HOME,
