@@ -1,0 +1,42 @@
+{
+  "task": "C-IN-03",
+  "parent_manifest": {
+    "revision": "15f043d39f7baacac39c4d94a83c46e463a71f7e",
+    "path": "docs/reports/c1-c5/integration-refresh-imports.json",
+    "sha256": "78688867a6def1622731784eb9d72212e7ebf3bc1980a6ada6affeb88faae4c9",
+    "entries": 59,
+    "inherited_entries": 102
+  },
+  "imports": [
+    {
+      "revision": "23d05b896395637de1c35d2fe5d9c67bcf180872",
+      "path": "docs/assignments/c1-c5/REVIEW-C2-AR01-FIX-01.md",
+      "sha256": "c335b2f01c559f1d085d9866c6a69337204cf10f2b57541f2b0706c502665c8c",
+      "bytes": 4451
+    },
+    {
+      "revision": "23d05b896395637de1c35d2fe5d9c67bcf180872",
+      "path": "docs/reports/c1-c5/c2-executable-fix-review-artifacts/focused.stderr.txt",
+      "sha256": "c70a2999d15dd72605d5f4bc5adb7a110ed5d3f06417af8e5b1708f90771d08d",
+      "bytes": 2918
+    },
+    {
+      "revision": "23d05b896395637de1c35d2fe5d9c67bcf180872",
+      "path": "docs/reports/c1-c5/c2-executable-fix-review-artifacts/focused.stdout.txt",
+      "sha256": "d7cde93914a3a8985a4af4fb6822e3d09778d29211deda662dc289210a0a645f",
+      "bytes": 675
+    },
+    {
+      "revision": "23d05b896395637de1c35d2fe5d9c67bcf180872",
+      "path": "docs/reports/c1-c5/c2-executable-fix-review-artifacts/public-summary.json",
+      "sha256": "7a3029383a670279a7e741e290053dd8dc9841db1268c56da32cdf41fb0542ad",
+      "bytes": 18165
+    },
+    {
+      "revision": "23d05b896395637de1c35d2fe5d9c67bcf180872",
+      "path": "docs/reports/c1-c5/c2-executable-fix-review.md",
+      "sha256": "6c0a278c8554acd038c458f134ef01fc721f2ba11cf165722c445088fa097f89",
+      "bytes": 13247
+    }
+  ]
+}

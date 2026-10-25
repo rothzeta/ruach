@@ -1,6 +1,6 @@
 # Ruach
 
-Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). The bounded disposable music correction/retest loop is closed. C2 corrected-source review, actual native advisory validation and final combined acceptance remain open; this preparation does not authorize publication.
+Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). The bounded disposable music correction/retest loop is closed, and corrected C2 source passed independent review. Actual native advisory validation and final combined acceptance remain open; this preparation does not authorize publication.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 

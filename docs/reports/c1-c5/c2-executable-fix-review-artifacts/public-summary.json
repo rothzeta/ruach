@@ -1,0 +1,508 @@
+{
+  "reviewed_revision": "4c5defcd13691f9b6754fd0c9bc3fde311e45061",
+  "source_baseline": "1a2b3748cec0477a5dfff7f1bccd0895ad38f5b0",
+  "evidence_revision": "7ea42d943698bc23cafa472cf648ec20ab94c7e2",
+  "changed_paths": [
+    {
+      "path": "docs/roadmap.md",
+      "sha256": "22bf94a851e9aa62b4ca75f1893df307b5497858eb92524dd18cb8c5d25b4407"
+    },
+    {
+      "path": "skills/ruach-herdr/SKILL.md",
+      "sha256": "9e4c09bc504d526563f17e3960657b996693be4edda5d5703f2357fd68115c03"
+    },
+    {
+      "path": "skills/ruach-herdr/references/agy.md",
+      "sha256": "1745501a5fa663ededf6a5c92d39e258d23530cbaa93589e45e79e1c88c597ad"
+    },
+    {
+      "path": "skills/ruach-herdr/scripts/launch-transport.ts",
+      "sha256": "b52c4e31609e9e7868adc8fa9ccd2b074cf719fed4a48b277b8f577d7532ed2e"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/agy.test.ts",
+      "sha256": "bef35bcccfe9bbecfbeca18fb16ca5b72c714803a7c7bf36effadbb0a8bbbd8f"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/fake-cli.ts",
+      "sha256": "82f317d6655238b0a4a5cf337fe08f89724b723cd0468148a8b9b3a9be7bce34"
+    }
+  ],
+  "preserved_transport_paths": [
+    {
+      "path": "skills/ruach-herdr/scripts/worker.ts",
+      "sha256": "5b03bef880de79ba74717381b9fadddb906842692b3eea599fbd92fd12ace921"
+    },
+    {
+      "path": "skills/ruach-herdr/scripts/native-launch.ts",
+      "sha256": "8c6fa379a805acc23caeb43998519dd06d1beca66acb5b0ae1ba59c3eb2943a1"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/launch-transport.test.ts",
+      "sha256": "f75749bc6ab337083d4c2691b1cce8d95a035590f5bb0194a34b2284e2b1f8c1"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-start.ts",
+      "sha256": "abee9c7ad1f2ab2f7b1f91572e0e81ec8edb526dc08e71eaa20f6d5e11010628"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-host.ts",
+      "sha256": "6ebb296d615798f1e04ec7d88701c77201654e15a0410d1b62f33fb6675b9c80"
+    },
+    {
+      "path": "skills/ruach-herdr/tests/fixtures/terminal-client.ts",
+      "sha256": "0955ebc21cb80d69e69d2a95a61e3cf76cda2c01719434f25e59ab066b85b89b"
+    }
+  ],
+  "worker_test_unchanged_from_baseline": true,
+  "accepted_long_block_unchanged": true,
+  "old_selection_matches_prior_rejected_source": true,
+  "provided_checksums": [
+    {
+      "path": "check.log",
+      "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "path": "after-agy-initial.log",
+      "sha256": "186b07c21707a52de2ec81507dd7a578f43981310edc76ec5d457f21c2bebefe"
+    },
+    {
+      "path": "final-resource.log",
+      "sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5"
+    },
+    {
+      "path": "commands.jsonl",
+      "sha256": "1eabc118d12996b1efa780af9a1003a7d56f21c69e21ca63550fae90e3424c56"
+    },
+    {
+      "path": "safe-evidence.ts",
+      "sha256": "21143c65faaedb524bba8dc5f7fbb5d6b2bfeca77a228a5e2850bb557aa42c55"
+    },
+    {
+      "path": "original-customized.log",
+      "sha256": "24e395275bd013e4ccf134f51bca6dea4c59e84bfb1f430d1f052fda1051d8c6"
+    },
+    {
+      "path": "prior-review-public-summary.json",
+      "sha256": "2c9cd6974ce0194f24d6847d9f8661fc0ac0d95d48290be928023cd0a8aa9b56"
+    },
+    {
+      "path": "final-resource-initial.log",
+      "sha256": "2dabc7ff71e991569c015e9edb859049221960416e9beef9633b3cf484481221"
+    },
+    {
+      "path": "startup-probe.ts",
+      "sha256": "38df292337bd71760b2d5fe508dbf52f9c094ce3d3fe8199f9d03058524a616d"
+    },
+    {
+      "path": "before-pty.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "final-resource-initial.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "safe-evidence-initial.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "artifact-integrity.log",
+      "sha256": "53f5e48ad62b00821d3894d01f2446118cfd99703913b01fb9f6eb6b76735f35"
+    },
+    {
+      "path": "before-pty.log",
+      "sha256": "5438e36d89ae5fcc95d97d7c8c1a3314d362e456d22e82032d2291fb86520aeb"
+    },
+    {
+      "path": "original-helper.sha256",
+      "sha256": "5672c849b4a907258b754438aa1bb710fa8caefc03ac6e8665030d33580f7e35"
+    },
+    {
+      "path": "release-check.log",
+      "sha256": "5d17481483b37c5e81e978b6de9dde0e8ac61ae9130a5b9fb8d3b79582aec102"
+    },
+    {
+      "path": "final-privacy.log",
+      "sha256": "5dae84ab810624aca78ea283fd148726933bf26c71992bb49fd11fb993c74b05"
+    },
+    {
+      "path": "setup-assignment-path.log",
+      "sha256": "6668674811324661e5d936309fe19c2ef5f18f5be8b0063f466e1ed74fce1e37"
+    },
+    {
+      "path": "candidate.sha",
+      "sha256": "753a0af30872a3e2f48babb76c93fd11accb5c3e33026ac1e26847e4106f05d5"
+    },
+    {
+      "path": "focused.log",
+      "sha256": "7af43b8395f839140d03b12071f8ffb6ff987f582cf830961cd1ad64f599343d"
+    },
+    {
+      "path": "assignment.sha256",
+      "sha256": "8e068f286334dfe5a00a6b11ef1493a579cef0a58810ca1eddd6bd590955e812"
+    },
+    {
+      "path": "safe-evidence-initial.ts",
+      "sha256": "8ef907fbe870a7b3cd78161067591e655b95cbe64fb09440180be31333f499fe"
+    },
+    {
+      "path": "herdr-test.log",
+      "sha256": "924584b3010d3588216c3bc744b147218ae3d1324743d3a4131f8ab20b9ce4b9"
+    },
+    {
+      "path": "after-agy-initial.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "artifact-integrity.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "check.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "final-privacy.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "final-resource.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "focused.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "handoff-validate.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "herdr-test.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "original-clean.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "original-customized.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "protected-source.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "release-check.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "root-test.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "safe-evidence.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "unchanged-production-before-red.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "handoff-validate.log",
+      "sha256": "a0e95fd05485b2fd2afad27bd5c38b30b354ba8fe122cfbc9b35ba1a585dc3c9"
+    },
+    {
+      "path": "safe-evidence-initial.log",
+      "sha256": "aeea41d17e93dacc3d1b9762ef772efbaea8d84091d7e7fceacaf17fa6f7be63"
+    },
+    {
+      "path": "startup-clean-summary.json",
+      "sha256": "b00c112a62f17d437af7c201c061ce474838d8fa1c1a7bd473e25e7ce0a7dfe8"
+    },
+    {
+      "path": "safe-evidence.log",
+      "sha256": "b655480d712e5758de68754e3a0a8ff35ca45041e31b8afbeac29fb9e86aa934"
+    },
+    {
+      "path": "root-test.log",
+      "sha256": "b71b4e4ef1f37dade1d7580eac3fd165894fd559100a76eb63754e865aa74fd0"
+    },
+    {
+      "path": "original-clean.log",
+      "sha256": "c0f42ce533f208d5f4d4192032c44057b758e49c6dabb7018e2af03ee06b0f1f"
+    },
+    {
+      "path": "common.ts",
+      "sha256": "c618c7a10d74246761e227ad779d8d5984509811c0ea5081a145c99afda855fc"
+    },
+    {
+      "path": "startup-corrected-customized-summary.json",
+      "sha256": "dd24bc675e3d7a589d2391b818a1fbf77d68333d6e08ceea832319d8003d7202"
+    },
+    {
+      "path": "assignment-initial-empty.sha256",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run-startup.ts",
+      "sha256": "ec20a4e3f2d5de5dc3944707cdf2d5d8bd6d1765a979c7ab734ff447ba5907fc"
+    }
+  ],
+  "provided_checksum_count": 48,
+  "provided_final_receipts": [
+    {
+      "name": "check",
+      "command": "timeout 300s just check",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "check.log",
+      "sha256": "077997bed1f9b4967cac420dfa163139d6a49c915ad4584a436b7742cce310e5"
+    },
+    {
+      "name": "root-test",
+      "command": "timeout 300s bun run test",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "root-test.log",
+      "sha256": "b71b4e4ef1f37dade1d7580eac3fd165894fd559100a76eb63754e865aa74fd0",
+      "pass": 110,
+      "fail": 0
+    },
+    {
+      "name": "release-check",
+      "command": "timeout 300s bun run release-check",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions",
+      "exit": 0,
+      "log": "release-check.log",
+      "sha256": "5d17481483b37c5e81e978b6de9dde0e8ac61ae9130a5b9fb8d3b79582aec102"
+    },
+    {
+      "name": "herdr-test",
+      "command": "timeout 600s bun test --timeout 30000",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+      "exit": 0,
+      "log": "herdr-test.log",
+      "sha256": "924584b3010d3588216c3bc744b147218ae3d1324743d3a4131f8ab20b9ce4b9",
+      "pass": 285,
+      "fail": 0
+    },
+    {
+      "name": "focused",
+      "command": "timeout 300s bun test --timeout 30000 tests/agy.test.ts tests/launch-transport.test.ts tests/worker.test.ts --test-name-pattern 'C2-AR-01:|LR-01:|normal argv|long literal|private argv crosses|large startup|short Agy|late Agy|missing Bun|private binding failure'",
+      "cwd": "/opt/dev/ruach-worktrees/c15-instructions/skills/ruach-herdr",
+      "exit": 0,
+      "log": "focused.log",
+      "sha256": "7af43b8395f839140d03b12071f8ffb6ff987f582cf830961cd1ad64f599343d",
+      "pass": 36,
+      "fail": 0
+    },
+    {
+      "name": "original-customized",
+      "command": "timeout 120s bun /tmp/ruach-c2-ar01-YVZ9wPlA/run-startup.ts corrected-customized",
+      "cwd": "/tmp/ruach-c2-ar01-YVZ9wPlA",
+      "exit": 0,
+      "log": "original-customized.log",
+      "sha256": "24e395275bd013e4ccf134f51bca6dea4c59e84bfb1f430d1f052fda1051d8c6"
+    },
+    {
+      "name": "original-clean",
+      "command": "timeout 120s bun /tmp/ruach-c2-ar01-YVZ9wPlA/run-startup.ts clean",
+      "cwd": "/tmp/ruach-c2-ar01-YVZ9wPlA",
+      "exit": 0,
+      "log": "original-clean.log",
+      "sha256": "c0f42ce533f208d5f4d4192032c44057b758e49c6dabb7018e2af03ee06b0f1f"
+    }
+  ],
+  "original_helpers": [
+    {
+      "name": "common.ts",
+      "sha256": "c618c7a10d74246761e227ad779d8d5984509811c0ea5081a145c99afda855fc"
+    },
+    {
+      "name": "startup-probe.ts",
+      "sha256": "38df292337bd71760b2d5fe508dbf52f9c094ce3d3fe8199f9d03058524a616d"
+    },
+    {
+      "name": "run-startup.ts",
+      "sha256": "ec20a4e3f2d5de5dc3944707cdf2d5d8bd6d1765a979c7ab734ff447ba5907fc"
+    }
+  ],
+  "original_controls": [
+    {
+      "name": "clean",
+      "ready": true,
+      "actual_version": "1.4.7",
+      "intended_executable": true,
+      "argv_count": 4,
+      "literal_argv_matches": true,
+      "pinned_PATH_HOME_cwd_matches": true,
+      "canonical_role_and_context_preserved": true,
+      "inherit": true,
+      "single_start": true,
+      "receipt_nonce_hash_pid_match": true,
+      "private_modes_match": true,
+      "startup_sentinel_retained": false
+    },
+    {
+      "name": "corrected-customized",
+      "ready": true,
+      "actual_version": "1.4.7",
+      "intended_executable": true,
+      "argv_count": 4,
+      "literal_argv_matches": true,
+      "pinned_PATH_HOME_cwd_matches": true,
+      "canonical_role_and_context_preserved": true,
+      "inherit": true,
+      "single_start": true,
+      "receipt_nonce_hash_pid_match": true,
+      "private_modes_match": true,
+      "startup_sentinel_retained": true
+    }
+  ],
+  "commands": [
+    {
+      "name": "focused-default",
+      "argv": [
+        "bun",
+        "test",
+        "--timeout",
+        "30000",
+        "tests/agy.test.ts",
+        "tests/launch-transport.test.ts",
+        "tests/worker.test.ts",
+        "--test-name-pattern",
+        "C2-AR-01:|short Agy|late Agy binding|private argv crosses|failed native exec|long literal|normal argv|LR-01:"
+      ],
+      "cwd": "/tmp/c2-ar01-review-01-gnGBLh/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T23:16:26.816Z",
+      "ended": "2026-10-25T23:17:13.049Z",
+      "wall_ms": 46232.370578,
+      "pid": 17,
+      "exit": 1,
+      "signal": null,
+      "timeout_ms": 300000,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "3ed0f723b025cd972e5e9b5a07b6fb901432bbfa7ecdbb71e4336e1cf71bf5f5"
+    },
+    {
+      "name": "startup-clean",
+      "argv": [
+        "bun",
+        "/tmp/c2-ar01-review-01-gnGBLh/startup-probe.ts",
+        "clean"
+      ],
+      "cwd": "/tmp/c2-ar01-review-01-gnGBLh",
+      "started": "2026-10-25T23:18:14.366Z",
+      "ended": "2026-10-25T23:18:15.431Z",
+      "wall_ms": 1065.188187,
+      "pid": 939815,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "6f23762b637cde42f82f278dead6ebb905766757e3c5bc07850b2da386226ec6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "startup-corrected-customized",
+      "argv": [
+        "bun",
+        "/tmp/c2-ar01-review-01-gnGBLh/startup-probe.ts",
+        "corrected-customized"
+      ],
+      "cwd": "/tmp/c2-ar01-review-01-gnGBLh",
+      "started": "2026-10-25T23:18:15.029Z",
+      "ended": "2026-10-25T23:18:16.071Z",
+      "wall_ms": 1042.0615810000002,
+      "pid": 939941,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 120000,
+      "stdout_sha256": "223104f0158096d90700dc20e4090081392ebe707400f4c06146ff22f30e0429",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "focused-authorized",
+      "argv": [
+        "bun",
+        "test",
+        "--timeout",
+        "30000",
+        "tests/agy.test.ts",
+        "tests/launch-transport.test.ts",
+        "tests/worker.test.ts",
+        "--test-name-pattern",
+        "C2-AR-01:|short Agy|late Agy binding|private argv crosses|failed native exec|long literal|normal argv|LR-01:"
+      ],
+      "cwd": "/tmp/c2-ar01-review-01-gnGBLh/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T23:18:17.146Z",
+      "ended": "2026-10-25T23:18:31.955Z",
+      "wall_ms": 14809.608734,
+      "pid": 940277,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 300000,
+      "stdout_sha256": "d7cde93914a3a8985a4af4fb6822e3d09778d29211deda662dc289210a0a645f",
+      "stderr_sha256": "c70a2999d15dd72605d5f4bc5adb7a110ed5d3f06417af8e5b1708f90771d08d"
+    }
+  ],
+  "assignment_sha256": "c335b2f01c559f1d085d9866c6a69337204cf10f2b57541f2b0706c502665c8c",
+  "disposition": "No material source findings; ready for a separately assigned bounded real linked Agy advisory validation",
+  "independent_focused": {
+    "pass": 26,
+    "fail": 0,
+    "filtered": 195,
+    "assertions": 240,
+    "elapsed_seconds": 14.78,
+    "full_command_receipt": {
+      "name": "focused-authorized",
+      "argv": [
+        "bun",
+        "test",
+        "--timeout",
+        "30000",
+        "tests/agy.test.ts",
+        "tests/launch-transport.test.ts",
+        "tests/worker.test.ts",
+        "--test-name-pattern",
+        "C2-AR-01:|short Agy|late Agy binding|private argv crosses|failed native exec|long literal|normal argv|LR-01:"
+      ],
+      "cwd": "/tmp/c2-ar01-review-01-gnGBLh/candidate/skills/ruach-herdr",
+      "started": "2026-10-25T23:18:17.146Z",
+      "ended": "2026-10-25T23:18:31.955Z",
+      "wall_ms": 14809.608734,
+      "pid": 940277,
+      "exit": 0,
+      "signal": null,
+      "timeout_ms": 300000,
+      "stdout_sha256": "d7cde93914a3a8985a4af4fb6822e3d09778d29211deda662dc289210a0a645f",
+      "stderr_sha256": "c70a2999d15dd72605d5f4bc5adb7a110ed5d3f06417af8e5b1708f90771d08d"
+    }
+  },
+  "restricted_check": {
+    "exit": 1,
+    "classification": "Environment-blocked at Unix-socket prerequisite; direct transport helpers ran, Agy socket-dependent paths did not reach their claimed boundaries",
+    "recorded_pass": 12,
+    "recorded_fail": 11,
+    "recorded_errors": 1,
+    "accepted_pass_scope": "Five direct helper cases passed. Other pre-mutation observations are retained but do not replace authorized socket/PTY coverage."
+  },
+  "correction_accounting": {
+    "outcome": "C2-AR-01",
+    "completed_failed_cycles_before": 1,
+    "completed_failed_cycles_after_source_review": 1,
+    "default_limit": 2,
+    "current_correction_rejected": false,
+    "next_required_source_or_native_failure": "Total two requires Architect/authority escalation; no ordinary third fix or renamed reset",
+    "unrelated_LAUNCH_MQ_histories": "Unchanged; no task record edited"
+  },
+  "limits": [
+    "All runtime programs are harmless local recorders; no actual Agy/Herdr/model/native thread or account inspection",
+    "Actual native role/inherit policy/authoritative identity/linked skill source/aggregate budget/ambient precedence/literal brief/activation/advisory remain unverified",
+    "No Agy watcher or same-session continuation support established",
+    "Final union review, hosted CI and separately authorized delivery remain held",
+    "No source/test edits or dependency installation; prior raw evidence remains immutable"
+  ]
+}

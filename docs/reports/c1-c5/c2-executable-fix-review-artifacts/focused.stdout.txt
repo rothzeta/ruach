@@ -1,0 +1,28 @@
+bun test v1.4.2 (744846f84)
+PTY transport observation: {
+  observed: true,
+  canonical: true,
+  submittedBytes: 7,
+  continuation: false,
+}
+LR-01 public observation: {
+  ready: true,
+  actualArgc: 13,
+  startup: "customization-retained",
+}
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/c2-ar01-review-01-gnGBLh/tmp/ruach-agy-4i3RHT/bin/agy",
+  actualVersion: "1.4.7",
+  argc: 4,
+  startup: undefined,
+}
+C2-AR-01 public observation: {
+  ready: true,
+  claimedVersion: "1.4.7",
+  executable: "/tmp/c2-ar01-review-01-gnGBLh/tmp/ruach-agy-LRnOia/bin/agy",
+  actualVersion: "1.4.7",
+  argc: 4,
+  startup: "customization-retained",
+}

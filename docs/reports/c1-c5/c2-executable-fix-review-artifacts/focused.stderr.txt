@@ -1,0 +1,38 @@
+
+tests/launch-transport.test.ts:
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=false [113.06ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=false, startup=true [109.65ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=false [135.74ms]
+(pass) private argv crosses a real canonical PTY with an independent byte oracle; copied=true, startup=true [127.32ms]
+(pass) failed native exec removes its receipt and withholds literal data [43.70ms]
+
+tests/worker.test.ts:
+(pass) long literal native argv crosses the canonical PTY and preserves role, config, permissions and native PATH [859.07ms]
+(pass) normal argv still starts through a canonical PTY without private bootstrap material [487.47ms]
+(pass) LR-01: public worker preserves prepared role and permissions after ordinary shell startup prepends PATH [856.94ms]
+(pass) LR-01: startup cannot redirect the prepared launch to a different native executable [842.53ms]
+
+tests/agy.test.ts:
+(pass) C2-AR-01: short Agy executes the exact preflight executable; startup=false [827.97ms]
+(pass) C2-AR-01: short Agy executes the exact preflight executable; startup=true [820.59ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: bypassBinding, blocked=false [729.30ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: bypassBinding, blocked=true [748.03ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: removeReceipt, blocked=false [756.53ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: removeReceipt, blocked=true [792.17ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: forgeReceipt, blocked=false [745.16ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: forgeReceipt, blocked=true [785.02ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: wrongForeground, blocked=false [842.29ms]
+(pass) short Agy rejects an unconfirmed ready/blocked process: wrongForeground, blocked=true [938.46ms]
+(pass) short Agy binding failure retains material without native submission: bootstrapSetupFailure [634.86ms]
+(pass) short Agy binding failure retains material without native submission: bootstrapWaitFailure [669.00ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapPrimitive [304.80ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapWaitOutput [338.33ms]
+(pass) short Agy requires binding capability before worktree or launch-space mutation: noBootstrapProcessInfo [368.31ms]
+(pass) short Agy requires execve before mutation [314.23ms]
+(pass) late Agy binding capability failure retains only the created checkout [520.46ms]
+
+ 26 pass
+ 195 filtered out
+ 0 fail
+ 240 expect() calls
+Ran 26 tests across 3 files. [14.78s]
