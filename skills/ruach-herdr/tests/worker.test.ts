@@ -318,7 +318,7 @@ for(const [name,file,content] of [
   ['unknown keys','roles.yaml','roles:\n  implementer: {preferred: build.v1, surprise: yes}\n'],
   ['invalid YAML','models.yaml','models: [\n'],
 ] as const) test(`invalid routing ${name} fails before any mutation`,async()=>{await writeFile(join(repo,'.agents',file),content);const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(2);await noMutation();});
-for(const kind of ['pi','opencode','dsh','agy','omp'])test(`${kind} absent or unverified adapter fails accurately without mutation`,async()=>{const r=await launch('start',['--kind',kind,'--model','test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
+for(const kind of ['pi','opencode','dsh','omp'])test(`${kind} absent or unverified adapter fails accurately without mutation`,async()=>{const r=await launch('start',['--kind',kind,'--model','test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
 test('unsupported Herdr kind fails even when the harness executable exists',async()=>{await cp(join(bin,'codex'),join(bin,'dsh'));const r=await launch('start',['--kind','dsh','--model','test-model','--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe('unsupported_herdr_kind');await noMutation();});
 for(const env of [{HERDR_ENV:'0'},{HERDR_PANE_ID:''}] as Record<string,string>[])test('absent caller context fails without mutation',async()=>{const r=await launch('start',[...explicit,'--temp-dir',temporary],env);expect(r.exit).toBe(3);await noMutation();});
 test('unreachable Herdr and both unavailable Codex readers fail before launch mutation',async()=>{behavior.unreachable=true;let r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();behavior.unreachable=false;behavior.daemonMissing=true;behavior.stdioUnavailable=true;r=await launch('start',[...explicit,'--temp-dir',temporary]);expect(r.exit).toBe(3);await noMutation();});
@@ -386,7 +386,7 @@ for(const [route,effort] of [['work.medium','off'],['review.low','none']] as con
   await portableRouting();const file=join(repo,'.agents','routing.yaml');await writeFile(file,(await readFile(file,'utf8')).replace(route==='work.medium'?'effort: medium':'effort: low',`effort: ${effort}`));
   const r=await asRole('builder','start',['--route',route]);expect(r.exit).toBe(2);expect(r.result.diagnostics[0].code).toBe('unsupported_effort');await noMutation();
 });
-for(const kind of ['dsh','omp','agy'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
+for(const kind of ['dsh','omp'])test(`known gated routed ${kind} reports unavailable capability before mutation`,async()=>{
   const file=join(repo,'.agents','models.yaml');await writeFile(file,(await readFile(file,'utf8')).replace('harness: codex',`harness: ${kind}`));
   await cp(join(bin,'codex'),join(bin,kind));const r=await launch('start',['--temp-dir',temporary]);expect(r.exit).toBe(3);expect(r.result.diagnostics[0].code).toBe(kind==='dsh'?'unsupported_herdr_kind':'unsupported_adapter');await noMutation();
 });

@@ -1,4 +1,7 @@
 routes:
+  gemini-3.8-flash-medium:
+    model: gemini-3.8-flash-medium
+    effort: auto
   gpt-6.1-sol-high:
     model: gpt-6.1-sol
     effort: high

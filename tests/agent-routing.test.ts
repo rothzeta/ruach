@@ -253,6 +253,7 @@ function useHarness(kind: string) {
 for (const [kind, mode] of [
   ['codex', 'auto-review'],
   ['opencode', 'inherit'],
+  ['agy', 'inherit'],
 ]) {
   test(
     kind +
@@ -292,5 +293,23 @@ test('permission conflicts, undeclared policy and native permission overrides fa
     useHarness(kind);
     expect(run(['start', 'implementer']).status).toBe(2);
   }
+  useHarness('agy');
+  expect(run(['start', 'implementer', '--permissions', 'auto-review']).status).toBe(2);
   expect(existsSync(join(fixture, 'calls.jsonl'))).toBe(false);
+});
+test('Agy advisory is an explicit Scout-only development alternative with native slug effort', () => {
+  const result = run(['resolve', 'scout', '--route', 'gemini-3.8-flash-medium'], script);
+  expect(result.status, result.stderr).toBe(0);
+  const data = JSON.parse(result.stdout);
+  expect(data.selection.kind).toBe('agy');
+  expect(data.selection.model).toBe('gemini-3.8-flash-medium');
+  expect(data.selection.effort).toBe('auto');
+  expect(data.permissions).toBe('inherit');
+  expect(data.launchable).toBe(false);
+  expect(result.stderr).toContain('agy=inherit; source: scripts/agent-routing.ts');
+  for (const role of ['coordinator', 'implementer', 'tester']) {
+    const rejected = run(['resolve', role, '--route', 'gemini-3.8-flash-medium'], script);
+    expect(rejected.status).toBe(2);
+    expect(JSON.parse(rejected.stdout).diagnostics[0].code).toBe('disallowed_route');
+  }
 });

@@ -1,6 +1,6 @@
 // Test executable: record the public argv/cwd and simulate native read boundaries.
 import { basename, join } from 'node:path';
-import { appendFileSync, readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { parse as parseJSONC } from 'jsonc-parser';
 import { terminalRequest } from './terminal-client';
 const exe=basename(process.argv[1]),args=process.argv.slice(2);
@@ -105,10 +105,23 @@ if(exe==='herdr') {
     out({result:{agent:{name:args[2],pane_id:data.startWrongPane?'wrong-pane':args[args.indexOf('--pane')+1]}}});
   } else process.exit(2);
 } else if(args.includes('--help')) {
+  if (exe === 'agy') {
+    console.error(data.agyMissingFlag ? '--model' : '--model --add-dir');
+    process.exit(0);
+  }
   if(exe==='pi'){console.log(data.piMissingFlag?'--model':'--provider --model --thinking --extension --skill --offline --list-models');process.exit(0);}
   if(exe==='goose'){console.log(args[0]==='session'?(data.gooseMissingFlag?'--model':'--system --provider --model'):'session');process.exit(0);}
   console.log('--model --config --cd --effort --settings --add-dir --no-alt-screen --sandbox --ask-for-approval --verbose'+(data.noAutoReview?'':' --permission-mode --approve-for-me')+(exe==='opencode'&&!data.opencodeNoStandalone?' --standalone':''));
-} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':exe==='pi'?(data.piVersion??'1.4.0'):exe==='goose'?(data.gooseVersion??'1.56.0'):exe==='opencode'?(data.opencodeVersion??'2.1.4'):'1.0.0');
+} else if(args.includes('--version'))console.log(exe==='claude'?'2.1.289':exe==='codex'?'0.160.0':exe==='pi'?(data.piVersion??'1.4.0'):exe==='goose'?(data.gooseVersion??'1.56.0'):exe==='opencode'?(data.opencodeVersion??'2.1.4'):exe==='agy'?(data.agyVersion??'1.4.7'):'1.0.0');
+else if (exe === 'agy' && args.join(' ') === 'models') {
+  if (data.agyCatalogFailure) { console.error(data.leak ?? 'native catalog unavailable'); process.exit(1); }
+  if (data.agySecondCwdConflict && process.cwd() !== data.repo) {
+    const directory = join(process.cwd(), '.agents/skills/conflict');
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(join(directory, 'SKILL.md'), '---\nname: ruach-technical\ndescription: Different native skill\n---\n');
+  }
+  console.log((data.agyModels ?? ['gemini-3.8-flash-medium']).map((id: string) => id + '\tAvailable model').join('\n'));
+}
 else if(exe==='pi'&&args.includes('--list-models')) {
   console.log('provider model context max-out thinking images');
   if(!data.piMissingModel)console.log('native test-model 200K 16K yes yes');

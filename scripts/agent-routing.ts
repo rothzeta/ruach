@@ -12,6 +12,7 @@ const permissionPolicy: Record<string, string> = {
   claude: 'auto-review',
   codex: 'auto-review',
   opencode: 'inherit',
+  agy: 'inherit',
 };
 
 const source = resolve(import.meta.dir, '..');

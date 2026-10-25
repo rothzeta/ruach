@@ -8,7 +8,7 @@ roles:
     alternatives: [claude-opus-5.5-high, gpt-6.1-sol-high]
   scout:
     preferred: claude-sonnet-5.5-medium
-    alternatives: [gpt-6.1-sol-high]
+    alternatives: [gpt-6.1-sol-high, gemini-3.8-flash-medium]
   implementer:
     preferred: claude-sonnet-5.5-medium
     alternatives: [claude-sonnet-5.5-low, gpt-6.1-sol-high]
