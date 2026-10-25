@@ -1,0 +1,12 @@
+export type Clip = Readonly<{ id: number; name: string }>;
+
+export function chooseClip(
+  clips: readonly Clip[],
+  requestedId: number,
+): Clip | undefined {
+  if (!requestedId) {
+    return undefined;
+  }
+
+  return clips.find((clip) => clip.id === requestedId);
+}
