@@ -1,0 +1,231 @@
+$ bun test --timeout 30000 ./tests
+
+tests/ready.test.ts:
+(pass) ready never changes files and runs only version probes [252.46ms]
+(pass) a snapshot reports its version and revision, and drift makes the native route fail [215.51ms]
+(pass) nested package state is missing, mismatched or ready with a remediation command [331.26ms]
+(pass) a missing prerequisite fails only the routes that need it [316.84ms]
+(pass) Pi and Goose readiness checks report optional executables without requiring them [146.84ms]
+(pass) a Ruach skill duplicated across locations warns without changing the exit code [110.01ms]
+(pass) --json is stable and renders home paths with a tilde [107.21ms]
+(pass) exit codes: usage 2, unreadable location 3, no route 0 [253.70ms]
+132 |     expect(ready(['--route', 'skill']).status).toBe(3);
+133 |   }
+134 | });
+135 | test('ready works from the source layout and from an installed snapshot after the source is removed', () => {
+136 |   const result = json([], { installedScript: script, cwd: base }); expect(result.status, result.stderr).toBe(0);
+137 |   expect(result.data.active.kind).toBe('source');
+                                        ^
+error: expect(received).toBe(expected)
+
+Expected: "source"
+Received: "plugin"
+
+      at <anonymous> (/tmp/c15-combined-review-01-2nIBdr/source/tests/ready.test.ts:137:35)
+(fail) ready works from the source layout and from an installed snapshot after the source is removed [104.41ms]
+
+tests/dependencies.test.ts:
+(pass) ruach-herdr lockfile resolves patched dependency versions [1.79ms]
+(pass) ruach-handoff lockfile resolves patched dependency versions [0.04ms]
+
+tests/typecheck.test.ts:
+(pass) sources and tests typecheck under the pinned compiler [283.67ms]
+
+tests/check.test.ts:
+(pass) top-level evals pass from a foreign cwd [29.15ms]
+(pass) installed evals/cases/01/task.md fails [65.23ms]
+(pass) installed references/rubric.md fails [58.46ms]
+(pass) skill identity and description are required [50.57ms]
+(pass) relative links resolve encoded filenames and anchors and ignore code and external URLs [77.64ms]
+(pass) source symlinks are rejected and dependencies are excluded [78.95ms]
+(pass) standalone skill folder must carry the root LICENSE [77.39ms]
+(pass) standalone skill folder must carry the root PROVENANCE.md [78.67ms]
+(pass) compatibility metadata must be a single bounded line [129.09ms]
+(pass) an executable skill must declare its Bun prerequisite early [78.42ms]
+
+tests/docs-consistency.test.ts:
+(pass) user docs describe the shipped readiness command instead of calling it planned [1.40ms]
+(pass) the 0.3.0 changelog entry covers the integrated tracks accurately [0.35ms]
+(pass) operations guide documents recovery and linked-worktree cleanup [0.14ms]
+(pass) roadmap numbers linked worktrees A7 and hardening A8 [0.12ms]
+(pass) delivery is a separate gated Implementer assignment everywhere, with no Merger role or integration-and-merging pairing [0.62ms]
+(pass) the escalation count names where a consumer sets it [0.25ms]
+(pass) native parity guide records evidence, pending smoke checks and undecided items, and its links resolve [0.43ms]
+(pass) the 0.3.0 changelog states Track E honestly: documented, smoke checks pending [0.11ms]
+(pass) the Herdr suite runs with a raised per-test timeout in just test and is documented [0.09ms]
+(pass) known limitations document the filter fail-closed behavior and the trust boundary [0.14ms]
+
+tests/agent-routing.test.ts:
+(pass) real source offline selection for coordinator works from a foreign cwd [247.31ms]
+(pass) real source offline selection for architect works from a foreign cwd [232.54ms]
+(pass) real source offline selection for scout works from a foreign cwd [240.10ms]
+(pass) real source offline selection for implementer works from a foreign cwd [235.85ms]
+(pass) real source offline selection for reviewer works from a foreign cwd [242.92ms]
+(pass) real source offline selection for librarian works from a foreign cwd [228.05ms]
+(pass) offline resolution honors declared alternatives and rejects other routes [342.69ms]
+(pass) start delegates once with default name, source roots, and exact output forwarding [145.23ms]
+(pass) external worktree selects policy and cwd while source code and resources remain canonical [145.10ms]
+(pass) Architect wrapper forwards exact background worktree options once [137.60ms]
+(pass) worker exit 2 is preserved without retry [139.74ms]
+(pass) worker exit 3 is preserved without retry [141.27ms]
+(pass) worker exit 4 is preserved without retry [151.21ms]
+(pass) invalid arguments do not invoke the worker [379.58ms]
+(pass) codex policy agrees across resolve, dry-run and start regardless of caller harness [431.99ms]
+(pass) opencode policy agrees across resolve, dry-run and start regardless of caller harness [497.01ms]
+(pass) agy policy agrees across resolve, dry-run and start regardless of caller harness [454.60ms]
+(pass) permission conflicts, undeclared policy and native permission overrides fail before launcher invocation [746.74ms]
+(pass) Agy advisory is an explicit Scout-only development alternative with native slug effort [627.85ms]
+
+tests/release.test.ts:
+(pass) matching semantic release metadata passes from a foreign cwd [27.87ms]
+(pass) plugin version drift fails [26.89ms]
+(pass) marketplace release drift fails [26.70ms]
+(pass) an unreleased package version needs a changelog entry [26.96ms]
+(pass) invalid semantic version and native agent identity fail [52.34ms]
+(pass) release requires every standalone skill folder to carry the root LICENSE and PROVENANCE [132.25ms]
+
+tests/install.test.ts:
+(pass) committed snapshot runs without source and preserves policy [157.55ms]
+(pass) development evals are not installed [166.56ms]
+(pass) drift requires explicit replace before update [357.79ms]
+(pass) added skill files are drift but extra consumer skills and dependencies are allowed [344.94ms]
+(pass) update prunes only previously managed files [279.01ms]
+(pass) unmanaged conflict fails before any write [212.10ms]
+(pass) symlink destination and source are rejected [120.23ms]
+(pass) metadata symlink is rejected before writes [64.42ms]
+(pass) missing file and executable mode drift are detected [319.58ms]
+(pass) upstream check detects locally rewritten manifest [210.65ms]
+(pass) invalid revision and unsafe metadata do not mutate [246.44ms]
+(pass) binary blobs and unusual filenames survive pinned installation [178.87ms]
+(pass) update removes the previous installer while preserving consumer policy [309.33ms]
+(pass) Git environment cannot redirect the explicit source [121.08ms]
+(pass) replacement refs cannot alter the pinned snapshot [133.99ms]
+(pass) unknown and incomplete CLI options fail without mutation [96.23ms]
+(pass) installing an annotated release records its version and immutable commit [158.60ms]
+(pass) release selection requires a tag with matching committed package metadata [109.57ms]
+(pass) ambiguous and invalid version options are rejected before writes [242.70ms]
+(pass) upstream check detects a locally rewritten release version [197.14ms]
+(pass) RU-08: updating a hardlinked managed file leaves the outside link untouched [228.00ms]
+(pass) RU-08: a mode change does not alter the outside hardlink [228.66ms]
+(pass) RU-08: pruning and --replace adoption leave outside hardlinks untouched [327.26ms]
+(pass) RU-07: a failing commit restores the previous tree [240.94ms]
+(pass) RU-07: removals are restored when the commit fails [248.63ms]
+(pass) RU-07: directories created by a failed update are removed [184.87ms]
+(pass) RU-09: a leftover in an incoming skill root fails without --replace [178.80ms]
+(pass) RU-09: --replace removes a leftover in an incoming skill root [289.33ms]
+(pass) RU-09: dependencies in an incoming skill root are not leftovers [233.24ms]
+(pass) RU-09: non-regular leftovers fail even with --replace [231.67ms]
+(pass) an interrupted install blocks install and check [216.80ms]
+(pass) RU-07: structural conflicts are rejected before any mutation, even with --replace [116.73ms]
+(pass) R2-I: drift created while waiting for the lock is refused without overwriting [314.82ms]
+(pass) R2-I: removals come from the manifest current under the lock [392.74ms]
+(pass) R2-I: a path another install creates is not planned as a create and lost [201.54ms]
+(pass) R2-I: another owner of the staging lock is left untouched [220.25ms]
+(pass) R2-I: metadata that becomes invalid under the lock is refused and owned staging is removed [393.80ms]
+(pass) R2-I: an unsafe skill entry that appears under the lock is refused even with --replace [205.51ms]
+(pass) R2-I: --replace plans a file deleted while waiting as a create from the current state [264.13ms]
+(pass) R2-I: --replace overwrites drift that appears while waiting [274.44ms]
+(pass) R2-I: a symlinked target ancestor is refused before anything is created through it [73.97ms]
+(pass) R2-I: a symlinked target root is refused without a transient lock in the link destination [79.03ms]
+
+tests/readme-routing.test.ts:
+(pass) the README "Choose your models" catalogs are valid and alternatives are explicit-only [483.17ms]
+
+tests/plugin-install.test.ts:
+(pass) install-plugin registers the checkout path and installs the native plugin [59.52ms]
+(pass) install-plugins registers the checkout path and installs the native plugin [58.03ms]
+(pass) install-plugin ruach registers the checkout path and installs the native plugin [55.82ms]
+(pass) install-plugins ruach registers the checkout path and installs the native plugin [55.49ms]
+(pass) marketplace registration failure prevents plugin installation [28.64ms]
+(pass) plugin argument is passed literally without shell interpolation [55.81ms]
+
+tests/agent-waiting.test.ts:
+137 |           throw new Error('Forbidden native operation: ' + message.method);
+138 |       }
+139 |       ws.send(JSON.stringify({ id: message.id, result }));
+140 |     }),
+141 |   );
+142 |   await new Promise<void>((done, reject) =>
+                ^
+EPERM: operation not permitted, listen '/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-BKWKO9/native.sock'
+    path: "/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-BKWKO9/native.sock",
+ syscall: "listen",
+   errno: -1,
+    code: "EPERM"
+
+      at <anonymous> (node:_http_server:359:39)
+      at <anonymous> (node:_http_server:332:33)
+      at new Promise (1:11)
+      at fixture (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:142:9)
+      at <anonymous> (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:220:19)
+(fail) consumer entry uses canonical delivery through dropped events, busy parking, interrupted send and restart [2.15ms]
+137 |           throw new Error('Forbidden native operation: ' + message.method);
+138 |       }
+139 |       ws.send(JSON.stringify({ id: message.id, result }));
+140 |     }),
+141 |   );
+142 |   await new Promise<void>((done, reject) =>
+                ^
+EPERM: operation not permitted, listen '/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-k2RpXd/native.sock'
+    path: "/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-k2RpXd/native.sock",
+ syscall: "listen",
+   errno: -1,
+    code: "EPERM"
+
+      at <anonymous> (node:_http_server:359:39)
+      at <anonymous> (node:_http_server:332:33)
+      at new Promise (1:11)
+      at fixture (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:142:9)
+      at <anonymous> (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:291:19)
+(fail) consumer arming rejects a replaced Coordinator and reports removed/replaced workers with old identity [0.57ms]
+137 |           throw new Error('Forbidden native operation: ' + message.method);
+138 |       }
+139 |       ws.send(JSON.stringify({ id: message.id, result }));
+140 |     }),
+141 |   );
+142 |   await new Promise<void>((done, reject) =>
+                ^
+EPERM: operation not permitted, listen '/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-wdGsgX/native.sock'
+    path: "/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-wdGsgX/native.sock",
+ syscall: "listen",
+   errno: -1,
+    code: "EPERM"
+
+      at <anonymous> (node:_http_server:359:39)
+      at <anonymous> (node:_http_server:332:33)
+      at new Promise (1:11)
+      at fixture (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:142:9)
+      at <anonymous> (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:325:19)
+(fail) consumer retains an actionable failure when a registered worker disappears [0.42ms]
+137 |           throw new Error('Forbidden native operation: ' + message.method);
+138 |       }
+139 |       ws.send(JSON.stringify({ id: message.id, result }));
+140 |     }),
+141 |   );
+142 |   await new Promise<void>((done, reject) =>
+                ^
+EPERM: operation not permitted, listen '/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-NEMMkZ/native.sock'
+    path: "/tmp/c15-combined-review-01-2nIBdr/tmp/ruach-consumer-wait-NEMMkZ/native.sock",
+ syscall: "listen",
+   errno: -1,
+    code: "EPERM"
+
+      at <anonymous> (node:_http_server:359:39)
+      at <anonymous> (node:_http_server:332:33)
+      at new Promise (1:11)
+      at fixture (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:142:9)
+      at <anonymous> (/tmp/c15-combined-review-01-2nIBdr/source/tests/agent-waiting.test.ts:340:21)
+(fail) consumer fails unsupported continuation and missing authoritative identity without a delivery [0.51ms]
+
+5 tests failed:
+(fail) ready works from the source layout and from an installed snapshot after the source is removed [104.41ms]
+(fail) consumer entry uses canonical delivery through dropped events, busy parking, interrupted send and restart [2.15ms]
+(fail) consumer arming rejects a replaced Coordinator and reports removed/replaced workers with old identity [0.57ms]
+(fail) consumer retains an actionable failure when a registered worker disappears [0.42ms]
+(fail) consumer fails unsupported continuation and missing authoritative identity without a delivery [0.51ms]
+
+ 105 pass
+ 5 fail
+ 943 expect() calls
+Ran 110 tests across 11 files. [18.93s]
+error: script "test" exited with code 1

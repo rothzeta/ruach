@@ -1,0 +1,37 @@
+{
+  "validator": {
+    "argv": [
+      "bun",
+      "/opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts",
+      "docs/reports/c1-c5/combined-source-review.md",
+      "--repo",
+      "/opt/dev/ruach-worktrees/c15-review"
+    ],
+    "cwd": "/opt/dev/ruach-worktrees/c15-review",
+    "started": "2026-10-26T00:20:54.583Z",
+    "ended": "2026-10-26T00:20:54.678Z",
+    "exit": 0,
+    "signal": null,
+    "stdout": "{\"schema_version\":1,\"ok\":true,\"report\":\"/opt/dev/ruach-worktrees/c15-review/docs/reports/c1-c5/combined-source-review.md\",\"repo\":\"/opt/dev/ruach-worktrees/c15-review\",\"revisions\":[{\"path\":\"/reviewed_revision\",\"resolved\":\"171a478d3fb2a93e4b68760f132232f56786f5d5\"},{\"path\":\"/tested_revision\",\"resolved\":\"171a478d3fb2a93e4b68760f132232f56786f5d5\"},{\"path\":\"/source_baseline\",\"resolved\":\"2b693cd72bf39c29575841a88d9c7ae719a29715\"},{\"path\":\"/evidence_revision\",\"resolved\":\"47cd46aaf9b808bd226f249899eab269100325f7\"},{\"path\":\"/mq_tester_evidence_revision\",\"resolved\":\"30deb550359d09ecd3381bfb581e688b8ae40491\"},{\"path\":\"/mq_source_review_revision\",\"resolved\":\"fe8eae24e1d784ec49d9eeaacd756a178f3caf98\"},{\"path\":\"/c2_source_revision\",\"resolved\":\"4c5defcd13691f9b6754fd0c9bc3fde311e45061\"},{\"path\":\"/c2_source_review_revision\",\"resolved\":\"23d05b896395637de1c35d2fe5d9c67bcf180872\"}],\"diagnostics\":[]}\n",
+    "stderr": ""
+  },
+  "resources": {
+    "argv": [
+      "bun",
+      "scripts/check.ts"
+    ],
+    "cwd": "/opt/dev/ruach-worktrees/c15-review",
+    "started": "2026-10-26T00:20:54.678Z",
+    "ended": "2026-10-26T00:20:54.784Z",
+    "exit": 0,
+    "signal": null,
+    "stdout": "Resource identities, eval placement and relative Markdown file targets passed; behavioral quality untested\n",
+    "stderr": ""
+  },
+  "assignment_sha256": "2dab1c44c16a28643e5b356ff0bb97ef84da0b97f3a4fa2df5db0c84eca11bf1",
+  "assignment_unchanged": true,
+  "evidence_files_verified": 25,
+  "owned_files_privacy_checked": 28,
+  "privacy_pattern_findings": 0,
+  "report_sha256": "160e289c298ec68fcb142d6b53b9af7c662f244768a79c59a65a94702880f056"
+}
