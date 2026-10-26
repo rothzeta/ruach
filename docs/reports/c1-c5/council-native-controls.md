@@ -26,6 +26,8 @@ native_version: codex-cli 0.164.0
 native_command_controls: passed
 whole_member_independence: held
 
+> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.
+
 This completes the scoped controls in the unchanged [assignment](../../assignments/c1-c5/C1-CONTROLS-01.md). **The native command boundary now passes. A whole Codex member's independent first round is not yet established.** This continues the same investigation; [original OS/native failures](council-isolation.md) and [the direct-host executable failure](council-native-preflight.md) remain original evidence, not retroactive passes. No model/worker/council/inference, source correction, global configuration/permission/trust/discovery change, delivery, merge/push or task teardown occurred.
 
 ## Exact runtime change and invocation
@@ -34,7 +36,7 @@ Worktree baseline: `51ad27f244df6e92de9adde481b47249522aa734`. Inspected canonic
 
 `codex --version` remains `codex-cli 0.164.0`. The same static executable at `$HOME/.codex/packages/standalone/releases/0.164.0-x86_64-unknown-linux-musl/bin/codex` was rehashed: `b93f6811d3f653f0fb83be4050d857fb9abbb111dfa2ce160563327daff7f306`, matching both earlier reports. The **only added runtime read grant** is this exact file. No broader package parent, HOME, CODEX_HOME, credential, shared-report, session or cache grant was added. No additional library grant or runtime-file iteration was necessary.
 
-Runtime grant bytes/reason/hash are [runtime-grants.json](/tmp/c1-controls-01.FXfAt0/attempt-01/runtime-grants.json). Raw evidence is under `R=/tmp/c1-controls-01.FXfAt0`; existing harmless fixtures remain under `S=/tmp/c1-isolation-01.IEPMA3`.
+Runtime grant bytes/reason/hash are runtime-grants.json (`/tmp/c1-controls-01.FXfAt0/attempt-01/runtime-grants.json`). Raw evidence is under `R=/tmp/c1-controls-01.FXfAt0`; existing harmless fixtures remain under `S=/tmp/c1-isolation-01.IEPMA3`.
 
 The authorized direct-host execution, cwd this Ruach worktree, was:
 
@@ -51,16 +53,16 @@ Only explicit environment changes: `TMPDIR=R/tmp`, `XDG_RUNTIME_DIR=R/runtime`, 
 
 Native argv for each case uses the verified absolute binary, `sandbox --include-managed-config -P PROFILE`, `-c 'approval_policy="on-request"'`, `-c 'approvals_reviewer="auto_review"'`, the inline filesystem table, `-c 'permissions.PROFILE.network.enabled=false'`, `-C S/MEMBER/out`, then `-- /usr/bin/python3 -c READ_WRITE_LOOP`. Full exact argv, profile bytes and original stdout/stderr are retained per case:
 
-- [A strict profile](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.toml), [argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.argv.json), [native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.stdout).
-- [B strict profile](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.toml), [argv](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.argv.json), [native output](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.stdout).
-- [Exact peer-file grant control](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.toml), [argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.argv.json), [native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.stdout).
-- [Contaminated-input control](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.toml), [argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.argv.json), [native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.stdout).
+- A strict profile (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.toml`), argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.argv.json`), native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.stdout`).
+- B strict profile (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.toml`), argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.argv.json`), native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.stdout`).
+- Exact peer-file grant control (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.toml`), argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.argv.json`), native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.stdout`).
+- Contaminated-input control (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.toml`), argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.argv.json`), native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.stdout`).
 
 Strict A/B tables grant `:minimal=read`, the exact `S/inputs/question.txt=read`, only `S/a/out=write` or `S/b/out=write`, the exact `/opt/dev/ruach/agents/scout.md=read`, exact `/opt/dev/ruach/skills/ruach-handoff/SKILL.md=read`, and the verified native executable file `=read`. A/B differ only in member/profile/output identities and authored output text. The same read/write loop and runtime grant apply symmetrically. There is no bypass, `never`, disabled reviewer, removed managed configuration or broader account-directory grant.
 
 ## Native results and independent controls
 
-These are **actual native child** results, not an outer runner's success. All four native commands exited 0, emitted parseable read/write JSON and had empty stderr. Host UID and child UID were 1000. [commands.jsonl](/tmp/c1-controls-01.FXfAt0/commands.jsonl) records full argv/cwd/environment/timestamps/exits; [result.json](/tmp/c1-controls-01.FXfAt0/attempt-01/result.json) retains observed JSON.
+These are **actual native child** results, not an outer runner's success. All four native commands exited 0, emitted parseable read/write JSON and had empty stderr. Host UID and child UID were 1000. commands.jsonl (`/tmp/c1-controls-01.FXfAt0/commands.jsonl`) records full argv/cwd/environment/timestamps/exits; result.json (`/tmp/c1-controls-01.FXfAt0/attempt-01/result.json`) retains observed JSON.
 
 | Case | Native PID / exit | Decisive observation |
 | --- | --- | --- |
@@ -75,13 +77,13 @@ Nine strict excluded paths in each actor view: the other actor's `out/answer.md`
 
 Unmasked host reads/stat/hash of all thirteen original marker/resource paths succeeded before and after native execution. The exact peer-file control then made that same authored B marker readable through the native command. Together, these controls establish view exclusion of **existing** data, not a failed lookup of nonexistent test files. Strict direct peer-output writes also failed with ENOENT, and no corresponding host files were present. Own-output reads/writes succeeded and their new harmless text persisted only in the authorized own-output directories.
 
-There is an additional observed distinction in the **deliberately broader exact peer-file control**: the child could create/read a new sibling filename at the displayed peer-output path, but that sibling file was absent on the host after the command exited. The existing peer answer stayed unchanged. This is consistent with namespace-only synthetic parent storage, but its mechanism was not separately traced. It is not reported as a strict-profile denial, a persistent peer write, or a consumer defect. Do not generalize these controls to all possible namespace scratch writes merely from path spelling. [verification.json](/tmp/c1-controls-01.FXfAt0/verification.json) records native success and host absence separately.
+There is an additional observed distinction in the **deliberately broader exact peer-file control**: the child could create/read a new sibling filename at the displayed peer-output path, but that sibling file was absent on the host after the command exited. The existing peer answer stayed unchanged. This is consistent with namespace-only synthetic parent storage, but its mechanism was not separately traced. It is not reported as a strict-profile denial, a persistent peer write, or a consumer defect. Do not generalize these controls to all possible namespace scratch writes merely from path spelling. verification.json (`/tmp/c1-controls-01.FXfAt0/verification.json`) records native success and host absence separately.
 
-`timeout 120 bun R/verify.ts`, cwd this worktree, exited 0 with **41/41 authored checks**: original existence/preservation, strict visibility, exact positive marker bytes, own persisted output, failed peer writes, the exact-grant control and native hardlink exposure. The raw [checker output](/tmp/c1-controls-01.FXfAt0/verify.stdout) and [checker source](/tmp/c1-controls-01.FXfAt0/verify.ts) remain separate from the native implementation. No unrelated test suite or product command was run.
+`timeout 120 bun R/verify.ts`, cwd this worktree, exited 0 with **41/41 authored checks**: original existence/preservation, strict visibility, exact positive marker bytes, own persisted output, failed peer writes, the exact-grant control and native hardlink exposure. The raw checker output (`/tmp/c1-controls-01.FXfAt0/verify.stdout`) and checker source (`/tmp/c1-controls-01.FXfAt0/verify.ts`) remain separate from the native implementation. No unrelated test suite or product command was run.
 
 ## Preserved evidence and source authority
 
-[Host before](/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-before.json) and [host after](/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-after.json) match for all thirteen original paths, including UID, byte count and SHA-256. This includes both original answers and the hardlink/symlink targets. Only new harmless own-output probe files were added; no original marker/output/log was overwritten.
+Host before (`/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-before.json`) and host after (`/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-after.json`) match for all thirteen original paths, including UID, byte count and SHA-256. This includes both original answers and the hardlink/symlink targets. Only new harmless own-output probe files were added; no original marker/output/log was overwritten.
 
 Selected original digests:
 
@@ -92,7 +94,7 @@ Selected original digests:
 | Canonical Scout | `750eb21d2dc8e11bd7008207fba8d88d5744b789f7d646d939b50c1657db4376` |
 | Canonical handoff skill | `59e43c30321167aceaf5b59837db1c5e114c48f4d23bd340c5aa579957569445` |
 
-[Evidence digests](/tmp/c1-controls-01.FXfAt0/evidence-digests.json) additionally identify the prior socket/lock/netlink/executable errors, earlier OS controls and current native outputs. Prior-log hashes were observed now; they are not falsely presented as an earlier before/after audit. Those original files were never write targets. The earlier missing-native-executable failure remains a failed preflight; only the scoped exact-file amendment produced these new passing command controls. No engineering correction cycle or architecture requirement is inferred from the earlier helper/setup failures.
+Evidence digests (`/tmp/c1-controls-01.FXfAt0/evidence-digests.json`) additionally identify the prior socket/lock/netlink/executable errors, earlier OS controls and current native outputs. Prior-log hashes were observed now; they are not falsely presented as an earlier before/after audit. Those original files were never write targets. The earlier missing-native-executable failure remains a failed preflight; only the scoped exact-file amendment produced these new passing command controls. No engineering correction cycle or architecture requirement is inferred from the earlier helper/setup failures.
 
 ## Actual-member boundary and smallest next setup
 
@@ -104,7 +106,7 @@ Relevant access-surface metadata, without secrets or peer-session enumeration:
 - `codex plugin list --json` exited 0 with `installed`/`available` top-level structure, but warned that its remote installed-plugin catalog request failed. The safe metadata collector did not retain raw plugin records or credentials; no complete enabled-plugin inventory is claimed. No escalation or retry was used for that partial catalog.
 - The prior supported no-server startup metadata exposed requirements, not a full effective enabled-surface inventory. No app server/session/daemon was queried to fill that gap. Native parent tools, apps/MCP, shared session/history APIs, memories/cache, inherited descriptors and answer copies inside already authorized inputs remain distinct whole-member paths requiring assessment.
 
-Exact commands/exits and selected non-secret fields are [configured-mcp.metadata.json](/tmp/c1-controls-01.FXfAt0/configured-mcp.metadata.json), [installed-plugins.metadata.json](/tmp/c1-controls-01.FXfAt0/installed-plugins.metadata.json) and `R/metadata-commands.jsonl`. Raw metadata stdout was hashed and discarded; there was no credential dump or automatic change to global connected services.
+Exact commands/exits and selected non-secret fields are configured-mcp.metadata.json (`/tmp/c1-controls-01.FXfAt0/configured-mcp.metadata.json`), installed-plugins.metadata.json (`/tmp/c1-controls-01.FXfAt0/installed-plugins.metadata.json`) and `R/metadata-commands.jsonl`. Raw metadata stdout was hashed and discarded; there was no credential dump or automatic change to global connected services.
 
 There is also a concrete **launch composition** gap in the unchanged Ruach source. `skills/ruach-herdr/scripts/adapters/codex.ts` preserves existing developer text/skill settings, adds the assigned canonical role and explicit selected model, and emits `--approve-for-me` for auto-review. `scripts/adapters/index.ts::validatePass` admits only its small Codex flag allowlist; `-c/--config`, `-P`, `--permission-profile` and config-profile selection are outside that pass-through surface. Under auto-review, native sandbox/approval overrides are also rejected. Therefore these successful `codex sandbox -P ...` invocations cannot simply be forwarded through the current worker launcher. No launcher/dry-run/worker was executed or changed to bypass that policy. Inspected adapter SHA-256 values are `25dfbfb5ea09155f647675e1f89f545cb15b768e90cfe854d657620527eec2f3` and `fa877caa627edafe4138ed07e6b09cc85270b731e31563c9996f440cff681eaa` respectively.
 

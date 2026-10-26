@@ -23,6 +23,8 @@ scratch: /tmp/c1-isolation-01.IEPMA3
 native_version: codex-cli 0.164.0
 scope: No inference, model/worker sessions, global configuration changes or product baseline mutations
 
+> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.
+
 Investigation on 2026-10-25, under the unchanged [assignment](../../assignments/c1-c5/C1-ISOLATION-01.md). Recommendation: **hold C1's native first-round independence claim.** A supported Linux namespace primitive passed real file-read controls, including cache/session-shaped fixtures, but this is an altered command environment. It is not an equivalence result for two Codex council members with their real native account/approval context. No council or model session was started.
 
 ## Inspected authority and supported interfaces
@@ -56,11 +58,11 @@ All fixtures are harmless, task-owned files under S, created before any namespac
 
 The same Python read loop also opens the actual canonical `/opt/dev/ruach/agents/scout.md` and `/opt/dev/ruach/skills/ruach-handoff/SKILL.md`. SHA-256 values are respectively `750eb21d2dc8e11bd7008207fba8d88d5744b789f7d646d939b50c1657db4376` and `59e43c30321167aceaf5b59837db1c5e114c48f4d23bd340c5aa579957569445`. Thus positive controls include actual role/technical-resource access, not just an unrelated executable starting successfully.
 
-`timeout 120 python3 S/read-probe.py`, cwd this worktree, exited 0 and read all thirteen paths, including both aliases. Full results are [host-marker-control.stdout](/tmp/c1-isolation-01.IEPMA3/logs/host-marker-control.stdout). This establishes file existence and readability without isolation; denied reads below are not nonexistent-file tests. All probes use UID 1000.
+`timeout 120 python3 S/read-probe.py`, cwd this worktree, exited 0 and read all thirteen paths, including both aliases. Full results are host-marker-control.stdout (`/tmp/c1-isolation-01.IEPMA3/logs/host-marker-control.stdout`). This establishes file existence and readability without isolation; denied reads below are not nonexistent-file tests. All probes use UID 1000.
 
 ## Native per-run profiles: attempted, not established
 
-`S/probe.ts` records exact argv/cwd/exit in [commands.jsonl](/tmp/c1-isolation-01.IEPMA3/commands.jsonl) and separate original stdout/stderr under `S/logs/`. Each command is bounded by `timeout --signal=TERM --kill-after=5 120`. Per-member profile bytes and argv are retained as `S/c1_{a,b}.toml` and `.argv.json`. Representative A configuration, supplied only with `-c` overrides:
+`S/probe.ts` records exact argv/cwd/exit in commands.jsonl (`/tmp/c1-isolation-01.IEPMA3/commands.jsonl`) and separate original stdout/stderr under `S/logs/`. Each command is bounded by `timeout --signal=TERM --kill-after=5 120`. Per-member profile bytes and argv are retained as `S/c1_{a,b}.toml` and `.argv.json`. Representative A configuration, supplied only with `-c` overrides:
 
 ```toml
 approval_policy="on-request"
@@ -93,7 +95,7 @@ These errors do not prove named read profiles are unsupported by Codex generally
 
 ## Actual OS namespace result
 
-Initial `unshare --user --map-root-user --mount --fork /bin/true` and `bwrap --unshare-user --unshare-pid --ro-bind / / --proc /proc --dev /dev -- /bin/true`, cwd S, exited 0. The actual marker experiment is [os-markers.ts](/tmp/c1-isolation-01.IEPMA3/os-markers.ts), not a mock wrapper. It ran two member views and a deliberate input-contamination control for each, all exit 0. Exact argv is in the command ledger.
+Initial `unshare --user --map-root-user --mount --fork /bin/true` and `bwrap --unshare-user --unshare-pid --ro-bind / / --proc /proc --dev /dev -- /bin/true`, cwd S, exited 0. The actual marker experiment is os-markers.ts (`/tmp/c1-isolation-01.IEPMA3/os-markers.ts`), not a mock wrapper. It ran two member views and a deliberate input-contamination control for each, all exit 0. Exact argv is in the command ledger.
 
 For each view it sets a task-owned empty `S/mask` directory to mode 000, then invokes bwrap with `--unshare-user --unshare-pid --cap-drop ALL --ro-bind / / --proc /proc --dev /dev`. Read-only bind mounts of that inaccessible mask cover the other member's root, `S/repo`, `S/native-home`, and `S/cache`. The clean-input view also masks all `S/inputs`, then exposes **only the original question file** via a read-only bind at an existing `S/work/input.txt` mount target. It runs the actual Python open/read loop. Mask permissions are restored to 0700 only after all commands finish; rerunning the script reestablishes 000 for its probes.
 
@@ -103,7 +105,7 @@ For each view it sets a task-owned empty `S/mask` directory to mode 000, then in
 | B, exact input | Original question via selected mount, B answer, same role/skill | A answer plus the same alternate locations/aliases: nine EACCES results | Same positive/negative command boundary, reversed ownership. |
 | A, broadly readable inputs | Question, own marker, role/skill **and peer hardlink** | Direct peer and other masked paths denied; symlink resolves into denied peer root | Actual peer bytes leak through allowed-directory hardlink. This control intentionally fails exclusion. |
 
-Raw [A exact-input output](/tmp/c1-isolation-01.IEPMA3/logs/os-a-exact-input.stdout), [B exact-input output](/tmp/c1-isolation-01.IEPMA3/logs/os-b-exact-input.stdout), and [contamination output](/tmp/c1-isolation-01.IEPMA3/logs/os-a-contaminated-input.stdout) retain paths, successful marker bytes and actual error numbers. Symlink denial alone would not catch the hardlink. Broadly mounting a full repository/input/plugin snapshot that contains answer bytes is invalid even when the conventional answer path is masked.
+Raw A exact-input output (`/tmp/c1-isolation-01.IEPMA3/logs/os-a-exact-input.stdout`), B exact-input output (`/tmp/c1-isolation-01.IEPMA3/logs/os-b-exact-input.stdout`), and contamination output (`/tmp/c1-isolation-01.IEPMA3/logs/os-a-contaminated-input.stdout`) retain paths, successful marker bytes and actual error numbers. Symlink denial alone would not catch the hardlink. Broadly mounting a full repository/input/plugin snapshot that contains answer bytes is invalid even when the conventional answer path is masked.
 
 **Limits:** this is read access for Python child processes in deliberately altered mount views. The root remains broadly readable outside the listed fixture masks. It does not hide the real shared account's other session/cache paths, constrain a native parent harness or MCP/app service, test inherited descriptors, or prove denial through native session/history APIs. No output-write control, native customization/credential flow, active automatic review or actual member run was exercised. Therefore these OS marker passes cannot be promoted to the required native-member independence claim.
 

@@ -25,6 +25,8 @@ native_version: codex-cli 0.164.0
 native_child_controls: preserved
 whole_member_independence: held
 
+> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.
+
 This completes the bounded [assignment](../../assignments/c1-c5/C1-MEMBER-PREP-01.md). The prior [41 passing native controls](council-native-controls.md) remain valid child-boundary evidence; all earlier setup failures remain failures. The smallest verified native composition is an explicitly named profile plus `approval_policy="on-request"` and `approvals_reviewer="auto_review"`, preserving the observed account/model/effort/config environment. **A real two-member independent round is still held:** neither the complete enabled tool surface nor all expanded member inputs have been frozen/attested through a supported no-inference interface.
 
 No model/member/worker/council launch, inference, thread creation, real-peer enumeration/read, credential copy, persistent daemon, global setting/trust/socket-mode change, source/test/catalog change, LR-01 retry, merge/push/delivery or task teardown occurred. Native ordinary runtime/log initialization was used only for owned short-lived readers, as authorized.
@@ -46,7 +48,7 @@ The first ordinary restricted reader failed initializing SQLite runtime under th
 | Same + actual `--approve-for-me` | `on-request` / `auto_review` | `c1_prep` | `workspace-write` | Both fields survive native config/read. |
 | Same + explicit workspace field | `on-request` / `auto_review` | `c1_prep` | `workspace-write` | Reproduces the legacy field added by the flag. |
 
-Exact safe evidence: [baseline.json](/tmp/c1-member-prep-01.idf0Wd/baseline.json), [named-auto.json](/tmp/c1-member-prep-01.idf0Wd/named-auto.json), [approve-flag.json](/tmp/c1-member-prep-01.idf0Wd/approve-flag.json), [workspace-field.json](/tmp/c1-member-prep-01.idf0Wd/workspace-field.json). They contain real argv/cwd/PIDs/exits and the exact read-method ledger. [reader.ts](/tmp/c1-member-prep-01.idf0Wd/reader.ts) is disposable investigation code, not a provider or launcher implementation.
+Exact safe evidence: baseline.json (`/tmp/c1-member-prep-01.idf0Wd/baseline.json`), named-auto.json (`/tmp/c1-member-prep-01.idf0Wd/named-auto.json`), approve-flag.json (`/tmp/c1-member-prep-01.idf0Wd/approve-flag.json`), workspace-field.json (`/tmp/c1-member-prep-01.idf0Wd/workspace-field.json`). They contain real argv/cwd/PIDs/exits and the exact read-method ledger. reader.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.ts`) is disposable investigation code, not a provider or launcher implementation.
 
 The named profile has the proven exact question read, own-output write, canonical Scout/technical reads, minimal system runtime, sole exact Codex-executable read and network disabled. No broad HOME, native state/cache or peer-report access was added. Existing developer text was composed in memory with the actual Scout file and declared technical-source path using the source adapter's preservation pattern. Baseline developer text was absent in this observed config; composed text is 1,846 bytes, SHA-256 `ede3cfba772c3633c42b232b5daf59e8aac91a076054b247465746c6ef18a293`, identical across the tested overrides. This proves configuration composition, not the final model request or complete native customization expansion. No model/effort/provider fallback was selected.
 
@@ -63,7 +65,7 @@ To test default resolution rather than explicit `-P`, separate owned app-server 
 | `default_permissions=c1_prep`, explicit on-request/auto_review | readable | ENOENT | `command/exec.exitCode=0` |
 | Same + actual `--approve-for-me` | readable | ENOENT | `command/exec.exitCode=0`; legacy field also reads workspace-write |
 
-Original command results/params: [named-default-command.json](/tmp/c1-member-prep-01.idf0Wd/named-default-command.json), [approve-flag-command.json](/tmp/c1-member-prep-01.idf0Wd/approve-flag-command.json), [reader.commands.ts](/tmp/c1-member-prep-01.idf0Wd/reader.commands.ts). This establishes real server default-profile command behavior without a thread or model. It does not establish a completed TUI/exec member turn, reviewer invocation or whole-member isolation. Given the official prohibition on mixed legacy/profile fields, prefer explicit on-request/auto_review **without** the workspace-setting flag for a new restrictive-profile option rather than treating the observed mixed behavior as a general compatibility contract.
+Original command results/params: named-default-command.json (`/tmp/c1-member-prep-01.idf0Wd/named-default-command.json`), approve-flag-command.json (`/tmp/c1-member-prep-01.idf0Wd/approve-flag-command.json`), reader.commands.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.commands.ts`). This establishes real server default-profile command behavior without a thread or model. It does not establish a completed TUI/exec member turn, reviewer invocation or whole-member isolation. Given the official prohibition on mixed legacy/profile fields, prefer explicit on-request/auto_review **without** the workspace-setting flag for a new restrictive-profile option rather than treating the observed mixed behavior as a general compatibility contract.
 
 ## Actual access routes and controlled restriction candidate
 
@@ -80,7 +82,7 @@ web_search="disabled"
 apps._default.enabled=false
 ```
 
-No global customization was changed. The effective config showed these values, retained `gpt-6.1-sol`/`high`, on-request/auto_review, `c1_prep`, and the same canonical-role developer hash. The actual MCP status page became **zero servers, no next cursor**. [restricted-tools-candidate.json](/tmp/c1-member-prep-01.idf0Wd/restricted-tools-candidate.json) and [reader.extra.ts](/tmp/c1-member-prep-01.idf0Wd/reader.extra.ts) retain exact safe fields/argv/methods/exits.
+No global customization was changed. The effective config showed these values, retained `gpt-6.1-sol`/`high`, on-request/auto_review, `c1_prep`, and the same canonical-role developer hash. The actual MCP status page became **zero servers, no next cursor**. restricted-tools-candidate.json (`/tmp/c1-member-prep-01.idf0Wd/restricted-tools-candidate.json`) and reader.extra.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.extra.ts`) retain exact safe fields/argv/methods/exits.
 
 This is a genuine per-run app-service reduction, **not** proof of a tool-free member. Inherited `features.multi_agent_v2.enabled=true`, hooks/remote-plugin/tool-suggest configuration and possible core tools still exist in effective metadata. Basic multi-agent=false is not evidence that every collaboration route is absent. The inspected schema's `ToolsV2` exposes web-search settings, not a universal deny-all switch. `ThreadStartParams.dynamicTools` is not a complete built-in-tool replacement, and setting an empty dynamic list would not prove the model sees no tools. No guessed `tools=[]`/`tool_choice` setting or undocumented RPC was used.
 

@@ -1,0 +1,780 @@
+{
+  "schema_version": 1,
+  "task": "CI-PORTABILITY-070-FIX-01",
+  "source_revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+  "source_tags": [
+    "v0.7.0",
+    "ruach--v0.7.0"
+  ],
+  "ci": {
+    "url": "https://github.com/rothzeta/ruach/actions/runs/40314249964",
+    "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "log_sha256": "250a90e29f91fdac755a2a3d85c2090429231325d83093843d9538e198ceebc4",
+    "observed_failure_count": 82,
+    "exact_failure_multiset_matches": true
+  },
+  "policy": "Only active machine-local evidence links become label plus parenthesized literal target. Original target strings, labels and all other historical bytes are preserved, apart from the declared editorial notice. Existing as-imported manifests remain immutable and describe originals, not curated working-tree bytes.",
+  "added_editorial_notice": "> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.\n\n",
+  "added_notice_count": 7,
+  "total_transformed_edges": 82,
+  "temporary_edges": 74,
+  "external_consumer_source_edges": 8,
+  "files": [
+    {
+      "path": "docs/reports/c1-c5/c2-capability.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "ab28365eb47016d68e2f8562a47adae9cb7e50f5",
+        "sha256": "76f57950fdbd31f014d1c5e8a9a3b2d9b6c79e5920405d699e53d705b55fa096",
+        "bytes": 28028,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "5a447799e1f9222bb1a270ec77c8d16e83d0d559",
+            "path": "docs/reports/c1-c5/c2-capability.md",
+            "sha256": "76f57950fdbd31f014d1c5e8a9a3b2d9b6c79e5920405d699e53d705b55fa096",
+            "bytes": 28028
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/c2-capability.md"
+      },
+      "curated": {
+        "sha256": "76272e889b60a3e84bb0d4c8377df5a79ee8745e6e3b0fb8cee909fceff99785",
+        "bytes": 28249
+      },
+      "transformation_count": 3,
+      "changes": [
+        {
+          "original_line": 50,
+          "label": "/tmp/c15-c2-scout-probes",
+          "target": "/tmp/c15-c2-scout-probes",
+          "original_markup": "[/tmp/c15-c2-scout-probes](/tmp/c15-c2-scout-probes)",
+          "curated_markup": "/tmp/c15-c2-scout-probes (`/tmp/c15-c2-scout-probes`)"
+        },
+        {
+          "original_line": 163,
+          "label": "/tmp/c15-c2-scout-probes/agy-tests.log",
+          "target": "/tmp/c15-c2-scout-probes/agy-tests.log",
+          "original_markup": "[/tmp/c15-c2-scout-probes/agy-tests.log](/tmp/c15-c2-scout-probes/agy-tests.log)",
+          "curated_markup": "/tmp/c15-c2-scout-probes/agy-tests.log (`/tmp/c15-c2-scout-probes/agy-tests.log`)"
+        },
+        {
+          "original_line": 165,
+          "label": "/tmp/c15-c2-scout-probes/agy-tests-with-deps.log",
+          "target": "/tmp/c15-c2-scout-probes/agy-tests-with-deps.log",
+          "original_markup": "[/tmp/c15-c2-scout-probes/agy-tests-with-deps.log](/tmp/c15-c2-scout-probes/agy-tests-with-deps.log)",
+          "curated_markup": "/tmp/c15-c2-scout-probes/agy-tests-with-deps.log (`/tmp/c15-c2-scout-probes/agy-tests-with-deps.log`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/c2-native-interface.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "0161f4f9860c30286f82d3ab7fb9fb1de90a9113",
+        "sha256": "2f7cf00dd1cbaa071fe7963c1947781d599c7c9bcc74b6eade00c644b742f850",
+        "bytes": 15518,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "38bf5087faeb7a8e6c69c571a52638238419373a",
+            "path": "docs/reports/c1-c5/c2-native-interface.md",
+            "sha256": "2f7cf00dd1cbaa071fe7963c1947781d599c7c9bcc74b6eade00c644b742f850",
+            "bytes": 15518
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/c2-native-interface.md"
+      },
+      "curated": {
+        "sha256": "b7e11b087413b2224719f0420c36584602ea3cc325f2c9d59f7ac9428bb3f744",
+        "bytes": 15743
+      },
+      "transformation_count": 7,
+      "changes": [
+        {
+          "original_line": 28,
+          "label": "/tmp/c15-c2-native-probes",
+          "target": "/tmp/c15-c2-native-probes",
+          "original_markup": "[/tmp/c15-c2-native-probes](/tmp/c15-c2-native-probes)",
+          "curated_markup": "/tmp/c15-c2-native-probes (`/tmp/c15-c2-native-probes`)"
+        },
+        {
+          "original_line": 56,
+          "label": "models.json",
+          "target": "/tmp/c15-c2-native-probes/models.json",
+          "original_markup": "[models.json](/tmp/c15-c2-native-probes/models.json)",
+          "curated_markup": "models.json (`/tmp/c15-c2-native-probes/models.json`)"
+        },
+        {
+          "original_line": 73,
+          "label": "prepare.ts",
+          "target": "/tmp/c15-c2-native-probes/prepare.ts",
+          "original_markup": "[prepare.ts](/tmp/c15-c2-native-probes/prepare.ts)",
+          "curated_markup": "prepare.ts (`/tmp/c15-c2-native-probes/prepare.ts`)"
+        },
+        {
+          "original_line": 92,
+          "label": "context-baseline.json",
+          "target": "/tmp/c15-c2-native-probes/context-baseline.json",
+          "original_markup": "[context-baseline.json](/tmp/c15-c2-native-probes/context-baseline.json)",
+          "curated_markup": "context-baseline.json (`/tmp/c15-c2-native-probes/context-baseline.json`)"
+        },
+        {
+          "original_line": 116,
+          "label": "interactive-receipt.json",
+          "target": "/tmp/c15-c2-native-probes/interactive-receipt.json",
+          "original_markup": "[interactive-receipt.json](/tmp/c15-c2-native-probes/interactive-receipt.json)",
+          "curated_markup": "interactive-receipt.json (`/tmp/c15-c2-native-probes/interactive-receipt.json`)"
+        },
+        {
+          "original_line": 122,
+          "label": "symbols.txt",
+          "target": "/tmp/c15-c2-native-probes/symbols.txt",
+          "original_markup": "[symbols.txt](/tmp/c15-c2-native-probes/symbols.txt)",
+          "curated_markup": "symbols.txt (`/tmp/c15-c2-native-probes/symbols.txt`)"
+        },
+        {
+          "original_line": 136,
+          "label": "final-state.json",
+          "target": "/tmp/c15-c2-native-probes/final-state.json",
+          "original_markup": "[final-state.json](/tmp/c15-c2-native-probes/final-state.json)",
+          "curated_markup": "final-state.json (`/tmp/c15-c2-native-probes/final-state.json`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/council-isolation.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "3faa8b4cdddf363c58d9bf4b64c361e7256aea7e",
+        "sha256": "886b4d64cbe47b7aef46442e39be0d14adf397ecfa523e71bb6402352f53a346",
+        "bytes": 17700,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "34287d924ea31c3226b4cb7fcb76e61c02774768",
+            "path": "docs/reports/c1-c5/council-isolation.md",
+            "sha256": "886b4d64cbe47b7aef46442e39be0d14adf397ecfa523e71bb6402352f53a346",
+            "bytes": 17700
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/council-isolation.md"
+      },
+      "curated": {
+        "sha256": "756e279bcb10abad64b3a1ef3004f42c6548f43adc99e5be4d0f8ee72cfd5a67",
+        "bytes": 17924
+      },
+      "transformation_count": 6,
+      "changes": [
+        {
+          "original_line": 59,
+          "label": "host-marker-control.stdout",
+          "target": "/tmp/c1-isolation-01.IEPMA3/logs/host-marker-control.stdout",
+          "original_markup": "[host-marker-control.stdout](/tmp/c1-isolation-01.IEPMA3/logs/host-marker-control.stdout)",
+          "curated_markup": "host-marker-control.stdout (`/tmp/c1-isolation-01.IEPMA3/logs/host-marker-control.stdout`)"
+        },
+        {
+          "original_line": 63,
+          "label": "commands.jsonl",
+          "target": "/tmp/c1-isolation-01.IEPMA3/commands.jsonl",
+          "original_markup": "[commands.jsonl](/tmp/c1-isolation-01.IEPMA3/commands.jsonl)",
+          "curated_markup": "commands.jsonl (`/tmp/c1-isolation-01.IEPMA3/commands.jsonl`)"
+        },
+        {
+          "original_line": 96,
+          "label": "os-markers.ts",
+          "target": "/tmp/c1-isolation-01.IEPMA3/os-markers.ts",
+          "original_markup": "[os-markers.ts](/tmp/c1-isolation-01.IEPMA3/os-markers.ts)",
+          "curated_markup": "os-markers.ts (`/tmp/c1-isolation-01.IEPMA3/os-markers.ts`)"
+        },
+        {
+          "original_line": 106,
+          "label": "A exact-input output",
+          "target": "/tmp/c1-isolation-01.IEPMA3/logs/os-a-exact-input.stdout",
+          "original_markup": "[A exact-input output](/tmp/c1-isolation-01.IEPMA3/logs/os-a-exact-input.stdout)",
+          "curated_markup": "A exact-input output (`/tmp/c1-isolation-01.IEPMA3/logs/os-a-exact-input.stdout`)"
+        },
+        {
+          "original_line": 106,
+          "label": "B exact-input output",
+          "target": "/tmp/c1-isolation-01.IEPMA3/logs/os-b-exact-input.stdout",
+          "original_markup": "[B exact-input output](/tmp/c1-isolation-01.IEPMA3/logs/os-b-exact-input.stdout)",
+          "curated_markup": "B exact-input output (`/tmp/c1-isolation-01.IEPMA3/logs/os-b-exact-input.stdout`)"
+        },
+        {
+          "original_line": 106,
+          "label": "contamination output",
+          "target": "/tmp/c1-isolation-01.IEPMA3/logs/os-a-contaminated-input.stdout",
+          "original_markup": "[contamination output](/tmp/c1-isolation-01.IEPMA3/logs/os-a-contaminated-input.stdout)",
+          "curated_markup": "contamination output (`/tmp/c1-isolation-01.IEPMA3/logs/os-a-contaminated-input.stdout`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/council-member-prep.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "6616339eb7ea0b1797c6cb262f1c5c98c91899a7",
+        "sha256": "2fc2066b11802b024cf40a4b245ec259caa8e7b995335c4aed17e2f20959d6c3",
+        "bytes": 18321,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "34287d924ea31c3226b4cb7fcb76e61c02774768",
+            "path": "docs/reports/c1-c5/council-member-prep.md",
+            "sha256": "2fc2066b11802b024cf40a4b245ec259caa8e7b995335c4aed17e2f20959d6c3",
+            "bytes": 18321
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/council-member-prep.md"
+      },
+      "curated": {
+        "sha256": "6120ff26cc2098bc62d0191e9d1753d0fba237211fd6562cd5f72198e9b3e3ed",
+        "bytes": 18549
+      },
+      "transformation_count": 10,
+      "changes": [
+        {
+          "original_line": 49,
+          "label": "baseline.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/baseline.json",
+          "original_markup": "[baseline.json](/tmp/c1-member-prep-01.idf0Wd/baseline.json)",
+          "curated_markup": "baseline.json (`/tmp/c1-member-prep-01.idf0Wd/baseline.json`)"
+        },
+        {
+          "original_line": 49,
+          "label": "named-auto.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/named-auto.json",
+          "original_markup": "[named-auto.json](/tmp/c1-member-prep-01.idf0Wd/named-auto.json)",
+          "curated_markup": "named-auto.json (`/tmp/c1-member-prep-01.idf0Wd/named-auto.json`)"
+        },
+        {
+          "original_line": 49,
+          "label": "approve-flag.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/approve-flag.json",
+          "original_markup": "[approve-flag.json](/tmp/c1-member-prep-01.idf0Wd/approve-flag.json)",
+          "curated_markup": "approve-flag.json (`/tmp/c1-member-prep-01.idf0Wd/approve-flag.json`)"
+        },
+        {
+          "original_line": 49,
+          "label": "workspace-field.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/workspace-field.json",
+          "original_markup": "[workspace-field.json](/tmp/c1-member-prep-01.idf0Wd/workspace-field.json)",
+          "curated_markup": "workspace-field.json (`/tmp/c1-member-prep-01.idf0Wd/workspace-field.json`)"
+        },
+        {
+          "original_line": 49,
+          "label": "reader.ts",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/reader.ts",
+          "original_markup": "[reader.ts](/tmp/c1-member-prep-01.idf0Wd/reader.ts)",
+          "curated_markup": "reader.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.ts`)"
+        },
+        {
+          "original_line": 66,
+          "label": "named-default-command.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/named-default-command.json",
+          "original_markup": "[named-default-command.json](/tmp/c1-member-prep-01.idf0Wd/named-default-command.json)",
+          "curated_markup": "named-default-command.json (`/tmp/c1-member-prep-01.idf0Wd/named-default-command.json`)"
+        },
+        {
+          "original_line": 66,
+          "label": "approve-flag-command.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/approve-flag-command.json",
+          "original_markup": "[approve-flag-command.json](/tmp/c1-member-prep-01.idf0Wd/approve-flag-command.json)",
+          "curated_markup": "approve-flag-command.json (`/tmp/c1-member-prep-01.idf0Wd/approve-flag-command.json`)"
+        },
+        {
+          "original_line": 66,
+          "label": "reader.commands.ts",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/reader.commands.ts",
+          "original_markup": "[reader.commands.ts](/tmp/c1-member-prep-01.idf0Wd/reader.commands.ts)",
+          "curated_markup": "reader.commands.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.commands.ts`)"
+        },
+        {
+          "original_line": 83,
+          "label": "restricted-tools-candidate.json",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/restricted-tools-candidate.json",
+          "original_markup": "[restricted-tools-candidate.json](/tmp/c1-member-prep-01.idf0Wd/restricted-tools-candidate.json)",
+          "curated_markup": "restricted-tools-candidate.json (`/tmp/c1-member-prep-01.idf0Wd/restricted-tools-candidate.json`)"
+        },
+        {
+          "original_line": 83,
+          "label": "reader.extra.ts",
+          "target": "/tmp/c1-member-prep-01.idf0Wd/reader.extra.ts",
+          "original_markup": "[reader.extra.ts](/tmp/c1-member-prep-01.idf0Wd/reader.extra.ts)",
+          "curated_markup": "reader.extra.ts (`/tmp/c1-member-prep-01.idf0Wd/reader.extra.ts`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/council-native-controls.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "46c10e9d4fabe4e55d10c1ef753da20e62a41d25",
+        "sha256": "1b74c890650273c6e1fe5ea14bb5598d126eea16674857b5673ad792739688c9",
+        "bytes": 18181,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "34287d924ea31c3226b4cb7fcb76e61c02774768",
+            "path": "docs/reports/c1-c5/council-native-controls.md",
+            "sha256": "1b74c890650273c6e1fe5ea14bb5598d126eea16674857b5673ad792739688c9",
+            "bytes": 18181
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/council-native-controls.md"
+      },
+      "curated": {
+        "sha256": "fb60d17ceee1bb4ebdc98896adacca539cd130cafe8a9dc1b14f1368a87a0ea7",
+        "bytes": 18422
+      },
+      "transformation_count": 23,
+      "changes": [
+        {
+          "original_line": 37,
+          "label": "runtime-grants.json",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/runtime-grants.json",
+          "original_markup": "[runtime-grants.json](/tmp/c1-controls-01.FXfAt0/attempt-01/runtime-grants.json)",
+          "curated_markup": "runtime-grants.json (`/tmp/c1-controls-01.FXfAt0/attempt-01/runtime-grants.json`)"
+        },
+        {
+          "original_line": 54,
+          "label": "A strict profile",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.toml",
+          "original_markup": "[A strict profile](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.toml)",
+          "curated_markup": "A strict profile (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.toml`)"
+        },
+        {
+          "original_line": 54,
+          "label": "argv",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.argv.json",
+          "original_markup": "[argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.argv.json)",
+          "curated_markup": "argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.argv.json`)"
+        },
+        {
+          "original_line": 54,
+          "label": "native output",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.stdout",
+          "original_markup": "[native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.stdout)",
+          "curated_markup": "native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-strict.stdout`)"
+        },
+        {
+          "original_line": 55,
+          "label": "B strict profile",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.toml",
+          "original_markup": "[B strict profile](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.toml)",
+          "curated_markup": "B strict profile (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.toml`)"
+        },
+        {
+          "original_line": 55,
+          "label": "argv",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.argv.json",
+          "original_markup": "[argv](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.argv.json)",
+          "curated_markup": "argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.argv.json`)"
+        },
+        {
+          "original_line": 55,
+          "label": "native output",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.stdout",
+          "original_markup": "[native output](/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.stdout)",
+          "curated_markup": "native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/b-strict.stdout`)"
+        },
+        {
+          "original_line": 56,
+          "label": "Exact peer-file grant control",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.toml",
+          "original_markup": "[Exact peer-file grant control](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.toml)",
+          "curated_markup": "Exact peer-file grant control (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.toml`)"
+        },
+        {
+          "original_line": 56,
+          "label": "argv",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.argv.json",
+          "original_markup": "[argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.argv.json)",
+          "curated_markup": "argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.argv.json`)"
+        },
+        {
+          "original_line": 56,
+          "label": "native output",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.stdout",
+          "original_markup": "[native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.stdout)",
+          "curated_markup": "native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-exact-peer-grant.stdout`)"
+        },
+        {
+          "original_line": 57,
+          "label": "Contaminated-input control",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.toml",
+          "original_markup": "[Contaminated-input control](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.toml)",
+          "curated_markup": "Contaminated-input control (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.toml`)"
+        },
+        {
+          "original_line": 57,
+          "label": "argv",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.argv.json",
+          "original_markup": "[argv](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.argv.json)",
+          "curated_markup": "argv (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.argv.json`)"
+        },
+        {
+          "original_line": 57,
+          "label": "native output",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.stdout",
+          "original_markup": "[native output](/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.stdout)",
+          "curated_markup": "native output (`/tmp/c1-controls-01.FXfAt0/attempt-01/a-contaminated-input.stdout`)"
+        },
+        {
+          "original_line": 63,
+          "label": "commands.jsonl",
+          "target": "/tmp/c1-controls-01.FXfAt0/commands.jsonl",
+          "original_markup": "[commands.jsonl](/tmp/c1-controls-01.FXfAt0/commands.jsonl)",
+          "curated_markup": "commands.jsonl (`/tmp/c1-controls-01.FXfAt0/commands.jsonl`)"
+        },
+        {
+          "original_line": 63,
+          "label": "result.json",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/result.json",
+          "original_markup": "[result.json](/tmp/c1-controls-01.FXfAt0/attempt-01/result.json)",
+          "curated_markup": "result.json (`/tmp/c1-controls-01.FXfAt0/attempt-01/result.json`)"
+        },
+        {
+          "original_line": 78,
+          "label": "verification.json",
+          "target": "/tmp/c1-controls-01.FXfAt0/verification.json",
+          "original_markup": "[verification.json](/tmp/c1-controls-01.FXfAt0/verification.json)",
+          "curated_markup": "verification.json (`/tmp/c1-controls-01.FXfAt0/verification.json`)"
+        },
+        {
+          "original_line": 80,
+          "label": "checker output",
+          "target": "/tmp/c1-controls-01.FXfAt0/verify.stdout",
+          "original_markup": "[checker output](/tmp/c1-controls-01.FXfAt0/verify.stdout)",
+          "curated_markup": "checker output (`/tmp/c1-controls-01.FXfAt0/verify.stdout`)"
+        },
+        {
+          "original_line": 80,
+          "label": "checker source",
+          "target": "/tmp/c1-controls-01.FXfAt0/verify.ts",
+          "original_markup": "[checker source](/tmp/c1-controls-01.FXfAt0/verify.ts)",
+          "curated_markup": "checker source (`/tmp/c1-controls-01.FXfAt0/verify.ts`)"
+        },
+        {
+          "original_line": 84,
+          "label": "Host before",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-before.json",
+          "original_markup": "[Host before](/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-before.json)",
+          "curated_markup": "Host before (`/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-before.json`)"
+        },
+        {
+          "original_line": 84,
+          "label": "host after",
+          "target": "/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-after.json",
+          "original_markup": "[host after](/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-after.json)",
+          "curated_markup": "host after (`/tmp/c1-controls-01.FXfAt0/attempt-01/host-existence-after.json`)"
+        },
+        {
+          "original_line": 95,
+          "label": "Evidence digests",
+          "target": "/tmp/c1-controls-01.FXfAt0/evidence-digests.json",
+          "original_markup": "[Evidence digests](/tmp/c1-controls-01.FXfAt0/evidence-digests.json)",
+          "curated_markup": "Evidence digests (`/tmp/c1-controls-01.FXfAt0/evidence-digests.json`)"
+        },
+        {
+          "original_line": 107,
+          "label": "configured-mcp.metadata.json",
+          "target": "/tmp/c1-controls-01.FXfAt0/configured-mcp.metadata.json",
+          "original_markup": "[configured-mcp.metadata.json](/tmp/c1-controls-01.FXfAt0/configured-mcp.metadata.json)",
+          "curated_markup": "configured-mcp.metadata.json (`/tmp/c1-controls-01.FXfAt0/configured-mcp.metadata.json`)"
+        },
+        {
+          "original_line": 107,
+          "label": "installed-plugins.metadata.json",
+          "target": "/tmp/c1-controls-01.FXfAt0/installed-plugins.metadata.json",
+          "original_markup": "[installed-plugins.metadata.json](/tmp/c1-controls-01.FXfAt0/installed-plugins.metadata.json)",
+          "curated_markup": "installed-plugins.metadata.json (`/tmp/c1-controls-01.FXfAt0/installed-plugins.metadata.json`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/council-native-preflight.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "ea06004c70259aada666a8a778a61fdcb7920d08",
+        "sha256": "234cac427e9d84af87aa02bd201d6bdd897c5426cda48714a4d3e171c29d5be3",
+        "bytes": 14054,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "34287d924ea31c3226b4cb7fcb76e61c02774768",
+            "path": "docs/reports/c1-c5/council-native-preflight.md",
+            "sha256": "234cac427e9d84af87aa02bd201d6bdd897c5426cda48714a4d3e171c29d5be3",
+            "bytes": 14054
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/council-native-preflight.md"
+      },
+      "curated": {
+        "sha256": "40123aa15898a1b4530e907f7930b2b6fabd6a9a3a7a5ceb9f2d9b49db540e33",
+        "bytes": 14282
+      },
+      "transformation_count": 10,
+      "changes": [
+        {
+          "original_line": 37,
+          "label": "startup-metadata.json",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/startup-metadata.json",
+          "original_markup": "[startup-metadata.json](/tmp/c1-native-preflight-01.iYUSr0/startup-metadata.json)",
+          "curated_markup": "startup-metadata.json (`/tmp/c1-native-preflight-01.iYUSr0/startup-metadata.json`)"
+        },
+        {
+          "original_line": 52,
+          "label": "helper",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/direct.ts",
+          "original_markup": "[helper](/tmp/c1-native-preflight-01.iYUSr0/direct.ts)",
+          "curated_markup": "helper (`/tmp/c1-native-preflight-01.iYUSr0/direct.ts`)"
+        },
+        {
+          "original_line": 52,
+          "label": "commands.jsonl",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/commands.jsonl",
+          "original_markup": "[commands.jsonl](/tmp/c1-native-preflight-01.iYUSr0/commands.jsonl)",
+          "curated_markup": "commands.jsonl (`/tmp/c1-native-preflight-01.iYUSr0/commands.jsonl`)"
+        },
+        {
+          "original_line": 52,
+          "label": "result.json",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/result.json",
+          "original_markup": "[result.json](/tmp/c1-native-preflight-01.iYUSr0/result.json)",
+          "curated_markup": "result.json (`/tmp/c1-native-preflight-01.iYUSr0/result.json`)"
+        },
+        {
+          "original_line": 54,
+          "label": "native-a-exact-input.argv.json",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.argv.json",
+          "original_markup": "[native-a-exact-input.argv.json](/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.argv.json)",
+          "curated_markup": "native-a-exact-input.argv.json (`/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.argv.json`)"
+        },
+        {
+          "original_line": 54,
+          "label": "native-a-exact-input.toml",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.toml",
+          "original_markup": "[native-a-exact-input.toml](/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.toml)",
+          "curated_markup": "native-a-exact-input.toml (`/tmp/c1-native-preflight-01.iYUSr0/native-a-exact-input.toml`)"
+        },
+        {
+          "original_line": 79,
+          "label": "native-a-exact-input.stderr",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stderr",
+          "original_markup": "[native-a-exact-input.stderr](/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stderr)",
+          "curated_markup": "native-a-exact-input.stderr (`/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stderr`)"
+        },
+        {
+          "original_line": 79,
+          "label": "native-a-exact-input.stdout",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stdout",
+          "original_markup": "[native-a-exact-input.stdout](/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stdout)",
+          "curated_markup": "native-a-exact-input.stdout (`/tmp/c1-native-preflight-01.iYUSr0/logs/native-a-exact-input.stdout`)"
+        },
+        {
+          "original_line": 89,
+          "label": "fixtures-before.json",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/fixtures-before.json",
+          "original_markup": "[fixtures-before.json](/tmp/c1-native-preflight-01.iYUSr0/fixtures-before.json)",
+          "curated_markup": "fixtures-before.json (`/tmp/c1-native-preflight-01.iYUSr0/fixtures-before.json`)"
+        },
+        {
+          "original_line": 89,
+          "label": "fixtures-after.json",
+          "target": "/tmp/c1-native-preflight-01.iYUSr0/fixtures-after.json",
+          "original_markup": "[fixtures-after.json](/tmp/c1-native-preflight-01.iYUSr0/fixtures-after.json)",
+          "curated_markup": "fixtures-after.json (`/tmp/c1-native-preflight-01.iYUSr0/fixtures-after.json`)"
+        }
+      ]
+    },
+    {
+      "path": "docs/reports/c1-c5/demo-readiness.md",
+      "original": {
+        "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "git_blob": "9e80c88868ee85d8d43ea52c640f7474d635ade2",
+        "sha256": "bc5afe20f7e4750f97b55fd2a5c0916899ee1d5100bc5fb3921f11e188ae51ba",
+        "bytes": 33049,
+        "imported_from": [
+          {
+            "manifest_path": "docs/reports/c1-c5/integration-imports.json",
+            "revision": "02d3460caa3ddc08550ce8d150b0bcdaad786633",
+            "path": "docs/reports/c1-c5/demo-readiness.md",
+            "sha256": "bc5afe20f7e4750f97b55fd2a5c0916899ee1d5100bc5fb3921f11e188ae51ba",
+            "bytes": 33049
+          }
+        ],
+        "recovery": "git show e37645b11ea012f98b213f6eddc38b513cb9248c:docs/reports/c1-c5/demo-readiness.md"
+      },
+      "curated": {
+        "sha256": "c22f90df11d8f20da74d1c2f3691ab1ef6afcbe46460ebcf6a34bb28728a61b1",
+        "bytes": 33290
+      },
+      "transformation_count": 23,
+      "changes": [
+        {
+          "original_line": 57,
+          "label": "AGENTS.md",
+          "target": "/opt/dev/ramec/AGENTS.md",
+          "original_markup": "[AGENTS.md](/opt/dev/ramec/AGENTS.md)",
+          "curated_markup": "AGENTS.md (`/opt/dev/ramec/AGENTS.md`)"
+        },
+        {
+          "original_line": 57,
+          "label": "CONCEPT.md",
+          "target": "/opt/dev/ramec/docs/CONCEPT.md",
+          "original_markup": "[CONCEPT.md](/opt/dev/ramec/docs/CONCEPT.md)",
+          "curated_markup": "CONCEPT.md (`/opt/dev/ramec/docs/CONCEPT.md`)"
+        },
+        {
+          "original_line": 57,
+          "label": "PLAYER-ARCHITECTURE.md",
+          "target": "/opt/dev/ramec/docs/PLAYER-ARCHITECTURE.md",
+          "original_markup": "[PLAYER-ARCHITECTURE.md](/opt/dev/ramec/docs/PLAYER-ARCHITECTURE.md)",
+          "curated_markup": "PLAYER-ARCHITECTURE.md (`/opt/dev/ramec/docs/PLAYER-ARCHITECTURE.md`)"
+        },
+        {
+          "original_line": 59,
+          "label": "ADR 0005",
+          "target": "/opt/dev/ramec/docs/adr/0005-review-gates.md",
+          "original_markup": "[ADR 0005](/opt/dev/ramec/docs/adr/0005-review-gates.md)",
+          "curated_markup": "ADR 0005 (`/opt/dev/ramec/docs/adr/0005-review-gates.md`)"
+        },
+        {
+          "original_line": 61,
+          "label": "AGENTS.md",
+          "target": "/opt/dev/pralice/AGENTS.md",
+          "original_markup": "[AGENTS.md](/opt/dev/pralice/AGENTS.md)",
+          "curated_markup": "AGENTS.md (`/opt/dev/pralice/AGENTS.md`)"
+        },
+        {
+          "original_line": 61,
+          "label": "whole-game reference",
+          "target": "/opt/dev/pralice/docs/architecture/game-architecture.md",
+          "original_markup": "[whole-game reference](/opt/dev/pralice/docs/architecture/game-architecture.md)",
+          "curated_markup": "whole-game reference (`/opt/dev/pralice/docs/architecture/game-architecture.md`)"
+        },
+        {
+          "original_line": 61,
+          "label": "ADR 0002",
+          "target": "/opt/dev/pralice/docs/architecture/0002-first-playable-slice.md",
+          "original_markup": "[ADR 0002](/opt/dev/pralice/docs/architecture/0002-first-playable-slice.md)",
+          "curated_markup": "ADR 0002 (`/opt/dev/pralice/docs/architecture/0002-first-playable-slice.md`)"
+        },
+        {
+          "original_line": 61,
+          "label": "Frontier Compact guide",
+          "target": "/opt/dev/pralice/docs/scenarios/frontier-compact.md",
+          "original_markup": "[Frontier Compact guide](/opt/dev/pralice/docs/scenarios/frontier-compact.md)",
+          "curated_markup": "Frontier Compact guide (`/opt/dev/pralice/docs/scenarios/frontier-compact.md`)"
+        },
+        {
+          "original_line": 78,
+          "label": "browser.ts",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.ts",
+          "original_markup": "[browser.ts](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.ts)",
+          "curated_markup": "browser.ts (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.ts`)"
+        },
+        {
+          "original_line": 78,
+          "label": "original result",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.initial.json",
+          "original_markup": "[original result](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.initial.json)",
+          "curated_markup": "original result (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.initial.json`)"
+        },
+        {
+          "original_line": 85,
+          "label": "browser-capability.png",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser-capability.png",
+          "original_markup": "[browser-capability.png](/tmp/c15-demo-scout-readiness.4Z8KlU/browser-capability.png)",
+          "curated_markup": "browser-capability.png (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser-capability.png`)"
+        },
+        {
+          "original_line": 167,
+          "label": "sources.json",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/sources.json",
+          "original_markup": "[sources.json](/tmp/c15-demo-scout-readiness.4Z8KlU/sources.json)",
+          "curated_markup": "sources.json (`/tmp/c15-demo-scout-readiness.4Z8KlU/sources.json`)"
+        },
+        {
+          "original_line": 167,
+          "label": "inventory.json",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/inventory.json",
+          "original_markup": "[inventory.json](/tmp/c15-demo-scout-readiness.4Z8KlU/inventory.json)",
+          "curated_markup": "inventory.json (`/tmp/c15-demo-scout-readiness.4Z8KlU/inventory.json`)"
+        },
+        {
+          "original_line": 167,
+          "label": "prepare.json",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/prepare.json",
+          "original_markup": "[prepare.json](/tmp/c15-demo-scout-readiness.4Z8KlU/prepare.json)",
+          "curated_markup": "prepare.json (`/tmp/c15-demo-scout-readiness.4Z8KlU/prepare.json`)"
+        },
+        {
+          "original_line": 169,
+          "label": "initial stdout",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stdout",
+          "original_markup": "[initial stdout](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stdout)",
+          "curated_markup": "initial stdout (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stdout`)"
+        },
+        {
+          "original_line": 169,
+          "label": "initial stderr",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stderr",
+          "original_markup": "[initial stderr](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stderr)",
+          "curated_markup": "initial stderr (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.stderr`)"
+        },
+        {
+          "original_line": 169,
+          "label": "retry stdout",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stdout",
+          "original_markup": "[retry stdout](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stdout)",
+          "curated_markup": "retry stdout (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stdout`)"
+        },
+        {
+          "original_line": 169,
+          "label": "retry stderr",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stderr",
+          "original_markup": "[retry stderr](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stderr)",
+          "curated_markup": "retry stderr (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.retry.stderr`)"
+        },
+        {
+          "original_line": 169,
+          "label": "structured retry result",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/browser.json",
+          "original_markup": "[structured retry result](/tmp/c15-demo-scout-readiness.4Z8KlU/browser.json)",
+          "curated_markup": "structured retry result (`/tmp/c15-demo-scout-readiness.4Z8KlU/browser.json`)"
+        },
+        {
+          "original_line": 173,
+          "label": "stdout",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stdout",
+          "original_markup": "[stdout](/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stdout)",
+          "curated_markup": "stdout (`/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stdout`)"
+        },
+        {
+          "original_line": 173,
+          "label": "stderr",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stderr",
+          "original_markup": "[stderr](/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stderr)",
+          "curated_markup": "stderr (`/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-check.stderr`)"
+        },
+        {
+          "original_line": 174,
+          "label": "stdout",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stdout",
+          "original_markup": "[stdout](/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stdout)",
+          "curated_markup": "stdout (`/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stdout`)"
+        },
+        {
+          "original_line": 174,
+          "label": "stderr",
+          "target": "/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stderr",
+          "original_markup": "[stderr](/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stderr)",
+          "curated_markup": "stderr (`/tmp/c15-demo-scout-readiness.4Z8KlU/ruach-test.stderr`)"
+        }
+      ]
+    }
+  ]
+}

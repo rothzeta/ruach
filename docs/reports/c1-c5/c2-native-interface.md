@@ -21,11 +21,13 @@ blockers:
   - "Native project trust blocks inspection of initialized composition at /tmp/c15-c2-native-probes/project; the assignment prohibits answering this dialog."
   - "Baseline-plus-role composition, canonical technical-skill discovery and added-directory scope still need actual native evidence after owner disposition of that specific trust boundary."
 
+> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.
+
 # C2 native interface follow-up — 2026-10-25
 
 The catalog limitation in the [prior report](c2-capability.md) is resolved for this binary/account. The additive composition limitation is narrowed to a concrete native trust boundary: the interactive inspector stops before establishing the session's context. This is not evidence that agy lacks additive role support. It is also not sufficient evidence to implement or mark a production adapter live-capable.
 
-This follows the [unchanged SCOUT-C2-NATIVE assignment](../../assignments/c1-c5/SCOUT-C2-NATIVE.md), SHA-256 `7a62f06134ad641d64a398f1060b80a43a0d99410b6401222639f11b1a53f93e`. The previous report remains unchanged. Only this report and the assignment are committed. No failed Architect pane access, source-launch retry, adapter edit, route edit, Herdr worker, inference, install, push or cleanup occurred. Raw receipts and private material remain in [/tmp/c15-c2-native-probes](/tmp/c15-c2-native-probes).
+This follows the [unchanged SCOUT-C2-NATIVE assignment](../../assignments/c1-c5/SCOUT-C2-NATIVE.md), SHA-256 `7a62f06134ad641d64a398f1060b80a43a0d99410b6401222639f11b1a53f93e`. The previous report remains unchanged. Only this report and the assignment are committed. No failed Architect pane access, source-launch retry, adapter edit, route edit, Herdr worker, inference, install, push or cleanup occurred. Raw receipts and private material remain in /tmp/c15-c2-native-probes (`/tmp/c15-c2-native-probes`).
 
 ## Verified native route
 
@@ -53,7 +55,7 @@ stderr was `Fetching available models...`. Native stdout offered these exact Gem
 | `gemini-3.8-flash-medium` | Gemini 3.8 Flash (Medium) |
 | `gemini-3.8-flash-low` | Gemini 3.8 Flash (Low) |
 
-The catalog also listed seven non-Gemini routes; none was selected. Full output and before/after settings hashes are in [models.json](/tmp/c15-c2-native-probes/models.json). This is actual native account-backed catalog evidence, superseding documentation examples. It does not establish a successful inference, quota, or every model/effort combination.
+The catalog also listed seven non-Gemini routes; none was selected. Full output and before/after settings hashes are in models.json (`/tmp/c15-c2-native-probes/models.json`). This is actual native account-backed catalog evidence, superseding documentation examples. It does not establish a successful inference, quota, or every model/effort combination.
 
 For both subsequent native probes the exact route stayed **`gemini-3.8-flash-medium`**, with no separate `--effort` flag. The interactive footer showed `Gemini 3.8 Flash · medium`. There was no provider/CLI/model fallback after an error. This is the concrete route to retain for a later bounded composition or reviewed-adapter advisory run, subject to a fresh catalog check if environment/account/binary changes. No development model catalog or role allowlist was changed.
 
@@ -70,7 +72,7 @@ Private probe material was prepared under `/tmp`, with no native-discovery or co
 | `/tmp/c15-c2-native-probes/private role ü/.agents/skills/ruach-handoff` | Symlink to the canonical technical skill `/opt/dev/ruach/skills/ruach-handoff` |
 | `/tmp/c15-c2-native-probes/private role ü/.agents/agents/scout.md` | Symlink to the canonical Scout role for possible non-model discovery inspection; no `--agent` selection was performed |
 
-Canonical Scout SHA-256 remains `750eb21d2dc8e11bd7008207fba8d88d5744b789f7d646d939b50c1657db4376`. The rule uses a source include, not an edited copy of the canonical role and not later task text. The source context explicitly resolves relative references at the canonical role location and directs workers not to load workflow bodies. Only the named technical skill was linked. These are **prepared material facts**, not claims that native discovery accepted them. Preparation script: [prepare.ts](/tmp/c15-c2-native-probes/prepare.ts).
+Canonical Scout SHA-256 remains `750eb21d2dc8e11bd7008207fba8d88d5744b789f7d646d939b50c1657db4376`. The rule uses a source include, not an edited copy of the canonical role and not later task text. The source context explicitly resolves relative references at the canonical role location and directs workers not to load workflow bodies. Only the named technical skill was linked. These are **prepared material facts**, not claims that native discovery accepted them. Preparation script: prepare.ts (`/tmp/c15-c2-native-probes/prepare.ts`).
 
 The first inspection attempted the native `/context` report without a model request:
 
@@ -89,7 +91,7 @@ Exact decisive response:
 /context is not available in print mode (it opens the interactive context breakdown); pass --disable-slash-commands to send /context to the model as literal text
 ```
 
-The returned envelope had empty conversation ID, `status: ERROR`, `num_turns: 0`, duration 0, and every usage counter 0. Full receipt: [context-baseline.json](/tmp/c15-c2-native-probes/context-baseline.json). The external process bound was 60 seconds; no timeout occurred. I did not disable slash handling or reinterpret a context-inspection command as a model task.
+The returned envelope had empty conversation ID, `status: ERROR`, `num_turns: 0`, duration 0, and every usage counter 0. Full receipt: context-baseline.json (`/tmp/c15-c2-native-probes/context-baseline.json`). The external process bound was 60 seconds; no timeout occurred. I did not disable slash handling or reinterpret a context-inspection command as a model task.
 
 The official [/context documentation](https://www.agy.dev/docs/cli/commands/context/) identifies an interactive inspector with separate system/customization token categories and tracked system/skill file paths. A direct native PTY was therefore opened for that necessary non-model interface, using the same selected route and the private overlay:
 
@@ -113,13 +115,13 @@ Antigravity CLI requires permission to read, edit, and execute files here.
 Gemini 3.8 Flash · medium
 ```
 
-The highlighted default is **not an approval**. No Enter, selection, slash command, or model prompt was sent. On observing the dialog I stopped this action as the assignment requires. One Ctrl+C produced `press ctrl+c again to exit`; a second Ctrl+C exited the owned process with code 0. This was process cancellation, not an answer to the security dialog. No Herdr worker or unbounded background service was requested. This inspection ended promptly at the dialog; no inference ran and the ten-minute inference allowance was not consumed. Safe PTY excerpts and termination receipt: [interactive-receipt.json](/tmp/c15-c2-native-probes/interactive-receipt.json).
+The highlighted default is **not an approval**. No Enter, selection, slash command, or model prompt was sent. On observing the dialog I stopped this action as the assignment requires. One Ctrl+C produced `press ctrl+c again to exit`; a second Ctrl+C exited the owned process with code 0. This was process cancellation, not an answer to the security dialog. No Herdr worker or unbounded background service was requested. This inspection ended promptly at the dialog; no inference ran and the ten-minute inference allowance was not consumed. Safe PTY excerpts and termination receipt: interactive-receipt.json (`/tmp/c15-c2-native-probes/interactive-receipt.json`).
 
 Consequently, the intended positive test could not be evaluated: neither baseline rule preservation nor initialized role include/skill visibility was observed in native `/context` or an actual initialized prompt. No model self-report is presented as proof. The blocked interface does not establish that `--add-dir` discovers the overlay, that custom-agent selection replaces or appends native system text, or that any ambient workflows are hidden.
 
 ## Other interface leads and constraints
 
-A read-only installed-binary string inspection found generated native symbols including `CustomAgentConfig.GetSystemPromptSections`, `GetSystemPromptConfig`, `GetExcludeDefaultComponents`, and `GetAllCustomAgentConfigs`. The narrow symbol output is retained in [symbols.txt](/tmp/c15-c2-native-probes/symbols.txt). Symbols alone do not define an accessible supported CLI API, payload schema, default semantics or endpoint authority; no guessed native RPC, vendor API modification or internal server attachment was attempted.
+A read-only installed-binary string inspection found generated native symbols including `CustomAgentConfig.GetSystemPromptSections`, `GetSystemPromptConfig`, `GetExcludeDefaultComponents`, and `GetAllCustomAgentConfigs`. The narrow symbol output is retained in symbols.txt (`/tmp/c15-c2-native-probes/symbols.txt`). Symbols alone do not define an accessible supported CLI API, payload schema, default semantics or endpoint authority; no guessed native RPC, vendor API modification or internal server attachment was attempted.
 
 The official [hook contract](https://www.agy.dev/docs/hooks/) documents pre-invocation system-message injection and native transcript metadata. It is another potential additive mechanism, but this investigation did not register hooks or prove private per-launch hook discovery. Its project/global/plugin configuration surfaces cannot be treated as permission to modify a consumer's hooks or persistent native settings. The native rules/skills overlay is likewise an investigation candidate, not an implemented adapter API.
 
@@ -133,7 +135,7 @@ These limits are specific:
 
 ## Verification, next step and implementation readiness
 
-The two inspected persistent files, `~/.gemini/antigravity-cli/settings.json` and `~/.gemini/config/config.json`, have matching hashes before the catalog retry and after the native probes. This includes the existing trust-bearing settings file. [final-state.json](/tmp/c15-c2-native-probes/final-state.json) records those comparisons. The check is limited to those files; native runtime log/cache/state writes were authorized and are not claimed absent. No explicit authentication/account/credential operation was invoked; the CLI's automatic spinner is reported rather than interpreted as a manual account change.
+The two inspected persistent files, `~/.gemini/antigravity-cli/settings.json` and `~/.gemini/config/config.json`, have matching hashes before the catalog retry and after the native probes. This includes the existing trust-bearing settings file. final-state.json (`/tmp/c15-c2-native-probes/final-state.json`) records those comparisons. The check is limited to those files; native runtime log/cache/state writes were authorized and are not claimed absent. No explicit authentication/account/credential operation was invoked; the CLI's automatic spinner is reported rather than interpreted as a manual account change.
 
 No automatic approval review rejected an action. All escalations above were granted; the stopping condition was the native trust dialog and the assignment's explicit prohibition on answering it. No inference, token charge, actual model response or usable-inference entitlement is claimed. The zero-usage context-error envelope is the only model-usage receipt produced. The permitted one-inference budget remains unused; it is not permission for an adapter smoke or retry.
 

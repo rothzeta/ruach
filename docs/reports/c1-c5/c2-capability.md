@@ -20,6 +20,8 @@ blockers:
   - "C2 activation held: no proven additive primary-session role transport, selective workflow exclusion, available native route, or actual linked interactive acceptance."
   - "Runtime-initializing catalog/config inspection needs a scoped follow-up; no further native retry was performed."
 
+> Editorial portability view: machine-local evidence locations are literal paths. [Original snapshots and curation provenance](../releases/0.7.0/ci-portability.md) remain available; historical findings are unchanged.
+
 # C2 capability investigation
 
 The investigation is complete; native adapter activation remains held. A functioning binary and declared Herdr kind support replace the historical CPU-crash gap, but do not establish the native composition contract. No application, routing, test, global configuration, retained consumer, or failed-pane changes were made. No paid inference, session start, trust response, merge, push, install, release, or subworker occurred.
@@ -47,7 +49,7 @@ Smallest safe launch remediation for the Coordinator to commission: preserve the
 
 ## Native identity and probe receipts
 
-All probes were on 2026-10-25. Default probe cwd: `/opt/dev/ruach-worktrees/c15-c2-scout`. Native helpers used structured argv, ignored stdin, and a 10-second whole-process timeout through the existing `process.run`; none timed out. Scratch scripts and full receipts are under [/tmp/c15-c2-scout-probes](/tmp/c15-c2-scout-probes), outside the repository. These temporary files supplement the durable excerpts below; they are not durable acceptance prerequisites.
+All probes were on 2026-10-25. Default probe cwd: `/opt/dev/ruach-worktrees/c15-c2-scout`. Native helpers used structured argv, ignored stdin, and a 10-second whole-process timeout through the existing `process.run`; none timed out. Scratch scripts and full receipts are under /tmp/c15-c2-scout-probes (`/tmp/c15-c2-scout-probes`), outside the repository. These temporary files supplement the durable excerpts below; they are not durable acceptance prerequisites.
 
 `command -v` found `/home/metatron/.local/bin/agy`, `/home/metatron/.local/bin/herdr`, and Bun; it found no `gemini` executable on this PATH. agy is a stripped Linux x86-64 ELF, 224,628,968 bytes, SHA-256 `128780f5776959ba6a991bde1f0a8b699eee37a59ed30deb9926147fedfa56c4`. Installed application source was not located; stripped-binary presence is not source proof. No substitute executable was invoked.
 
@@ -160,9 +162,9 @@ After a reviewed adapter exists and runtime initialization is scoped, live accep
 
 ## Verification and limits
 
-Ran `bun test --timeout 30000 tests/worker.test.ts -t agy` in this checkout's `skills/ruach-herdr` with approved local socket access. Exit 1: three tests expected exit 3 but received exit 2 because the checkout lacks skill-local `node_modules/yaml/package.json`, which [worker.ts](../../../skills/ruach-herdr/scripts/worker.ts) explicitly requires. This is missing test setup, not evidence that the adapter gate regressed. Full log: [/tmp/c15-c2-scout-probes/agy-tests.log](/tmp/c15-c2-scout-probes/agy-tests.log).
+Ran `bun test --timeout 30000 tests/worker.test.ts -t agy` in this checkout's `skills/ruach-herdr` with approved local socket access. Exit 1: three tests expected exit 3 but received exit 2 because the checkout lacks skill-local `node_modules/yaml/package.json`, which [worker.ts](../../../skills/ruach-herdr/scripts/worker.ts) explicitly requires. This is missing test setup, not evidence that the adapter gate regressed. Full log: /tmp/c15-c2-scout-probes/agy-tests.log (`/tmp/c15-c2-scout-probes/agy-tests.log`).
 
-Copied the skill unchanged to `/tmp/c15-c2-scout-probes/skill`, copied existing `/opt/dev/ruach/skills/ruach-herdr/node_modules` (dependencies match the committed manifest: yaml 2.9.1, ws 8.22.0, jsonc-parser 3.3.1), and compared scripts/tests with `git diff --no-index`; both comparisons exited 0. Ran the same exact test argv in that disposable skill copy with local sockets. Exit 0: **3 pass, 155 filtered, 0 fail, 14 assertions**, Bun 1.4.2. Full log: [/tmp/c15-c2-scout-probes/agy-tests-with-deps.log](/tmp/c15-c2-scout-probes/agy-tests-with-deps.log). No dependency installation or repository test edit was made.
+Copied the skill unchanged to `/tmp/c15-c2-scout-probes/skill`, copied existing `/opt/dev/ruach/skills/ruach-herdr/node_modules` (dependencies match the committed manifest: yaml 2.9.1, ws 8.22.0, jsonc-parser 3.3.1), and compared scripts/tests with `git diff --no-index`; both comparisons exited 0. Ran the same exact test argv in that disposable skill copy with local sockets. Exit 0: **3 pass, 155 filtered, 0 fail, 14 assertions**, Bun 1.4.2. Full log: /tmp/c15-c2-scout-probes/agy-tests-with-deps.log (`/tmp/c15-c2-scout-probes/agy-tests-with-deps.log`). No dependency installation or repository test edit was made.
 
 Mechanical handoff check: `bun /opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts docs/reports/c1-c5/c2-capability.md --repo /opt/dev/ruach-worktrees/c15-c2-scout` exits 0. Validation checks structure/revision resolution, not native acceptance or independent review. Full unrelated suites, `just check`, all root tests, paid advisory, native linked launch and broader role write acceptance were not run; this assignment changes investigation documents only and explicitly requests bounded checks.
 
