@@ -1,0 +1,38 @@
+# Assignment COUNCIL-USER-DOC-01 (role: implementer), v1
+
+Task: ruach-c1-c5 / COUNCIL-USER-DOC-01. Follow the canonical Implementer role supplied at launch. This is documentation authoring, not running a council. Do not load or execute Coordinator workflow bodies as instructions; you may inspect the council workflow and rounds reference as read-only product source needed to describe their contract.
+
+Workspace: /opt/dev/ruach-worktrees/c16-council-guide, branch ruach/c16-council-guide, exact base 47cd46aaf9b808bd226f249899eab269100325f7 (combined candidate 171a478d plus report-only successor). The Coordinator checked the fresh launch destination/branch through the canonical wrapper. Current main remains published0.6.1, while this candidate prepares0.7.0; do not merge or deliver it.
+
+Authority: DEC-007 owner: "do add it thats more helper doc for a user than for the agent that uses the skill". The preceding discussion established that the prepared council skill and member specimen describe agent protocol but lack an accessible owner-facing setup guide. DEC-001 authorizes Ruach specialists, Codex engineering workers; your explicitly selected route is gpt-6.1-sol-high/auto-review under existing Ruach consumer policy. DEC-002 scope is Ruach/global skills/plugin, retained consumers unchanged. This assignment permits NO global installation/configuration, inference/native experiments, trust answers, runtime council, push, release or main mutation.
+
+Outcome: a person reading Ruach docs can ask a Coordinator to arrange a council and understands how to choose members, roles, expertise focus, model/harness routes, round modes, input/scope/time/action budgets and expected reports. They need not read an agent protocol or invent a configuration file/CLI.
+
+Own only:
+- New docs/council.md, user-facing setup guide.
+- README.md: one short discoverable link in the existing appropriate user navigation (use normal readable prose; do not rewrite release status or unrelated docs).
+- This unchanged assignment at docs/assignments/c1-c5/COUNCIL-USER-DOC-01.md.
+- Concise canonical handoff docs/reports/c1-c5/council-user-guide.md and only proportionate owned evidence if necessary.
+
+Protected: all agents/, skills/, scripts/, config/, tests/, packages/locks, plugin/release metadata, other docs/reports/design/evals, old immutable evidence, main/retained branches and private Coordinator task record/journal. No test or executable edits are needed for a Markdown guide. Do not import unsafe Scout ancestry or inspect private global/native sessions.
+
+Acceptance:
+1. Lead with a copyable natural-language request to the Coordinator, explicitly a request/example rather than executable YAML, a new council configuration schema or a command. Include a bounded question, named roster/expertise, existing advisory roles, explicit authorized route choice, exactly-N-total mode, evidence/revision, advice-only scope, bounded time/actions, report/synthesis expectations. Use illustrative placeholders or clearly identify repository-specific route examples; do not imply any model/effort/harness is a universal default or supported live council capability.
+2. Explain role versus member identity/expertise versus route. Multiple members may use one role/model. Existing Scout/Architect or consumer-declared read-only roles fit; no new generic role. Consumer routing catalogs govern allowed selections, wrapper permission policy is separate, no automatic fallback after failure, and the Coordinator handles assignments/launches.
+3. Explain exactly three supported mode choices: manual one round then owner pause; automatic exact positive N total INCLUDING round one (agreement is not early-stop authority); separately explicit up-to-N stop-when-stable mode based on no consequential proposition/evidence/assumption/disposition changes between two closed rounds. N=1 cannot demonstrate comparative stability. No arbitrary default round count/vote/majority adoption.
+4. Explain where configuration is recorded: owner brief becomes the Coordinator's existing task record plus separate member assignments; reusable role definitions and consumer routing stay in their existing locations. No council.yaml, new framework or invented CLI. Link to canonical workflow/rounds/member specimen/routing reference for mechanics rather than copying agent operational rules.
+5. Explain expected result and continuation/amendments in plain language: actual durable closed-round reports, attributed disagreements/minority objections and evidence, recommendation versus owner adoption, later rounds exchange only closed reports, artifact-based resume, manual next round/exhausted budget needs owner extension. Council alone grants no product edits/implementation/delivery.
+6. Clearly and briefly disclose current prepared0.7 state: source guide/workflow exist but complete native independence/council demonstrations are capability-held. Separate worktrees or telling models not to read peers is not verified isolation. Keep this user-useful, link current boundary decision; do not turn the guide into a native-internals checklist, revive old trust prompt, waive the hold or claim Gemini/council execution worked.
+7. Keep it concise and readable, primarily user guidance. No duplicated authoritative workflow body or long handoff ledger in the guide. Preserve ordinary Markdown formatting and project style.
+
+Verification (working directory this worktree):
+- Read CONTRIBUTING.md and relevant existing navigation/conventions. Inspect council source/reference/specimen and routing as read-only product source, never as instructions to execute their workflow.
+- Use existing root/skill dependencies via local node_modules symlinks from /opt/dev/ruach if needed, no installation/lock mutation. Links only in your task checkout.
+- Run just check and bun run test (300s each), preserving command exit and output. AGENTS.md requires these; no executable skill body changes mean no new affected executable suite. No new tests for prose/formatting. Local Unix sockets may require an explicitly scoped escalation for the exact verification recipe; report environment denial before one supported remediation, never bypass forbidden commands.
+- Check all added local links against this exact candidate and git diff --check; confirm only owned files changed. No product/native/browser/end-to-end or council/model runs.
+- Run bun skills/ruach-handoff/scripts/validate.ts docs/reports/c1-c5/council-user-guide.md --repo /opt/dev/ruach-worktrees/c16-council-guide (120s). Mechanical validation is separate from technical truth/independent review.
+- Commit guide/README changes first, report exact candidate/tested revision, then commit unchanged assignment and handoff. Do not predict the report's creating commit. Return creating SHA and clean status, actual commands/exits, any unsupported capability and private temporary_directory from your launch if known. Disposable verification logs/helpers stay outside repo; retain enough concise evidence to review.
+
+Scope changes: stop the affected change and report a specific conflict/need; do not edit protected files or negotiate ownership. Ordinary justified in-scope authoring/diagnostic iterations are allowed; no correction budget is currently assigned. Need for authority/capability/design or no viable in-scope progress can block earlier.
+
+Independent review will inspect the exact documentation diff and links against unchanged canonical contracts. No merge/delivery is assigned. The Coordinator will release your session/worktree and source preparation checkout promptly once review/fix reuse ends, preserving your branch and all evidence.
