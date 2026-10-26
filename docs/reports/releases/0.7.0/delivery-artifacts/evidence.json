@@ -1,0 +1,1057 @@
+{
+  "reviewed_revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+  "delivered_revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+  "destination_before": "2b693cd72bf39c29575841a88d9c7ae719a29715",
+  "main_merge": {
+    "before": "2b693cd72bf39c29575841a88d9c7ae719a29715",
+    "after": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "fast_forward": true,
+    "tracked_and_untracked_clean": true,
+    "routing_intent_preserved_in_reviewed_policy": true,
+    "backup_preserved": true
+  },
+  "publication": {
+    "before": "2b693cd72bf39c29575841a88d9c7ae719a29715",
+    "delivered_revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "tags": [
+      {
+        "name": "v0.7.0",
+        "type": "tag",
+        "object": "7abf5ecd846807214595b155050cb9c49204c370",
+        "target": "e37645b11ea012f98b213f6eddc38b513cb9248c"
+      },
+      {
+        "name": "ruach--v0.7.0",
+        "type": "tag",
+        "object": "a9c9467162864c390aa4f174f00bde7770101088",
+        "target": "e37645b11ea012f98b213f6eddc38b513cb9248c"
+      }
+    ],
+    "atomic_push_exit": 0,
+    "remote": {
+      "refs/heads/main": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+      "refs/tags/ruach--v0.7.0": "a9c9467162864c390aa4f174f00bde7770101088",
+      "refs/tags/ruach--v0.7.0^{}": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+      "refs/tags/v0.7.0": "7abf5ecd846807214595b155050cb9c49204c370",
+      "refs/tags/v0.7.0^{}": "e37645b11ea012f98b213f6eddc38b513cb9248c"
+    },
+    "exact_remote_matches": true
+  },
+  "remote_final": {
+    "refs/heads/main": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "refs/tags/ruach--v0.7.0": "a9c9467162864c390aa4f174f00bde7770101088",
+    "refs/tags/ruach--v0.7.0^{}": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "refs/tags/v0.7.0": "7abf5ecd846807214595b155050cb9c49204c370",
+    "refs/tags/v0.7.0^{}": "e37645b11ea012f98b213f6eddc38b513cb9248c"
+  },
+  "main_setup": {
+    "revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "frozen_setup_passed": true,
+    "check_and_release_passed": true,
+    "handoff_fast_uri": "3.1.9",
+    "source_clean": true
+  },
+  "installed": {
+    "delivered_revision": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "shared_skills": 15,
+    "plugin_version": "0.7.0",
+    "plugin_source": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "plugin_roles": 7,
+    "plugin_skills": 15,
+    "shared_managed_checked": 114,
+    "plugin_managed_checked": 127,
+    "old_discovery_entries_preserved": true,
+    "old_claude_link_identities_preserved": true,
+    "discovery": [
+      {
+        "agent": "pi",
+        "total": 15,
+        "matching_targets": 15
+      },
+      {
+        "agent": "goose",
+        "total": 15,
+        "matching_targets": 15
+      }
+    ],
+    "dependencies": [
+      {
+        "scope": "main",
+        "skill": "ruach-handoff",
+        "fast_uri": "3.1.9",
+        "owned_fast_uri": true,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "main",
+        "skill": "ruach-herdr",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "main",
+        "skill": "ruach-harness-eval",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "shared",
+        "skill": "ruach-handoff",
+        "fast_uri": "3.1.9",
+        "owned_fast_uri": true,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "shared",
+        "skill": "ruach-herdr",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "shared",
+        "skill": "ruach-harness-eval",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "plugin",
+        "skill": "ruach-handoff",
+        "fast_uri": "3.1.9",
+        "owned_fast_uri": true,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "plugin",
+        "skill": "ruach-herdr",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      },
+      {
+        "scope": "plugin",
+        "skill": "ruach-harness-eval",
+        "fast_uri": null,
+        "owned_fast_uri": null,
+        "ordinary_node_modules": true
+      }
+    ],
+    "unrelated_settings_preserved": true,
+    "unrelated_shared_files_preserved": true,
+    "unrelated_skill_metadata_preserved": true,
+    "unrelated_plugin_metadata_preserved": true,
+    "marketplace_registration_unchanged": true,
+    "main_exact_clean": true,
+    "bytes_and_git_modes_exact": true,
+    "full_unix_modes_equal_delivered_worktree": true,
+    "records_verified": 241,
+    "initial_literal_mode_assumption": {
+      "expected": "0644 from normalized Git mode",
+      "observed_ordinary_files": "0664, same as delivered worktree and prior installation",
+      "differing_records": 239,
+      "permission_changes_performed": false
+    },
+    "versions": {
+      "bun": "1.4.2",
+      "claude": "2.1.310",
+      "skills_cli": "1.7.0"
+    }
+  },
+  "readiness": {
+    "command_exit": 0,
+    "packages": [
+      {
+        "skill": "ruach-handoff",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-herdr",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-handoff",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-herdr",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-handoff",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-herdr",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-handoff",
+        "state": "ready"
+      },
+      {
+        "skill": "ruach-herdr",
+        "state": "ready"
+      }
+    ],
+    "active_version": "0.7.0"
+  },
+  "routing_backups": {
+    "file_sha256": "9000bb915bb361d4a7e1e6eb66c7f9b896c3420b61f79b52429688df8f2b671b",
+    "patch_sha256": "9fbe68920abcbcb881223ec62f8e92c231459c3efc53c15fb553805aed8a5926",
+    "private_backup_retained": true,
+    "represented_intent_preserved": true
+  },
+  "ci": {
+    "url": "https://github.com/rothzeta/ruach/actions/runs/40314249964",
+    "sha": "e37645b11ea012f98b213f6eddc38b513cb9248c",
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "name": "verify",
+        "conclusion": "failure",
+        "failed_steps": [
+          "Resource, link and type checks"
+        ]
+      }
+    ],
+    "observed_broken_targets": 82,
+    "report_files": [
+      "docs/reports/c1-c5/c2-capability.md",
+      "docs/reports/c1-c5/c2-native-interface.md",
+      "docs/reports/c1-c5/council-isolation.md",
+      "docs/reports/c1-c5/council-member-prep.md",
+      "docs/reports/c1-c5/council-native-controls.md",
+      "docs/reports/c1-c5/council-native-preflight.md",
+      "docs/reports/c1-c5/demo-readiness.md"
+    ],
+    "cause": "Resource checker treats historical absolute temporary-evidence links as required local targets; these are absent on hosted runner.",
+    "no_fix_or_workflow_rerun": true
+  },
+  "commands": [
+    {
+      "name": "preflight",
+      "argv": [
+        "bun",
+        "$R/preflight.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:16:50.078Z",
+      "ended": "2026-10-26T11:16:51.762Z",
+      "exit": 0,
+      "stdout_sha256": "04103db57e95110b30c8268ef915da105f91825185a8577e48c5dcb139097922",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-list-after",
+      "argv": [
+        "claude",
+        "plugin",
+        "list",
+        "--json"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:24:48.705Z",
+      "ended": "2026-10-26T11:24:49.375Z",
+      "exit": 0,
+      "stdout_sha256": "359c5ce84c19277ba9f2e34663c18dcea5bf622eef944c8dcdfc4396de9b48e7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-frozen-handoff",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach/skills/ruach-handoff",
+      "started": "2026-10-26T11:18:56.653Z",
+      "ended": "2026-10-26T11:18:56.698Z",
+      "exit": 0,
+      "stdout_sha256": "d8298ca5e7ed47819af38f4e8b6cb2294f6b134e866c5c052ac8ae40e7ea8fd8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-identify-native",
+      "argv": [
+        "gh",
+        "run",
+        "list",
+        "--repo",
+        "rothzeta/ruach",
+        "--commit",
+        "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "--branch",
+        "main",
+        "--event",
+        "push",
+        "--limit",
+        "5",
+        "--json",
+        "databaseId,headSha,status,conclusion,name,url"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:24:01.332Z",
+      "ended": "2026-10-26T11:24:02.250Z",
+      "exit": 0,
+      "stdout_sha256": "7c61fec63693b4081deae6f407ac71a3a7e1f8c206d7dbf3ca9ad401710a4fe6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "clear-represented-routing",
+      "argv": [
+        "git",
+        "restore",
+        "--source=HEAD",
+        "--worktree",
+        "--",
+        "config/agent-routing/roles.yaml"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:17:43.472Z",
+      "ended": "2026-10-26T11:17:43.478Z",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shared-frozen-ruach-harness-eval",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$SHARED/ruach-harness-eval",
+      "started": "2026-10-26T11:22:51.117Z",
+      "ended": "2026-10-26T11:22:51.124Z",
+      "exit": 0,
+      "stdout_sha256": "9c3e0e2891d49793f3ab29494ddc8a655ca0b8413c84351aea9cb05f0d2290a6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "guarded-merge",
+      "argv": [
+        "flock",
+        "-n",
+        "/opt/dev/ruach/.git/ruach-release-070.lock",
+        "bun",
+        "$R/merge.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:17:42.141Z",
+      "ended": "2026-10-26T11:17:43.620Z",
+      "exit": 0,
+      "stdout_sha256": "8b16061566c715c767fd81b8daa11f6ac1bf933a77ac2f82feccc40acb9921cc",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "publication",
+      "argv": [
+        "flock",
+        "-n",
+        "/opt/dev/ruach/.git/ruach-release-070.lock",
+        "bun",
+        "$R/publish.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:19:41.783Z",
+      "ended": "2026-10-26T11:19:49.296Z",
+      "exit": 0,
+      "stdout_sha256": "fa46c7b0e807dddd0d2aed34ebd2e063c157f6ca7373d168a2fd5bc5c670e4c7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote-push-guard",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:43.766Z",
+      "ended": "2026-10-26T11:19:44.998Z",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shared-frozen-ruach-handoff",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$SHARED/ruach-handoff",
+      "started": "2026-10-26T11:22:51.014Z",
+      "ended": "2026-10-26T11:22:51.020Z",
+      "exit": 0,
+      "stdout_sha256": "e7258a23d7400777449b2cfe77de12adea6f495503c0af933bbe50e076ee13ac",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-failed-log",
+      "argv": [
+        "gh",
+        "run",
+        "view",
+        "40314249964",
+        "--repo",
+        "rothzeta/ruach",
+        "--log-failed"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:24:50.048Z",
+      "ended": "2026-10-26T11:24:51.792Z",
+      "exit": 0,
+      "stdout_sha256": "250a90e29f91fdac755a2a3d85c2090429231325d83093843d9538e198ceebc4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installed-inspection",
+      "argv": [
+        "bun",
+        "$R/inspect-installed.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:23:34.182Z",
+      "ended": "2026-10-26T11:23:34.456Z",
+      "exit": 0,
+      "stdout_sha256": "4c3b992b8d49712af6f36316237c7a23fc139af86eeb82db4137186908e53a60",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff",
+      "argv": [
+        "bun",
+        "/opt/dev/ruach/skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/releases/0.7.0/delivery.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:30:53.093Z",
+      "ended": "2026-10-26T11:30:53.192Z",
+      "exit": 0,
+      "stdout_sha256": "bac4da61b9259c602fc4da77ffab9f86547eca52b52b8b5a28d99c0c430d7bad",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-frozen-ruach-handoff",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$PLUGIN/skills/ruach-handoff",
+      "started": "2026-10-26T11:22:51.165Z",
+      "ended": "2026-10-26T11:22:51.174Z",
+      "exit": 0,
+      "stdout_sha256": "cc16a15b6d1e2e8893e40efbf25941990ea1652d81cba0f5da502bfefdbfeac6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-help-default",
+      "argv": [
+        "claude",
+        "plugin",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:11.727Z",
+      "ended": "2026-10-26T11:15:11.846Z",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-install-audit",
+      "argv": [
+        "bun",
+        "$R/final-install-audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:27:44.739Z",
+      "ended": "2026-10-26T11:27:44.974Z",
+      "exit": 0,
+      "stdout_sha256": "d0092a2369cc4927ec5ea1673de93fb5df45e3266374969dcc1ea2d56a250713",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote-tag-guard",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:41.842Z",
+      "ended": "2026-10-26T11:19:43.059Z",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-update-help",
+      "argv": [
+        "claude",
+        "plugin",
+        "update",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:20:57.764Z",
+      "ended": "2026-10-26T11:20:57.923Z",
+      "exit": 0,
+      "stdout_sha256": "b5b32d1fabce040b27d227f5278743a66408aacc527e13c63e031e4443ef5807",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-frozen-ruach-harness-eval",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$PLUGIN/skills/ruach-harness-eval",
+      "started": "2026-10-26T11:22:51.270Z",
+      "ended": "2026-10-26T11:22:51.278Z",
+      "exit": 0,
+      "stdout_sha256": "8722237d6ffa7ea102182db20cebd470b638665903821c7e7351b574fd0d3c2c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "skills-update",
+      "argv": [
+        "bun",
+        "x",
+        "--bun",
+        "skills@1.7.0",
+        "add",
+        "./skills",
+        "--global",
+        "--agent",
+        "codex",
+        "--agent",
+        "pi",
+        "--agent",
+        "goose",
+        "--skill",
+        "*",
+        "--yes"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:20:56.190Z",
+      "ended": "2026-10-26T11:20:57.650Z",
+      "exit": 0,
+      "stdout_sha256": "430fdbadf445968b18fcd0cafc2029fbad4d94a44654aee5518a611f83c73c77",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tag-version",
+      "argv": [
+        "git",
+        "tag",
+        "-a",
+        "v0.7.0",
+        "e37645b11ea012f98b213f6eddc38b513cb9248c",
+        "-m",
+        "Ruach 0.7.0"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:43.083Z",
+      "ended": "2026-10-26T11:19:43.086Z",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-tag-help-native",
+      "argv": [
+        "claude",
+        "plugin",
+        "tag",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:14.719Z",
+      "ended": "2026-10-26T11:15:14.846Z",
+      "exit": 0,
+      "stdout_sha256": "43c977d68785c2a9bb190792aac90215fa7c04f3e7f2730eb41f242ab4b383da",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-version-native",
+      "argv": [
+        "claude",
+        "--version"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:14.871Z",
+      "ended": "2026-10-26T11:15:14.882Z",
+      "exit": 0,
+      "stdout_sha256": "03c71ebd08ddd569558734d42a29ae8c6a2a049e4a7fb78126979867e6f941d2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-frozen-harness-eval",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach/skills/ruach-harness-eval",
+      "started": "2026-10-26T11:18:56.751Z",
+      "ended": "2026-10-26T11:18:56.756Z",
+      "exit": 0,
+      "stdout_sha256": "9c3e0e2891d49793f3ab29494ddc8a655ca0b8413c84351aea9cb05f0d2290a6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installation-lifecycle",
+      "argv": [
+        "bun",
+        "$R/install.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:20:56.119Z",
+      "ended": "2026-10-26T11:20:59.752Z",
+      "exit": 0,
+      "stdout_sha256": "a3cb427f1efd84387dfc8ea4c5d70f8b39d354f789076fd67449bb49334341e0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-update",
+      "argv": [
+        "claude",
+        "plugin",
+        "update",
+        "ruach@ruach",
+        "--scope",
+        "user"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:20:57.947Z",
+      "ended": "2026-10-26T11:20:59.727Z",
+      "exit": 0,
+      "stdout_sha256": "edaf5ce7e92ed7e8c487d6e7998fa7820fa99b12a0f500c676609d25c2903d25",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-version-default",
+      "argv": [
+        "claude",
+        "--version"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:12.010Z",
+      "ended": "2026-10-26T11:15:12.022Z",
+      "exit": 0,
+      "stdout_sha256": "03c71ebd08ddd569558734d42a29ae8c6a2a049e4a7fb78126979867e6f941d2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote-before",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:14.907Z",
+      "ended": "2026-10-26T11:15:16.189Z",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-frozen-herdr",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach/skills/ruach-herdr",
+      "started": "2026-10-26T11:18:56.722Z",
+      "ended": "2026-10-26T11:18:56.727Z",
+      "exit": 0,
+      "stdout_sha256": "e596e1da52e2a7a1433f7c6358ab7c327a9c9e13b425b3805d2809d042605a9e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote-merge-guard",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:17:42.194Z",
+      "ended": "2026-10-26T11:17:43.434Z",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-detail",
+      "argv": [
+        "gh",
+        "run",
+        "view",
+        "40314249964",
+        "--repo",
+        "rothzeta/ruach",
+        "--json",
+        "headSha,status,conclusion,jobs,url"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:24:48.798Z",
+      "ended": "2026-10-26T11:24:50.025Z",
+      "exit": 0,
+      "stdout_sha256": "15ad38e786804217925b9efeae35a2451c156cbc827c70ad9aebf1abe7bacb46",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "receipt-links",
+      "argv": [
+        "bun",
+        "scripts/check.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:31:48.693Z",
+      "ended": "2026-10-26T11:31:48.745Z",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "merge-main",
+      "argv": [
+        "git",
+        "merge",
+        "--ff-only",
+        "e37645b11ea012f98b213f6eddc38b513cb9248c"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:17:43.510Z",
+      "ended": "2026-10-26T11:17:43.584Z",
+      "exit": 0,
+      "stdout_sha256": "0d67406088bdecb3aa1dc93dde0bea059ec242d382c0a75cdee4fedffe643d1f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-release",
+      "argv": [
+        "bun",
+        "run",
+        "release-check"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:18:57.194Z",
+      "ended": "2026-10-26T11:18:57.209Z",
+      "exit": 0,
+      "stdout_sha256": "9f242bc3b30b3488cba542e9d53b58724f570b13a53586ef251d1e4ce9930c00",
+      "stderr_sha256": "3b58f2e74a7474a1f4d798216f71d12bb0d8a48a543941efa0fd6f6087746cb2"
+    },
+    {
+      "name": "main-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:18:56.778Z",
+      "ended": "2026-10-26T11:18:57.171Z",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "remote-final",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:27:47.121Z",
+      "ended": "2026-10-26T11:27:48.394Z",
+      "exit": 0,
+      "stdout_sha256": "ffb636a7da7cfcf16acc9fb3756bde7f087e3c6fd51025adfe7479b5ca93625f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ready-after",
+      "argv": [
+        "bun",
+        "scripts/install.ts",
+        "ready",
+        "--route",
+        "skill",
+        "--json",
+        "--project",
+        "$R/empty",
+        "--skills",
+        "$PLUGIN/skills"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:27:47.054Z",
+      "ended": "2026-10-26T11:27:47.096Z",
+      "exit": 0,
+      "stdout_sha256": "625108f17b7f97d7667e7baff092ae25a3ed2843c97c38a20b14e9e9c97c9eab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installed-verification",
+      "argv": [
+        "bun",
+        "$R/verify-install.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:22:50.957Z",
+      "ended": "2026-10-26T11:22:51.297Z",
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a2c7ed4181d066a5942c900a96eb4303059f70090a2a88aa591fcfcc67c688f0"
+    },
+    {
+      "name": "plugin-help-native",
+      "argv": [
+        "claude",
+        "plugin",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:14.572Z",
+      "ended": "2026-10-26T11:15:14.692Z",
+      "exit": 0,
+      "stdout_sha256": "afc319633b0e4fbbafbb4160e4b120bd459e2073bd30f4f6182d4a1faaf7172a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "push-atomic",
+      "argv": [
+        "git",
+        "push",
+        "--atomic",
+        "origin",
+        "main",
+        "refs/tags/v0.7.0",
+        "refs/tags/ruach--v0.7.0"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:45.022Z",
+      "ended": "2026-10-26T11:19:47.998Z",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "23e3597c54c42874c594169b41a93b2c153d5971a0d629a4fc0a098941dfd47f"
+    },
+    {
+      "name": "remote-after-push",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/main",
+        "refs/tags/v0.7.0",
+        "refs/tags/v0.7.0^{}",
+        "refs/tags/ruach--v0.7.0",
+        "refs/tags/ruach--v0.7.0^{}"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:48.020Z",
+      "ended": "2026-10-26T11:19:49.280Z",
+      "exit": 0,
+      "stdout_sha256": "ffb636a7da7cfcf16acc9fb3756bde7f087e3c6fd51025adfe7479b5ca93625f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-frozen-ruach-herdr",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$PLUGIN/skills/ruach-herdr",
+      "started": "2026-10-26T11:22:51.217Z",
+      "ended": "2026-10-26T11:22:51.227Z",
+      "exit": 0,
+      "stdout_sha256": "50e7f5322303dc183bc14b3966e4fbccc0e46e143f63a9ea9994d06433039057",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "skills-list-after",
+      "argv": [
+        "bun",
+        "x",
+        "--bun",
+        "skills@1.7.0",
+        "list",
+        "--global"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:24:48.472Z",
+      "ended": "2026-10-26T11:24:48.680Z",
+      "exit": 0,
+      "stdout_sha256": "634af77101afd2aa1754818efd567b388829ae741f66d015f26462b7ee819b9d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-setup",
+      "argv": [
+        "bun",
+        "$R/main-setup.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:18:56.580Z",
+      "ended": "2026-10-26T11:18:57.242Z",
+      "exit": 0,
+      "stdout_sha256": "4a5c2d641d786f372985ebc58689e00a556d123e1e0232f2303bd5bb6ca6dd74",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shared-frozen-ruach-herdr",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "$SHARED/ruach-herdr",
+      "started": "2026-10-26T11:22:51.064Z",
+      "ended": "2026-10-26T11:22:51.070Z",
+      "exit": 0,
+      "stdout_sha256": "e596e1da52e2a7a1433f7c6358ab7c327a9c9e13b425b3805d2809d042605a9e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "main-frozen-root",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:18:56.624Z",
+      "ended": "2026-10-26T11:18:56.630Z",
+      "exit": 0,
+      "stdout_sha256": "ede3e3fe5bac3ed31dc2af37339cdf10eafd41761d0416612d332d57eb985324",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-identify",
+      "argv": [
+        "git_placeholder"
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:23:34.532Z",
+      "ended": "2026-10-26T11:23:34.534Z",
+      "exit": 127,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "84c1c3cad3690f4397c8e3f7090da82850f7915f40e48eed65d754954badd815"
+    },
+    {
+      "name": "tag-plugin",
+      "argv": [
+        "claude",
+        "plugin",
+        "tag",
+        "."
+      ],
+      "cwd": "/opt/dev/ruach",
+      "started": "2026-10-26T11:19:43.111Z",
+      "ended": "2026-10-26T11:19:43.725Z",
+      "exit": 0,
+      "stdout_sha256": "2988542e12563209d912fc1798175f92f74224f1573d4a1ee1e8f1e935f69ada",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-tag-help-default",
+      "argv": [
+        "claude",
+        "plugin",
+        "tag",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T11:15:11.870Z",
+      "ended": "2026-10-26T11:15:11.985Z",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limitations": [
+    "Hosted CI is failed; Coordinator routing required before release acceptance.",
+    "No native/model/council/listening or product acceptance expanded.",
+    "No source/tag rewrite, force push, GitHub Release, native dialog or retained consumer change.",
+    "Initial exact-0644 helper assumption failed; read-only correction verifies Git mode and literal delivered-worktree modes without chmod.",
+    "One mistyped private CI metadata command exited 127; actual native gh identification/detail/log receipts supersede it."
+  ]
+}
