@@ -7,7 +7,9 @@ description: Coordinator-only workflow (workers never load it) to coordinate a b
 
 This is the generic feature workflow. Use a more specific workflow when one is assigned; keep this procedure sufficient for ordinary feature delivery.
 
-Only the Coordinator loads and executes this workflow. Translate it into self-contained specialist assignments; workers receive their role, context and bounded instructions without workflow bodies. Require [ruach-handoff](../ruach-handoff/SKILL.md) for every worker result, including integration and delivery. Specify the consumer's durable assignment/report locations, protected-document owners, commit requirements and evidence-retention rules. Workers keep disposable material outside the repository. Each responsible worker runs the handoff validator before returning; this is separate from technical verification and acceptance. Use the consumer's authorized launch and communication mechanisms; for Herdr see [ruach-herdr](../ruach-herdr/SKILL.md).
+Only the Coordinator loads and executes this workflow. Translate it into self-contained specialist assignments; workers receive their role, context and bounded instructions without workflow bodies. Apply the Coordinator's [assignment and report contracts](../../agents/coordinator.md#delegation), including short follow-ups to existing workers. Workers keep disposable material outside the repository. Use the consumer's authorized launch and communication mechanisms; for Herdr see [ruach-herdr](../ruach-herdr/SKILL.md).
+
+For compact work, use one Implementer and one independent Reviewer. Combine implementation, integration confirmation and verification in the Implementer's initial assignment when one workspace holds the whole change. Skip investigation and design phases that have no unresolved question. Delivery still follows step 8, using a short follow-up to the Implementer when possible.
 
 At every phase, follow the Coordinator's [external waiting and parking rules](../../agents/coordinator.md#external-waiting-and-parking): continue independent work or persist pending work, confirm external monitoring is armed, and end the turn in `awaiting-workers`. Do not set a wait timer or keep the model active with idle wait calls. Parking never advances to final collection, completion or cleanup of still-needed resources. Reconcile durable event dispositions on wake before advancing.
 
@@ -92,7 +94,7 @@ After required checks on the combined revision succeed, assign an independent Re
 
 When the assignment asks for an uncommitted diff, a retained checkout or a candidate branch instead of a merge, deliver exactly that. It is a normal successful outcome: record where the result is and why it is retained. The rest of this step applies when delivery by merge is requested.
 
-Delivery is a separate Implementer assignment; there is no Merger role. Create it only after both hold:
+Delivery is a separate Implementer assignment, which may be a [short follow-up](../../agents/coordinator.md#short-follow-ups) to the existing worker; it needs no new worker or repeated brief. Create it only after both hold:
 
 - an independent Reviewer reported no outstanding blocking findings on the combined revision, with required checks passing on that revision;
 - you have confirmed that the user authorized delivery to the named target. Silence or earlier approval of other work is not authorization.

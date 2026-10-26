@@ -7,10 +7,12 @@ Coordinator overhead should match the task. Choose the lightest level that still
 | Level | Use when | What you run |
 | --- | --- | --- |
 | Direct | The change is small, local and low-risk, and you will read the diff yourself | One native role (for example `claude --agent ruach:implementer`) with the skills you want. No Coordinator, no Herdr. |
-| Compact | One bounded change needs independent verification or review but no design phase | A Coordinator, one Implementer and one Reviewer. Skip Scout and Architect. One assignment each; handoffs required. |
+| Compact | One bounded change needs independent verification or review but no design phase | A Coordinator, one Implementer for implementation and verification, and one independent Reviewer. Skip Scout and Architect. Reuse the Implementer for a short delivery follow-up after review and target authorization; technical handoffs remain required. |
 | Full | The work spans components, needs design decisions, or has parallel tasks and an integration step | The whole feature workflow: optional Scout and Architect, several Implementers with file ownership, integration, combined verification, review, a separate delivery assignment and cleanup. |
 
 The record scales too: direct work needs none, compact work a small [task record](task-record.md), and full work the fuller sections for decisions, authorization, units and resources. Do not add them to a task that does not need them.
+
+For an existing worker, a [short follow-up](assignment-specimen.md#short-follow-ups) records only the new instruction and a reference to the unchanged brief. Startup acknowledgements and clarifications do not need fresh assignment files or technical completion reports.
 
 Move up a level when a trigger appears: unclear scope, more than one owner of the same files, a design question, or a result you cannot judge alone. Move down when roles would only repeat the same check. Extra workers add launch, reading and cleanup cost; they are not free assurance.
 

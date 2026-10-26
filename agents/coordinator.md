@@ -33,11 +33,17 @@ For each worker provide:
 
 Translate the workflow into self-contained worker assignments. Keep the workflow in your context; do not pass workflow documents to workers or ask them to select or follow a workflow.
 
-Write each self-contained assignment at the consumer's durable assignment location in the worker's workspace. Specify whether the worker must commit it unchanged with the report. Keep launch selection in consumer routing data; send the assignment through the authorized communication mechanism after startup.
+Write the initial self-contained assignment at the consumer's durable assignment location in the worker's workspace. Specify whether the worker must commit it unchanged with the report. Keep launch selection in consumer routing data; send the assignment through the authorized communication mechanism after startup.
 
 For review assignments, identify the exact change and revision, supply task-relevant project context and acceptance conditions, and request findings plus verification evidence. Provide the Implementer's reasoning transcript only when necessary for the review.
 
 Track workers through the consumer's monitoring mechanism and react to `working`, `blocked`, `done`, or equivalent states.
+
+### Short follow-ups
+
+For a bounded continuation to the same worker in the same workspace, reuse its accessible brief. Before dispatch, record a stable follow-up ID, prior brief reference and changed instruction in the task record. Do not repeat unchanged context or create another assignment file unless consumer policy requires it. After context loss, supply the brief again.
+
+Delivery remains a separate gated assignment with the exact reviewed revision, named target and authorization, even when it reuses the Implementer. Corrections retain the blocking outcome and remaining budget. Changed scope, authority or base needs an explicit amendment with its effect and receipt recorded; a new worker needs a self-contained assignment. Startup acknowledgements and factual clarifications need no engineering assignment or completion report; record consequential facts in the task record.
 
 ## External waiting and parking
 
@@ -55,7 +61,7 @@ Do not inspect healthy workers' transcripts, source, diffs or logs for progress.
 
 Keep one [task record](../docs/examples/task-record.md) as the authoritative state; the [assignment specimen](../docs/examples/assignment-specimen.md) lists what each assignment carries. The record is yours alone to edit; workers write their assigned artifacts.
 
-- Check every outgoing assignment against the [assignment specimen](../docs/examples/assignment-specimen.md#before-sending-an-assignment) checklist before sending it.
+- Check initial assignments against the [assignment specimen](../docs/examples/assignment-specimen.md#before-sending-an-assignment); use the short follow-up contract for continuations.
 - Write a consequential owner decision, with its exact words and source, to the record before acting on it. Write phase, work and resource changes before any dependent action. Writing is separate from committing; follow the consumer's commit policy.
 - After actual context loss or compaction, re-read the task record and the raw sources needed for current decisions, authorization and unresolved ambiguity. An ordinary event wake in the existing conversation is not a new intake.
 - Reconcile the record with actual worker, Git and native state. Age, silence or an ownership change is not evidence that a worker ended; confirm identity and liveness, keep running sessions and preserve partial work and requested diffs.
@@ -93,7 +99,7 @@ Do not broaden product scope without approval.
 
 ## Worker reports
 
-Require worker completion through [ruach-handoff](../skills/ruach-handoff/SKILL.md). Require workers to run the skill's mechanical validator on their own reports; this checks structure and revision references separately from technical verification and acceptance. Read the concise handoff fields first; do not reconstruct completion from terminal transcripts when a handoff is available. Request correction from the responsible worker for missing or inconsistent fields, and more detail only when needed for coordination.
+Require completed technical work through [ruach-handoff](../skills/ruach-handoff/SKILL.md), including integration and delivery. Require workers to run the skill's mechanical validator on their own reports; this checks structure and revision references separately from technical verification and acceptance. Read concise handoff fields first; request correction from the responsible worker for missing or inconsistent fields, and more detail only when needed for coordination.
 
 ## Advancement
 

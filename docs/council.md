@@ -1,92 +1,67 @@
 # Ask for a council
 
-Use this natural-language request as an example for your Coordinator. Replace the
-bracketed inputs and route choices before using it; this is a request, not a
-configuration file or command.
+**Availability:** Ruach 0.7.0 includes the council workflow, but a complete live
+council remains blocked on verified member isolation. Separate worktrees and
+instructions to ignore peers do not establish that isolation. See the
+[boundary decision](design/c1-c5/council-boundary-decision.md) for the missing
+capability. A request does not waive this hold.
 
-> Please arrange an advisory council on this bounded question: should we retain
-> the current cache eviction policy or adopt the proposed policy for the next
-> release? Use only [repository revision SHA], [proposal version] and [benchmark
-> report version] as evidence. Name Ada as a Scout focused on failure cases and
-> Lin as an Architect focused on design and maintenance costs. I explicitly
-> authorize Ada's [approved Scout route ID: harness, model, effort] and Lin's
-> [approved Architect route ID: harness, model, effort], subject to our existing
-> permission policy and capability gates. Use automatic **exactly 3 total
-> rounds, including round one**; agreement does not authorize stopping early.
-> Limit the whole council to 45 minutes and each member to four evidence reads
-> per round. Advice only: members may write their assigned reports; no product
-> edits, runtime probes, network access, implementation or delivery. If required
-> access or evidence is missing, report the hold. Return durable reports for each
-> closed round and a final synthesis with attributed evidence, disagreements,
-> supported minority objections, changed assumptions, recommendations and any
-> decisions I still need to make. Recommendations require my separate adoption.
+When that capability is available, give your Coordinator a request like this.
+Replace the bracketed evidence references; this is ordinary text, not a config
+file or command.
 
-**Current availability:** this prepared 0.7.0 source includes the guide and council
-workflow, but complete native independence and council demonstrations remain on
-a capability hold. Separate worktrees or telling models not to read peers do not
-establish verified isolation. The [current boundary decision](design/c1-c5/council-boundary-decision.md)
-records the missing capability and reopening condition. Preparing a brief does
-not waive that hold or establish live council support for a chosen route.
+> Arrange a council on whether to keep our cache eviction policy or adopt the
+> proposal. Use [repository revision], [proposal] and [benchmark report].
+> Use two members on our configured routes: a Scout examining failure cases
+> and an Architect examining maintenance costs. Run exactly three total rounds,
+> including the first, even if they agree early. Advice only; no product edits
+> or runtime probes. Return the recommendations, evidence, disagreements and
+> decisions I still need to make. Report any missing capability before starting.
 
-## Choose members and routes
+## Configure the request
 
-Three choices describe each member:
+| Choice | What to specify |
+| --- | --- |
+| Question | One bounded decision and the evidence versions members may use |
+| Members | How many, each role and its perspective; names are optional |
+| Rounds | Choose one mode from the table below; there is no default count |
+| Routes, if overriding policy | An authorized selection from your consumer's routing catalogs |
+| Limits, if needed | Time, cost or evidence-access bounds; otherwise existing consumer policy applies |
 
-| Choice | What it means | Example |
-| --- | --- | --- |
-| Role | The existing responsibility and authority contract | Scout, Architect, or a consumer-declared read-only domain role |
-| Member identity and expertise | A named perspective on this question | Ada examines failure cases; Lin examines maintenance costs |
-| Route | The selected harness, model and effort | An explicitly authorized route from your consumer's catalogs |
-
-Multiple members may share a role or model while examining different concerns.
-You do not need a new generic council role. Choose expertise that could expose
-different evidence or assumptions, and name the evidence revision and read scope
-so the advice answers the same question.
-
-Consumer routing catalogs govern allowed selections; a role's declared
-alternatives require explicit selection. Wrapper permission policy is separate
-from model routing, and route selection alone grants no action authority or
-native capability. Failure never causes automatic route or model fallback. The
-Coordinator prepares assignments and handles launches within the authorized
-bounds. See the [routing reference](../skills/ruach-herdr/references/routing.md);
-Ruach's [development catalogs](../config/agent-routing/) are repository-specific
-examples, not universal model, effort or harness defaults.
+Multiple members may share a role or model. Use perspectives that could expose
+different evidence or assumptions. Existing Scout and Architect roles usually
+suffice; no new generic council role is required. You need not repeat harness,
+model and effort when the configured route already selects them. Routes never
+change automatically after failure. See [routing](../skills/ruach-herdr/references/routing.md)
+for overrides and permission policy.
 
 ## Choose one round mode
 
-| Mode | What you authorize |
+| Mode | What happens |
 | --- | --- |
-| Manual | One round, its closure and synthesis, then an owner pause. A next round needs your request. |
-| Automatic exact N | A positive N total rounds, including round one. Agreement does not permit an early stop; a block, cancellation or owner amendment can interrupt the plan. |
-| Automatic up to N, stop when stable | Separately authorize a positive maximum N and an early stop only when two successive closed rounds show no consequential change in propositions, evidence, assumptions or dispositions. |
+| Manual | One round and synthesis, then a pause until you request another |
+| Exactly N | N total rounds, including the first; agreement does not permit early stopping |
+| Up to N, stop when stable | At most N rounds; stop early only after two successive closed rounds have no consequential change in propositions, evidence, assumptions or dispositions |
 
-With N=1, the budget can end but comparative stability cannot be demonstrated.
-There is no default round count, vote or majority-adoption rule. Stability also
-preserves supported minority objections.
+N must be positive. With N=1, the budget ends without demonstrating comparative
+stability. A capability block, cancellation or your amendment can interrupt any
+mode. Agreement is neither a vote nor permission to adopt the recommendation.
+Supported minority objections remain in the synthesis.
 
-## Where the brief and results go
+## Results and follow-ups
 
-Your brief becomes the Coordinator's existing task record and separate bounded
-member assignments. Reusable role definitions stay in their existing role files;
-consumer routing stays in its catalogs. No `council.yaml`, new configuration
-schema or council CLI is needed. You can ask the Coordinator to fill gaps in the
-brief before arranging members.
+The Coordinator records your brief and gives members separate assignments.
+Members work independently within each round; later rounds may use reports
+from closed rounds. A round closes only with durable reports and recorded
+dispositions; missing or blocked members stay explicit.
 
-Expect actual durable member reports and recorded Coordinator dispositions before
-a round closes. Missing or blocked members remain explicit. Later rounds exchange
-only reports from closed rounds, alongside identified new evidence; open peer
-answers stay excluded. The synthesis should retain attributed supporting and
-opposing reasons, evidence limits, changed positions, unresolved objections and
-what evidence or owner decision could resolve them. A recommendation remains
-separate from your adoption; council alone grants no product edits,
-implementation or delivery authority.
+Expect attributed supporting and opposing reasons, evidence limits, changed
+positions and unresolved questions. Advice grants no implementation or delivery
+authority. Ask separately to adopt a recommendation, extend the round budget or
+change the question, roster, route or evidence.
 
-The retained task record, reports and synthesis support resumption after sessions
-are released. Ask for a manual next round or extend an exhausted automatic budget
-explicitly. When changing the question, roster, route, evidence or budgets, state
-the amendment so the Coordinator can record its effect on remaining rounds.
-
-For mechanics, see the canonical [council workflow](../skills/ruach-workflow-council/SKILL.md),
-[closed-round reference](../skills/ruach-workflow-council/references/rounds.md) and
-[member assignment specimen](examples/council-member-assignment.md). The Coordinator
-uses the workflow; members receive their own assignments.
+The task record and linked reports preserve the result after sessions close.
+No `council.yaml` or new CLI is needed. For Coordinator mechanics, see the
+[workflow](../skills/ruach-workflow-council/SKILL.md),
+[round reference](../skills/ruach-workflow-council/references/rounds.md) and
+[member brief](examples/council-member-assignment.md).

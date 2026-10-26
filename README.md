@@ -1,6 +1,6 @@
 # Ruach
 
-Prepared source candidate: **0.7.0, untagged and unreleased**. Latest published release: **0.6.1**. See the [changelog](CHANGELOG.md), [C1–C5 status](docs/roadmap.md#c1c5--deliberate-find-fix-exercise) and [operations guide](docs/operations.md). The bounded disposable music correction/retest loop is closed, and corrected C2 source passed independent review. The combined source gate and user guide passed independent review. Native council/advisory and full parity acceptance remain open. Owner-authorized merge, push and installation await separate final review and delivery. See the [0.7.0 preparation and delivery plan](docs/reports/releases/0.7.0/preparation.md).
+Latest release: **0.7.1**. See the [changelog](CHANGELOG.md), [CI](https://github.com/rothzeta/ruach/actions/workflows/ci.yml) and [roadmap](docs/roadmap.md) for shipped changes, verification and remaining capability limits.
 
 Portable agent roles and self-contained skills for bounded engineering and knowledge maintenance. Consumer projects supply their own decisions, knowledge structure and routing policy.
 
@@ -26,13 +26,21 @@ Pick the route that matches what you want to do. Each route installs different t
 
 The snapshot route is for projects that want an auditable, committed installation. Start with the smallest route that covers the job; you can add another later. Avoid installing the same skills twice into one harness. The [lifecycle guide](docs/operations.md#lifecycle-inspect-upgrade-and-remove) covers inspecting, upgrading and removing an installation. To check, read-only, whether a copy can serve a route, run `just ready --route skill|native|herdr` from a checkout or `bun .agents/ruach-install.ts ready --route native` from a snapshot ([readiness](docs/operations.md#check-readiness)). If a snapshot install is interrupted or fails, see [failures and recovery](docs/operations.md#snapshot-installation-failures-and-recovery).
 
-To see how the roles are used on a real task, read the [worked consumer example](docs/examples/consumer-example.md), the [assignment specimen](docs/examples/assignment-specimen.md) and the [direct, compact and full use guide](docs/examples/direct-compact-full.md). Each task has [one coordination owner](docs/coordination.md).
+For a small task, start one role and give it the outcome and checks:
+
+```sh
+claude --agent ruach:implementer
+```
+
+For example: “Fix the CSV export so names containing commas round-trip. Add a regression test and run the relevant checks. Leave the change for review.” This needs neither a Coordinator nor Herdr.
+
+Use [direct, compact or full coordination](docs/examples/direct-compact-full.md) according to the task. The [worked consumer example](docs/examples/consumer-example.md) shows a larger task; the [assignment specimen](docs/examples/assignment-specimen.md) is for the Coordinator preparing worker instructions. Each coordinated task has [one owner](docs/coordination.md).
 
 To request several advisory perspectives, use the [council setup guide](docs/council.md) to choose members, routes, rounds and budgets with your Coordinator.
 
 For a known failure, use [debugging](skills/ruach-debugging/SKILL.md) with the [bugfix assignment specimen](docs/examples/bugfix-assignment.md). For runtime evidence, assign the [Tester](agents/tester.md) with [runtime testing](skills/ruach-runtime-testing/SKILL.md) and its [QA specimen](docs/examples/runtime-qa-assignment.md). The Coordinator owns [council](skills/ruach-workflow-council/SKILL.md), [bugfix](skills/ruach-workflow-bugfix/SKILL.md), [QA](skills/ruach-workflow-qa/SKILL.md) and [bounded hunt](skills/ruach-workflow-bug-hunt/SKILL.md) orchestration; workers receive bounded assignments. The [council member specimen](docs/examples/council-member-assignment.md) does not establish an independent execution boundary. See the roadmap for demonstrated results and remaining gates; static [capability cases](evals/ruach-capabilities/) are preparation, not behavioral proof.
 
-The completed bounded music example retains its [relative patch](docs/reports/c1-c5/music-fix-artifacts/mq-f01.patch), [source review](docs/reports/c1-c5/music-fix-review.md) and [actual original Tester retest](docs/reports/c1-c5/music-retest.md). Coordinator closure combines those separate source/runtime results. Retained Ramec is unchanged: this is a disposable correction and patch/evidence outcome, without upstream delivery, listening or musical-quality acceptance. The [combined source Reviewer](docs/reports/c1-c5/combined-source-review.md) audited the actual original Tester packet and passed the source gate; listening, quality and broader native acceptance remain open.
+The [roadmap](docs/roadmap.md) links the worked examples, review evidence and remaining native/runtime checks.
 
 ## Design and testing expectations
 
@@ -74,20 +82,20 @@ Alternatives are explicit-only: the launcher uses the preferred route unless you
 
 Ruach follows the [Agent Skills specification](https://agentskills.io/specification). Like [Vercel's agent-skills](https://github.com/vercel-labs/agent-skills), it can be installed through the [Skills CLI](https://github.com/vercel-labs/skills). Like [Anthropic's skills](https://github.com/anthropics/skills) and [Superpowers](https://github.com/obra/superpowers), it also ships native Claude plugin metadata. The shared specification covers skills; native agent definitions and plugin packaging depend on the harness.
 
-Install the released skills globally for Codex and Claude Code:
-
-These remote examples remain pinned to published **0.6.1**. The resource navigation above describes the prepared 0.7.0 source, which adds Tester, six skills and bounded Agy preparation. No 0.7.0 tag or remote installation is available from this preparation; review a committed candidate locally with the installer's explicit `--revision SHA` instead.
+Install a standalone technique, such as testing, globally for Codex and Claude Code:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --global --agent codex --agent claude-code --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.7.1 --global --agent codex --agent claude-code --skill ruach-testing
 ```
 
-Omit `--global` for a project installation. From a checkout of the desired release, `just install-global` uses the same CLI with the local `skills/` directory. The CLI installs skill folders and manages native discovery links; this route does not install role files or the combined Ruach snapshot manifest.
+Omit `--global` for a project installation, or name other techniques after `--skill`. From this checkout, `just install-global` installs the nine technical skills without the six Coordinator workflows. The CLI manages skill discovery links, but does not install role files.
+
+**Workflow dependency:** `ruach-workflow-*` skills require the sibling `agents/` role contracts in the combined layout. Use the native plugin or [project snapshot](#install-a-pinned-project-snapshot) for workflows. Installing every skill with `--skill '*'` alone does not supply that layout; a plugin installed elsewhere does not repair standalone workflow links.
 
 For Pi and Goose skill discovery, select their agent IDs through the same CLI:
 
 ```sh
-bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.6.1 --global --agent pi --agent goose --skill '*'
+bunx --bun skills@1.7.0 add https://github.com/rothzeta/ruach/tree/v0.7.1 --global --agent pi --agent goose --skill ruach-testing
 ```
 
 Skill discovery works independently of Herdr launch support. See the [Pi and Goose launch prerequisites](docs/operations.md#pi-and-goose-harnesses).
@@ -95,7 +103,7 @@ Skill discovery works independently of Herdr launch support. See the [Pi and Goo
 For Claude Code, install the native plugin to expose Ruach skills and named agents together:
 
 ```sh
-claude plugin marketplace add rothzeta/ruach#v0.6.1 --scope user
+claude plugin marketplace add rothzeta/ruach#v0.7.1 --scope user
 claude plugin install ruach@ruach --scope user
 claude --agent ruach:coordinator
 ```
@@ -109,12 +117,12 @@ Executable skills require Bun and their own frozen dependency install. A copied 
 For a combined, auditable project installation of roles and skills, use Ruach's snapshot installer. Requires Bun and Git. From a local checkout containing the release tag:
 
 ```sh
-bun scripts/install.ts install --source . --version 0.6.1 --target /path/to/project/.agents
+bun scripts/install.ts install --source . --version 0.7.1 --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents
 bun /path/to/project/.agents/ruach-install.ts check --target /path/to/project/.agents --source /path/to/ruach
 ```
 
-`--version 0.6.1` selects exactly the `v0.6.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
+`--version 0.7.1` selects exactly the `v0.7.1` Git tag and checks that its committed package version matches. Installation reads committed objects, never uncommitted source files; records release version, upstream origin, resolved commit and file hashes in `ruach.json`; and includes the installer, provenance and license. The resolved commit is integrity metadata; users select a release version. Existing managed drift or conflicting files require explicit `--replace`. Unrelated consumer configuration and extra local skills/roles stay with the consumer. `check` needs no source checkout for local integrity; adding `--source` verifies the snapshot against its recorded upstream tree and version. Advanced or legacy callers can still use `--revision` instead of `--version`. The snapshot installer does not fetch, push, install global links or change persistent harness settings.
 
 Roles and skills install together as `agents/` and `skills/`, preserving cross-resource links. Skill-local scripts remain usable from independently copied skill folders after their local dependency install. Consumers can expose skills through their harness discovery mechanism; global discovery is installation, not a new canonical source.
 
@@ -143,7 +151,9 @@ bun skills/ruach-herdr/scripts/worker.ts start --name ruach-goose --role impleme
 just architect ruach-designer --placement pane
 ```
 
-The Coordinator and Architect prefer Claude Opus 5.5 at high effort; existing engineering roles retain explicit Codex high-effort alternatives, and Tester prefers Codex high. Scout alone has an explicit `gemini-3.8-flash-medium` advisory alternative. These [development catalogs](config/agent-routing/roles.yaml) are local policy and are not installed into consumers. The wrapper resolves permission policy by selected harness: Claude and Codex require `auto-review`; OpenCode and Agy require `inherit`. Agy's route uses portable effort `auto` because native medium is encoded in its exact model slug; no separate effort flag is sent. Conflicting requests fail before launch; other harnesses need an explicit development policy decision. Preflight stderr identifies the effective mode and policy source; the portable launcher still defaults to `inherit`. `resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks source prerequisites and reports a planned checkout without creating it. `start` creates a new Git worktree and Herdr workspace in the background and starts once. When launched from a Herdr workspace of the same repository, the worktree is registered as a Herdr linked worktree of that workspace; otherwise it gets a standalone workspace. It preserves caller layout and focus and needs no caller pane ID. Send the task separately after startup. See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md). Catalog selection does not confer authority for a model call or establish native advisory acceptance.
+Run `just agent-routing resolve ROLE` to inspect the current model and effort selection. The [development catalogs](config/agent-routing/roles.yaml) are Ruach-local policy and are not installed into consumers. The wrapper requires `auto-review` for Claude and Codex, and `inherit` for OpenCode and Agy; conflicting requests fail before launch. Preflight identifies the effective mode and policy source.
+
+`resolve` selects offline without native config reads or launch spaces. `start --dry-run` checks prerequisites without creating a checkout. `start` creates a background Git worktree and Herdr workspace and starts once, preserving caller layout and focus. It uses a Herdr linked worktree when the parent workspace supports it, otherwise a standalone workspace. Send tasks separately after startup; monitored work also needs [verified native identity](skills/ruach-herdr/references/waiting.md#initialize-worker-identity). See [launch prerequisites and recovery](skills/ruach-herdr/SKILL.md). Catalog selection does not authorize model calls or establish native advisory acceptance.
 
 For `just architect`, the default worker name is `ruach-architect`, checkout `/path/to/ruach-worktrees/ruach-architect` next to this repo, branch `ruach/ruach-architect`, and base committed HEAD. Choose a fresh worker name for each launch; existing branches and paths are rejected. Uncommitted source edits are not copied. Use `--worktree DIR`, `--branch NAME` and `--base REF` to customize the checkout. Native settings are read again from the actual worker checkout before startup. `--placement pane` explicitly uses the supplied source cwd and requires a caller pane ID.
 
@@ -183,6 +193,6 @@ The Coordinator parks with no wait timer or idle model calls when only delegated
 
 Use Semantic Versioning for the repository bundle. Update the root `package.json` version, `.claude-plugin/plugin.json` version, marketplace metadata version, the current release and installation examples in this README, and `CHANGELOG.md` together. Skill-local private package versions remain independent implementation-package metadata.
 
-An untagged preparation synchronizes metadata and records open gates before independent review; it is not publication or installation authority. Keep remote examples on the latest published version until separately authorized delivery publishes the new tags. Inspect a concrete preparation using `--revision` in a new temporary consumer. Refresh outstanding source/live/product evidence and independently review the exact combined candidate before assigning delivery.
+An untagged preparation synchronizes metadata and records open gates before independent review; it is not publication or installation authority. Keep remote examples on the latest published version, and update release status and examples when the new tags are published. Inspect a concrete preparation using `--revision` in a new temporary consumer. Refresh outstanding source/live/product evidence and independently review the exact combined candidate before assigning delivery.
 
 Run `just release-check`, `just check`, the root tests and affected skill suites before committing. Create an annotated `vMAJOR.MINOR.PATCH` tag on the release commit. `claude plugin tag .` creates the additional native `ruach--vMAJOR.MINOR.PATCH` tag used for Claude plugin dependency-version resolution; both tags name the same commit. Never move or overwrite a released tag. Remote publication is a separate explicit step.

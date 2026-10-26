@@ -9,9 +9,9 @@ just install-plugins
 
 `install` prepares pinned executable-skill dependencies. `install-plugins` registers this checkout as a user-level Claude marketplace and installs `ruach@ruach`. The equivalent spellings `just install-plugin` and `just install-plugin ruach` work too. The marketplace receives the absolute checkout path; bare `.` is not a supported source for the installed Claude CLI. Repeating installation is supported. This local plugin loads in place, so source edits take effect in a new Claude session or after `/reload-plugins`.
 
-To refresh an existing local Claude plugin after a release bump, run `claude plugin update ruach@ruach --scope user`, then restart Claude or reload its plugins. Confirm the recorded version with `claude plugin list`. Shared Skills CLI installations are separate copies: refresh them too, then rerun frozen dependency installation in each copied executable skill. Installation updates discovery resources, not instructions already loaded into an active session. For shared skill discovery without adding a second Claude installation, use `bun x --bun skills@1.7.0 add ./skills --global --agent codex --agent pi --agent goose --skill '*' --yes` from the release checkout, and install the copied executable skills' frozen dependencies.
+To refresh an existing local Claude plugin after a release bump, run `claude plugin update ruach@ruach --scope user`, then restart Claude or reload its plugins. Confirm the recorded version with `claude plugin list`. Shared Skills CLI installations are separate copies: refresh the selected techniques using the [versioned installation commands](../README.md#standard-installation), then rerun frozen dependency installation in each copied executable skill. Installation updates discovery resources, not instructions already loaded into an active session.
 
-`just install-global` installs skills through the Skills CLI for Codex and Claude. It does not install role definitions or consumer launch shortcuts. Choose the native plugin for Claude when you want its named agents and skills together. See the [README](../README.md#standard-installation) for versioned remote installation. Remote version tags must be published before those commands can fetch them.
+`just install-global` installs nine technical skills through the Skills CLI for Codex and Claude. It excludes the six Coordinator workflows, whose relative role links require the combined plugin or project-snapshot layout. It does not install role definitions or consumer launch shortcuts. Choose one Claude discovery route to avoid duplicate skills. See the [README](../README.md#standard-installation) for versioned remote installation.
 
 ### Pi and Goose harnesses
 
@@ -23,7 +23,7 @@ The selected harness kind must also appear in `herdr agent start --help`. The He
 
 ### Agy advisory preparation
 
-The untagged 0.7.0 candidate adds non-Coordinator preparation for exactly Agy 1.4.7. Ruach's development wrapper offers Scout's explicit `gemini-3.8-flash-medium` alternative with inherited native permissions and portable effort `auto`; medium is already encoded in the native slug. Offline selection is read-only:
+Ruach 0.7.0 adds non-Coordinator preparation for exactly Agy 1.4.7. Ruach's development wrapper offers Scout's explicit `gemini-3.8-flash-medium` alternative with inherited native permissions and portable effort `auto`; medium is already encoded in the native slug. Offline selection is read-only:
 
 ```sh
 just agent-routing resolve scout --route gemini-3.8-flash-medium
@@ -109,7 +109,7 @@ The launcher reports `action: awaiting-input`, `ready: false`, `awaiting_user_in
 herdr workspace focus <returned-workspace-id>
 ```
 
-Read and answer the native dialog yourself. An assistant must obtain explicit permission before answering a blocked security or approval dialog. Once the agent becomes idle or done, use that existing session for the assignment. Do not launch another worker to answer the first worker's dialog. Ordinary startup does not submit a task prompt.
+Read and answer the native dialog yourself. An assistant must obtain explicit permission before answering a blocked security or approval dialog. Once interactive startup completes, follow [worker identity initialization](../skills/ruach-herdr/references/waiting.md#initialize-worker-identity) before monitored assignments in that same session. Do not launch another worker to answer the first worker's dialog. Ordinary startup does not submit a task prompt.
 
 ## Inspect and recover
 
@@ -123,7 +123,7 @@ herdr pane read <returned-pane-id> --source recent-unwrapped --lines 120
 
 | Result | Meaning | Next step |
 | --- | --- | --- |
-| Exit 0, `action: started`, `ready: true` | Native startup was confirmed. | Submit the assignment separately. |
+| Exit 0, `action: started`, `ready: true` | Interactive startup was confirmed. | For monitored work, require `assignment_ready: true` or complete the linked identity initialization; then register and submit the assignment separately. |
 | Exit 0, `action: awaiting-input` | The matching native agent is blocked on a dialog. | Open its existing workspace and answer with user approval. |
 | Exit 2 | Invalid arguments, catalogs, role source, branch or path, including a requested `--cwd` subdirectory that is not an ordinary directory of the base commit (`worktree_cwd_unavailable`). | Correct the reported configuration; existing destinations are never overwritten. A refused `--cwd` creates no checkout, branch, workspace, pane or agent; approved native preparation may already have run. |
 | Exit 3 | A required executable, Herdr session or native capability is unavailable. | Resolve the prerequisite without assuming the model/account is unavailable. |

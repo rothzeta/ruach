@@ -27,7 +27,7 @@ Synthetic example (illustrative, not a real entry):
 - Authority: consumer policy permits one rerun for this symptom in this environment
 - Disposition: on an identical second failure, stop and report; do not raise limits or widen the entry
 
-Engineering escalation follows the [feature workflow's correction-cycle definition and limit](../../ruach-workflow-feature/SKILL.md#escalation), separately from command-retry and registered-flake rules. Never retry a forbidden command or relabel a failure to evade a limit. Do not create or edit a foreign flake record to make a run green.
+Engineering escalation uses the correction-cycle definition and limit supplied in the assignment by the Coordinator from `ruach-workflow-feature`. Workers use that self-contained brief without loading the Coordinator workflow. This budget is separate from command-retry and registered-flake rules. Never retry a forbidden command or relabel a failure to evade a limit. Do not create or edit a foreign flake record to make a run green.
 
 ## Complete verification before shortening its display
 

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -24,6 +24,52 @@ function run(args:string[],env:Record<string,string>={}) {
     HOME:join(root,'home'),PATH:bin+':'+process.env.PATH,BUN_BIN:process.execPath,CALLS:join(root,'calls.jsonl'),...env}});
 }
 function calls(){return readFileSync(join(root,'calls.jsonl'),'utf8').trim().split('\n').map(line=>JSON.parse(line));}
+
+test('standalone installation selects technical skills and preserves caller arguments', () => {
+  const fakeBun = join(bin, 'bun-capture');
+  writeFileSync(fakeBun, `#!${process.execPath}
+await Bun.write(process.env.CALLS, JSON.stringify({
+  args: process.argv.slice(2),
+  cwd: process.cwd(),
+}));
+`);
+  chmodSync(fakeBun, 0o700);
+
+  const result = run(['install-global', '--yes'], { BUN_BIN: fakeBun });
+  expect(result.status, result.stderr).toBe(0);
+  const invocation = JSON.parse(readFileSync(join(root, 'calls.jsonl'), 'utf8'));
+  expect(invocation.cwd).toBe(checkout);
+  expect(invocation.args).toEqual([
+    'x', '--bun', 'skills@1.7.0', 'add', './skills',
+    '--global', '--agent', 'codex', '--agent', 'claude-code',
+    '--skill', 'ruach-changelog', 'ruach-debugging', 'ruach-handoff',
+    'ruach-harness-eval', 'ruach-herdr', 'ruach-librarian',
+    'ruach-runtime-testing', 'ruach-simplification', 'ruach-testing', '--yes',
+  ]);
+
+  // Check the selected installation as a standalone bundle, without source roles
+  // or workflows accidentally making a broken dependency appear available.
+  const source = resolve(import.meta.dir, '..');
+  const bundle = join(root, 'standalone');
+  mkdirSync(join(bundle, 'skills'), { recursive: true });
+  mkdirSync(join(bundle, 'scripts'));
+  copyFileSync(join(source, 'scripts/check.ts'), join(bundle, 'scripts/check.ts'));
+  for (const notice of ['LICENSE', 'PROVENANCE.md']) {
+    copyFileSync(join(source, notice), join(bundle, notice));
+  }
+  const selected = invocation.args.slice(invocation.args.indexOf('--skill') + 1, -1);
+  for (const skill of selected) {
+    cpSync(join(source, 'skills', skill), join(bundle, 'skills', skill), {
+      recursive: true,
+      filter: (path) => !path.split('/').includes('node_modules'),
+    });
+  }
+  const checked = spawnSync(process.execPath, [join(bundle, 'scripts/check.ts')], {
+    cwd: tmpdir(),
+    encoding: 'utf8',
+  });
+  expect(checked.status, checked.stderr).toBe(0);
+});
 for(const args of [['install-plugin'],['install-plugins'],['install-plugin','ruach'],['install-plugins','ruach']])test(`${args.join(' ')} registers the checkout path and installs the native plugin`,()=>{
   const r=run(args);expect(r.status,r.stderr).toBe(0);
   expect(calls()).toEqual([

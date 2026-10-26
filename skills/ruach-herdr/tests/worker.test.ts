@@ -145,6 +145,64 @@ test('explicit Codex start composes developer text and existing skills, passes e
   expect(skills.config.filter((e:any)=>e.path.includes('workflow')).every((e:any)=>!e.enabled)).toBe(true);
   expect(r.stdout+r.stderr).not.toContain(secret);expect(r.stdout).not.toContain(pass[1]);
 });
+test('assignment readiness requires an authoritative native session, without sending a bootstrap prompt', async () => {
+  const r = await launch('start', explicit);
+  expect(r.exit, r.stderr).toBe(0);
+  expect(r.result.ready).toBe(true);
+  expect(r.result.assignment_ready).toBe(false);
+  expect(r.result.native_identity).toBeNull();
+  expect(r.result.diagnostics.map((entry: any) => entry.code)).toContain('native_identity_unavailable');
+  expect((await lines('mutations.jsonl')).map((entry) => entry.action)).toEqual(['split', 'start']);
+});
+test('assignment readiness exposes the same verified worker session', async () => {
+  behavior.nativeSession = { kind: 'id', value: 'native-worker-session' };
+  const r = await launch('start', explicit);
+  expect(r.exit, r.stderr).toBe(0);
+  expect(r.result.assignment_ready).toBe(true);
+  expect(r.result.native_identity).toEqual({
+    name: 'example-worker',
+    kind: 'codex',
+    pane: 'w1:p2',
+    session: 'native-worker-session',
+  });
+});
+for (const session of [
+  { kind: 'pending', value: 'unconfirmed-session' },
+  { kind: 'id', value: '' },
+  { kind: 'id', value: '   ' },
+  { kind: 'id', value: 'session\nforeign' },
+  { kind: 'id', value: 42 },
+]) {
+  test('assignment readiness rejects an unverified session ' + JSON.stringify(session), async () => {
+    behavior.nativeSession = session;
+    const r = await launch('start', explicit);
+    expect(r.exit, r.stderr).toBe(0);
+    expect(r.result.assignment_ready).toBe(false);
+    expect(r.result.native_identity).toBeNull();
+  });
+}
+test('assignment readiness stays false at a native dialog even when a session is known', async () => {
+  behavior.startBlocked = true;
+  behavior.inspectPane = 'w1:p2';
+  behavior.inspectKind = 'codex';
+  behavior.nativeSession = { kind: 'id', value: 'blocked-worker-session' };
+  const r = await launch('start', explicit);
+  expect(r.exit, r.stderr).toBe(0);
+  expect(r.result.ready).toBe(false);
+  expect(r.result.assignment_ready).toBe(false);
+  expect(r.result.native_identity?.session).toBe('blocked-worker-session');
+});
+for (const fault of ['startWrongName', 'startWrongPane', 'startWrongKind']) {
+  test('assignment readiness rejects a replaced worker: ' + fault, async () => {
+    behavior[fault] = true;
+    behavior.nativeSession = { kind: 'id', value: 'foreign-session' };
+    const r = await launch('start', explicit);
+    expect(r.exit).toBe(4);
+    expect(r.result.diagnostics[0].code).toBe('start_uncertain');
+    expect(r.result.assignment_ready).not.toBe(true);
+    expect(r.result.native_identity).toBeUndefined();
+  });
+}
 test('long literal native argv crosses the canonical PTY and preserves role, config, permissions and native PATH', async () => {
   behavior.terminalStart = true;
   const longRole = "Canonical role: spaces ü 漢字 ' \" `literal` $(literal).\n".repeat(240);

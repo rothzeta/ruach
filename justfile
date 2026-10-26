@@ -13,9 +13,11 @@ install:
     @cd skills/ruach-herdr && "{{bun}}" install --frozen-lockfile
     @cd skills/ruach-harness-eval && "{{bun}}" install --frozen-lockfile
 
-# Install this checkout's skills globally through the standard Skills CLI.
+# Install technical skills globally; workflows need the combined roles installation.
 install-global *args:
-    @"{{bun}}" x --bun skills@1.7.0 add ./skills --global --agent codex --agent claude-code --skill '*' "$@"
+    @"{{bun}}" x --bun skills@1.7.0 add ./skills --global --agent codex --agent claude-code \
+        --skill ruach-changelog ruach-debugging ruach-handoff ruach-harness-eval \
+        ruach-herdr ruach-librarian ruach-runtime-testing ruach-simplification ruach-testing "$@"
 
 # Register this checkout as a user-level Claude marketplace and install its plugin.
 install-plugin plugin='ruach':

@@ -1,16 +1,18 @@
 # Ruach roadmap
 
-Backlog reconciled **2026-10-26** for the untagged **0.7.0 preparation**, preserving the published **0.6.1** baseline and earlier [RAMEC proposal](design/0.4-suggestions-from-ramec-orchestration.md) dispositions. This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcomes, not automatic execution authority.
+Backlog reconciled **2026-10-26** after publication of **0.7.0**, preserving earlier [RAMEC proposal](design/0.4-suggestions-from-ramec-orchestration.md) dispositions. This is the single planning list; proposals and historical reports supply evidence, not additional queues. IDs identify outcomes, not automatic execution authority.
 
-Current state: six C1–C5 skills, Tester, specimens/static cases, accepted Codex/Bash long-argv correction and source-reviewed corrected Agy preparation are combined. MQ-F01's bounded disposable music correction/retest loop is closed by Coordinator disposition using separate [source review](reports/c1-c5/music-fix-review.md) and [actual original Tester evidence](reports/c1-c5/music-retest.md). The [combined source gate](reports/c1-c5/combined-source-review.md) passed at `171a478` in review `fb347bb`, including an audit of the actual original Tester packet; the [owner-facing council guide](council.md) also passed independent review `8f7b665`. C2 actual advisory validation remains unproved; its blocked session was closed during owner cleanup, with zero new Gemini turns. The old trust question is superseded, neither pending nor approved. C1 independent execution, broader native union acceptance, hosted CI for the candidate and delivery remain open. No 0.7.0 tag/publication/install, upstream product delivery or full C1–C5 acceptance is claimed. Earlier OpenCode smoke/Enoch/authorization acceptance and resume/ambiguity failures remain dated evidence; original install-route/native parity and real-consumer criteria are not closed by local checks.
+Current state: **0.7.0 is published and installed**. Tags `v0.7.0` and `ruach--v0.7.0` identify `e37645b`; main `9ab0f94` adds portable historical-evidence links with identical managed roles and skills. [Hosted CI passed](https://github.com/rothzeta/ruach/actions/runs/40321383891) on main: 529 tests, native-smoke packet 14, coordination packet 10 and all three dependency audits. Delivery and the existing shared-skills/plugin update were independently verified; task workspaces and worktrees were released.
+
+The six C1–C5 skills, Tester, specimens, Codex/Bash launch correction and source-reviewed Agy preparation are included. MQ-F01's bounded disposable music correction/retest loop is closed using separate [source review](reports/c1-c5/music-fix-review.md) and [original Tester evidence](reports/c1-c5/music-retest.md). C1 independent council execution, C2 actual native advisory validation, broader native parity and real-consumer criteria remain open. Source, packet and CI checks do not establish those behaviors. Earlier OpenCode smoke/Enoch/authorization acceptance and resume/ambiguity failures remain dated evidence.
 
 ## Priorities and sequencing
 
 | Order | Packages | Outcome |
 | --- | --- | --- |
-| Current preparation | C1–C5 | Combined source and guide passed review; prepare the truthful 0.7.0 release and independently review its exact candidate before owner-authorized delivery |
+| Released | C1–C5 source | 0.7.0 published and installed; preserve the distinct live capability and evidence gaps |
 | Existing guidance/evidence | R4–R7 | Preserve 0.6.1 source improvements and the dated preparation docket; remaining behavioral/combined gates need their own evidence |
-| Evidence follow-ups | R1, R3; R2 live boundary | Record hosted green and missing behavioral/consumer evidence; preserve the documented replacement-ref limitation |
+| Evidence follow-ups | R1, R3; R2 live boundary | Hosted green recorded; obtain missing behavioral/consumer evidence and preserve the replacement-ref limitation |
 | Capability execution | C1, C3–C5 | Council boundary held; Codex/Bash transport accepted; bounded disposable music feedback loop closed, prototype findings-only coverage retained |
 | Conditional companion | C2 | Corrected Agy source reviewed; linked launch preflight passed its metadata boundary, session closed at cleanup, actual native advisory unproved |
 | Measurement | M1 | Establish whether the workflow earns its overhead; prepare cases early, run after R1 |
@@ -41,7 +43,9 @@ R4/R5 native behavioral smoke and other live evidence remain separate gates. The
 
 ### R1 — Close release and native-use evidence gaps
 
-**Next action:** inspect CI on the published revision and record a linked green run, or diagnose any remaining failure. The previously observed [run 37986084683](https://github.com/rothzeta/ruach/actions/runs/37986084683), at `d75039a`, passed installation, resource/type checks, release metadata and audit, then failed “Test root tools and all executable skills.” Earlier [run 37661762155](https://github.com/rothzeta/ruach/actions/runs/37661762155) also failed. Those historical failures were diagnosed; no resulting hosted green run is recorded in the retained evidence.
+**CI closed:** [run 40321383891](https://github.com/rothzeta/ruach/actions/runs/40321383891) passed all required stages at `9ab0f94` after the evidence-link portability correction. Earlier failing runs remain historical evidence.
+
+**Next action:** close the remaining native-use and real-consumer evidence gaps below; another release-preparation cycle is not required merely to record the existing green run.
 
 Then complete the [native smoke checklist](native-parity.md#clean-install-smoke-checklist) and one real consumer task. Preserve role/skill discovery, scope, handoff and tool-version evidence; compare Claude native `--agent` and adapter composition on the same task. Include isolated-home Codex discovery and explicit skill-path fallback. Keep paid runs pending their required authorization. Harness-eval's unassisted brief must not hint at routes/skills; label hinted runs assisted.
 

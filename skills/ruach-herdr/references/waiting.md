@@ -12,6 +12,24 @@ This integration supports an existing **named Codex Coordinator**, identified by
 
 Verified versions and exact live evidence are recorded in the release report. A successful queue addition proves submission, not activation. The watcher correlates its persisted native message UUID with a started native turn in the Coordinator's recent turn summaries. Only the Coordinator's task-record disposition acknowledges handling. No worker transcripts, source, diffs or logs are read. Twenty recent Coordinator turns are searched; an older unhandled delivery can be redelivered with the same event identity. Actions must therefore reconcile durable assignment/acceptance/delivery identities before repeating anything.
 
+## Initialize worker identity
+
+Before the first monitored assignment:
+
+1. Resolve native startup dialogs with user approval in the existing workspace. `ready: true` means interactive startup, not that a native session ID exists.
+2. Use the launcher's `native_identity` when `assignment_ready` is true. Otherwise inspect `herdr agent get <worker-name>` once and compare its name, kind and pane with the launch receipt. Require `agent_session.kind: id` and a nonempty string value without control characters. A pending ID, transcript hint or guessed UUID is not authoritative.
+3. If that harness creates its ID only on a first turn, an authorized operator can initialize the existing idle worker using the bounded commands below. This is a separate model call, never automatic launcher behavior or a Coordinator waiting fallback. Require observed turn activity followed by `idle` or `done`, then check the same name, kind and pane and authoritative session ID. A blocked dialog, stalled prompt or unavailable identity is a capability blocker. Reconcile an interrupted bootstrap before considering any resubmission; do not send the real assignment or replace the worker to bypass missing identity.
+4. Record the verified tuple and current `state_change_seq` in the task record before sending the real assignment. Arm the canonical watcher for this registration. Reuse the same native session; identity changes require reconciliation, not silently accepting a replacement.
+
+Operator bootstrap, only when needed and authorized:
+
+```sh
+herdr agent prompt <worker-name> "Reply READY; do no task work or tool calls." --wait --timeout 120000
+herdr agent get <worker-name>
+```
+
+An initial `assignment_ready: false` receipt remains a historical launch receipt. Later initialization is established by native metadata, not by rerunning `start`. This sequence does not add continuation support for another Coordinator harness.
+
 ## Task record
 
 Add exactly one `ruach-wait` JSON fence to the **existing** Markdown task record. The Coordinator remains its sole writer. This operational section accompanies its ordinary pending assignments, expected next events, decisions and next actions; it does not replace them. Replace illustrative IDs below with actual `herdr agent list` lifecycle metadata (`agent_session.kind` must be `id`). Never commit private native IDs to Ruach.
