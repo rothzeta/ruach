@@ -1,0 +1,580 @@
+{
+  "candidate_revision": "1050c6f3cfccd424306997b81714f5b13c2c3463",
+  "tested_revision": "1050c6f3cfccd424306997b81714f5b13c2c3463",
+  "source_baseline": "0d686a454eb5b21001e65eac2b7eeed614290d3f",
+  "destination_before": "2b693cd72bf39c29575841a88d9c7ae719a29715",
+  "correction_outcome": "RR070-01",
+  "attempt": 1,
+  "completed_failed_cycles_before": 0,
+  "independent_re_review": "not-run",
+  "source": {
+    "base": "0d686a454eb5b21001e65eac2b7eeed614290d3f",
+    "candidate": "1050c6f3cfccd424306997b81714f5b13c2c3463",
+    "candidate_paths": 16,
+    "imported_files": 12,
+    "exact_imports": true,
+    "one_lock_entry_changed": true,
+    "old_resolution": [
+      "fast-uri@3.1.8",
+      "",
+      {},
+      "sha512-GZMtZUTNRpOVIECoXwLNZS5xUGE+mVNbTB8h/7Rwh2TFWcBQiPzTgyZi05BF9UMZKkLJv8XBRJTlU7zg8+ZfMg=="
+    ],
+    "new_resolution": [
+      "fast-uri@3.1.9",
+      "",
+      {},
+      "sha512-hS/0Wt3Ya043oKXs0sIxrMpKQITXhMLIrVAKKXi4gozGC9v7YRWVnXIZzjNPTO02M9BdxLCWqK1yRXgNziVyJQ=="
+    ],
+    "manifest_guide_and_old_evidence_unchanged": true,
+    "unsafe_and_review_ancestry_absent": true,
+    "privacy_pattern_findings": 0,
+    "main": "2b693cd72bf39c29575841a88d9c7ae719a29715",
+    "main_only_declared_dirty_policy": true,
+    "main_global_hashes_unchanged": {
+      "main_dirty_policy": "9000bb915bb361d4a7e1e6eb66c7f9b896c3420b61f79b52429688df8f2b671b",
+      "main_handoff_lock": "d078e8adc0c94c4c9dd457aa6c227fde092d4f587802885a19fdb55ac5d987d0",
+      "main_handoff_fast_uri": "30cad05aad3d3596513706451dbfc7e0422f9c1d00f2903ecc34580327d54bc7",
+      "global_skill_lock": "1908a52a10759a6b7021316839a719ff9937dc8aacb3651179ac7f3b3daf4def",
+      "plugin_registry": "8402930b81a4e7cff4dfa45f1313642d7d432e8a0a9c6d345459379ba94ef843",
+      "marketplace_registry": "cf66fe3a19de1107c26ff0518ef146f4ababbf277b1b37fb093c76f913d41053"
+    },
+    "discovery_links_preserved": 9,
+    "corrected_lock_in_relocated_snapshot": true,
+    "assignment_sha256": "d08552f8911fc662a6c9eca8e1780ec34a7374c7bf5ba7a37fc149301a31a51f"
+  },
+  "snapshot": {
+    "candidate": "1050c6f3cfccd424306997b81714f5b13c2c3463",
+    "commands": 4,
+    "managed_files": 124,
+    "roles": 7,
+    "skills": 15,
+    "bytes_and_modes_match": true,
+    "customization_sentinels": 5,
+    "relocation_foreign_cwd": true,
+    "manifest_sha256": "2958bdc4f04d891c196f4e168acf2b0bb323cb51c5420ea48fcd7de1335d3dc5"
+  },
+  "full_suite_counts": [
+    {
+      "passed": 110,
+      "failed": 0
+    },
+    {
+      "passed": 28,
+      "failed": 0
+    },
+    {
+      "passed": 285,
+      "failed": 0
+    },
+    {
+      "passed": 71,
+      "failed": 0
+    },
+    {
+      "passed": 35,
+      "failed": 0
+    }
+  ],
+  "full_suite_total": 529,
+  "commands": [
+    {
+      "name": "snapshot-check",
+      "argv": [
+        "bun",
+        "$R/consumer/.agents/ruach-install.ts",
+        "check",
+        "--target",
+        "$R/consumer/.agents",
+        "--source",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "$R/foreign",
+      "started": "2026-10-26T10:48:40.947Z",
+      "ended": "2026-10-26T10:48:41.023Z",
+      "exit": 0,
+      "stdout_sha256": "ea7adebe6c36056d6ae3943de30ad707240acc8f4d867dae9afad897622b70f5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-relocated-local",
+      "argv": [
+        "bun",
+        "$R/relocated/consumer with spaces/.agents/ruach-install.ts",
+        "check",
+        "--target",
+        "$R/relocated/consumer with spaces/.agents"
+      ],
+      "cwd": "$R/foreign",
+      "started": "2026-10-26T10:48:41.256Z",
+      "ended": "2026-10-26T10:48:41.316Z",
+      "exit": 0,
+      "stdout_sha256": "ea7adebe6c36056d6ae3943de30ad707240acc8f4d867dae9afad897622b70f5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "resolve-default",
+      "argv": [
+        "bun",
+        "update",
+        "fast-uri",
+        "--lockfile-only",
+        "--cache-dir",
+        "$R/cache"
+      ],
+      "cwd": "$R/resolution",
+      "started": "2026-10-26T10:45:36.930Z",
+      "ended": "2026-10-26T10:45:36.938Z",
+      "exit": 1,
+      "stdout_sha256": "76b88bbc96b94dac222a7ce5af39e36d89f03e2a92a01884e4c43a24b07ef816",
+      "stderr_sha256": "6cc4852c07745e73a6bedfe9c20f5d8ad48d996124beb52aa7bc9d8dfea51fa7"
+    },
+    {
+      "name": "baseline-audit-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:45:46.725Z",
+      "ended": "2026-10-26T10:45:46.967Z",
+      "exit": 1,
+      "stdout_sha256": "98c787c9bf6052dcac86cda3a22053f42bf7e3706864e4c9730c377078e06a58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-isolated",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/c1-c5/audit-fix-070.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:56:12.385Z",
+      "ended": "2026-10-26T10:56:12.470Z",
+      "exit": 0,
+      "stdout_sha256": "2f7cf31cd2cc42034a35797c4c54f13c154c4c17da398e98c9e1e174c1532349",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-root-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:46:36.600Z",
+      "ended": "2026-10-26T10:46:36.606Z",
+      "exit": 1,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "baseline-audit",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:45:36.901Z",
+      "ended": "2026-10-26T10:45:36.906Z",
+      "exit": 1,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "handoff",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/c1-c5/audit-fix-070.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:54:20.300Z",
+      "ended": "2026-10-26T10:54:20.369Z",
+      "exit": 2,
+      "stdout_sha256": "81019d4d9d281da9fffef44cf32a390dd9a4bfb4853384731f54de551a6ca60d",
+      "stderr_sha256": "f313ef95893016f0c1e54afab597c513ed5cefa31dc0b138fc9bcad7eb561b82"
+    },
+    {
+      "name": "snapshot-relocated-source",
+      "argv": [
+        "bun",
+        "$R/relocated/consumer with spaces/.agents/ruach-install.ts",
+        "check",
+        "--target",
+        "$R/relocated/consumer with spaces/.agents",
+        "--source",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "$R/foreign",
+      "started": "2026-10-26T10:48:41.338Z",
+      "ended": "2026-10-26T10:48:41.413Z",
+      "exit": 0,
+      "stdout_sha256": "ea7adebe6c36056d6ae3943de30ad707240acc8f4d867dae9afad897622b70f5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-root-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:46:48.925Z",
+      "ended": "2026-10-26T10:46:49.123Z",
+      "exit": 0,
+      "stdout_sha256": "f2e94288ab831c39780e33b5094be07de735e450aee97e8c9977f2ca3d542a32",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install-help",
+      "argv": [
+        "bun",
+        "install",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:45:36.874Z",
+      "ended": "2026-10-26T10:45:36.877Z",
+      "exit": 0,
+      "stdout_sha256": "21ff2bc783edc0f44703461b14949a701608398b68ea252ab3fe5613e34aedc0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-herdr-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-herdr",
+      "started": "2026-10-26T10:46:36.656Z",
+      "ended": "2026-10-26T10:46:36.662Z",
+      "exit": 1,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "full-socket",
+      "argv": [
+        "just",
+        "test"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:49:32.247Z",
+      "ended": "2026-10-26T10:53:29.662Z",
+      "exit": 0,
+      "stdout_sha256": "5fde3a04f0270902a93b4df7e504a14e3ed4307f1f8a701456f7167610535a28",
+      "stderr_sha256": "c1ee071ff071a43f202518ebe6f6027de47fbb9f4b8dc897fc02f715504128dd"
+    },
+    {
+      "name": "audit-handoff-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:46:49.149Z",
+      "ended": "2026-10-26T10:46:49.342Z",
+      "exit": 0,
+      "stdout_sha256": "fa70a815af16d79f2dce42d4280d15240551fd70f1608fe5c7e9ea604cdd40a2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-final",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/c1-c5/audit-fix-070.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-prep"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:55:09.029Z",
+      "ended": "2026-10-26T10:55:09.112Z",
+      "exit": 0,
+      "stdout_sha256": "2f7cf31cd2cc42034a35797c4c54f13c154c4c17da398e98c9e1e174c1532349",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "report-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:55:09.136Z",
+      "ended": "2026-10-26T10:55:09.430Z",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "resolution-evidence",
+      "argv": [
+        "bun",
+        "$R/resolution-evidence.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:48:06.135Z",
+      "ended": "2026-10-26T10:48:06.166Z",
+      "exit": 0,
+      "stdout_sha256": "c05a27588eb02c68c17321353f540ac82776bbe43a594930ddb43e37648c505b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-audit-final",
+      "argv": [
+        "bun",
+        "$R/source-audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:55:40.460Z",
+      "ended": "2026-10-26T10:55:40.577Z",
+      "exit": 0,
+      "stdout_sha256": "07456760f27a965233a81c2446aefa1e272964c4c86d0d50024f7afde4e2527c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:54:19.971Z",
+      "ended": "2026-10-26T10:54:20.276Z",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "snapshot",
+      "argv": [
+        "bun",
+        "$R/snapshot.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:48:40.774Z",
+      "ended": "2026-10-26T10:48:41.418Z",
+      "exit": 0,
+      "stdout_sha256": "1be1a757d86fc836bd30d3c02e2aef145340cf5ca2a4e9cdee8ebd8a0cb06014",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "resolve-network",
+      "argv": [
+        "bun",
+        "update",
+        "fast-uri",
+        "--lockfile-only",
+        "--cache-dir",
+        "$R/cache"
+      ],
+      "cwd": "$R/resolution",
+      "started": "2026-10-26T10:45:46.991Z",
+      "ended": "2026-10-26T10:45:47.035Z",
+      "exit": 0,
+      "stdout_sha256": "06dc4ce7f9b793b36190b23cb09f35d01b3d6a1dbc4d0b7cea6988c1a1e3b8bf",
+      "stderr_sha256": "9d28594ca8082656d4d4ba05f5c4cf0738e8146fdb9d342cafb03b07f8d733c4"
+    },
+    {
+      "name": "source-audit",
+      "argv": [
+        "bun",
+        "$R/source-audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:49:23.361Z",
+      "ended": "2026-10-26T10:49:23.473Z",
+      "exit": 0,
+      "stdout_sha256": "07456760f27a965233a81c2446aefa1e272964c4c86d0d50024f7afde4e2527c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "registry",
+      "argv": [
+        "bun",
+        "$R/registry.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:47:20.483Z",
+      "ended": "2026-10-26T10:47:20.783Z",
+      "exit": 0,
+      "stdout_sha256": "49409d7b68876f65132bc24f95738490e2820da9872430438d23a5f10c8f7f3d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "frozen-default",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:46:36.570Z",
+      "ended": "2026-10-26T10:46:36.576Z",
+      "exit": 1,
+      "stdout_sha256": "12c364a795837cc390db208e774e3f64badb2fa42e4823c29662df46aa18e03a",
+      "stderr_sha256": "4050177fcc79777ec770f9b55fcd4eb343738f7d7c8d80d0dc224524a12764c5"
+    },
+    {
+      "name": "render-handoff",
+      "argv": [
+        "bun",
+        "$R/render-handoff.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:55:08.978Z",
+      "ended": "2026-10-26T10:55:09.006Z",
+      "exit": 0,
+      "stdout_sha256": "fa7766f6c3e49232ed531787a8e4ee85287cae7643bea19d12abb695aed7e419",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "release",
+      "argv": [
+        "bun",
+        "run",
+        "release-check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:48:39.956Z",
+      "ended": "2026-10-26T10:48:39.970Z",
+      "exit": 0,
+      "stdout_sha256": "9f242bc3b30b3488cba542e9d53b58724f570b13a53586ef251d1e4ce9930c00",
+      "stderr_sha256": "3b58f2e74a7474a1f4d798216f71d12bb0d8a48a543941efa0fd6f6087746cb2"
+    },
+    {
+      "name": "audit-handoff-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:46:36.629Z",
+      "ended": "2026-10-26T10:46:36.634Z",
+      "exit": 1,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "prepare",
+      "argv": [
+        "bun",
+        "$R/prepare.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:46:36.482Z",
+      "ended": "2026-10-26T10:46:36.545Z",
+      "exit": 0,
+      "stdout_sha256": "4a41d9b7d377879b38d08a643fb799944dc7ef2e96a582312d83e6b2b9cc8013",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:48:39.609Z",
+      "ended": "2026-10-26T10:48:39.934Z",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "frozen-network",
+      "argv": [
+        "bun",
+        "install",
+        "--frozen-lockfile",
+        "--cache-dir",
+        "$R/cache",
+        "--backend",
+        "copyfile"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-handoff",
+      "started": "2026-10-26T10:46:48.818Z",
+      "ended": "2026-10-26T10:46:48.898Z",
+      "exit": 0,
+      "stdout_sha256": "e5e947d62b275a6992ec74265f6782f8f909f81ea489df5ab83fff596b8bdf3a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-install",
+      "argv": [
+        "bun",
+        "/opt/dev/ruach-worktrees/c17-release-prep/scripts/install.ts",
+        "install",
+        "--source",
+        "/opt/dev/ruach-worktrees/c17-release-prep",
+        "--revision",
+        "1050c6f3cfccd424306997b81714f5b13c2c3463",
+        "--target",
+        "$R/consumer/.agents"
+      ],
+      "cwd": "$R/foreign",
+      "started": "2026-10-26T10:48:40.827Z",
+      "ended": "2026-10-26T10:48:40.923Z",
+      "exit": 0,
+      "stdout_sha256": "389158bef0f1693dccc0bd92b454cabb81c2f9286e32cefc255f31314a985405",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-herdr-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep/skills/ruach-herdr",
+      "started": "2026-10-26T10:46:49.368Z",
+      "ended": "2026-10-26T10:46:49.576Z",
+      "exit": 0,
+      "stdout_sha256": "329eb6745413ba2e14322392a6f902b76b55358353b9cde75b3107ccab1e5d72",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "full-default",
+      "argv": [
+        "just",
+        "test"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:48:39.994Z",
+      "ended": "2026-10-26T10:48:54.293Z",
+      "exit": 1,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "2cf1e1b647474717860269820627810c465f1843b0ea24d6d08555e895a855d9"
+    },
+    {
+      "name": "update-help",
+      "argv": [
+        "bun",
+        "update",
+        "--help"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-prep",
+      "started": "2026-10-26T10:45:36.847Z",
+      "ended": "2026-10-26T10:45:36.850Z",
+      "exit": 0,
+      "stdout_sha256": "8a76a88783504553ccd8e9eb3064bcf1d9d98f8b8798cf8ae3dfa5cc23a707d8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "not_run": [
+    "Hosted candidate CI",
+    "Actual native/model/council/product/browser probes",
+    "Merge/tags/push/global install"
+  ],
+  "scratch_alias": "$R is the actual raw scratch directory named in the canonical handoff artifacts"
+}
