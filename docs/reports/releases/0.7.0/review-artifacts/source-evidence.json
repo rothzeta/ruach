@@ -1,0 +1,239 @@
+{
+  "candidate": "e96367b5e482808a22fbac817ed1162e8cc712ec",
+  "record": "0d686a454eb5b21001e65eac2b7eeed614290d3f",
+  "base": "8f7b665fca3eaf3dc61249f88fcda91cabd1629a",
+  "candidate_paths": 35,
+  "record_only_paths": [
+    "docs/assignments/c1-c5/RELEASE-PREP-070-01.md",
+    "docs/reports/c1-c5/release-prep-070.md",
+    "docs/reports/releases/0.7.0/verification-summary.json"
+  ],
+  "new_imports": 28,
+  "new_checksums": 26,
+  "prior_imports": 166,
+  "protected_equal": true,
+  "guide_equal": true,
+  "unsafe_graph_absent": true,
+  "privacy_patterns_clear": true,
+  "prep_receipts": [
+    {
+      "name": "final-audit",
+      "exit": 0,
+      "stdout_sha256": "6e2163dbed98c467b4d4947c20e48db1fe8f18ecac851f66875c6896d9fa2b3c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-check",
+      "exit": 0,
+      "stdout_sha256": "936ed463565105a7c67f8c2e99a700ff6c8a8019c429105746f62981bd83dbff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-relocated-local",
+      "exit": 0,
+      "stdout_sha256": "936ed463565105a7c67f8c2e99a700ff6c8a8019c429105746f62981bd83dbff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote",
+      "exit": 128,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7a08cdbf86d3cd0198eebffdf0db8178cb2b36a5bb2d3c66245e1ce02a863cf0"
+    },
+    {
+      "name": "root-authorized",
+      "exit": 0,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "ef13e83d14d061b54d71083e65ea426f8afcbe1a6887d0608a3eefd4069638cd"
+    },
+    {
+      "name": "handoff",
+      "exit": 0,
+      "stdout_sha256": "05a8106fe2584228d43360943f86cb12ae7e4077765c7ca16fdc7662fe4060a6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-relocated-source",
+      "exit": 0,
+      "stdout_sha256": "936ed463565105a7c67f8c2e99a700ff6c8a8019c429105746f62981bd83dbff",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-help",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "full-authorized",
+      "exit": 0,
+      "stdout_sha256": "28064fa69eff4ee67e76cdaff1d2d45e2783ba1e30deb3aa923ddae6b4c4db17",
+      "stderr_sha256": "b8edf54a97676006251af368565fe67d113ad1daddf82aefa41a17fe51dad6c7"
+    },
+    {
+      "name": "remote-authorized",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root",
+      "exit": 1,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "8d231ddc8508e2f97a6d9b2482830417803fd16d5e12c94723525dd636cc7e35"
+    },
+    {
+      "name": "source-audit-final",
+      "exit": 0,
+      "stdout_sha256": "67e0a23482ad212afdef8c2c49d6b72a6167dbad1360f989b172cac26d61c3a2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "check-before",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "final-check",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "skills-list",
+      "exit": 0,
+      "stdout_sha256": "9010ce87a248ff037107f7bb73d4246f924bd6a057730440c94a007a9c12d045",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-detail",
+      "exit": 0,
+      "stdout_sha256": "f43df75bbbf3c12ff5c3a8092b59a35fe320cde5b116524de8937e9578da2d09",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "plugin-list",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ready-deps",
+      "exit": 0,
+      "stdout_sha256": "615e312c1f546dec8565f3ebebdc172d8491b962261ebd78830b3582b5e95642",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-audit",
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "09c99da500327f6cbee00fa64d3a365b3b1e368f043a8c1b3d239b1109a6fda1"
+    },
+    {
+      "name": "plugin-list-text",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "marketplace-list",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "remote-final",
+      "exit": 0,
+      "stdout_sha256": "0de5ed274148601af6de3b4399fc18f9e6fb5ea04e81c544cc7676c73a21be9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installation-preflight-final",
+      "exit": 0,
+      "stdout_sha256": "741f8e37914c76a234817789d198abbbc35e829a22e0daf34be77021cbe0ef65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "release",
+      "exit": 0,
+      "stdout_sha256": "9f242bc3b30b3488cba542e9d53b58724f570b13a53586ef251d1e4ce9930c00",
+      "stderr_sha256": "3b58f2e74a7474a1f4d798216f71d12bb0d8a48a543941efa0fd6f6087746cb2"
+    },
+    {
+      "name": "check-precommit",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "ci",
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "eed65211f0fcee1b82c2661764250c1adaebcb36f0cb78a702d59632f056c439"
+    },
+    {
+      "name": "check",
+      "exit": 0,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "full",
+      "exit": 1,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "b94c5fae47d21a92ab270a2450bd3059d95521d8d9ac68491219836c94fb1cb9"
+    },
+    {
+      "name": "snapshot-install",
+      "exit": 0,
+      "stdout_sha256": "9a7e758ca19f5ec8b13b43428f125b7bbd7b5a22a53c4899e0423dcb509595f3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "snapshot-audit",
+      "exit": 0,
+      "stdout_sha256": "d154550a5926b85eb0c5dad106fbcfce72a098b8586771a4862e973fe0dcd56b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-failure-log",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "ci-authorized",
+      "exit": 0,
+      "stdout_sha256": "8e0b024d0602e13a61a0578972c673da08e996ffa7a193e7909f13d23c584378",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "full_suite_pass_counts": [
+    110,
+    28,
+    285,
+    71,
+    35
+  ],
+  "snapshot": {
+    "files": 124,
+    "roles": 7,
+    "skills": 15,
+    "sentinels": 5,
+    "bytes_modes_match": true,
+    "manifest_sha256": "906c599361d4fb1f146cc805d6d65b78d1e296df03374f9da8cd94412e07dc85"
+  },
+  "installation": {
+    "shared_skills": 9,
+    "shared_files": 84,
+    "plugin_files": 92,
+    "version": "0.6.1",
+    "discovery_links": 9,
+    "dirty_roles_sha256": "9000bb915bb361d4a7e1e6eb66c7f9b896c3420b61f79b52429688df8f2b671b",
+    "dirty_patch_sha256": "9fbe68920abcbcb881223ec62f8e92c231459c3efc53c15fb553805aed8a5926",
+    "preserved": true
+  },
+  "assignment_sha256": "f035500d8ad5252a337d3267e06cbb4b02381e3fcf37471bee9de26de0364969",
+  "baseline_handoff_lock_equal": true
+}

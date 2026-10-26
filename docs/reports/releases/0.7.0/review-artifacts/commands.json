@@ -1,0 +1,443 @@
+{
+  "raw_logs": "Private review scratch returned to Coordinator; $REVIEW denotes that directory.",
+  "receipts": [
+    {
+      "name": "audit-handoff-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review/skills/ruach-handoff",
+      "started": "2026-10-26T10:34:19.208Z",
+      "ended": "2026-10-26T10:34:19.213Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "audit-handoff-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review/skills/ruach-handoff",
+      "started": "2026-10-26T10:34:37.673Z",
+      "ended": "2026-10-26T10:34:37.875Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "98c787c9bf6052dcac86cda3a22053f42bf7e3706864e4c9730c377078e06a58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-herdr-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review/skills/ruach-herdr",
+      "started": "2026-10-26T10:34:19.205Z",
+      "ended": "2026-10-26T10:34:19.213Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "audit-herdr-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review/skills/ruach-herdr",
+      "started": "2026-10-26T10:34:39.183Z",
+      "ended": "2026-10-26T10:34:39.387Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "a82c4e82545fa1e2588586a601daa812d3161824053318f6a8ba4313752c7306",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "audit-root-default",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:19.205Z",
+      "ended": "2026-10-26T10:34:19.214Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "2e97577636a785fcb3eda78372d46c91647eae25bc94d049cf13fdb920e08c43",
+      "stderr_sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "name": "audit-root-network",
+      "argv": [
+        "bun",
+        "audit"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:36.042Z",
+      "ended": "2026-10-26T10:34:36.259Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "170b266fb260d3d3586edf52b0274a6dc2297f97230136237866180a2b55d516",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:19.188Z",
+      "ended": "2026-10-26T10:34:19.531Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "ci-log-default",
+      "argv": [
+        "gh",
+        "run",
+        "view",
+        "40134877122",
+        "--repo",
+        "rothzeta/ruach",
+        "--job",
+        "120994159585",
+        "--log-failed"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:19.209Z",
+      "ended": "2026-10-26T10:34:19.272Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "eed65211f0fcee1b82c2661764250c1adaebcb36f0cb78a702d59632f056c439"
+    },
+    {
+      "name": "ci-log-network",
+      "argv": [
+        "gh",
+        "run",
+        "view",
+        "40134877122",
+        "--repo",
+        "rothzeta/ruach",
+        "--job",
+        "120994159585",
+        "--log-failed"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:41.840Z",
+      "ended": "2026-10-26T10:34:43.043Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "8f7b665f",
+        "0d686a45"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:37:29.449Z",
+      "ended": "2026-10-26T10:37:29.455Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-check",
+      "argv": [
+        "just",
+        "check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:39:47.883Z",
+      "ended": "2026-10-26T10:39:48.178Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "1c89d2caac0c6f4b73d33c952fb5f99b2b9701841bc10383ecbbbb6afba288b5",
+      "stderr_sha256": "9296ffc1b66f3a7175b15d5f9901ca79e02bf8118f7939fef138055c03ac7125"
+    },
+    {
+      "name": "final-owned-scope",
+      "argv": [
+        "bun",
+        "$REVIEW/scope.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:41:15.018Z",
+      "ended": "2026-10-26T10:41:15.054Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "eaf956bf0578da9680f10b2e66bad859c99513dd0b48be944068735d75f3bd85",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "final-scope",
+      "argv": [
+        "bun",
+        "$REVIEW/scope.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:27.218Z",
+      "ended": "2026-10-26T10:40:27.288Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "2d5749e6399f0a49501e78a21c0bf3142d7f0e0381b86fb614c5f189a6601d82",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-final",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/releases/0.7.0/review.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-review"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:27.023Z",
+      "ended": "2026-10-26T10:40:27.115Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6ff573885457a6cece5e0c6e8193869522979aa171b28b873260f0debc04b416",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff-recorded",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/releases/0.7.0/review.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-review"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:41:43.306Z",
+      "ended": "2026-10-26T10:41:43.398Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6ff573885457a6cece5e0c6e8193869522979aa171b28b873260f0debc04b416",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "handoff",
+      "argv": [
+        "bun",
+        "skills/ruach-handoff/scripts/validate.ts",
+        "docs/reports/releases/0.7.0/review.md",
+        "--repo",
+        "/opt/dev/ruach-worktrees/c17-release-review"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:39:47.701Z",
+      "ended": "2026-10-26T10:39:47.792Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6ff573885457a6cece5e0c6e8193869522979aa171b28b873260f0debc04b416",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "release",
+      "argv": [
+        "bun",
+        "run",
+        "release-check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:19.190Z",
+      "ended": "2026-10-26T10:34:19.205Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "9f242bc3b30b3488cba542e9d53b58724f570b13a53586ef251d1e4ce9930c00",
+      "stderr_sha256": "3b58f2e74a7474a1f4d798216f71d12bb0d8a48a543941efa0fd6f6087746cb2"
+    },
+    {
+      "name": "restage",
+      "argv": [
+        "git",
+        "add",
+        "-A",
+        "--",
+        "docs/assignments/c1-c5/RELEASE-REVIEW-070-01.md",
+        "docs/reports/releases/0.7.0/review.md",
+        "docs/reports/releases/0.7.0/review-artifacts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:41:18.338Z",
+      "ended": "2026-10-26T10:41:18.342Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "root-default",
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:34:19.191Z",
+      "ended": "2026-10-26T10:34:34.671Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "b14bbbbe264853523cd07633bd89c50c4ffd82baab700c9f80baa30ee6bbb7d7"
+    },
+    {
+      "name": "root-socket",
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:35:00.031Z",
+      "ended": "2026-10-26T10:35:19.254Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "6043908c8d26d62698476b88f737f39d5d3e91008d4155a81730902f5a37479c",
+      "stderr_sha256": "fe406be9e3a4ac613fb079f7617fd4cdc9c45df70353e2d4c2397d8795d99042"
+    },
+    {
+      "name": "source-evidence-complete",
+      "argv": [
+        "bun",
+        "$REVIEW/audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:37:28.278Z",
+      "ended": "2026-10-26T10:37:29.778Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "2fa31948ccbb572a03d039a36eb97e8521e5cc6669838e7209e3b56822e6a526",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-evidence-final",
+      "argv": [
+        "bun",
+        "$REVIEW/audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:36:18.044Z",
+      "ended": "2026-10-26T10:36:18.935Z",
+      "exit": 1,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "094eb81ac43071fb3e8d1c3d1b8589f0b4a8b93fedaa83b511e35176c42664d7"
+    },
+    {
+      "name": "source-evidence-normalized",
+      "argv": [
+        "bun",
+        "$REVIEW/audit.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:36:26.972Z",
+      "ended": "2026-10-26T10:36:28.410Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "2fa31948ccbb572a03d039a36eb97e8521e5cc6669838e7209e3b56822e6a526",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "stage-authorized",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "docs/assignments/c1-c5/RELEASE-REVIEW-070-01.md",
+        "docs/reports/releases/0.7.0/review.md",
+        "docs/reports/releases/0.7.0/review-artifacts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:45.337Z",
+      "ended": "2026-10-26T10:40:45.375Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "stage",
+      "argv": [
+        "git",
+        "add",
+        "--",
+        "docs/assignments/c1-c5/RELEASE-REVIEW-070-01.md",
+        "docs/reports/releases/0.7.0/review.md",
+        "docs/reports/releases/0.7.0/review-artifacts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:35.852Z",
+      "ended": "2026-10-26T10:40:35.854Z",
+      "exit": 128,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "cdf51c0279d503e479b7c57855b7ac0903ccc520e2a37ac279942df8f1ef3626"
+    },
+    {
+      "name": "staged-diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:45.466Z",
+      "ended": "2026-10-26T10:40:45.470Z",
+      "exit": 2,
+      "signal": null,
+      "stdout_sha256": "3dc19605588b20b7fee37787e2a4aea29d031c878a987bd47179fb76bc255a36",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "staged-diff-final",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:41:18.432Z",
+      "ended": "2026-10-26T10:41:18.435Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "staged-scope",
+      "argv": [
+        "bun",
+        "$REVIEW/scope.ts"
+      ],
+      "cwd": "/opt/dev/ruach-worktrees/c17-release-review",
+      "started": "2026-10-26T10:40:45.493Z",
+      "ended": "2026-10-26T10:40:45.531Z",
+      "exit": 0,
+      "signal": null,
+      "stdout_sha256": "2d5749e6399f0a49501e78a21c0bf3142d7f0e0381b86fb614c5f189a6601d82",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+  "method": "Exact safe final file snapshots only; no foreign ancestry",
+  "files": [
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-handoff-default.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 92,
+      "sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-handoff-network.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-handoff-network.stdout",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 889,
+      "sha256": "98c787c9bf6052dcac86cda3a22053f42bf7e3706864e4c9730c377078e06a58"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-herdr-default.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 92,
+      "sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-herdr-network.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-herdr-network.stdout",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 87,
+      "sha256": "a82c4e82545fa1e2588586a601daa812d3161824053318f6a8ba4313752c7306"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-root-default.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 92,
+      "sha256": "d838c48c43b1a57f9805f7340d9348c813cfc6684c6bf49bdc35d1367c3e5243"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-root-network.stderr",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/audit-root-network.stdout",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 88,
+      "sha256": "170b266fb260d3d3586edf52b0274a6dc2297f97230136237866180a2b55d516"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/commands.json",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 14907,
+      "sha256": "8d35ecc28876a8f6aebfddb17953c1269fd48d421023c8ef700407585d073c6b"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review-artifacts/source-evidence.json",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 9106,
+      "sha256": "758480290023ac76f14f9cda74a4157672cc984a3c773a754d28cac8be6da1b1"
+    },
+    {
+      "path": "docs/reports/releases/0.7.0/review.md",
+      "source_revision": "cede9c95ddd9240e17395e043f17b9b889e0804d",
+      "bytes": 15394,
+      "sha256": "f2f0e8392145bb319c98126cb6178299ca21e012fbfbc975b4c464021cbe1649"
+    }
+  ]
+}
